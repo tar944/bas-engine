@@ -31,6 +31,20 @@ dependencies:
   flutter:
     sdk: flutter
 
+  go_router: ^6.0.4
+  fluent_ui: ^4.4.0
+  window_manager: ^0.3.0
+  provider: ^6.0.5
+  system_theme: ^2.1.0
+  flutter_acrylic: ^1.1.0
+  path_provider: ^2.0.12
+  file_picker: ^5.2.5
+  # The following adds the Cupertino Icons font to your application.
+  # Use with the CupertinoIcons class for iOS style icons.
+  flutter_hooks: ^0.18.6
+  simple_animations: ^5.0.0+3
+  screen_retriever: ^0.1.6
+  indexed: ^0.0.8
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -52,7 +66,10 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
+  assets:
+    - lib/assets/actions/
+    - lib/assets/images/
+    - lib/assets/testImages/
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
