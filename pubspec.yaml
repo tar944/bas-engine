@@ -45,6 +45,7 @@ dependencies:
   simple_animations: ^5.0.0+3
   screen_retriever: ^0.1.6
   indexed: ^0.0.8
+  flutter_meedu_videoplayer: ^4.2.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -70,6 +71,7 @@ flutter:
     - lib/assets/actions/
     - lib/assets/images/
     - lib/assets/testImages/
+    - lib/assets/video/
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

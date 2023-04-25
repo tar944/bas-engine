@@ -93,14 +93,6 @@ class _SoftWaresList extends State<SoftWaresList> with WindowListener {
 
   @override
   Widget build(BuildContext context) {
-    const skills = <String>[
-      'Graphic',
-      'Programming',
-      '3D Arts',
-      'Word',
-      'Windows',
-      'Crypto currency',
-    ];
 
     void onSoftwareSelect(String title) {
       print(title);
@@ -125,7 +117,7 @@ class _SoftWaresList extends State<SoftWaresList> with WindowListener {
         content: SizedBox.expand(
           child: Column(children: [
             TopBarPanel(
-              title: Strings.pageLibrary,
+              title: Strings.pageSoftware,
               needBack: false,
               needHelp: false,
             ),

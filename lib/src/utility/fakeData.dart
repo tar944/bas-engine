@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:bas_dataset_generator_engine/src/models/softwareModel.dart';
+import 'package:bas_dataset_generator_engine/src/models/videoModel.dart';
 
 
 class FakeData {
@@ -78,6 +79,20 @@ class FakeData {
           appIcon[Random().nextInt(appIcon.length-1)],
           'companyLogo'));
     }
+    return list;
+  }
+  List<VideoModel> generateVideos() {
+    List<VideoModel> list = [];
+    // for (var i = 0; i < 12; i++) {
+    //   list.add(VideoModel(
+    //       'id',
+    //       softwareTitle[Random().nextInt(softwareTitle.length - 1)],
+    //       'companyId',
+    //       comTitle[Random().nextInt(comTitle.length-1)],
+    //       description[Random().nextInt(description.length-1)],
+    //       appIcon[Random().nextInt(appIcon.length-1)],
+    //       'companyLogo'));
+    // }
     return list;
   }
 

@@ -1,4 +1,6 @@
 import 'package:bas_dataset_generator_engine/src/pages/softwaresList.dart';
+import 'package:bas_dataset_generator_engine/src/pages/videoList.dart';
+import 'package:bas_dataset_generator_engine/src/pages/yoloTest.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:bas_dataset_generator_engine/src/utility/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -85,17 +87,22 @@ class MyApp extends StatelessWidget {
 
 final router = GoRouter(
   routes: [
-    // GoRoute(
-    //   path: '/',
-    //   name: 'Library',
-    //   builder: (context, state) => const LibraryPage(),
-    // ),
-
     GoRoute(
       path: '/',
-      name: 'Record Panel',
-      builder: (context, state) => const SoftWaresList(),
+      name: 'Yolo test page',
+      builder: (context, state) => YoloTest(),
     ),
+    // GoRoute(
+    //   path: '/',
+    //   name: 'Video list',
+    //   builder: (context, state) => const VideoList(),
+    // ),
+    //
+    // GoRoute(
+    //   path: '/',
+    //   name: 'Record Panel',
+    //   builder: (context, state) => const SoftWaresList(),
+    // ),
 
   ],
 );

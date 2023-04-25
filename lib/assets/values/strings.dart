@@ -29,8 +29,12 @@ class Strings{
   static const String focus = "Focus";
   static const String panel = "Panel";
   static const String createACourse = "Create";
+  static const String addSoftware = "Software";
   static const String openACourse = "open";
+  static const String openVideo = "Video";
   static const String pageLibrary = "Library";
+  static const String pageVideo = "Video list";
+  static const String pageSoftware = "Software list";
   static const String pageDashboard = "Dashboard";
   static const String pageStudio = "Studio";
   static const String pageCVC = "Course version control";
