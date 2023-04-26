@@ -28,6 +28,7 @@ class AddsOnPanel extends HookWidget {
         child: Column(
           children: [
             kind=="video"?
+
               ActionButton(
                 icon: FluentIcons.open_file,
                 title: Strings.openVideo,

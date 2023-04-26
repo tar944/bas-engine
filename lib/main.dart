@@ -1,3 +1,5 @@
+import 'package:bas_dataset_generator_engine/src/pages/mainPageLabeling.dart';
+import 'package:bas_dataset_generator_engine/src/pages/mainPages.dart';
 import 'package:bas_dataset_generator_engine/src/pages/softwaresList.dart';
 import 'package:bas_dataset_generator_engine/src/pages/videoList.dart';
 import 'package:bas_dataset_generator_engine/src/pages/yoloTest.dart';
@@ -87,20 +89,15 @@ class MyApp extends StatelessWidget {
 
 final router = GoRouter(
   routes: [
+
     GoRoute(
       path: '/',
-      name: 'Yolo test page',
-      builder: (context, state) => YoloTest(),
+      name: 'Video list',
+      builder: (context, state) => const MainPageLabeling(),
     ),
     // GoRoute(
     //   path: '/',
-    //   name: 'Video list',
-    //   builder: (context, state) => const VideoList(),
-    // ),
-    //
-    // GoRoute(
-    //   path: '/',
-    //   name: 'Record Panel',
+    //   name: 'Software list',
     //   builder: (context, state) => const SoftWaresList(),
     // ),
 

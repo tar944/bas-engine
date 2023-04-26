@@ -10,6 +10,7 @@ import 'package:window_manager/window_manager.dart';
 import '../../assets/values/dimens.dart';
 import '../../assets/values/strings.dart';
 import '../dialogs/dlgExit.dart';
+import '../items/videoItem.dart';
 import '../parts/addsOnPanel.dart';
 import '../parts/topBarPanel.dart';
 import '../utility/fakeData.dart';
@@ -155,14 +156,28 @@ class _VideoList extends State<VideoList> with WindowListener {
                                 (Dimens.actionBtnW + 15),
                             height: MediaQuery.of(context).size.height -
                                 (Dimens.topBarHeight + Dimens.tabHeight + 60),
-                            child:  Container(),
+                            child: GridView(
+                              controller:
+                              ScrollController(keepScrollOffset: false),
+                              shrinkWrap: true,
+                              scrollDirection: Axis.vertical,
+                              gridDelegate:
+                              const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 300,
+                                  childAspectRatio: 3 / 1.8,
+                                  crossAxisSpacing: 20,
+                                  mainAxisSpacing: 20),
+                              children: [1,1,1,1,1,1,1,]
+                                  .map((item) => VideoItem())
+                                  .toList(),
+                            ),
                           ),
-                        ),
-                        Button(child: Text('click to play'), onPressed: ()=>{})
+                        )
                       ],
                     ),
                   ),
                 )
+
               ],
             )
           ]),

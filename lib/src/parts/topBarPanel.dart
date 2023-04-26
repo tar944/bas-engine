@@ -1,4 +1,5 @@
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../assets/values/dimens.dart';
 import '../../assets/values/textStyle.dart';
@@ -46,7 +47,7 @@ class TopBarPanel extends StatelessWidget {
                   onPressed: () =>onBackCaller!()),
             ),
           Padding(
-            padding: const EdgeInsets.only(left: 8.0),
+            padding: const EdgeInsets.only(left: 8.0,right: 8.0),
             child: Row(
               children: [
                 Text(
@@ -60,7 +61,11 @@ class TopBarPanel extends StatelessWidget {
                   Text(
                     "( $description )",
                     style: TextSystem.textXs(Colors.grey[130]),
-                  )
+                  ),
+
+
+
+
               ],
             ),
           ),
@@ -83,6 +88,7 @@ class TopBarPanel extends StatelessWidget {
                       )),
                   onPressed: () => onBackCaller),
             ),
+          IconButton(icon: Icon(CupertinoIcons.xmark,color: Colors.white,), onPressed: (){Navigator.of(context).pop();}),
         ],
       ),
     );
