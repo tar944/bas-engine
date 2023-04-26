@@ -62,11 +62,7 @@ class MainPageLabeling extends HookWidget with WindowListener {
 
   @override
   Widget build(BuildContext context) {
-    final selectedTools = useState('none');
-    final addsOnAnimType = useState('close');
-    final selectedAdds = useState('none');
-    final toolsAnimType = useState('close');
-    final selectedParts = useState('none');
+
 
     useEffect(() {
       _init();
