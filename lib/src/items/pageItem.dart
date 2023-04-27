@@ -3,12 +3,16 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../assets/values/dimens.dart';
+import 'flyoutPageItemDelete.dart';
+import 'flyoutPageItemEdit.dart';
 
 class PageItem extends StatelessWidget {
   const PageItem({Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
+
     return Container(
       decoration: BoxDecoration(
         borderRadius:
@@ -56,27 +60,9 @@ class PageItem extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Container(
-                          width: 25,
-                          height: 25,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.blue,
-                          ),
-                          child: Icon(CupertinoIcons.pen,color: Colors.white,size: 15,),
-
-                        ),
+                        FlyoutPageItemEdit(),
                         SizedBox(width: 10,),
-                        Container(
-                          width: 25,
-                          height: 25,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            color: Colors.red,
-                          ),
-                          child: Icon(CupertinoIcons.delete,color: Colors.white,size: 15,),
-
-                        ),
+                        FlyoutPageItemDelete(),
                       ],
                     )
                     

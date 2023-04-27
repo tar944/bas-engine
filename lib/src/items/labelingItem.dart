@@ -5,6 +5,8 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+import '../pages/example.dart';
+
 class LabelingItem extends HookWidget {
   const LabelingItem(   {
     Key? key,
@@ -20,58 +22,58 @@ class LabelingItem extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage(item.imagePath!),
-          fit: BoxFit.cover,
-        ),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Spacer(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              IconButton(
-                  icon: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[170].withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                          child: Icon(
-                        CupertinoIcons.left_chevron,
-                        color: Colors.white,
-                        size: 40,
-                      ))),
-                  onPressed:() =>perviousClick()),
-
-              IconButton(
-                  icon: Container(
-                      width: 50,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        color: Colors.grey[170].withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Center(
-                          child: Icon(
-                        CupertinoIcons.right_chevron,
-                        color: Colors.white,
-                        size: 40,
-                      ))),
-                  onPressed: () =>nextClick()),
-            ],
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(item.imagePath!),
+              fit: BoxFit.cover,
+            ),
           ),
-          Spacer(),
+        ),
+        Positioned.fill(child: MyRectangle()),
+        Positioned(
+          top: 350,
+          right: 0,
+          left: 0,
+          child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton(
+                icon: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[170].withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                        child: Icon(
+                          CupertinoIcons.left_chevron,
+                          color: Colors.white,
+                          size: 40,
+                        ))),
+                onPressed:() =>perviousClick()),
 
-        ],
-      ),
-
+            IconButton(
+                icon: Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[170].withOpacity(0.5),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                        child: Icon(
+                          CupertinoIcons.right_chevron,
+                          color: Colors.white,
+                          size: 40,
+                        ))),
+                onPressed: () =>nextClick()),
+          ],
+        ),)
+      ],
     );
   }
 }

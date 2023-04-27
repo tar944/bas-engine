@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/src/pages/example.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPageLabeling.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPages.dart';
 import 'package:bas_dataset_generator_engine/src/pages/pagePartLabeling.dart';
@@ -6,6 +7,7 @@ import 'package:bas_dataset_generator_engine/src/pages/videoList.dart';
 import 'package:bas_dataset_generator_engine/src/pages/yoloTest.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:bas_dataset_generator_engine/src/utility/theme.dart';
+import 'package:bas_dataset_generator_engine/src/widgets/pagePartsList.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
@@ -94,7 +96,7 @@ final router = GoRouter(
     GoRoute(
       path: '/',
       name: 'Video list',
-      builder: (context, state) => const PagePartLabeling(),
+      builder: (context, state) =>  PagePartLabeling(),
     ),
     // GoRoute(
     //   path: '/',

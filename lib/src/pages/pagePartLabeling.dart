@@ -7,11 +7,13 @@ import '../../assets/values/strings.dart';
 
 import '../../assets/values/textStyle.dart';
 import '../items/labelingItem.dart';
+import '../items/pageItem.dart';
 import '../models/pageItemModel.dart';
 import '../parts/addsOnPanel.dart';
 import '../parts/topBarPanel.dart';
 import '../utility/platform_util.dart';
 import '../widgets/flyoutMainPageLabeling.dart';
+import '../widgets/pagePartsList.dart';
 
 class PagePartLabeling extends HookWidget with WindowListener {
   const PagePartLabeling({super.key});
@@ -62,8 +64,6 @@ class PagePartLabeling extends HookWidget with WindowListener {
 
   @override
   Widget build(BuildContext context) {
-
-
     useEffect(() {
       _init();
       return null;
@@ -94,27 +94,30 @@ class PagePartLabeling extends HookWidget with WindowListener {
 
     nextImage() {
       indexImage.value = ++indexImage.value;
-      if (indexImage.value== imageList.length) {
-        return indexImage.value=0;
+      if (indexImage.value == imageList.length) {
+        return indexImage.value = 0;
       }
     }
 
     perviousImage() {
-      if(indexImage.value==0)
-        return;
+      if (indexImage.value == 0) return;
       indexImage.value = --indexImage.value;
       print(indexImage.value);
     }
 
-
-    onImageHandler(int index){
+    onImageHandler(int index) {
       indexImage.value = index;
     }
 
+    final showPartList = useState(false);
 
+    showPartListOpen() {
+      showPartList.value = true;
+    }
 
-
-
+    showPartListClose() {
+      showPartList.value = false;
+    }
 
     return ScaffoldPage(
         padding: const EdgeInsets.only(top: 0, bottom: 0),
@@ -138,16 +141,17 @@ class PagePartLabeling extends HookWidget with WindowListener {
                       (Dimens.actionBtnW + 15),
                   decoration: BoxDecoration(color: Colors.grey[190]),
                   child: Stack(
-
                     children: [
                       SizedBox(
                         width: MediaQuery.of(context).size.width -
                             (Dimens.actionBtnW + 15),
-                        height: MediaQuery.of(context).size.height - (Dimens.topBarHeight),
+                        height: MediaQuery.of(context).size.height -
+                            (Dimens.topBarHeight),
                         child: LabelingItem(
                           item: imageList[indexImage.value],
                           nextClick: nextImage,
-                          perviousClick: perviousImage, itemBottom: imageList,
+                          perviousClick: perviousImage,
+                          itemBottom: imageList,
                         ),
                       ),
                       Positioned(
@@ -156,99 +160,144 @@ class PagePartLabeling extends HookWidget with WindowListener {
                           bottom: 10,
                           child: Column(
                             children: [
-                              Padding(
-                                padding: const EdgeInsets.all(10),
-
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 655,
-                                  color: Colors.red,
-                                ),
-                              ),
+                              showPartList.value==true?
+                              PagePartsList():
+                              Container(),
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 mainAxisAlignment: MainAxisAlignment.end,
                                 children: [
-
-                                   Padding(
-                                     padding: const EdgeInsets.only(right: 10,bottom: 5),
-                                     child: Container(
+                                  Padding(
+                                    padding: const EdgeInsets.only(
+                                        right: 10, bottom: 5),
+                                    child: Container(
                                       height: 30,
                                       decoration: BoxDecoration(
                                         color: Colors.grey[200],
                                         borderRadius: BorderRadius.circular(5),
                                       ),
                                       child: Padding(
-                                        padding: const EdgeInsets.only(left: 10,right: 10),
+                                        padding: const EdgeInsets.only(
+                                            left: 10, right: 10),
                                         child: Row(
-                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
                                           children: [
-                                            Text('All Parts Show :',style: TextSystem.textS(Colors.white),),
-                                            Text(' 112',style: TextSystem.textS(Colors.orange),),
+                                            Text(
+                                              'All Parts Show :',
+                                              style: TextSystem.textS(
+                                                  Colors.white),
+                                            ),
+                                            Text(
+                                              ' 112',
+                                              style: TextSystem.textS(
+                                                  Colors.orange),
+                                            ),
                                           ],
                                         ),
                                       ),
+                                    ),
                                   ),
-                                   ),
-
                                 ],
                               ),
                               Padding(
-                                padding: const EdgeInsets.only(left: 10,right: 10),
+                                padding:
+                                    const EdgeInsets.only(left: 10, right: 10),
                                 child: Container(
                                   height: 100,
                                   width: double.infinity,
                                   decoration: BoxDecoration(
                                     color: Colors.grey[200],
                                     borderRadius: BorderRadius.circular(10),
-
                                   ),
                                   child: Row(
                                     children: [
-                                      const SizedBox(width: 10,),
+                                      const SizedBox(
+                                        width: 10,
+                                      ),
                                       Container(
                                         height: 80,
-                                        width: MediaQuery.of(context).size.width-100,
+                                        width:
+                                            MediaQuery.of(context).size.width -
+                                                100,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(5),color: Colors.grey
-                                        ),
+                                            borderRadius:
+                                                BorderRadius.circular(5),
+                                            color: Colors.grey),
                                         child: ListView.builder(
                                             itemCount: imageList.length,
                                             scrollDirection: Axis.horizontal,
-                                            itemBuilder: (context,index){
+                                            itemBuilder: (context, index) {
                                               return GestureDetector(
-                                                onTap: ()=> onImageHandler(index),
+                                                onTap: () =>
+                                                    onImageHandler(index),
                                                 child: Padding(
-                                                  padding: const EdgeInsets.all(5),
+                                                  padding:
+                                                      const EdgeInsets.all(5),
                                                   child: Container(
                                                     height: 80,
-
                                                     width: 150,
                                                     decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(Dimens.actionRadius),
-                                                      image:  DecorationImage(
-                                                        image: ExactAssetImage(imageList[index].imagePath!),
+                                                      borderRadius: BorderRadius
+                                                          .circular(Dimens
+                                                              .actionRadius),
+                                                      image: DecorationImage(
+                                                        image: ExactAssetImage(
+                                                            imageList[index]
+                                                                .imagePath!),
                                                         fit: BoxFit.cover,
                                                       ),
-
                                                     ),
                                                     child: Column(
-                                                      mainAxisAlignment: MainAxisAlignment.end,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.end,
                                                       children: [
                                                         Container(
                                                           height: 30,
-                                                          width: double.infinity,
+                                                          width:
+                                                              double.infinity,
                                                           decoration: BoxDecoration(
-                                                            color: Colors.grey[170].withOpacity(0.7),
-                                                            borderRadius: BorderRadius.only(bottomRight: Radius.circular(Dimens.actionRadius),bottomLeft: Radius.circular(Dimens.actionRadius))
-                                                          ),
+                                                              color: Colors
+                                                                  .grey[170]
+                                                                  .withOpacity(
+                                                                      0.7),
+                                                              borderRadius: BorderRadius.only(
+                                                                  bottomRight: Radius
+                                                                      .circular(
+                                                                          Dimens
+                                                                              .actionRadius),
+                                                                  bottomLeft: Radius
+                                                                      .circular(
+                                                                          Dimens
+                                                                              .actionRadius))),
                                                           child: Padding(
-                                                            padding: const EdgeInsets.fromLTRB(5, 0, 5, 0),
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .fromLTRB(
+                                                                    5, 0, 5, 0),
                                                             child: Row(
-                                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .spaceBetween,
                                                               children: [
-                                                                Text('Create Parts',style: TextSystem.textXs(Colors.white),),
-                                                                Text('Show Parts',style: TextSystem.textXs(Colors.white),),
+                                                                GestureDetector(
+                                                                    onTap:
+                                                                        () {showPartListClose(); },
+                                                                    child: Text(
+                                                                      'Create Parts',
+                                                                      style: TextSystem.textXs(
+                                                                          Colors
+                                                                              .white),
+                                                                    )),
+                                                                GestureDetector(
+                                                                  onTap: (){showPartListOpen();},
+                                                                  child: Text(
+                                                                    'Show Parts',
+                                                                    style: TextSystem
+                                                                        .textXs(Colors
+                                                                            .white),
+                                                                  ),
+                                                                ),
                                                               ],
                                                             ),
                                                           ),
@@ -260,7 +309,6 @@ class PagePartLabeling extends HookWidget with WindowListener {
                                               );
                                             }),
                                       ),
-
                                     ],
                                   ),
                                 ),
