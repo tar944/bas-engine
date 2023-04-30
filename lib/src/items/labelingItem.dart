@@ -4,7 +4,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../widgets/myRectangle.dart';
+import '../widgets/partRegionExplorer.dart';
 
 
 class LabelingItem extends HookWidget {
@@ -32,7 +32,7 @@ class LabelingItem extends HookWidget {
             ),
           ),
         ),
-        Positioned.fill(child: MyRectangle()),
+        Positioned.fill(child: PartRegionExplorer()),
         Positioned(
           top: 350,
           right: 0,
