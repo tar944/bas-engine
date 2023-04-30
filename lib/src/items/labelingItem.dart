@@ -1,11 +1,11 @@
-import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
-import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
+
 import 'package:bas_dataset_generator_engine/src/models/pageItemModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../pages/example.dart';
+import '../widgets/myRectangle.dart';
+
 
 class LabelingItem extends HookWidget {
   const LabelingItem(   {

@@ -1,21 +1,24 @@
+import 'package:bas_dataset_generator_engine/src/widgets/rectanglePainter.dart';
 import 'package:flutter/material.dart';
 
+import '../items/flyoutPageItemDelete.dart';
+import '../items/flyoutPageItemEdit.dart';
 import '../models/rectangleModel.dart';
+import 'editBottomRectangle.dart';
 
 class MyRectangle extends StatefulWidget {
   @override
   _MyRectangleState createState() => _MyRectangleState();
 }
 
+
 class _MyRectangleState extends State<MyRectangle> {
-  // مشخصات مستطیل
   List<RectangleModel> allRectangles = [];
   bool isPainting = false;
 
   @override
   Widget build(BuildContext context) {
     return Listener(
-      // کنترل کردن حرکت موس,
       onPointerDown: (e) {
         setState(() {
           allRectangles.add(RectangleModel(e.localPosition.dx,
@@ -34,35 +37,20 @@ class _MyRectangleState extends State<MyRectangle> {
       onPointerUp: (e) {
         isPainting = false;
       },
-      // نمایش مستطیل
       child: CustomPaint(
         painter: RectanglePainter(allRectangles),
-        // size: Size(50, 50),
+        child: Stack(
+          children: allRectangles.map((e) {
+            return Positioned(
+              left: e.right!-60,
+              top: e.bottom!+10,
+              child: EditBottomRectangle(),
+            );
+          }).toList(),
+        ),
       ),
     );
   }
 }
 
-class RectanglePainter extends CustomPainter {
-  List<RectangleModel> allRectangles;
 
-  RectanglePainter(this.allRectangles);
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    for (var e in allRectangles) {
-      Paint paint = Paint()
-        ..color = e.color
-        ..style = PaintingStyle.stroke
-        ..strokeWidth = 4;
-
-      Rect rect = Rect.fromLTRB(e.left!, e.top!, e.right!, e.bottom!);
-      canvas.drawRect(rect, paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return true;
-  }
-}
