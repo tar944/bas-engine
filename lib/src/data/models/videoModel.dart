@@ -1,4 +1,5 @@
-import 'package:bas_dataset_generator_engine/src/models/screenShootModel.dart';
+
+import 'package:bas_dataset_generator_engine/src/data/models/screenShootModel.dart';
 
 class VideoModel {
   String? id, name, path, time;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../models/rectangleModel.dart';
+
+import '../data/models/rectangleModel.dart';
 
 class RectanglePainter extends CustomPainter {
   RectangleModel? rectangle;

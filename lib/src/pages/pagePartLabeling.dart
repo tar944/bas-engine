@@ -6,9 +6,8 @@ import '../../assets/values/dimens.dart';
 import '../../assets/values/strings.dart';
 
 import '../../assets/values/textStyle.dart';
+import '../data/models/pageItemModel.dart';
 import '../items/labelingItem.dart';
-import '../items/pageItem.dart';
-import '../models/pageItemModel.dart';
 import '../parts/addsOnPanel.dart';
 import '../parts/topBarPanel.dart';
 import '../utility/platform_util.dart';

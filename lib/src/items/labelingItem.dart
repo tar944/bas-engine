@@ -1,9 +1,8 @@
-
-import 'package:bas_dataset_generator_engine/src/models/pageItemModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
+import '../data/models/pageItemModel.dart';
 import '../widgets/partRegionExplorer.dart';
 
 

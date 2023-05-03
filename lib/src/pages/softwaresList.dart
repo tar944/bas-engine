@@ -5,6 +5,7 @@ import 'package:window_manager/window_manager.dart';
 
 import '../../assets/values/dimens.dart';
 import '../../assets/values/strings.dart';
+import '../data/models/softwareModel.dart';
 import '../dialogs/dlgExit.dart';
 import '../parts/addsOnPanel.dart';
 import '../parts/topBarPanel.dart';
@@ -98,18 +99,15 @@ class _SoftWaresList extends State<SoftWaresList> with WindowListener {
       print(title);
     }
 
-    void onCreateCourseHandler(String createdSoftware) {
+    void onCreateCourseHandler(SoftwareModel software) {
     }
 
-    void onActionHandler(String action) {
-      if (action == Strings.createACourse) {
-        showDialog(
-            context: context,
-            barrierDismissible: true,
-            builder: (context) => DlgNewSoftware(
-                availableSoftware: const ['Adobe PhotoShop','Adobe Primire','Microsoft Word','Microsoft Excel','Microsoft Access','Microsoft Powerpoint','Microsoft Teams','Telegram',],
-                onSaveCaller: onCreateCourseHandler));
-      } else {}
+    void onNewSoftwareHandler(String action) {
+      showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) => DlgNewSoftware(
+              onSaveCaller: onCreateCourseHandler));
     }
 
     return ScaffoldPage(
@@ -127,7 +125,7 @@ class _SoftWaresList extends State<SoftWaresList> with WindowListener {
               children: [
                 AddsOnPanel(
                   kind: "library",
-                  onActionCaller: onActionHandler,
+                  onActionCaller: onNewSoftwareHandler,
                 ),
                 Container(
                   width: MediaQuery.of(context).size.width -

@@ -1,10 +1,5 @@
-import 'dart:io';
-
-import 'package:bas_dataset_generator_engine/src/dialogs/dlgNewSoftware.dart';
-import 'package:bas_dataset_generator_engine/src/items/softwareItem.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_meedu_videoplayer/meedu_player.dart';
-import 'package:video_player/video_player.dart';
 import 'package:window_manager/window_manager.dart';
 
 import '../../assets/values/dimens.dart';
@@ -13,7 +8,6 @@ import '../dialogs/dlgExit.dart';
 import '../items/videoItem.dart';
 import '../parts/addsOnPanel.dart';
 import '../parts/topBarPanel.dart';
-import '../utility/fakeData.dart';
 import '../utility/platform_util.dart';
 
 class VideoList extends StatefulWidget {
@@ -112,13 +106,13 @@ class _VideoList extends State<VideoList> with WindowListener {
 
     void onActionHandler(String action) {
       if (action == Strings.createACourse) {
-        showDialog(
-            context: context,
-            barrierDismissible: true,
-            builder: (context) => DlgNewSoftware(
-                availableSoftware: const ['Adobe PhotoShop','Adobe Primire','Microsoft Word','Microsoft Excel','Microsoft Access','Microsoft Powerpoint','Microsoft Teams','Telegram',],
-                onSaveCaller: onCreateCourseHandler));
-      } else {}
+        // showDialog(
+            // context: context,
+            // barrierDismissible: true,
+            // builder: (context) => DlgNewSoftware(
+            //     availableSoftware: const ['Adobe PhotoShop','Adobe Primire','Microsoft Word','Microsoft Excel','Microsoft Access','Microsoft Powerpoint','Microsoft Teams','Telegram',],
+            //     onSaveCaller: onCreateCourseHandler));
+      }
     }
 
     return ScaffoldPage(

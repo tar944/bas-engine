@@ -114,12 +114,12 @@ class _MainPages extends State<MainPages> with WindowListener {
 
     void onActionHandler(String action) {
       if (action == Strings.createACourse) {
-        showDialog(
-            context: context,
-            barrierDismissible: true,
-            builder: (context) => DlgNewSoftware(
-                availableSoftware: const ['Adobe PhotoShop','Adobe Primire','Microsoft Word','Microsoft Excel','Microsoft Access','Microsoft Powerpoint','Microsoft Teams','Telegram',],
-                onSaveCaller: onCreateCourseHandler));
+        // showDialog(
+        //     context: context,
+        //     barrierDismissible: true,
+        //     builder: (context) => DlgNewSoftware(
+        //         availableSoftware: const ['Adobe PhotoShop','Adobe Primire','Microsoft Word','Microsoft Excel','Microsoft Access','Microsoft Powerpoint','Microsoft Teams','Telegram',],
+        //         onSaveCaller: onCreateCourseHandler));
       } else {}
     }
 

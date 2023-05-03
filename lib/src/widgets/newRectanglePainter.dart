@@ -1,7 +1,8 @@
 import 'package:bas_dataset_generator_engine/src/widgets/rectanglePainter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import '../models/rectangleModel.dart';
+
+import '../data/models/rectangleModel.dart';
 
 class NewRectanglePainter extends HookWidget {
   NewRectanglePainter({Key? key, required this.onNewListener})

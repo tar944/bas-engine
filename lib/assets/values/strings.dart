@@ -51,14 +51,14 @@ class Strings{
   static const String dlgLanguage = "All languages";
   static const String dlgTextTitle = "Type your text";
   static const String dlgVoiceRecorder = "Voice recorder";
-  static const String dlgNewCourse = "Create new course";
+  static const String dlgNewSoftware = "New software";
   static const String dlgChapter = "Chapter info";
   static const String dlgLesson = "Lesson info";
   static const String dlgNewChapter = "New chapter";
   static const String dlgNewLesson = "New lesson";
   static const String typeTextHint = "please type here";
   static const String chooseImage = "Choose an image";
-  static const String dlgCourseTitleHint = "Enter a title for your course";
+  static const String dlgSoftwareTitleHint = "Enter a title";
   static const String dlgChapterTitleHint = "Enter a title for your chapter";
   static const String dlgCourseTitle = "Title of course";
   static const String dlgChapterTitle = "Title of chapter";
@@ -66,6 +66,7 @@ class Strings{
   static const String courseDescriptionTextHint = "type a description about your course here";
   static const String chapterDescriptionTextHint = "type a description about your chapter here";
   static const String lessonDescriptionTextHint = "type a description about your lesson here";
+  static const String softwareDescriptionHint = "type a description for this software";
 
   static const String chapters="Chapters";
   static const String lessons="Lessons";

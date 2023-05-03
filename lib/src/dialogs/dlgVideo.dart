@@ -62,7 +62,7 @@ class DlgNewSoftware extends HookWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   DialogTitleBar(
-                    title: Strings.dlgNewCourse,
+                    title: Strings.dlgNewSoftware,
                     onActionListener: onCloseClicked,
                   ),
                   const SizedBox(
@@ -87,7 +87,7 @@ class DlgNewSoftware extends HookWidget {
                                         children: [
                                           TextBox(
                                             placeholder:
-                                            Strings.dlgCourseTitleHint,
+                                            Strings.dlgSoftwareTitleHint,
                                             expands: false,
                                             onChanged: (e) =>
                                             {title.value = e.toString()},

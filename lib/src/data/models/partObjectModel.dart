@@ -1,4 +1,5 @@
-import '../utility/enum.dart';
+
+import '../../utility/enum.dart';
 
 class PartObjectModel {
   String? id, imageName,path,description,label;

@@ -1,6 +1,8 @@
-import 'package:bas_dataset_generator_engine/src/models/partObjectModel.dart';
 
-import '../utility/enum.dart';
+
+import 'package:bas_dataset_generator_engine/src/data/models/partObjectModel.dart';
+
+import '../../utility/enum.dart';
 
 class ScenePartModel {
   String? id, imageName,path,description,label;

@@ -1,4 +1,5 @@
-import 'package:bas_dataset_generator_engine/src/models/videoModel.dart';
+
+import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
 
 class SoftwareModel {
   String? id, title, companyId, companyName, description, icon, companyLogo;

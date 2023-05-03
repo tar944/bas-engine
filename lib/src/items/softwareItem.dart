@@ -1,9 +1,9 @@
-import 'package:bas_dataset_generator_engine/src/models/softwareModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../assets/values/dimens.dart';
 import '../../assets/values/textStyle.dart';
+import '../data/models/softwareModel.dart';
 import '../utility/measureSize.dart';
 
 class SoftwareItem extends HookWidget {
@@ -29,7 +29,7 @@ class SoftwareItem extends HookWidget {
               borderRadius: const BorderRadius.all(
                   Radius.circular(Dimens.dialogCornerRadius)),
               color: Colors.grey[170],
-              border: Border.all(color: Colors.magenta, width: 1.5)),
+              border: Border.all(color: Colors.magenta, width: 1)),
           child: Padding(
             padding: const EdgeInsets.all(5.0),
             child: Column(

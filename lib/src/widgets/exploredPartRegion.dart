@@ -1,7 +1,8 @@
-import 'package:bas_dataset_generator_engine/src/models/rectangleModel.dart';
+
 import 'package:bas_dataset_generator_engine/src/widgets/rectanglePainter.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
+import '../data/models/rectangleModel.dart';
 import '../items/flyoutPageItemDelete.dart';
 import '../items/flyoutPageItemEdit.dart';
 

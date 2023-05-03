@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import '../models/rectangleModel.dart';
+import '../data/models/rectangleModel.dart';
 import 'exploredPartRegion.dart';
 import 'newRectanglePainter.dart';
 

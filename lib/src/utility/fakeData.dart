@@ -1,7 +1,7 @@
 import 'dart:math';
 
-import 'package:bas_dataset_generator_engine/src/models/softwareModel.dart';
-import 'package:bas_dataset_generator_engine/src/models/videoModel.dart';
+import '../data/models/softwareModel.dart';
+import '../data/models/videoModel.dart';
 
 
 class FakeData {
