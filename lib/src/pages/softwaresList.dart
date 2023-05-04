@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/src/data/dao/softwareDAO.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/dlgNewSoftware.dart';
 import 'package:bas_dataset_generator_engine/src/items/softwareItem.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -21,7 +22,7 @@ class SoftWaresList extends StatefulWidget {
 
 class _SoftWaresList extends State<SoftWaresList> with WindowListener {
   Offset _lastShownPosition = Offset.zero;
-
+  List<SoftwareModel>? allSoftware;
 
   @override
   void initState() {
@@ -54,6 +55,7 @@ class _SoftWaresList extends State<SoftWaresList> with WindowListener {
       await Future.delayed(const Duration(milliseconds: 100));
       await _windowShow();
     });
+    allSoftware = await SoftwareDAO().getAllSoftware();
   }
 
   Future<void> _windowShow({
@@ -94,20 +96,18 @@ class _SoftWaresList extends State<SoftWaresList> with WindowListener {
 
   @override
   Widget build(BuildContext context) {
-
     void onSoftwareSelect(String title) {
       print(title);
     }
 
-    void onCreateCourseHandler(SoftwareModel software) {
-    }
+    void onCreateCourseHandler(SoftwareModel software) {}
 
     void onNewSoftwareHandler(String action) {
       showDialog(
           context: context,
           barrierDismissible: true,
-          builder: (context) => DlgNewSoftware(
-              onSaveCaller: onCreateCourseHandler));
+          builder: (context) =>
+              DlgNewSoftware(onSaveCaller: onCreateCourseHandler));
     }
 
     return ScaffoldPage(
@@ -140,29 +140,43 @@ class _SoftWaresList extends State<SoftWaresList> with WindowListener {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 20, bottom: 20),
-                          child: SizedBox(
+                          child: Container(
+                            alignment: Alignment.center,
                             width: MediaQuery.of(context).size.width -
                                 (Dimens.actionBtnW + 15),
                             height: MediaQuery.of(context).size.height -
-                                (Dimens.topBarHeight + Dimens.tabHeight + 60),
-                            child: GridView(
-                              controller:
-                              ScrollController(keepScrollOffset: false),
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              gridDelegate:
-                              const SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 250,
-                                  childAspectRatio: 3 / 1.8,
-                                  crossAxisSpacing: 20,
-                                  mainAxisSpacing: 20),
-                              children: FakeData()
-                                  .generateSoftware()
-                                  .map((item) => SoftwareItem(
-                                  software: item,
-                                  onActionListener: onSoftwareSelect))
-                                  .toList(),
-                            ),
+                                (Dimens.topBarHeight + 60),
+                            child: allSoftware != null &&allSoftware!.isNotEmpty ?
+                            GridView(
+                                    controller: ScrollController(
+                                        keepScrollOffset: false),
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.vertical,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithMaxCrossAxisExtent(
+                                            maxCrossAxisExtent: 250,
+                                            childAspectRatio: 3 / 1.8,
+                                            crossAxisSpacing: 20,
+                                            mainAxisSpacing: 20),
+                                    children: allSoftware!
+                                        .map((item) => SoftwareItem(
+                                            software: item,
+                                            onActionListener: onSoftwareSelect))
+                                        .toList(),
+                                  )
+                                : Column(
+                                  children: [
+                                    Container(
+                                      decoration: const BoxDecoration(
+                                        image: DecorationImage(
+                                          image: AssetImage(' lib/assets/images/emptyBox.png'),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                    Text('your software list is empty...'),
+                                  ],
+                                ),
                           ),
                         )
                       ],

@@ -1,8 +1,8 @@
+import 'package:bas_dataset_generator_engine/src/data/models/screenShootModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../data/models/pageItemModel.dart';
 import '../widgets/partRegionExplorer.dart';
 
 
@@ -14,8 +14,8 @@ class LabelingItem extends HookWidget {
     required this.nextClick,
     required this.perviousClick,
   }) : super(key: key);
-  final PageItemModel item;
-  final List<PageItemModel> itemBottom;
+  final ScreenShootModel item;
+  final List<ScreenShootModel> itemBottom;
   final VoidCallback nextClick;
   final VoidCallback perviousClick;
 
@@ -26,7 +26,7 @@ class LabelingItem extends HookWidget {
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(item.imagePath!),
+              image: AssetImage(item.imageName!),
               fit: BoxFit.cover,
             ),
           ),

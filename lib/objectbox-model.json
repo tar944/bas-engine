@@ -1,0 +1,297 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:5922885288332288138",
+      "lastPropertyId": "13:2118667474981069231",
+      "name": "PartObjectModel",
+      "properties": [
+        {
+          "id": "1:2499940764790309662",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:8539448575626686583",
+          "name": "left",
+          "type": 8
+        },
+        {
+          "id": "3:1756235525460106639",
+          "name": "right",
+          "type": 8
+        },
+        {
+          "id": "4:4027477781195997805",
+          "name": "top",
+          "type": 8
+        },
+        {
+          "id": "5:3528762213549066877",
+          "name": "bottom",
+          "type": 8
+        },
+        {
+          "id": "6:7879993695700189823",
+          "name": "color",
+          "type": 9
+        },
+        {
+          "id": "7:2790378843541322856",
+          "name": "imageName",
+          "type": 9
+        },
+        {
+          "id": "8:7818238208987796591",
+          "name": "path",
+          "type": 9
+        },
+        {
+          "id": "9:533588271424915937",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "10:918939126606934192",
+          "name": "label",
+          "type": 9
+        },
+        {
+          "id": "11:4788626507602896507",
+          "name": "type",
+          "type": 9
+        },
+        {
+          "id": "12:194160298915799660",
+          "name": "status",
+          "type": 9
+        },
+        {
+          "id": "13:2118667474981069231",
+          "name": "actionKind",
+          "type": 9
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:1511157904358265259",
+      "lastPropertyId": "11:2380622141480846707",
+      "name": "ScenePartModel",
+      "properties": [
+        {
+          "id": "1:1962129822223855595",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5161238095427950572",
+          "name": "left",
+          "type": 8
+        },
+        {
+          "id": "3:851009505196112053",
+          "name": "right",
+          "type": 8
+        },
+        {
+          "id": "4:4985530005039131169",
+          "name": "top",
+          "type": 8
+        },
+        {
+          "id": "5:8120794572590322291",
+          "name": "bottom",
+          "type": 8
+        },
+        {
+          "id": "6:849727135604059823",
+          "name": "color",
+          "type": 9
+        },
+        {
+          "id": "7:4114126750303806628",
+          "name": "imageName",
+          "type": 9
+        },
+        {
+          "id": "8:7355176820899515523",
+          "name": "path",
+          "type": 9
+        },
+        {
+          "id": "9:5844064191119127598",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "10:7324499478361269917",
+          "name": "label",
+          "type": 9
+        },
+        {
+          "id": "11:2380622141480846707",
+          "name": "status",
+          "type": 9
+        }
+      ],
+      "relations": [
+        {
+          "id": "1:7154955083376384755",
+          "name": "partObjects",
+          "targetId": "1:5922885288332288138"
+        }
+      ]
+    },
+    {
+      "id": "3:1597679080181769401",
+      "lastPropertyId": "7:3350676040812579837",
+      "name": "ScreenShootModel",
+      "properties": [
+        {
+          "id": "1:8563603067741121587",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:292102565215588503",
+          "name": "imageName",
+          "type": 9
+        },
+        {
+          "id": "3:1319629608762230992",
+          "name": "path",
+          "type": 9
+        },
+        {
+          "id": "4:754001611922789193",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "5:3434340765512382439",
+          "name": "label",
+          "type": 9
+        },
+        {
+          "id": "6:3220529532867476599",
+          "name": "type",
+          "type": 9
+        },
+        {
+          "id": "7:3350676040812579837",
+          "name": "status",
+          "type": 9
+        }
+      ],
+      "relations": [
+        {
+          "id": "2:7096364116743183016",
+          "name": "sceneParts",
+          "targetId": "2:1511157904358265259"
+        }
+      ]
+    },
+    {
+      "id": "4:3071344233334664377",
+      "lastPropertyId": "7:1576951636825092240",
+      "name": "SoftwareModel",
+      "properties": [
+        {
+          "id": "1:913838930232164171",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:762380834622339688",
+          "name": "title",
+          "type": 9
+        },
+        {
+          "id": "3:2344305387419992394",
+          "name": "companyId",
+          "type": 9
+        },
+        {
+          "id": "4:5456851054820624921",
+          "name": "companyName",
+          "type": 9
+        },
+        {
+          "id": "5:6265991732107459666",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "6:7927146172863663854",
+          "name": "icon",
+          "type": 9
+        },
+        {
+          "id": "7:1576951636825092240",
+          "name": "companyLogo",
+          "type": 9
+        }
+      ],
+      "relations": [
+        {
+          "id": "3:3142818417267476908",
+          "name": "allVideos",
+          "targetId": "5:8704043719060779501"
+        }
+      ]
+    },
+    {
+      "id": "5:8704043719060779501",
+      "lastPropertyId": "4:8023234655259261754",
+      "name": "VideoModel",
+      "properties": [
+        {
+          "id": "1:9014292450817808013",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:1784800348298360510",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:2635845138829844197",
+          "name": "path",
+          "type": 9
+        },
+        {
+          "id": "4:8023234655259261754",
+          "name": "time",
+          "type": 9
+        }
+      ],
+      "relations": [
+        {
+          "id": "4:3601124264196646975",
+          "name": "screenShoots",
+          "targetId": "3:1597679080181769401"
+        }
+      ]
+    }
+  ],
+  "lastEntityId": "5:8704043719060779501",
+  "lastIndexId": "0:0",
+  "lastRelationId": "4:3601124264196646975",
+  "lastSequenceId": "0:0",
+  "modelVersion": 5,
+  "modelVersionParserMinimum": 5,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

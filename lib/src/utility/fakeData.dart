@@ -71,7 +71,7 @@ class FakeData {
     List<SoftwareModel> list = [];
     for (var i = 0; i < 12; i++) {
       list.add(SoftwareModel(
-          'id',
+          0,
           softwareTitle[Random().nextInt(softwareTitle.length - 1)],
           'companyId',
           comTitle[Random().nextInt(comTitle.length-1)],

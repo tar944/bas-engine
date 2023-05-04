@@ -3,7 +3,6 @@ import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:bas_dataset_generator_engine/src/utility/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
@@ -24,20 +23,10 @@ Future<void> main() async {
     await windowManager.show();
     await windowManager.focus();
   });
-  await Hive.initFlutter();
-  await Hive.openBox('DSGE_DB');
   runApp(const MyApp());
 }
-class MyApp extends StatelessWidget with WindowListener {
+class MyApp extends StatelessWidget {
   const MyApp({super.key});
-
-
-  @override
-  void onWindowClose() {
-    Hive.box('DSGE_DB').compact();
-    Hive.box('DSGE_DB').close();
-    Hive.close();
-  }
 
   @override
   Widget build(BuildContext context) {

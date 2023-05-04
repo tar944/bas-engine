@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/src/data/models/screenShootModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -6,7 +7,6 @@ import '../../assets/values/dimens.dart';
 import '../../assets/values/strings.dart';
 
 import '../../assets/values/textStyle.dart';
-import '../data/models/pageItemModel.dart';
 import '../items/labelingItem.dart';
 import '../parts/addsOnPanel.dart';
 import '../parts/topBarPanel.dart';
@@ -69,26 +69,7 @@ class MainPageLabeling extends HookWidget with WindowListener {
       return null;
     }, const []);
 
-    final List<PageItemModel> imageList = [
-      PageItemModel(
-        'lib/assets/img/view1.jpg',
-      ),
-      PageItemModel(
-        'lib/assets/img/view2.jpg',
-      ),
-      PageItemModel(
-        'lib/assets/img/view3.jpg',
-      ),
-      PageItemModel(
-        'lib/assets/img/view4.jpg',
-      ),
-      PageItemModel(
-        'lib/assets/img/view5.jpg',
-      ),
-      PageItemModel(
-        'lib/assets/img/view6.jpg',
-      ),
-    ];
+    final List<ScreenShootModel> imageList = [];
 
     final indexImage = useState(0);
 
@@ -193,7 +174,7 @@ class MainPageLabeling extends HookWidget with WindowListener {
                                                       decoration: BoxDecoration(
                                                         borderRadius: BorderRadius.circular(Dimens.actionRadius),
                                                         image:  DecorationImage(
-                                                          image: ExactAssetImage(imageList[index].imagePath!),
+                                                          image: ExactAssetImage(imageList[index].imageName!),
                                                           fit: BoxFit.cover,
                                                         ),
 

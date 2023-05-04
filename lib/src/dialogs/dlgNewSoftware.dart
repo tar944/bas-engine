@@ -36,7 +36,7 @@ class DlgNewSoftware extends HookWidget {
       }
       if (software == null) {
         onSaveCaller(
-            SoftwareModel('', title.value, '', '', description.value, '', ''));
+            SoftwareModel(0, title.value, '', '', description.value, '', ''));
       } else {
         onSaveCaller(software!);
       }
