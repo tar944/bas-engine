@@ -9,13 +9,17 @@ class SoftwareDAO extends BaseBox {
   Future<List<SoftwareModel>> getAllSoftware() async {
     final store = await lazyStore;
     Box<SoftwareModel> box = store.box<SoftwareModel>();
-    return box.getAll();
+    final softwareList =box.getAll();
+    store.close();
+    return softwareList;
   }
 
   Future<SoftwareModel?> getSoftware(int id) async {
     final store = await lazyStore;
     Box<SoftwareModel> box = store.box<SoftwareModel>();
-    return box.get(id);
+    SoftwareModel? software = box.get(id);
+    store.close();
+    return software;
   }
 
   Future<List<VideoModel>> getAllVideos(int id) async{
@@ -23,13 +27,15 @@ class SoftwareDAO extends BaseBox {
     if(software==null){
       return [];
     }
-    return software.allVideos;
+    return software.allVideos.toList();
   }
 
   Future<int> addSoftware(SoftwareModel newSoftware) async{
     final store = await lazyStore;
     Box<SoftwareModel> box = store.box<SoftwareModel>();
-    return box.put(newSoftware);
+    int result = box.put(newSoftware);
+    store.close();
+    return result;
   }
 
   Future<bool> addAVideo(int id,VideoModel video) async{
@@ -55,12 +61,15 @@ class SoftwareDAO extends BaseBox {
   Future<int> updateSoftware(SoftwareModel software) async{
     final store = await lazyStore;
     Box<SoftwareModel> box = store.box<SoftwareModel>();
-    return box.put(software);
+    int result=box.put(software);
+    return result;
   }
 
   Future<bool>  deleteSoftware(int id) async{
     final store = await lazyStore;
     Box<SoftwareModel> box = store.box<SoftwareModel>();
-    return box.remove(id);
+    bool result =box.remove(id);
+    store.close();
+    return result;
   }
 }

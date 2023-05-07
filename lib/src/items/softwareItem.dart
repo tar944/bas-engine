@@ -4,19 +4,21 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../assets/values/dimens.dart';
 import '../../assets/values/textStyle.dart';
 import '../data/models/softwareModel.dart';
+import '../dialogs/flyDlgDelete.dart';
 import '../utility/measureSize.dart';
 
 class SoftwareItem extends HookWidget {
   const SoftwareItem(
-      {Key? key, required this.software, required this.onActionListener})
+      {Key? key, required this.software, required this.onActionCaller})
       : super(key: key);
 
   final SoftwareModel software;
-  final ValueSetter<String>? onActionListener;
+  final ValueSetter<String>? onActionCaller;
 
   @override
   Widget build(BuildContext context) {
-    var size = useState(const Size(213.3, 284.4));
+    var size = useState(const Size(215, 300));
+    final controller = FlyoutController();
 
     return MeasureSize(
         onChange: (e) {
@@ -36,21 +38,16 @@ class SoftwareItem extends HookWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(
-                        width: (size.value.width - 57),
-                        child: Text(
-                          software.title!,
-                          style: TextSystem.textS(Colors.white),
-                          maxLines: 2,
-                        ))
-                  ],
+                SizedBox(
+                  width: size.value.width,
+                  child: Text(
+                    software.title!,
+                    style: TextSystem.textS(Colors.white),
+                    maxLines: 2,
+                  ),
                 ),
                 const SizedBox(
-                  height: 5.0,
+                  height: 10.0,
                 ),
                 SizedBox(
                     width: (size.value.width),
@@ -63,17 +60,37 @@ class SoftwareItem extends HookWidget {
                 Row(
                   children: [
                     Expanded(
-                      flex: 1,
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: Text('Videos'),
-                    )),
+                        flex: 28,
+                        child: Row(
+                          children: [
+                            FlyoutTarget(
+                                key: GlobalKey(),
+                                controller: controller,
+                                child: IconButton(
+                                    icon: Icon(
+                                      FluentIcons.delete,
+                                      color: Colors.red,
+                                    ),
+                                    onPressed: () => showFlyDelete(
+                                        "Are you sure?",
+                                        "yeh",
+                                        controller,
+                                        FlyoutPlacementMode.topCenter,
+                                        software.id,
+                                        onActionCaller))),
+                            IconButton(
+                                icon: const Icon(FluentIcons.edit), onPressed: ()=>onActionCaller!("edit&&${software.id}"))
+                          ],
+                        )),
                     Expanded(
-                      flex: 1,
+                        flex: 72,
                         child: IconButton(
-                          onPressed: () {},
-                          icon: Text('Main pages',style: TextSystem.textM(Colors.blue.lighter),),
-                    ))
+                          onPressed: ()=>onActionCaller!('goto&&${software.id}'),
+                          icon: Text(
+                            'All videos',
+                            style: TextSystem.textS(Colors.white),
+                          ),
+                        )),
                   ],
                 )
               ],

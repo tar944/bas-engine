@@ -1,43 +1,24 @@
+
+import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/softwareDAO.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/dlgNewSoftware.dart';
 import 'package:bas_dataset_generator_engine/src/items/softwareItem.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:window_manager/window_manager.dart';
-
 import '../../assets/values/dimens.dart';
 import '../../assets/values/strings.dart';
 import '../data/models/softwareModel.dart';
-import '../dialogs/dlgExit.dart';
 import '../parts/addsOnPanel.dart';
 import '../parts/topBarPanel.dart';
-import '../utility/fakeData.dart';
 import '../utility/platform_util.dart';
 
-class SoftWaresList extends StatefulWidget {
-  const SoftWaresList({super.key});
-
-  @override
-  State<SoftWaresList> createState() => _SoftWaresList();
-}
-
-class _SoftWaresList extends State<SoftWaresList> with WindowListener {
+class SoftWaresList extends HookWidget with WindowListener {
   Offset _lastShownPosition = Offset.zero;
-  List<SoftwareModel>? allSoftware;
-
-  @override
-  void initState() {
-    windowManager.addListener(this);
-    _init();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    windowManager.removeListener(this);
-    super.dispose();
-  }
 
   void _init() async {
+    windowManager.addListener(this);
     // Add this line to override the default close handler
     await windowManager.setPreventClose(true);
 
@@ -55,7 +36,6 @@ class _SoftWaresList extends State<SoftWaresList> with WindowListener {
       await Future.delayed(const Duration(milliseconds: 100));
       await _windowShow();
     });
-    allSoftware = await SoftwareDAO().getAllSoftware();
   }
 
   Future<void> _windowShow({
@@ -82,25 +62,42 @@ class _SoftWaresList extends State<SoftWaresList> with WindowListener {
     }
   }
 
-  void onCloseListener(String action) {}
-
-  @override
-  void onWindowClose() async {
-    bool isPreventClose = await windowManager.isPreventClose();
-    if (isPreventClose) {
-      showContentDialog(context, true, onCloseListener);
-    }
-  }
-
-  void onBackHandler(bool kind) {}
-
   @override
   Widget build(BuildContext context) {
-    void onSoftwareSelect(String title) {
-      print(title);
+    final software = useState([]);
+
+    useEffect(() {
+      _init();
+      Future<void>.microtask(() async {
+        software.value = await SoftwareDAO().getAllSoftware();
+      });
+      return null;
+    }, const []);
+
+    void onCreateCourseHandler(SoftwareModel curSoftware) async {
+      await SoftwareDAO().addSoftware(curSoftware);
+      software.value = await SoftwareDAO().getAllSoftware();
     }
 
-    void onCreateCourseHandler(SoftwareModel software) {}
+    void onSoftwareSelect(String action) async{
+      SoftwareModel? soft =  await SoftwareDAO().getSoftware(int.parse(action.split('&&')[1]));
+      switch(action.split('&&')[0]){
+        case 'edit':
+          showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (context) =>DlgNewSoftware(onSaveCaller: onCreateCourseHandler,software:soft),);
+          break;
+        case 'delete':
+          await SoftwareDAO().deleteSoftware(soft!.id);
+          software.value = await SoftwareDAO().getAllSoftware();
+          break;
+        case 'goto':
+          context.goNamed('videoList',params: {'softwareId':soft!.id.toString()});
+          break;
+      }
+    }
+
 
     void onNewSoftwareHandler(String action) {
       showDialog(
@@ -146,37 +143,57 @@ class _SoftWaresList extends State<SoftWaresList> with WindowListener {
                                 (Dimens.actionBtnW + 15),
                             height: MediaQuery.of(context).size.height -
                                 (Dimens.topBarHeight + 60),
-                            child: allSoftware != null &&allSoftware!.isNotEmpty ?
-                            GridView(
-                                    controller: ScrollController(
-                                        keepScrollOffset: false),
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.vertical,
-                                    gridDelegate:
-                                        const SliverGridDelegateWithMaxCrossAxisExtent(
-                                            maxCrossAxisExtent: 250,
-                                            childAspectRatio: 3 / 1.8,
-                                            crossAxisSpacing: 20,
-                                            mainAxisSpacing: 20),
-                                    children: allSoftware!
-                                        .map((item) => SoftwareItem(
-                                            software: item,
-                                            onActionListener: onSoftwareSelect))
-                                        .toList(),
+                            child: software.value != null &&
+                                    software.value!.isNotEmpty
+                                ? SizedBox(
+                                    width: MediaQuery.of(context).size.width -
+                                        (Dimens.actionBtnW + 15),
+                                    height: MediaQuery.of(context).size.height -
+                                        (Dimens.topBarHeight),
+                                    child: GridView(
+                                      controller: ScrollController(
+                                          keepScrollOffset: false),
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.vertical,
+                                      gridDelegate:
+                                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                                              maxCrossAxisExtent: 250,
+                                              childAspectRatio: 3 / 1.8,
+                                              crossAxisSpacing: 20,
+                                              mainAxisSpacing: 20),
+                                      children: software.value!
+                                          .map((item) => SoftwareItem(
+                                              software: item,
+                                              onActionCaller:
+                                                  onSoftwareSelect))
+                                          .toList(),
+                                    ),
                                   )
                                 : Column(
-                                  children: [
-                                    Container(
-                                      decoration: const BoxDecoration(
-                                        image: DecorationImage(
-                                          image: AssetImage(' lib/assets/images/emptyBox.png'),
-                                          fit: BoxFit.cover,
+                                    children: [
+                                      const SizedBox(
+                                        height: 150,
+                                      ),
+                                      Container(
+                                        height: 350,
+                                        width: 350,
+                                        decoration: const BoxDecoration(
+                                          image: DecorationImage(
+                                            image: AssetImage(
+                                                'lib/assets/images/emptyBox.png'),
+                                            fit: BoxFit.cover,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                    Text('your software list is empty...'),
-                                  ],
-                                ),
+                                      const SizedBox(
+                                        height: 50,
+                                      ),
+                                      Text(
+                                        'your software list is empty...',
+                                        style: TextSystem.textL(Colors.white),
+                                      ),
+                                    ],
+                                  ),
                           ),
                         )
                       ],

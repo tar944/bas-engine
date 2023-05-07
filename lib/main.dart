@@ -1,4 +1,5 @@
 import 'package:bas_dataset_generator_engine/src/pages/softwaresList.dart';
+import 'package:bas_dataset_generator_engine/src/pages/videoList.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:bas_dataset_generator_engine/src/utility/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -80,15 +81,15 @@ class MyApp extends StatelessWidget {
 
 final router = GoRouter(
   routes: [
-    // GoRoute(
-    //   path: '/',
-    //   name: 'Video list',
-    //   builder: (context, state) => PagePartLabeling(),
-    // ),
+    GoRoute(
+      path: '/video/:softwareId',
+      name: 'videoList',
+      builder: (context, state) => VideoList(int.parse(state.params['softwareId']!)),
+    ),
     GoRoute(
       path: '/',
-      name: 'Software list',
-      builder: (context, state) => const SoftWaresList(),
+      name: 'softwareList',
+      builder: (context, state) => SoftWaresList(),
     ),
   ],
 );

@@ -5,6 +5,7 @@
 import FlutterMacOS
 import Foundation
 
+import fc_native_video_thumbnail
 import flutter_meedu_videoplayer
 import macos_window_utils
 import media_kit_libs_macos_video
@@ -18,6 +19,7 @@ import wakelock_macos
 import window_manager
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
+  FcNativeVideoThumbnailPlugin.register(with: registry.registrar(forPlugin: "FcNativeVideoThumbnailPlugin"))
   FlutterMeeduVideoplayerPlugin.register(with: registry.registrar(forPlugin: "FlutterMeeduVideoplayerPlugin"))
   MacOSWindowUtilsPlugin.register(with: registry.registrar(forPlugin: "MacOSWindowUtilsPlugin"))
   MediaKitLibsMacosVideoPlugin.register(with: registry.registrar(forPlugin: "MediaKitLibsMacosVideoPlugin"))

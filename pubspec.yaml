@@ -46,6 +46,7 @@ dependencies:
   screen_retriever: ^0.1.6
   indexed: ^0.0.8
   flutter_meedu_videoplayer: ^4.2.1
+  fc_native_video_thumbnail: ^0.4.0
   objectbox: ^2.0.0
 
   # The following adds the Cupertino Icons font to your application.
@@ -71,7 +72,7 @@ dev_dependencies:
 flutter:
   assets:
     - lib/assets/actions/
-    - lib/assets/images/
+    - lib/assets/images/emptyBox.png
     - lib/assets/testImages/
     - lib/assets/video/
     - lib/assets/img/

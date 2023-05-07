@@ -3,6 +3,7 @@
 #
 
 list(APPEND FLUTTER_PLUGIN_LIST
+  fc_native_video_thumbnail
   flutter_acrylic
   flutter_meedu_videoplayer
   fullscreen_window

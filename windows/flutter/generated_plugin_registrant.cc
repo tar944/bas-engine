@@ -6,6 +6,7 @@
 
 #include "generated_plugin_registrant.h"
 
+#include <fc_native_video_thumbnail/fc_native_video_thumbnail_plugin_c_api.h>
 #include <flutter_acrylic/flutter_acrylic_plugin.h>
 #include <flutter_meedu_videoplayer/flutter_meedu_videoplayer_plugin_c_api.h>
 #include <fullscreen_window/fullscreen_window_plugin_c_api.h>
@@ -17,6 +18,8 @@
 #include <window_manager/window_manager_plugin.h>
 
 void RegisterPlugins(flutter::PluginRegistry* registry) {
+  FcNativeVideoThumbnailPluginCApiRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("FcNativeVideoThumbnailPluginCApi"));
   FlutterAcrylicPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("FlutterAcrylicPlugin"));
   FlutterMeeduVideoplayerPluginCApiRegisterWithRegistrar(

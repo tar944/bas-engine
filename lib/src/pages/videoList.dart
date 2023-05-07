@@ -1,42 +1,25 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_meedu_videoplayer/meedu_player.dart';
 import 'package:window_manager/window_manager.dart';
-
 import '../../assets/values/dimens.dart';
 import '../../assets/values/strings.dart';
-import '../dialogs/dlgExit.dart';
+import '../../assets/values/textStyle.dart';
+import '../data/dao/softwareDAO.dart';
 import '../items/videoItem.dart';
 import '../parts/addsOnPanel.dart';
 import '../parts/topBarPanel.dart';
 import '../utility/platform_util.dart';
 
-class VideoList extends StatefulWidget {
-  const VideoList({super.key});
+class VideoList extends HookWidget  with WindowListener {
+  int? softwareId;
 
-  @override
-  State<VideoList> createState() => _VideoList();
-}
+  VideoList(this.softwareId);
 
-class _VideoList extends State<VideoList> with WindowListener {
   Offset _lastShownPosition = Offset.zero;
-
-  final _controller = MeeduPlayerController(
-    screenManager: const ScreenManager(forceLandScapeInFullscreen: false),
-  );
-
-  @override
-  void initState() {
-    windowManager.addListener(this);
-    _init();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    windowManager.removeListener(this);
-    _controller.dispose();
-    super.dispose();
-  }
 
   void _init() async {
     // Add this line to override the default close handler
@@ -82,36 +65,36 @@ class _VideoList extends State<VideoList> with WindowListener {
     }
   }
 
-  void onCloseListener(String action) {}
-
-  @override
-  void onWindowClose() async {
-    bool isPreventClose = await windowManager.isPreventClose();
-    if (isPreventClose) {
-      showContentDialog(context, true, onCloseListener);
-    }
-  }
-
   void onBackHandler(bool kind) {}
 
   @override
   Widget build(BuildContext context) {
+    final videos = useState([]);
 
-    void onSoftwareSelect(String title) {
-      print(title);
+    useEffect(() {
+      _init();
+      Future<void>.microtask(() async {
+        videos.value = await SoftwareDAO().getAllVideos(softwareId!);
+      });
+      return null;
+    }, const []);
+
+
+    void onVideoActionHandler(String action) {
+      print(action);
     }
 
     void onCreateCourseHandler(String createdSoftware) {
     }
 
-    void onActionHandler(String action) {
-      if (action == Strings.createACourse) {
-        // showDialog(
-            // context: context,
-            // barrierDismissible: true,
-            // builder: (context) => DlgNewSoftware(
-            //     availableSoftware: const ['Adobe PhotoShop','Adobe Primire','Microsoft Word','Microsoft Excel','Microsoft Access','Microsoft Powerpoint','Microsoft Teams','Telegram',],
-            //     onSaveCaller: onCreateCourseHandler));
+    void onActionHandler(String action) async{
+      FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
+
+      if (result != null) {
+        List<File> files = result.paths.map((path) => File(path!)).toList();
+        print(files);
+      } else {
+        // User canceled the picker
       }
     }
 
@@ -129,7 +112,7 @@ class _VideoList extends State<VideoList> with WindowListener {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 AddsOnPanel(
-                  kind: "library",
+                  kind: "video",
                   onActionCaller: onActionHandler,
                 ),
                 Container(
@@ -145,25 +128,60 @@ class _VideoList extends State<VideoList> with WindowListener {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(top: 20, bottom: 20),
-                          child: SizedBox(
+                          child: Container(
+                            alignment: Alignment.center,
                             width: MediaQuery.of(context).size.width -
                                 (Dimens.actionBtnW + 15),
                             height: MediaQuery.of(context).size.height -
                                 (Dimens.topBarHeight + Dimens.tabHeight + 60),
-                            child: GridView(
-                              controller:
-                              ScrollController(keepScrollOffset: false),
-                              shrinkWrap: true,
-                              scrollDirection: Axis.vertical,
-                              gridDelegate:
-                              const SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 300,
-                                  childAspectRatio: 3 / 1.8,
-                                  crossAxisSpacing: 20,
-                                  mainAxisSpacing: 20),
-                              children: [1,1,1,1,1,1,1,]
-                                  .map((item) => VideoItem())
-                                  .toList(),
+                            child: videos.value != null &&
+                                videos.value!.isNotEmpty
+                                ? SizedBox(
+                              width: MediaQuery.of(context).size.width -
+                                  (Dimens.actionBtnW + 15),
+                              height: MediaQuery.of(context).size.height -
+                                  (Dimens.topBarHeight),
+                              child:
+                                    GridView(
+                                controller:
+                                ScrollController(keepScrollOffset: false),
+                                shrinkWrap: true,
+                                scrollDirection: Axis.vertical,
+                                gridDelegate:
+                                const SliverGridDelegateWithMaxCrossAxisExtent(
+                                    maxCrossAxisExtent: 300,
+                                    childAspectRatio: 3 / 1.8,
+                                    crossAxisSpacing: 20,
+                                    mainAxisSpacing: 20),
+                                children: videos.value
+                                    .map((item) => VideoItem())
+                                    .toList(),
+                              ),
+                            )
+                                : Column(
+                              children: [
+                                const SizedBox(
+                                  height: 150,
+                                ),
+                                Container(
+                                  height: 350,
+                                  width: 350,
+                                  decoration: const BoxDecoration(
+                                    image: DecorationImage(
+                                      image: AssetImage(
+                                          'lib/assets/images/emptyBox.png'),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 50,
+                                ),
+                                Text(
+                                  'your Video list is empty...',
+                                  style: TextSystem.textL(Colors.white),
+                                ),
+                              ],
                             ),
                           ),
                         )
