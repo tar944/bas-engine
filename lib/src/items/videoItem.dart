@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bas_dataset_generator_engine/src/data/dao/videoDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
 import 'package:bas_dataset_generator_engine/src/utility/localPaths.dart';
@@ -8,9 +10,11 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 
 import '../../assets/values/dimens.dart';
 import '../../assets/values/textStyle.dart';
+import '../dialogs/flyDlgDelete.dart';
 
 class VideoItem extends HookWidget {
-  VideoItem( {Key? key, required this.video, this.onActionCaller}) : super(key: key);
+  VideoItem({Key? key, required this.video, this.onActionCaller})
+      : super(key: key);
 
   final VideoModel video;
 
@@ -19,91 +23,114 @@ class VideoItem extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final imgPath = useState('');
+    final controller = FlyoutController();
+
     useEffect(() {
-      if(video.thumbnailPath.isNotEmpty){
+      if (video.thumbnailPath.isNotEmpty) {
         imgPath.value = video.thumbnailPath;
-      }else{
+      } else {
         Future<void>.microtask(() async {
-        final dest=await LocalPaths().generateThumbnailPath('${video.software.target!.id}_${video.software.target!.title!}',video.name!);
+          final dest = await LocalPaths().generateThumbnailPath(
+              '${video.software.target!.id}_${video.software.target!.title!}',
+              video.name!);
           await _plugin.getVideoThumbnail(
               srcFile: video.path,
-              destFile:dest,
+              destFile: dest,
               width: 450,
               height: 300,
               keepAspectRatio: true);
-          video.thumbnailPath=dest;
+          video.thumbnailPath = dest;
           VideoDAO().updateVideo(video);
-          imgPath.value=video.thumbnailPath;
+          imgPath.value = video.thumbnailPath;
         });
       }
       return null;
     }, const []);
 
-
-    return  Container(
-          width: double.infinity,
-          height: double.infinity,
-          decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(
-                  Radius.circular(Dimens.dialogCornerRadius)),
-              color: Colors.grey[170],
-              border: Border.all(color: Colors.magenta, width: 1.5),
-            image: DecorationImage(
-              image: AssetImage(
-                  'lib/assets/testImages/testImg1.png'),
-              fit: BoxFit.fill,
-            ),
+    return Container(
+      width: double.infinity,
+      height: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius:
+            const BorderRadius.all(Radius.circular(Dimens.dialogCornerRadius)),
+        color: Colors.grey[170],
+        border: Border.all(color: Colors.magenta, width: 1.5),
+        image: DecorationImage(
+          image: imgPath.value == ''
+              ? const AssetImage('lib/assets/testImages/testImg1.png')
+              : Image.file(File(video.thumbnailPath)).image,
+          fit: BoxFit.fill,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 35,
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              SizedBox(height: 50,),
-              Container(
-                  width: 80,
-                  height: 40,
+          IconButton(
+              icon: Container(
+                  width: 60,
+                  height: 60,
+                  alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
+                    shape: BoxShape.circle,
                     color: Colors.grey[170].withOpacity(0.5),
                   ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(CupertinoIcons.play,color: Colors.white,size: 25,),
-                      SizedBox(width: 5,),
-                      Text('3:45',style: TextSystem.textM(Colors.white),)
-                    ],
+                  child:const Padding(
+                    padding: EdgeInsets.only(left: 5),
+                    child: Icon(
+                      CupertinoIcons.play,
+                      color: Colors.white,
+                      size: 45,
+                    ),
                   )),
-
-              Spacer(),
-              Container(
-                height: 40,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.only(bottomLeft: Radius.circular(10),bottomRight: Radius.circular(10),),
-                  color: Colors.grey[170].withOpacity(0.7)
+              onPressed: () => onActionCaller!('play&&${video.id}')),
+          const Spacer(),
+          Container(
+            height: 40,
+            width: double.infinity,
+            decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(10),
+                  bottomRight: Radius.circular(10),
                 ),
-                child: Row(
-                  children: [
-                    Expanded(
-                        flex: 1,
+                color: Colors.grey[170].withOpacity(0.7)),
+            child: Row(
+              children: [
+                Expanded(
+                    flex: 14,
+                    child: FlyoutTarget(
+                        key: GlobalKey(),
+                        controller: controller,
                         child: IconButton(
-                          onPressed: () {},
-                          icon: Text('Videos',style: TextSystem.textM(Colors.white),),
-                        )),
-                    Expanded(
-                        flex: 1,
-                        child: IconButton(
-                          onPressed: () {},
-                          icon: Text('Main pages',style: TextSystem.textM(Colors.blue.lighter),),
-                        ))
-                  ],
-                ),
-              ),
-            ],
+                            icon: Icon(
+                              FluentIcons.delete,
+                              color: Colors.red,
+                            ),
+                            onPressed: () => showFlyDelete(
+                                "Are you sure?",
+                                "yeh",
+                                controller,
+                                FlyoutPlacementMode.topCenter,
+                                video.id,
+                                onActionCaller)))),
+                Expanded(
+                    flex: 86,
+                    child: IconButton(
+                      onPressed: ()=>onActionCaller!('goto&&${video.id}'),
+                      icon: Text(
+                        'Watch screens',
+                        style: TextSystem.textS(Colors.white),
+                      ),
+                    )),
+              ],
+            )
           ),
-        );
+        ],
+      ),
+    );
   }
 }
