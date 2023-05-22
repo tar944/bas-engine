@@ -62,6 +62,7 @@ class SoftwareDAO extends BaseBox {
     final store = await lazyStore;
     Box<SoftwareModel> box = store.box<SoftwareModel>();
     int result=box.put(software);
+    store.close();
     return result;
   }
 

@@ -1,9 +1,9 @@
 import 'dart:io';
-
+import 'package:bas_dataset_generator_engine/src/data/dao/videoDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_meedu_videoplayer/meedu_player.dart';
 import 'package:window_manager/window_manager.dart';
 import '../../assets/values/dimens.dart';
 import '../../assets/values/strings.dart';
@@ -14,7 +14,7 @@ import '../parts/addsOnPanel.dart';
 import '../parts/topBarPanel.dart';
 import '../utility/platform_util.dart';
 
-class VideoList extends HookWidget  with WindowListener {
+class VideoList extends HookWidget with WindowListener {
   int? softwareId;
 
   VideoList(this.softwareId);
@@ -41,9 +41,7 @@ class VideoList extends HookWidget  with WindowListener {
     });
   }
 
-  Future<void> _windowShow({
-    bool isShowBelowTray = false,
-  }) async {
+  Future<void> _windowShow() async {
     bool isAlwaysOnTop = await windowManager.isAlwaysOnTop();
     if (kIsLinux) {
       await windowManager.setPosition(_lastShownPosition);
@@ -79,20 +77,21 @@ class VideoList extends HookWidget  with WindowListener {
       return null;
     }, const []);
 
-
     void onVideoActionHandler(String action) {
       print(action);
     }
 
-    void onCreateCourseHandler(String createdSoftware) {
-    }
+    void onCreateCourseHandler(String createdSoftware) {}
 
-    void onActionHandler(String action) async{
-      FilePickerResult? result = await FilePicker.platform.pickFiles(allowMultiple: true);
+    void onActionHandler(String action) async {
+      FilePickerResult? result =
+          await FilePicker.platform.pickFiles(allowMultiple: true);
 
       if (result != null) {
-        List<File> files = result.paths.map((path) => File(path!)).toList();
-        print(files);
+        result.paths.map((path) {
+          File newVideo=File(path!);
+          VideoDAO().addVideo(VideoModel(0,newVideo.uri.toString() , newVideo.path, '00:00'));
+        });
       } else {
         // User canceled the picker
       }
@@ -135,61 +134,59 @@ class VideoList extends HookWidget  with WindowListener {
                             height: MediaQuery.of(context).size.height -
                                 (Dimens.topBarHeight + Dimens.tabHeight + 60),
                             child: videos.value != null &&
-                                videos.value!.isNotEmpty
+                                    videos.value!.isNotEmpty
                                 ? SizedBox(
-                              width: MediaQuery.of(context).size.width -
-                                  (Dimens.actionBtnW + 15),
-                              height: MediaQuery.of(context).size.height -
-                                  (Dimens.topBarHeight),
-                              child:
-                                    GridView(
-                                controller:
-                                ScrollController(keepScrollOffset: false),
-                                shrinkWrap: true,
-                                scrollDirection: Axis.vertical,
-                                gridDelegate:
-                                const SliverGridDelegateWithMaxCrossAxisExtent(
-                                    maxCrossAxisExtent: 300,
-                                    childAspectRatio: 3 / 1.8,
-                                    crossAxisSpacing: 20,
-                                    mainAxisSpacing: 20),
-                                children: videos.value
-                                    .map((item) => VideoItem())
-                                    .toList(),
-                              ),
-                            )
-                                : Column(
-                              children: [
-                                const SizedBox(
-                                  height: 150,
-                                ),
-                                Container(
-                                  height: 350,
-                                  width: 350,
-                                  decoration: const BoxDecoration(
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                          'lib/assets/images/emptyBox.png'),
-                                      fit: BoxFit.cover,
+                                    width: MediaQuery.of(context).size.width -
+                                        (Dimens.actionBtnW + 15),
+                                    height: MediaQuery.of(context).size.height -
+                                        (Dimens.topBarHeight),
+                                    child: GridView(
+                                      controller: ScrollController(
+                                          keepScrollOffset: false),
+                                      shrinkWrap: true,
+                                      scrollDirection: Axis.vertical,
+                                      gridDelegate:
+                                          const SliverGridDelegateWithMaxCrossAxisExtent(
+                                              maxCrossAxisExtent: 300,
+                                              childAspectRatio: 3 / 1.8,
+                                              crossAxisSpacing: 20,
+                                              mainAxisSpacing: 20),
+                                      children: videos.value
+                                          .map((item) => VideoItem())
+                                          .toList(),
                                     ),
+                                  )
+                                : Column(
+                                    children: [
+                                      const SizedBox(
+                                        height: 150,
+                                      ),
+                                      Container(
+                                        height: 350,
+                                        width: 350,
+                                        decoration: const BoxDecoration(
+                                          image: DecorationImage(
+                                            image: AssetImage(
+                                                'lib/assets/images/emptyBox.png'),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                        height: 50,
+                                      ),
+                                      Text(
+                                        'your Video list is empty...',
+                                        style: TextSystem.textL(Colors.white),
+                                      ),
+                                    ],
                                   ),
-                                ),
-                                const SizedBox(
-                                  height: 50,
-                                ),
-                                Text(
-                                  'your Video list is empty...',
-                                  style: TextSystem.textL(Colors.white),
-                                ),
-                              ],
-                            ),
                           ),
                         )
                       ],
                     ),
                   ),
                 )
-
               ],
             )
           ]),

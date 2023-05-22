@@ -25,19 +25,22 @@ class DlgNewSoftware extends HookWidget {
       Navigator.pop(context);
     }
 
-    final title = useState("");
-    final description = useState("");
+    var ctlTitle = TextEditingController(text:software!=null?software!.title:"");
+    var ctlDescription = TextEditingController(text:software!=null?software!.description:"");
+
 
     void onBtnSaveListener() {
-      if (title.value == "") {
-        Toast("You should enter a title for course", false)
+      if (ctlTitle.text == "") {
+        Toast("You should enter a title for software", false)
             .showWarning(context);
         return;
       }
       if (software == null) {
         onSaveCaller(
-            SoftwareModel(0, title.value, '', '', description.value, '', ''));
+            SoftwareModel(0, ctlTitle.text, '', '', ctlDescription.text, '', ''));
       } else {
+        software!.title = ctlTitle.text;
+        software!.description = ctlDescription.text;
         onSaveCaller(software!);
       }
       Navigator.pop(context);
@@ -61,7 +64,7 @@ class DlgNewSoftware extends HookWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   DialogTitleBar(
-                    title: Strings.dlgNewSoftware,
+                    title: software!=null?Strings.dlgEditSoftware:Strings.dlgNewSoftware,
                     onActionListener: onCloseClicked,
                   ),
                   const SizedBox(
@@ -85,20 +88,19 @@ class DlgNewSoftware extends HookWidget {
                                       child: Column(
                                         children: [
                                           TextBox(
+                                            controller: ctlTitle,
                                             placeholder:
                                                 Strings.dlgSoftwareTitleHint,
                                             expands: false,
-                                            onChanged: (e) =>
-                                                {title.value = e.toString()},
                                           ),
                                           const SizedBox(
                                             height: 15,
                                           ),
                                           TextBox(
+                                            controller: ctlDescription,
                                             maxLines: 8,
                                             placeholder:
                                                 Strings.softwareDescriptionHint,
-                                            onChanged: (e)=>{description.value=e.toString()},
                                           ),
                                         ],
                                       ))),

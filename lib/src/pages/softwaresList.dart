@@ -75,12 +75,15 @@ class SoftWaresList extends HookWidget with WindowListener {
     }, const []);
 
     void onCreateCourseHandler(SoftwareModel curSoftware) async {
-      await SoftwareDAO().addSoftware(curSoftware);
-      software.value = await SoftwareDAO().getAllSoftware();
+      Future<void>.microtask(() async {
+        await SoftwareDAO().updateSoftware(curSoftware);
+        software.value = await SoftwareDAO().getAllSoftware();
+      });
     }
 
     void onSoftwareSelect(String action) async{
       SoftwareModel? soft =  await SoftwareDAO().getSoftware(int.parse(action.split('&&')[1]));
+      print(action);
       switch(action.split('&&')[0]){
         case 'edit':
           showDialog(

@@ -52,6 +52,7 @@ class Strings{
   static const String dlgTextTitle = "Type your text";
   static const String dlgVoiceRecorder = "Voice recorder";
   static const String dlgNewSoftware = "New software";
+  static const String dlgEditSoftware = "Edit software";
   static const String dlgChapter = "Chapter info";
   static const String dlgLesson = "Lesson info";
   static const String dlgNewChapter = "New chapter";

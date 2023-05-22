@@ -32,7 +32,7 @@ void showFlyDelete(
             Button(
               child: Text(btnText),
               onPressed: () {
-                onActionListener!("deleteFile&&$id");
+                onActionListener!("delete&&$id");
                 Navigator.pop(context);
               },
             ),

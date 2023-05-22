@@ -4,7 +4,7 @@ import '../models/screenShootModel.dart';
 import 'baseBox.dart';
 
 class VideoDAO extends BaseBox {
-  VideoDAO() : super(boxName: 'videoBox');
+  VideoDAO() : super(boxName: 'softwareBox');
 
   Future<VideoModel?> getVideo(int id) async {
     final store = await lazyStore;
