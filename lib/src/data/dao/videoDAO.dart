@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/src/data/dao/softwareDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
 import '../../../main.dart';
 import '../../../objectbox.g.dart';
@@ -19,9 +20,11 @@ class VideoDAO{
     return video.screenShoots.toList();
   }
 
-  Future<int> addVideo(VideoModel newVideo) async{
+  Future<int> addVideo(VideoModel newVideo,int softwareId) async{
     Box<VideoModel> box = objectbox.store.box<VideoModel>();
     int result = box.put(newVideo);
+    newVideo.id = result;
+    SoftwareDAO().addAVideo(softwareId, newVideo);
     return result;
   }
 
@@ -51,7 +54,7 @@ class VideoDAO{
     return result;
   }
 
-  Future<bool>  deleteSoftware(int id) async{
+  Future<bool>  deleteVideo(int id) async{
     Box<VideoModel> box = objectbox.store.box<VideoModel>();
     bool result =box.remove(id);
     return result;

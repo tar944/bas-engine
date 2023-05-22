@@ -83,7 +83,6 @@ class SoftWaresList extends HookWidget with WindowListener {
 
     void onSoftwareSelect(String action) async{
       SoftwareModel? soft =  await SoftwareDAO().getSoftware(int.parse(action.split('&&')[1]));
-      print(action);
       switch(action.split('&&')[0]){
         case 'edit':
           showDialog(

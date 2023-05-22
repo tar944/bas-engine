@@ -1,11 +1,17 @@
+import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fc_native_video_thumbnail/fc_native_video_thumbnail.dart';
 
 import '../../assets/values/dimens.dart';
 import '../../assets/values/textStyle.dart';
 
 class VideoItem extends StatelessWidget {
-  const VideoItem({Key? key}) : super(key: key);
+  VideoItem({Key? key, required this.video, this.onActionCaller}) : super(key: key);
+
+  final VideoModel video;
+  final ValueSetter<String>? onActionCaller;
+  final _plugin = FcNativeVideoThumbnail();
 
   @override
   Widget build(BuildContext context) {

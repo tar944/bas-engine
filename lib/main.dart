@@ -1,6 +1,7 @@
 import 'package:bas_dataset_generator_engine/src/data/dao/objectBox.dart';
 import 'package:bas_dataset_generator_engine/src/pages/softwaresList.dart';
 import 'package:bas_dataset_generator_engine/src/pages/videoList.dart';
+import 'package:bas_dataset_generator_engine/src/utility/localPaths.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:bas_dataset_generator_engine/src/utility/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -18,6 +19,7 @@ Future<void> main() async {
   }
   WindowOptions windowOptions = const WindowOptions(
     center: true,
+    fullScreen: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: false,
     titleBarStyle: TitleBarStyle.hidden,
@@ -26,6 +28,7 @@ Future<void> main() async {
     await windowManager.show();
     await windowManager.focus();
   });
+  await LocalPaths().createLocalDir();
   objectbox = await ObjectBox.create();
   runApp(const MyApp());
 }

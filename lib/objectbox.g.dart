@@ -288,14 +288,7 @@ final _entities = <ModelEntity>[
             id: const IdUid(4, 8023234655259261754),
             name: 'time',
             type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(5, 4568898860801454124),
-            name: 'softwareId',
-            type: 11,
-            flags: 520,
-            indexId: const IdUid(1, 2805705393685960525),
-            relationTarget: 'SoftwareModel')
+            flags: 0)
       ],
       relations: <ModelRelation>[
         ModelRelation(
@@ -331,8 +324,8 @@ ModelDefinition getObjectBoxModel() {
       lastRelationId: const IdUid(4, 3601124264196646975),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [],
-      retiredIndexUids: const [],
-      retiredPropertyUids: const [],
+      retiredIndexUids: const [2805705393685960525],
+      retiredPropertyUids: const [4568898860801454124],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -608,7 +601,7 @@ ModelDefinition getObjectBoxModel() {
         }),
     VideoModel: EntityDefinition<VideoModel>(
         model: _entities[4],
-        toOneRelations: (VideoModel object) => [object.software],
+        toOneRelations: (VideoModel object) => [],
         toManyRelations: (VideoModel object) =>
             {RelInfo<VideoModel>.toMany(4, object.id): object.screenShoots},
         getId: (VideoModel object) => object.id,
@@ -627,7 +620,6 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(1, nameOffset);
           fbb.addOffset(2, pathOffset);
           fbb.addOffset(3, timeOffset);
-          fbb.addInt64(4, object.software.targetId);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -643,9 +635,6 @@ ModelDefinition getObjectBoxModel() {
                   .vTableGetNullable(buffer, rootOffset, 8),
               const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 10));
-          object.software.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
-          object.software.attach(store);
           InternalToManyAccess.setRelInfo<VideoModel>(object.screenShoots,
               store, RelInfo<VideoModel>.toMany(4, object.id));
           return object;
@@ -850,10 +839,6 @@ class VideoModel_ {
   /// see [VideoModel.time]
   static final time =
       QueryStringProperty<VideoModel>(_entities[4].properties[3]);
-
-  /// see [VideoModel.software]
-  static final software =
-      QueryRelationToOne<VideoModel, SoftwareModel>(_entities[4].properties[4]);
 
   /// see [VideoModel.screenShoots]
   static final screenShoots = QueryRelationToMany<VideoModel, ScreenShootModel>(

@@ -4,6 +4,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:go_router/go_router.dart';
 import 'package:window_manager/window_manager.dart';
 import '../../assets/values/dimens.dart';
 import '../../assets/values/strings.dart';
@@ -77,10 +78,18 @@ class VideoList extends HookWidget with WindowListener {
       return null;
     }, const []);
 
-    void onVideoActionHandler(String action) {
-      print(action);
+    void onVideoActionHandler(String action) async{
+      VideoModel? video=  await VideoDAO().getVideo(int.parse(action.split('&&')[1]));
+      switch(action.split('&&')[0]){
+        case 'delete':
+          await VideoDAO().deleteVideo(video!.id);
+          videos.value = await SoftwareDAO().getAllVideos(softwareId!);
+          break;
+        case 'goto':
+          context.goNamed('screenList',params: {'videoId':video!.id.toString()});
+          break;
+      }
     }
-
     void onCreateCourseHandler(String createdSoftware) {}
 
     void onActionHandler(String action) async {
@@ -88,10 +97,13 @@ class VideoList extends HookWidget with WindowListener {
           await FilePicker.platform.pickFiles(allowMultiple: true);
 
       if (result != null) {
-        result.paths.map((path) {
-          File newVideo=File(path!);
-          VideoDAO().addVideo(VideoModel(0,newVideo.uri.toString() , newVideo.path, '00:00'));
-        });
+        for (var path in result.paths) {
+          File newVideo = File(path!);
+          VideoDAO().addVideo(
+              VideoModel(0, newVideo.uri.toString(), newVideo.path, '00:00'),
+              softwareId!);
+        }
+        videos.value = await SoftwareDAO().getAllVideos(softwareId!);
       } else {
         // User canceled the picker
       }
@@ -152,7 +164,7 @@ class VideoList extends HookWidget with WindowListener {
                                               crossAxisSpacing: 20,
                                               mainAxisSpacing: 20),
                                       children: videos.value
-                                          .map((item) => VideoItem())
+                                          .map((item) => VideoItem(video: item,onActionCaller: onVideoActionHandler,))
                                           .toList(),
                                     ),
                                   )

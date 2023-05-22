@@ -272,14 +272,6 @@
           "id": "4:8023234655259261754",
           "name": "time",
           "type": 9
-        },
-        {
-          "id": "5:4568898860801454124",
-          "name": "softwareId",
-          "type": 11,
-          "flags": 520,
-          "indexId": "1:2805705393685960525",
-          "relationTarget": "SoftwareModel"
         }
       ],
       "relations": [
@@ -298,8 +290,12 @@
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
-  "retiredIndexUids": [],
-  "retiredPropertyUids": [],
+  "retiredIndexUids": [
+    2805705393685960525
+  ],
+  "retiredPropertyUids": [
+    4568898860801454124
+  ],
   "retiredRelationUids": [],
   "version": 1
 }
