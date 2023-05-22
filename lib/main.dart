@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/src/data/dao/objectBox.dart';
 import 'package:bas_dataset_generator_engine/src/pages/softwaresList.dart';
 import 'package:bas_dataset_generator_engine/src/pages/videoList.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
@@ -8,6 +9,7 @@ import 'package:provider/provider.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:flutter_acrylic/flutter_acrylic.dart' as flutter_acrylic;
 
+late ObjectBox objectbox;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
@@ -24,6 +26,7 @@ Future<void> main() async {
     await windowManager.show();
     await windowManager.focus();
   });
+  objectbox = await ObjectBox.create();
   runApp(const MyApp());
 }
 class MyApp extends StatelessWidget {

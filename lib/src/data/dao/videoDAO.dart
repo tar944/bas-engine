@@ -1,16 +1,13 @@
 import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
+import '../../../main.dart';
 import '../../../objectbox.g.dart';
 import '../models/screenShootModel.dart';
-import 'baseBox.dart';
 
-class VideoDAO extends BaseBox {
-  VideoDAO() : super(boxName: 'softwareBox');
+class VideoDAO{
 
   Future<VideoModel?> getVideo(int id) async {
-    final store = await lazyStore;
-    Box<VideoModel> box = store.box<VideoModel>();
+    Box<VideoModel> box = objectbox.store.box<VideoModel>();
     VideoModel? software = box.get(id);
-    store.close();
     return software;
   }
 
@@ -23,10 +20,8 @@ class VideoDAO extends BaseBox {
   }
 
   Future<int> addVideo(VideoModel newVideo) async{
-    final store = await lazyStore;
-    Box<VideoModel> box = store.box<VideoModel>();
+    Box<VideoModel> box = objectbox.store.box<VideoModel>();
     int result = box.put(newVideo);
-    store.close();
     return result;
   }
 
@@ -51,17 +46,14 @@ class VideoDAO extends BaseBox {
   }
 
   Future<int> updateVideo(VideoModel video) async{
-    final store = await lazyStore;
-    Box<VideoModel> box = store.box<VideoModel>();
+    Box<VideoModel> box = objectbox.store.box<VideoModel>();
     int result=box.put(video);
     return result;
   }
 
   Future<bool>  deleteSoftware(int id) async{
-    final store = await lazyStore;
-    Box<VideoModel> box = store.box<VideoModel>();
+    Box<VideoModel> box = objectbox.store.box<VideoModel>();
     bool result =box.remove(id);
-    store.close();
     return result;
   }
 }
