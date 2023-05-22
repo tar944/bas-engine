@@ -249,7 +249,7 @@
     },
     {
       "id": "5:8704043719060779501",
-      "lastPropertyId": "5:4568898860801454124",
+      "lastPropertyId": "7:2459049436572717933",
       "name": "VideoModel",
       "properties": [
         {
@@ -272,6 +272,19 @@
           "id": "4:8023234655259261754",
           "name": "time",
           "type": 9
+        },
+        {
+          "id": "6:6284512524528458776",
+          "name": "thumbnailPath",
+          "type": 9
+        },
+        {
+          "id": "7:2459049436572717933",
+          "name": "softwareId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "2:4390184275348585787",
+          "relationTarget": "SoftwareModel"
         }
       ],
       "relations": [
@@ -284,7 +297,7 @@
     }
   ],
   "lastEntityId": "5:8704043719060779501",
-  "lastIndexId": "1:2805705393685960525",
+  "lastIndexId": "2:4390184275348585787",
   "lastRelationId": "4:3601124264196646975",
   "lastSequenceId": "0:0",
   "modelVersion": 5,

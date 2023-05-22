@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:bas_dataset_generator_engine/src/data/dao/videoDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
+import 'package:bas_dataset_generator_engine/src/utility/localPaths.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -14,6 +15,7 @@ import '../items/videoItem.dart';
 import '../parts/addsOnPanel.dart';
 import '../parts/topBarPanel.dart';
 import '../utility/platform_util.dart';
+import 'package:path/path.dart' as p;
 
 class VideoList extends HookWidget with WindowListener {
   int? softwareId;
@@ -97,15 +99,15 @@ class VideoList extends HookWidget with WindowListener {
           await FilePicker.platform.pickFiles(allowMultiple: true);
 
       if (result != null) {
+        final software = await SoftwareDAO().getSoftware(softwareId!);
         for (var path in result.paths) {
           File newVideo = File(path!);
-          VideoDAO().addVideo(
-              VideoModel(0, newVideo.uri.toString(), newVideo.path, '00:00'),
-              softwareId!);
+          final video = VideoModel(0, p.basename(newVideo.path),'', newVideo.path, '00:00');
+          video.software.target=software;
+          VideoDAO().addVideo(video);
+          await LocalPaths().createVideoDir('${softwareId}_${software!.title!}',  p.basename(newVideo.path));
         }
         videos.value = await SoftwareDAO().getAllVideos(softwareId!);
-      } else {
-        // User canceled the picker
       }
     }
 

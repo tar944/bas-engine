@@ -266,7 +266,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(5, 8704043719060779501),
       name: 'VideoModel',
-      lastPropertyId: const IdUid(5, 4568898860801454124),
+      lastPropertyId: const IdUid(7, 2459049436572717933),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -288,7 +288,19 @@ final _entities = <ModelEntity>[
             id: const IdUid(4, 8023234655259261754),
             name: 'time',
             type: 9,
-            flags: 0)
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(6, 6284512524528458776),
+            name: 'thumbnailPath',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(7, 2459049436572717933),
+            name: 'softwareId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(2, 4390184275348585787),
+            relationTarget: 'SoftwareModel')
       ],
       relations: <ModelRelation>[
         ModelRelation(
@@ -320,7 +332,7 @@ ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
       lastEntityId: const IdUid(5, 8704043719060779501),
-      lastIndexId: const IdUid(1, 2805705393685960525),
+      lastIndexId: const IdUid(2, 4390184275348585787),
       lastRelationId: const IdUid(4, 3601124264196646975),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [],
@@ -601,7 +613,7 @@ ModelDefinition getObjectBoxModel() {
         }),
     VideoModel: EntityDefinition<VideoModel>(
         model: _entities[4],
-        toOneRelations: (VideoModel object) => [],
+        toOneRelations: (VideoModel object) => [object.software],
         toManyRelations: (VideoModel object) =>
             {RelInfo<VideoModel>.toMany(4, object.id): object.screenShoots},
         getId: (VideoModel object) => object.id,
@@ -611,15 +623,17 @@ ModelDefinition getObjectBoxModel() {
         objectToFB: (VideoModel object, fb.Builder fbb) {
           final nameOffset =
               object.name == null ? null : fbb.writeString(object.name!);
-          final pathOffset =
-              object.path == null ? null : fbb.writeString(object.path!);
+          final pathOffset = fbb.writeString(object.path);
           final timeOffset =
               object.time == null ? null : fbb.writeString(object.time!);
-          fbb.startTable(6);
+          final thumbnailPathOffset = fbb.writeString(object.thumbnailPath);
+          fbb.startTable(8);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nameOffset);
           fbb.addOffset(2, pathOffset);
           fbb.addOffset(3, timeOffset);
+          fbb.addOffset(5, thumbnailPathOffset);
+          fbb.addInt64(6, object.software.targetId);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -632,9 +646,14 @@ ModelDefinition getObjectBoxModel() {
               const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 6),
               const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 8),
+                  .vTableGet(buffer, rootOffset, 14, ''),
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 8, ''),
               const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 10));
+          object.software.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
+          object.software.attach(store);
           InternalToManyAccess.setRelInfo<VideoModel>(object.screenShoots,
               store, RelInfo<VideoModel>.toMany(4, object.id));
           return object;
@@ -839,6 +858,14 @@ class VideoModel_ {
   /// see [VideoModel.time]
   static final time =
       QueryStringProperty<VideoModel>(_entities[4].properties[3]);
+
+  /// see [VideoModel.thumbnailPath]
+  static final thumbnailPath =
+      QueryStringProperty<VideoModel>(_entities[4].properties[4]);
+
+  /// see [VideoModel.software]
+  static final software =
+      QueryRelationToOne<VideoModel, SoftwareModel>(_entities[4].properties[5]);
 
   /// see [VideoModel.screenShoots]
   static final screenShoots = QueryRelationToMany<VideoModel, ScreenShootModel>(

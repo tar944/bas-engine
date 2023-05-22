@@ -3,6 +3,7 @@ import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/softwareDAO.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/dlgNewSoftware.dart';
 import 'package:bas_dataset_generator_engine/src/items/softwareItem.dart';
+import 'package:bas_dataset_generator_engine/src/utility/localPaths.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -75,10 +76,9 @@ class SoftWaresList extends HookWidget with WindowListener {
     }, const []);
 
     void onCreateCourseHandler(SoftwareModel curSoftware) async {
-      Future<void>.microtask(() async {
-        await SoftwareDAO().updateSoftware(curSoftware);
-        software.value = await SoftwareDAO().getAllSoftware();
-      });
+      final id = await SoftwareDAO().updateSoftware(curSoftware);
+      await LocalPaths().createSoftwareDir('${id}_${curSoftware.title!}');
+      software.value = await SoftwareDAO().getAllSoftware();
     }
 
     void onSoftwareSelect(String action) async{

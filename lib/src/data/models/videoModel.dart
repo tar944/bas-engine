@@ -7,9 +7,11 @@ class VideoModel {
   @Id()
   int id;
   String? name;
-  String? path;
+  String path;
+  String thumbnailPath;
   String? time;
   final  screenShoots= ToMany<ScreenShootModel>();
+  final software = ToOne<SoftwareModel>();
 
-  VideoModel(this.id, this.name, this.path, this.time);
+  VideoModel(this.id, this.name,this.thumbnailPath, this.path, this.time);
 }

@@ -20,11 +20,11 @@ class VideoDAO{
     return video.screenShoots.toList();
   }
 
-  Future<int> addVideo(VideoModel newVideo,int softwareId) async{
+  Future<int> addVideo(VideoModel newVideo) async{
     Box<VideoModel> box = objectbox.store.box<VideoModel>();
     int result = box.put(newVideo);
     newVideo.id = result;
-    SoftwareDAO().addAVideo(softwareId, newVideo);
+    SoftwareDAO().addAVideo(newVideo.software.target!.id, newVideo);
     return result;
   }
 
