@@ -1,5 +1,6 @@
+import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
+
 import '../../../objectbox.g.dart';
-import '../../utility/localPaths.dart';
 
 class ObjectBox {
   /// The Store of this app.
@@ -11,7 +12,7 @@ class ObjectBox {
 
   /// Create an instance of ObjectBox to use throughout the app.
   static Future<ObjectBox> create() async {
-    final path =await LocalPaths().dbPath;
+    final path =await DirectoryManager().dbPath;
     final store = await openStore(directory: path);
     return ObjectBox._create(store);
   }

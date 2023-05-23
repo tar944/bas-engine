@@ -5,7 +5,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
 
-class LocalPaths{
+class DirectoryManager{
 
   final appDirName='DSGE_folder';
 
@@ -50,6 +50,22 @@ class LocalPaths{
     }else{
       path.create();
       return true;
+    }
+  }
+
+  deleteVideoDirectory(String softwareName,String videoName) async{
+    final docsDir=await getApplicationDocumentsDirectory();
+    var path= Directory(p.join(docsDir.path,appDirName,softwareName,videoName));
+    if (path.existsSync()){
+      path.deleteSync(recursive: true);
+    }
+  }
+
+  deleteSoftwareDirectory(String softwareName) async{
+    final docsDir=await getApplicationDocumentsDirectory();
+    var path= Directory(p.join(docsDir.path,appDirName,softwareName));
+    if (path.existsSync()){
+      path.deleteSync(recursive: true);
     }
   }
 }

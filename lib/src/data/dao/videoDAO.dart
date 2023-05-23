@@ -1,5 +1,6 @@
 import 'package:bas_dataset_generator_engine/src/data/dao/softwareDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
+import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import '../../../main.dart';
 import '../../../objectbox.g.dart';
 import '../models/screenShootModel.dart';
@@ -54,9 +55,10 @@ class VideoDAO{
     return result;
   }
 
-  Future<bool>  deleteVideo(int id) async{
+  Future<bool>  deleteVideo(VideoModel video) async{
     Box<VideoModel> box = objectbox.store.box<VideoModel>();
-    bool result =box.remove(id);
+    bool result =box.remove(video.id);
+    DirectoryManager().deleteVideoDirectory('${video.software.target!.id}_${video.software.target!.title!}', video.name!);
     return result;
   }
 }

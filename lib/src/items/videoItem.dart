@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:bas_dataset_generator_engine/src/data/dao/videoDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
-import 'package:bas_dataset_generator_engine/src/utility/localPaths.dart';
+import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fc_native_video_thumbnail/fc_native_video_thumbnail.dart';
@@ -31,7 +31,7 @@ class VideoItem extends HookWidget {
         imgPath.value = video.thumbnailPath;
       } else {
         Future<void>.microtask(() async {
-          final dest = await LocalPaths().generateThumbnailPath(
+          final dest = await DirectoryManager().generateThumbnailPath(
               '${video.software.target!.id}_${video.software.target!.title!}',
               video.name!);
           await _plugin.getVideoThumbnail(

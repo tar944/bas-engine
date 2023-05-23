@@ -1,7 +1,8 @@
 import 'dart:io';
 import 'package:bas_dataset_generator_engine/src/data/dao/videoDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
-import 'package:bas_dataset_generator_engine/src/utility/localPaths.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/dlgPlayVideo.dart';
+import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -83,8 +84,14 @@ class VideoList extends HookWidget with WindowListener {
     void onVideoActionHandler(String action) async{
       VideoModel? video=  await VideoDAO().getVideo(int.parse(action.split('&&')[1]));
       switch(action.split('&&')[0]){
+        case 'play':
+          showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) =>DlgPlayVideo(video: video,),);
+          break;
         case 'delete':
-          await VideoDAO().deleteVideo(video!.id);
+          await VideoDAO().deleteVideo(video!);
           videos.value = await SoftwareDAO().getAllVideos(softwareId!);
           break;
         case 'goto':
@@ -105,7 +112,7 @@ class VideoList extends HookWidget with WindowListener {
           final video = VideoModel(0, p.basename(newVideo.path),'', newVideo.path, '00:00');
           video.software.target=software;
           VideoDAO().addVideo(video);
-          await LocalPaths().createVideoDir('${softwareId}_${software!.title!}',  p.basename(newVideo.path));
+          await DirectoryManager().createVideoDir('${softwareId}_${software!.title!}',  p.basename(newVideo.path));
         }
         videos.value = await SoftwareDAO().getAllVideos(softwareId!);
       }

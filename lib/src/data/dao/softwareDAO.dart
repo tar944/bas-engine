@@ -1,6 +1,7 @@
 import 'package:bas_dataset_generator_engine/main.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/softwareModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
+import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import '../../../objectbox.g.dart';
 
 
@@ -58,9 +59,10 @@ class SoftwareDAO {
     return result;
   }
 
-  Future<bool>  deleteSoftware(int id) async{
+  Future<bool>  deleteSoftware(SoftwareModel software) async{
     Box<SoftwareModel> box = objectbox.store.box<SoftwareModel>();
-    bool result =box.remove(id);
+    bool result =box.remove(software.id);
+    DirectoryManager().deleteSoftwareDirectory('${software.id}_${software.title}');
     return result;
   }
 }
