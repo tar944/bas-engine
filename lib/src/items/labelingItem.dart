@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bas_dataset_generator_engine/src/data/models/screenShootModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,12 +12,10 @@ class LabelingItem extends HookWidget {
   const LabelingItem(   {
     Key? key,
     required this.item,
-    required this.itemBottom,
     required this.nextClick,
     required this.perviousClick,
   }) : super(key: key);
   final ScreenShootModel item;
-  final List<ScreenShootModel> itemBottom;
   final VoidCallback nextClick;
   final VoidCallback perviousClick;
 
@@ -26,7 +26,7 @@ class LabelingItem extends HookWidget {
         Container(
           decoration: BoxDecoration(
             image: DecorationImage(
-              image: AssetImage(item.imageName!),
+              image:Image.file(File(item.path!)).image,
               fit: BoxFit.cover,
             ),
           ),

@@ -95,7 +95,7 @@ class VideoList extends HookWidget with WindowListener {
           videos.value = await SoftwareDAO().getAllVideos(softwareId!);
           break;
         case 'goto':
-          context.goNamed('screenList',params: {'videoId':video!.id.toString()});
+          context.goNamed('labeling',params: {'videoId':video!.id.toString()});
           break;
       }
     }

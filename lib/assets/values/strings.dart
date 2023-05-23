@@ -34,6 +34,7 @@ class Strings{
   static const String openVideo = "Video";
   static const String pageLibrary = "Library";
   static const String pageVideo = "Video list";
+  static const String pageLabeling = "Labeling page";
   static const String pageSoftware = "Software list";
   static const String pageDashboard = "Dashboard";
   static const String pageStudio = "Studio";

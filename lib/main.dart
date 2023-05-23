@@ -1,4 +1,5 @@
 import 'package:bas_dataset_generator_engine/src/data/dao/objectBox.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage.dart';
 import 'package:bas_dataset_generator_engine/src/pages/softwaresList.dart';
 import 'package:bas_dataset_generator_engine/src/pages/videoList.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
@@ -96,6 +97,11 @@ final router = GoRouter(
       path: '/',
       name: 'softwareList',
       builder: (context, state) => SoftWaresList(),
+    ),
+    GoRoute(
+      path: '/labeling/:videoId',
+      name: 'labeling',
+      builder: (context, state) => LabelingPage(int.parse(state.params['videoId']!)),
     ),
   ],
 );

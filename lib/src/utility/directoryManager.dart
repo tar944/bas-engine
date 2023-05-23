@@ -4,67 +4,91 @@ import 'package:bas_dataset_generator_engine/src/utility/utility.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
+class DirectoryManager {
+  final appDirName = 'DSGE_folder';
 
-class DirectoryManager{
-
-  final appDirName='DSGE_folder';
-
-  createLocalDir()async{
-    final docsDir=await getApplicationDocumentsDirectory();
-    final path= Directory(p.join(docsDir.path,appDirName));
-    if (!path.existsSync()){
+  createLocalDir() async {
+    final docsDir = await getApplicationDocumentsDirectory();
+    final path = Directory(p.join(docsDir.path, appDirName));
+    if (!path.existsSync()) {
       path.create();
     }
   }
 
-  get dbPath async{
-    final docsDir=await getApplicationDocumentsDirectory();
-    return p.join(docsDir.path,appDirName, "dataBase");
+  get dbPath async {
+    final docsDir = await getApplicationDocumentsDirectory();
+    return p.join(docsDir.path, appDirName, "dataBase");
   }
 
-  Future<String> generateThumbnailPath(String softwareName,String videoName) async{
-    final docsDir=await getApplicationDocumentsDirectory();
-    var path= Directory(p.join(docsDir.path,appDirName,softwareName,videoName,"thumbnailDir"));
-    if (!path.existsSync()){
+  Future<String> generateThumbnailPath(
+      String softwareName, String videoName) async {
+    final docsDir = await getApplicationDocumentsDirectory();
+    var path = Directory(p.join(
+        docsDir.path, appDirName, softwareName, videoName, "thumbnailDir"));
+    if (!path.existsSync()) {
       path.create();
     }
-    return p.join(docsDir.path,appDirName,softwareName,videoName,"thumbnailDir",'${getRandomString(10)}.jpg');
+    return p.join(docsDir.path, appDirName, softwareName, videoName,
+        "thumbnailDir", '${getRandomString(10)}.jpg');
   }
 
-  Future<bool> createSoftwareDir(String softwareName) async{
-    final docsDir=await getApplicationDocumentsDirectory();
-    var path= Directory(p.join(docsDir.path,appDirName,softwareName));
-    if (path.existsSync()){
+  Future<String> getScreenDirectoryPath(
+      String softwareName, String videoName) async {
+    final docsDir = await getApplicationDocumentsDirectory();
+    var path = Directory(p.join(
+        docsDir.path, appDirName, softwareName, videoName, "screenShotsDir"));
+    if (!path.existsSync()) {
+      path.create();
+    }
+    return p.join(
+        docsDir.path, appDirName, softwareName, videoName, "screenShotsDir");
+  }
+
+  Future<bool> createSoftwareDir(String softwareName) async {
+    final docsDir = await getApplicationDocumentsDirectory();
+    var path = Directory(p.join(docsDir.path, appDirName, softwareName));
+    if (path.existsSync()) {
       return false;
-    }else{
+    } else {
       path.create();
       return true;
     }
   }
 
-  Future<bool> createVideoDir(String softwareName,String videoName) async{
-    final docsDir=await getApplicationDocumentsDirectory();
-    var path= Directory(p.join(docsDir.path,appDirName,softwareName,videoName));
-    if (path.existsSync()){
+  Future<bool> createVideoDir(String softwareName, String videoName) async {
+    final docsDir = await getApplicationDocumentsDirectory();
+    var path =
+        Directory(p.join(docsDir.path, appDirName, softwareName, videoName));
+    if (path.existsSync()) {
       return false;
-    }else{
+    } else {
       path.create();
       return true;
     }
   }
 
-  deleteVideoDirectory(String softwareName,String videoName) async{
-    final docsDir=await getApplicationDocumentsDirectory();
-    var path= Directory(p.join(docsDir.path,appDirName,softwareName,videoName));
-    if (path.existsSync()){
+  deleteVideoDirectory(String softwareName, String videoName) async {
+    final docsDir = await getApplicationDocumentsDirectory();
+    var path =
+        Directory(p.join(docsDir.path, appDirName, softwareName, videoName));
+    if (path.existsSync()) {
       path.deleteSync(recursive: true);
     }
   }
 
-  deleteSoftwareDirectory(String softwareName) async{
-    final docsDir=await getApplicationDocumentsDirectory();
-    var path= Directory(p.join(docsDir.path,appDirName,softwareName));
-    if (path.existsSync()){
+  deleteSoftwareDirectory(String softwareName) async {
+    final docsDir = await getApplicationDocumentsDirectory();
+    var path = Directory(p.join(docsDir.path, appDirName, softwareName));
+    if (path.existsSync()) {
+      path.deleteSync(recursive: true);
+    }
+  }
+
+  deleteScreen(String softwareName, String videoName, String screenName) async {
+    final docsDir = await getApplicationDocumentsDirectory();
+    var path = File(p.join(docsDir.path, appDirName, softwareName, videoName,
+        'screenShotsDir', screenName));
+    if (path.existsSync()) {
       path.deleteSync(recursive: true);
     }
   }

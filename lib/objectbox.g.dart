@@ -168,7 +168,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(3, 1597679080181769401),
       name: 'ScreenShootModel',
-      lastPropertyId: const IdUid(7, 3350676040812579837),
+      lastPropertyId: const IdUid(9, 9200597527566909841),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -205,7 +205,19 @@ final _entities = <ModelEntity>[
             id: const IdUid(7, 3350676040812579837),
             name: 'status',
             type: 9,
-            flags: 0)
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(8, 5446305834062302201),
+            name: 'hashDifference',
+            type: 6,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(9, 9200597527566909841),
+            name: 'videoId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(3, 9102685703102770362),
+            relationTarget: 'VideoModel')
       ],
       relations: <ModelRelation>[
         ModelRelation(
@@ -332,7 +344,7 @@ ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
       lastEntityId: const IdUid(5, 8704043719060779501),
-      lastIndexId: const IdUid(2, 4390184275348585787),
+      lastIndexId: const IdUid(3, 9102685703102770362),
       lastRelationId: const IdUid(4, 3601124264196646975),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [],
@@ -495,7 +507,7 @@ ModelDefinition getObjectBoxModel() {
         }),
     ScreenShootModel: EntityDefinition<ScreenShootModel>(
         model: _entities[2],
-        toOneRelations: (ScreenShootModel object) => [],
+        toOneRelations: (ScreenShootModel object) => [object.video],
         toManyRelations: (ScreenShootModel object) => {
               RelInfo<ScreenShootModel>.toMany(2, object.id!): object.sceneParts
             },
@@ -518,7 +530,7 @@ ModelDefinition getObjectBoxModel() {
               object.type == null ? null : fbb.writeString(object.type!);
           final statusOffset =
               object.status == null ? null : fbb.writeString(object.status!);
-          fbb.startTable(8);
+          fbb.startTable(10);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, imageNameOffset);
           fbb.addOffset(2, pathOffset);
@@ -526,6 +538,8 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(4, labelOffset);
           fbb.addOffset(5, typeOffset);
           fbb.addOffset(6, statusOffset);
+          fbb.addInt64(7, object.hashDifference);
+          fbb.addInt64(8, object.video.targetId);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -533,21 +547,24 @@ ModelDefinition getObjectBoxModel() {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
 
-          final object = ScreenShootModel()
-            ..id =
-                const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4)
-            ..imageName = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 6)
-            ..path = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 8)
+          final object = ScreenShootModel(
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4),
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 18),
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 6),
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 8),
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 16))
             ..description = const fb.StringReader(asciiOptimization: true)
                 .vTableGetNullable(buffer, rootOffset, 10)
             ..label = const fb.StringReader(asciiOptimization: true)
                 .vTableGetNullable(buffer, rootOffset, 12)
             ..type = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 14)
-            ..status = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 16);
+                .vTableGetNullable(buffer, rootOffset, 14);
+          object.video.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0);
+          object.video.attach(store);
           InternalToManyAccess.setRelInfo<ScreenShootModel>(object.sceneParts,
               store, RelInfo<ScreenShootModel>.toMany(2, object.id!));
           return object;
@@ -799,6 +816,14 @@ class ScreenShootModel_ {
   /// see [ScreenShootModel.status]
   static final status =
       QueryStringProperty<ScreenShootModel>(_entities[2].properties[6]);
+
+  /// see [ScreenShootModel.hashDifference]
+  static final hashDifference =
+      QueryIntegerProperty<ScreenShootModel>(_entities[2].properties[7]);
+
+  /// see [ScreenShootModel.video]
+  static final video = QueryRelationToOne<ScreenShootModel, VideoModel>(
+      _entities[2].properties[8]);
 
   /// see [ScreenShootModel.sceneParts]
   static final sceneParts =

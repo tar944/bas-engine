@@ -149,7 +149,7 @@
     },
     {
       "id": "3:1597679080181769401",
-      "lastPropertyId": "7:3350676040812579837",
+      "lastPropertyId": "9:9200597527566909841",
       "name": "ScreenShootModel",
       "properties": [
         {
@@ -187,6 +187,19 @@
           "id": "7:3350676040812579837",
           "name": "status",
           "type": 9
+        },
+        {
+          "id": "8:5446305834062302201",
+          "name": "hashDifference",
+          "type": 6
+        },
+        {
+          "id": "9:9200597527566909841",
+          "name": "videoId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "3:9102685703102770362",
+          "relationTarget": "VideoModel"
         }
       ],
       "relations": [
@@ -297,7 +310,7 @@
     }
   ],
   "lastEntityId": "5:8704043719060779501",
-  "lastIndexId": "2:4390184275348585787",
+  "lastIndexId": "3:9102685703102770362",
   "lastRelationId": "4:3601124264196646975",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
