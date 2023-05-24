@@ -81,9 +81,10 @@ class LabelingPage extends HookWidget with WindowListener {
               await DirectoryManager().getScreenDirectoryPath(
                   '${video.software.target!.id}_${video.software.target!.title!}',
                   video.name!));
-          for(var screen in screenResult){
-            final newScreen = ScreenShootModel(0, screen['hashDifference'],screen['imageName'], screen['path'], 'created');
-            newScreen.video.target=video;
+          for (var screen in screenResult) {
+            final newScreen = ScreenShootModel(0, screen['hashDifference'],
+                screen['imageName'], screen['path'], 'created');
+            newScreen.video.target = video;
             ScreenDAO().addScreen(newScreen);
           }
           allScreens.value = await VideoDAO().getAllScreens(videoId!);
@@ -106,8 +107,31 @@ class LabelingPage extends HookWidget with WindowListener {
       indexImage.value = --indexImage.value;
     }
 
-    onImageHandler(String action) {
-      // indexImage.value = index;
+    onImageHandler(String action) async {
+      print(action);
+      var actions=action.split('&&');
+      ScreenShootModel? screen =
+          await ScreenDAO().getScreen(int.parse(actions[1]));
+      switch (actions[0]) {
+        case 'edit':
+          screen!.type=actions[2];
+          screen.description=actions[3];
+          await ScreenDAO().updateScreen(screen);
+          allScreens.value = await VideoDAO().getAllScreens(videoId!);
+          break;
+        case 'delete':
+          await ScreenDAO().deleteScreen(screen!);
+          allScreens.value = await VideoDAO().getAllScreens(videoId!);
+          break;
+        case 'show':
+          for (final item in allScreens.value) {
+            if (item.id == screen!.id) {
+              indexImage.value = allScreens.value.indexOf(item);
+              break;
+            }
+          }
+          break;
+      }
     }
 
     return ScaffoldPage(
@@ -115,80 +139,90 @@ class LabelingPage extends HookWidget with WindowListener {
         content: SizedBox.expand(
           child: Column(children: [
             TopBarPanel(
-              title: '${'${Strings.pageLabeling}   ( '+allScreens.value[indexImage.value].imageName} )',
+              title:
+                  '${'${Strings.pageLabeling}   ( ' + allScreens.value[indexImage.value].imageName} )',
               needBack: true,
               needHelp: false,
             ),
             if (allScreens.value.isEmpty)
               Expanded(
                 child: Container(
-                      alignment: Alignment.center,
-                      color: Colors.grey[150],
-                      child: Text("please waiting ...",style: TextSystem.textL(Colors.white),),
-                    ),
-              ) else Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
+                  alignment: Alignment.center,
+                  color: Colors.grey[150],
+                  child: Text(
+                    "please waiting ...",
+                    style: TextSystem.textL(Colors.white),
+                  ),
+                ),
+              )
+            else
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Stack(
                     children: [
-                      Stack(
-                        children: [
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width ,
-                            height: MediaQuery.of(context).size.height -
-                                (Dimens.topBarHeight),
-                            child: LabelingItem(
-                              item: allScreens.value[indexImage.value],
-                              nextClick: nextImage,
-                              perviousClick: perviousImage,
-                            ),
-                          ),
-                          Positioned(
-                              right: 0,
-                              left: 0,
-                              bottom: 10,
-                              child: Column(
-                                children: [
-                                  FlyoutMainPageLabeling(),
-                                  Padding(
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        height: MediaQuery.of(context).size.height -
+                            (Dimens.topBarHeight),
+                        child: LabelingItem(
+                          item: allScreens.value[indexImage.value],
+                          nextClick: nextImage,
+                          perviousClick: perviousImage,
+                        ),
+                      ),
+                      Positioned(
+                          right: 0,
+                          left: 0,
+                          bottom: 10,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              FlyoutMainPageLabeling(
+                                onActionCaller: onImageHandler,
+                                screen: allScreens.value[indexImage.value],
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 10, right: 10, bottom: 20),
+                                child: Container(
+                                  height: 110,
+                                  width: double.infinity,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[200],
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                  child: Padding(
                                     padding: const EdgeInsets.only(
-                                        left: 10, right: 10, bottom: 20),
+                                        left: 10, right: 10, top: 5, bottom: 5),
                                     child: Container(
-                                      height: 110,
-                                      width: double.infinity,
+                                      height: 80,
                                       decoration: BoxDecoration(
-                                        color: Colors.grey[200],
-                                        borderRadius:
-                                            BorderRadius.circular(10),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 10,right: 10,top: 5,bottom: 5),
-                                        child: Container(
-                                          height: 80,
-                                          decoration: BoxDecoration(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      5),
-                                              color: Colors.grey),
-                                          child: ListView.builder(
-                                              itemCount:
-                                                  allScreens.value.length,
-                                              scrollDirection:
-                                                  Axis.horizontal,
-                                              itemBuilder:
-                                                  (context, index) {
-                                                return ScreenItem(screen: allScreens.value[index],onActionCaller: onImageHandler,);
-                                              }),
-                                        ),
-                                      ),
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: Colors.grey),
+                                      child: ListView.builder(
+                                          itemCount: allScreens.value.length,
+                                          scrollDirection: Axis.horizontal,
+                                          itemBuilder: (context, index) {
+                                            return ScreenItem(
+                                              screen: allScreens.value[index],
+                                              onActionCaller: onImageHandler,
+                                              isSelected:indexImage.value==index,
+                                            );
+                                          }),
                                     ),
                                   ),
-                                ],
-                              ))
-                        ],
-                      )
+                                ),
+                              ),
+                            ],
+                          ))
                     ],
                   )
+                ],
+              )
           ]),
         ));
   }

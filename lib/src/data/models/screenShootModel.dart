@@ -12,7 +12,7 @@ class ScreenShootModel {
   String? description;
   String? label;
   String? type; //mainPage,subPage,dialog,menu,submenu,rightMenu
-  String? status; //passed,finished,deleted,created
+  String? status; //finished,created
   final video = ToOne<VideoModel>();
   final sceneParts = ToMany<ScenePartModel>();
 

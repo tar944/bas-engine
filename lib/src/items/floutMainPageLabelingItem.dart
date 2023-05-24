@@ -1,10 +1,24 @@
+import 'package:bas_dataset_generator_engine/src/dialogs/flyScreenDescription.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../assets/values/textStyle.dart';
 
 class FlyoutMainPageLabelingItem extends StatelessWidget {
-  const FlyoutMainPageLabelingItem({Key? key, required this.title}) : super(key: key);
+  const FlyoutMainPageLabelingItem(
+      {Key? key,
+      required this.title,
+      required this.isSelected,
+      required this.onActionListener,
+      required this.description})
+      : super(key: key);
   final String title;
+  final String description;
+  final ValueSetter<String> onActionListener;
+  final bool isSelected;
+
+  onSaveHandler(String newDescription) {
+    onActionListener('$title&&$newDescription');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,78 +27,24 @@ class FlyoutMainPageLabelingItem extends StatelessWidget {
         key: GlobalKey(),
         controller: controller,
         child: GestureDetector(
-          onTap: () async {
-            controller.showFlyout(
-
-              autoModeConfiguration: FlyoutAutoConfiguration(
-                preferredMode: FlyoutPlacementMode.topCenter,
-              ),
-              barrierDismissible: true,
-              dismissOnPointerMoveAway: false,
-              dismissWithEsc: true,
-              builder: (context) {
-                return FlyoutContent(
-                  color: Colors.grey[200],
-                  child: SizedBox(
-                    width: 300,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Label Box',
-                          style: TextSystem.textMB(Colors.white),
-                        ),
-                        const SizedBox(height: 10),
-                        TextBox(
-
-                          placeholder: title,
-                          style: TextSystem.textS(Colors.grey),
-                          expands: false,
-                        ),
-                        const SizedBox(height: 10),
-                        TextBox(
-                          
-                          placeholder: 'description',
-                          style: TextSystem.textS(Colors.grey),
-                          expands: false,
-                        ),
-                        const SizedBox(height: 10),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            GestureDetector(
-                              onTap: (){Navigator.of(context).pop();},
-                              child: Container(
-                                width: 70,
-                                height: 30,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: Colors.blue,
-                                ),
-                                child: Center(child: Text('Save',style: TextSystem.textS(Colors.white),)),
-                              ),
-                            ),
-                          ],
-                        )
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          },
-
+          onTap: () => showFlyDescription(description, controller,
+              FlyoutPlacementMode.topCenter, onSaveHandler),
           child: Container(
-            width: 80,
+            width: 90,
             height: 30,
             decoration: BoxDecoration(
-              color: Colors.grey[200],
+              color: isSelected ? Colors.grey[210] : Colors.grey[180],
+              border: Border.all(
+                  color: isSelected ? Colors.blue : Colors.transparent,
+                  width: 2),
               borderRadius: BorderRadius.circular(5),
             ),
-            child: Center(child: Text(title,style: TextSystem.textS(Colors.white),)),
+            child: Center(
+                child: Text(
+              title,
+              style: TextSystem.textS(Colors.white),
+            )),
           ),
-        )
-    );
+        ));
   }
 }
