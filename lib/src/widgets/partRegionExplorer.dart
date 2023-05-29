@@ -1,21 +1,54 @@
+import 'package:bas_dataset_generator_engine/src/data/dao/screenPartDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/screenShotDAO.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import '../data/models/rectangleModel.dart';
+import '../data/models/scenePartModel.dart';
 import 'exploredPartRegion.dart';
 import 'newRectanglePainter.dart';
 
 class PartRegionExplorer extends HookWidget {
-  PartRegionExplorer({
+  PartRegionExplorer( {
     Key? key,
+    required this.allParts,
+    required this.screenId,
   }) : super(key: key);
+
+  final List<ScenePartModel> allParts;
+  final int screenId;
 
   @override
   Widget build(BuildContext context) {
-    final allRectangles = useState([]);
+    final allRectangles = useState(allParts);
 
-    onNewRectangleHandler(RectangleModel newRec) {
-      print('new rectangle created');
-      allRectangles.value = [...allRectangles.value..add(newRec)];
+    onNewRectangleHandler(ScenePartModel newPart) {
+      allRectangles.value = [...allRectangles.value..add(newPart)];
+    }
+
+    onPartSaveHandler(String action) async{
+      print(action);
+      var actions = action.split('&&');
+      ScenePartModel? part = await PartDAO().getPart(int.parse(actions[1]));
+      switch (actions[0]) {
+        case 'edit':
+          part!.type = actions[2];
+          part.description = actions[3];
+          part.status = 'finished';
+          await PartDAO().updatePart(part);
+          allRectangles.value = await ScreenDAO().getAllParts(screenId);
+          break;
+        case 'delete':
+          await PartDAO().deletePart(part!);
+          allRectangles.value = await ScreenDAO().getAllParts(screenId);
+          break;
+        case 'show':
+          // for (final item in allScreens.value) {
+          //   if (item.id == screen!.id) {
+          //     indexImage.value = allScreens.value.indexOf(item);
+          //     break;
+          //   }
+          // }
+          break;
+      }
     }
 
     return Stack(children: [

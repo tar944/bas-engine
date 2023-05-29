@@ -1,20 +1,19 @@
+import 'package:bas_dataset_generator_engine/src/data/models/scenePartModel.dart';
 import 'package:flutter/material.dart';
 
-import '../data/models/rectangleModel.dart';
-
 class RectanglePainter extends CustomPainter {
-  RectangleModel? rectangle;
+  ScenePartModel? rectangle;
 
   RectanglePainter(this.rectangle);
 
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = rectangle!.color
+      ..color = Colors.blue
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 
-    Rect rect = Rect.fromLTRB(rectangle!.left!, rectangle!.top!, rectangle!.right!, rectangle!.bottom!);
+    Rect rect = Rect.fromLTRB(rectangle!.left, rectangle!.top, rectangle!.right, rectangle!.bottom);
     canvas.drawRect(rect, paint);
   }
 

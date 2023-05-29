@@ -67,6 +67,30 @@ class DirectoryManager {
     }
   }
 
+  Future<String> getPartDir(String softwareName, String videoName) async {
+    final docsDir = await getApplicationDocumentsDirectory();
+    var path =
+        Directory(p.join(docsDir.path, appDirName, softwareName, videoName,'partDir'));
+    if (path.existsSync()) {
+      return path.path;
+    } else {
+      path.create();
+      return path.path;
+    }
+  }
+
+  Future<String> getObjectDir(String softwareName, String videoName) async {
+    final docsDir = await getApplicationDocumentsDirectory();
+    var path =
+        Directory(p.join(docsDir.path, appDirName, softwareName, videoName,'objectDir'));
+    if (path.existsSync()) {
+      return path.path;
+    } else {
+      path.create();
+      return path.path;
+    }
+  }
+
   deleteVideoDirectory(String softwareName, String videoName) async {
     final docsDir = await getApplicationDocumentsDirectory();
     var path =
@@ -84,10 +108,9 @@ class DirectoryManager {
     }
   }
 
-  deleteScreen(String softwareName, String videoName, String screenName) async {
+  deleteImage(String imagePath) async {
     final docsDir = await getApplicationDocumentsDirectory();
-    var path = File(p.join(docsDir.path, appDirName, softwareName, videoName,
-        'screenShotsDir', screenName));
+    var path = File(p.join(docsDir.path, imagePath));
     if (path.existsSync()) {
       path.deleteSync(recursive: true);
     }

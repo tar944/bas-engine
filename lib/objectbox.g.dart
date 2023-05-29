@@ -99,7 +99,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(2, 1511157904358265259),
       name: 'ScenePartModel',
-      lastPropertyId: const IdUid(11, 2380622141480846707),
+      lastPropertyId: const IdUid(15, 2205741989534374320),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -128,11 +128,6 @@ final _entities = <ModelEntity>[
             type: 8,
             flags: 0),
         ModelProperty(
-            id: const IdUid(6, 849727135604059823),
-            name: 'color',
-            type: 9,
-            flags: 0),
-        ModelProperty(
             id: const IdUid(7, 4114126750303806628),
             name: 'imageName',
             type: 9,
@@ -155,6 +150,18 @@ final _entities = <ModelEntity>[
         ModelProperty(
             id: const IdUid(11, 2380622141480846707),
             name: 'status',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(12, 6629873035293510143),
+            name: 'screenId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(4, 5077230280801065317),
+            relationTarget: 'ScreenShootModel'),
+        ModelProperty(
+            id: const IdUid(15, 2205741989534374320),
+            name: 'type',
             type: 9,
             flags: 0)
       ],
@@ -344,12 +351,17 @@ ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
       lastEntityId: const IdUid(5, 8704043719060779501),
-      lastIndexId: const IdUid(3, 9102685703102770362),
+      lastIndexId: const IdUid(5, 6611679611590200189),
       lastRelationId: const IdUid(4, 3601124264196646975),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [],
-      retiredIndexUids: const [2805705393685960525],
-      retiredPropertyUids: const [4568898860801454124],
+      retiredIndexUids: const [2805705393685960525, 6611679611590200189],
+      retiredPropertyUids: const [
+        4568898860801454124,
+        849727135604059823,
+        6542381401667717635,
+        3519223867602794168
+      ],
       retiredRelationUids: const [],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -437,7 +449,7 @@ ModelDefinition getObjectBoxModel() {
         }),
     ScenePartModel: EntityDefinition<ScenePartModel>(
         model: _entities[1],
-        toOneRelations: (ScenePartModel object) => [],
+        toOneRelations: (ScenePartModel object) => [object.screen],
         toManyRelations: (ScenePartModel object) =>
             {RelInfo<ScenePartModel>.toMany(1, object.id!): object.partObjects},
         getId: (ScenePartModel object) => object.id,
@@ -445,8 +457,6 @@ ModelDefinition getObjectBoxModel() {
           object.id = id;
         },
         objectToFB: (ScenePartModel object, fb.Builder fbb) {
-          final colorOffset =
-              object.color == null ? null : fbb.writeString(object.color!);
           final imageNameOffset = object.imageName == null
               ? null
               : fbb.writeString(object.imageName!);
@@ -459,18 +469,21 @@ ModelDefinition getObjectBoxModel() {
               object.label == null ? null : fbb.writeString(object.label!);
           final statusOffset =
               object.status == null ? null : fbb.writeString(object.status!);
-          fbb.startTable(12);
+          final typeOffset =
+              object.type == null ? null : fbb.writeString(object.type!);
+          fbb.startTable(16);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addFloat64(1, object.left);
           fbb.addFloat64(2, object.right);
           fbb.addFloat64(3, object.top);
           fbb.addFloat64(4, object.bottom);
-          fbb.addOffset(5, colorOffset);
           fbb.addOffset(6, imageNameOffset);
           fbb.addOffset(7, pathOffset);
           fbb.addOffset(8, descriptionOffset);
           fbb.addOffset(9, labelOffset);
           fbb.addOffset(10, statusOffset);
+          fbb.addInt64(11, object.screen.targetId);
+          fbb.addOffset(14, typeOffset);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -478,19 +491,12 @@ ModelDefinition getObjectBoxModel() {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
 
-          final object = ScenePartModel()
-            ..id =
-                const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4)
-            ..left = const fb.Float64Reader()
-                .vTableGetNullable(buffer, rootOffset, 6)
-            ..right = const fb.Float64Reader()
-                .vTableGetNullable(buffer, rootOffset, 8)
-            ..top = const fb.Float64Reader()
-                .vTableGetNullable(buffer, rootOffset, 10)
-            ..bottom = const fb.Float64Reader()
-                .vTableGetNullable(buffer, rootOffset, 12)
-            ..color = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 14)
+          final object = ScenePartModel(
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4),
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 6, 0),
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 8, 0),
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 10, 0),
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 12, 0))
             ..imageName = const fb.StringReader(asciiOptimization: true)
                 .vTableGetNullable(buffer, rootOffset, 16)
             ..path = const fb.StringReader(asciiOptimization: true)
@@ -500,7 +506,12 @@ ModelDefinition getObjectBoxModel() {
             ..label = const fb.StringReader(asciiOptimization: true)
                 .vTableGetNullable(buffer, rootOffset, 22)
             ..status = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 24);
+                .vTableGetNullable(buffer, rootOffset, 24)
+            ..type = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 32);
+          object.screen.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 26, 0);
+          object.screen.attach(store);
           InternalToManyAccess.setRelInfo<ScenePartModel>(object.partObjects,
               store, RelInfo<ScenePartModel>.toMany(1, object.id!));
           return object;
@@ -757,29 +768,33 @@ class ScenePartModel_ {
   static final bottom =
       QueryDoubleProperty<ScenePartModel>(_entities[1].properties[4]);
 
-  /// see [ScenePartModel.color]
-  static final color =
-      QueryStringProperty<ScenePartModel>(_entities[1].properties[5]);
-
   /// see [ScenePartModel.imageName]
   static final imageName =
-      QueryStringProperty<ScenePartModel>(_entities[1].properties[6]);
+      QueryStringProperty<ScenePartModel>(_entities[1].properties[5]);
 
   /// see [ScenePartModel.path]
   static final path =
-      QueryStringProperty<ScenePartModel>(_entities[1].properties[7]);
+      QueryStringProperty<ScenePartModel>(_entities[1].properties[6]);
 
   /// see [ScenePartModel.description]
   static final description =
-      QueryStringProperty<ScenePartModel>(_entities[1].properties[8]);
+      QueryStringProperty<ScenePartModel>(_entities[1].properties[7]);
 
   /// see [ScenePartModel.label]
   static final label =
-      QueryStringProperty<ScenePartModel>(_entities[1].properties[9]);
+      QueryStringProperty<ScenePartModel>(_entities[1].properties[8]);
 
   /// see [ScenePartModel.status]
   static final status =
-      QueryStringProperty<ScenePartModel>(_entities[1].properties[10]);
+      QueryStringProperty<ScenePartModel>(_entities[1].properties[9]);
+
+  /// see [ScenePartModel.screen]
+  static final screen = QueryRelationToOne<ScenePartModel, ScreenShootModel>(
+      _entities[1].properties[10]);
+
+  /// see [ScenePartModel.type]
+  static final type =
+      QueryStringProperty<ScenePartModel>(_entities[1].properties[11]);
 
   /// see [ScenePartModel.partObjects]
   static final partObjects =

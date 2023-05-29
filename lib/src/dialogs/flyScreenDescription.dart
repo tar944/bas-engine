@@ -26,7 +26,7 @@ void showFlyDescription(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Label Box',
+                'Page description',
                 style: TextSystem.textMB(Colors.white),
               ),
               const SizedBox(height: 20),

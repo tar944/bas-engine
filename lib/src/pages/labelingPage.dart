@@ -68,6 +68,7 @@ class LabelingPage extends HookWidget with WindowListener {
   @override
   Widget build(BuildContext context) {
     final allScreens = useState([]);
+    final indexImage = useState(0);
 
     useEffect(() {
       _init();
@@ -75,6 +76,12 @@ class LabelingPage extends HookWidget with WindowListener {
         final video = await VideoDAO().getVideo(videoId!);
         if (video!.screenShoots.toList().isNotEmpty) {
           allScreens.value = video.screenShoots.toList();
+          for(final screen in allScreens.value) {
+            if(screen.status=='created'){
+              indexImage.value= allScreens.value.indexOf(screen);
+              break;
+            }
+          }
         } else {
           final screenResult = await PythonHelper().generateScreenShoots(
               video.path,
@@ -93,7 +100,6 @@ class LabelingPage extends HookWidget with WindowListener {
       return null;
     }, const []);
 
-    final indexImage = useState(0);
 
     nextImage() {
       indexImage.value = ++indexImage.value;
@@ -109,13 +115,14 @@ class LabelingPage extends HookWidget with WindowListener {
 
     onImageHandler(String action) async {
       print(action);
-      var actions=action.split('&&');
+      var actions = action.split('&&');
       ScreenShootModel? screen =
           await ScreenDAO().getScreen(int.parse(actions[1]));
       switch (actions[0]) {
         case 'edit':
-          screen!.type=actions[2];
-          screen.description=actions[3];
+          screen!.type = actions[2];
+          screen.description = actions[3];
+          screen.status = 'finished';
           await ScreenDAO().updateScreen(screen);
           allScreens.value = await VideoDAO().getAllScreens(videoId!);
           break;
@@ -180,6 +187,22 @@ class LabelingPage extends HookWidget with WindowListener {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.start,
                             children: [
+                              if (allScreens.value[indexImage.value].description != null &&
+                                  allScreens.value[indexImage.value].description != '')
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10,bottom: 10),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: Colors.grey[200],
+                                        borderRadius: BorderRadius.circular(10)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(top: 8.0,bottom: 10.0,left: 8.0,right: 8.0),
+                                      child: Text('Description : '+allScreens.value[indexImage.value].description,
+                                        style: TextSystem.textM(Colors.white),
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               FlyoutMainPageLabeling(
                                 onActionCaller: onImageHandler,
                                 screen: allScreens.value[indexImage.value],
@@ -210,7 +233,8 @@ class LabelingPage extends HookWidget with WindowListener {
                                             return ScreenItem(
                                               screen: allScreens.value[index],
                                               onActionCaller: onImageHandler,
-                                              isSelected:indexImage.value==index,
+                                              isSelected:
+                                                  indexImage.value == index,
                                             );
                                           }),
                                     ),

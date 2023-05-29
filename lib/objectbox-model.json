@@ -79,7 +79,7 @@
     },
     {
       "id": "2:1511157904358265259",
-      "lastPropertyId": "11:2380622141480846707",
+      "lastPropertyId": "15:2205741989534374320",
       "name": "ScenePartModel",
       "properties": [
         {
@@ -109,11 +109,6 @@
           "type": 8
         },
         {
-          "id": "6:849727135604059823",
-          "name": "color",
-          "type": 9
-        },
-        {
           "id": "7:4114126750303806628",
           "name": "imageName",
           "type": 9
@@ -136,6 +131,19 @@
         {
           "id": "11:2380622141480846707",
           "name": "status",
+          "type": 9
+        },
+        {
+          "id": "12:6629873035293510143",
+          "name": "screenId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "4:5077230280801065317",
+          "relationTarget": "ScreenShootModel"
+        },
+        {
+          "id": "15:2205741989534374320",
+          "name": "type",
           "type": 9
         }
       ],
@@ -310,17 +318,21 @@
     }
   ],
   "lastEntityId": "5:8704043719060779501",
-  "lastIndexId": "3:9102685703102770362",
+  "lastIndexId": "5:6611679611590200189",
   "lastRelationId": "4:3601124264196646975",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,
   "retiredEntityUids": [],
   "retiredIndexUids": [
-    2805705393685960525
+    2805705393685960525,
+    6611679611590200189
   ],
   "retiredPropertyUids": [
-    4568898860801454124
+    4568898860801454124,
+    849727135604059823,
+    6542381401667717635,
+    3519223867602794168
   ],
   "retiredRelationUids": [],
   "version": 1

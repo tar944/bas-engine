@@ -4,6 +4,7 @@ import '../../../main.dart';
 import '../../../objectbox.g.dart';
 import '../models/scenePartModel.dart';
 import '../models/screenShootModel.dart';
+import 'package:path/path.dart' as p;
 
 class ScreenDAO {
   Future<ScreenShootModel?> getScreen(int id) async {
@@ -57,11 +58,10 @@ class ScreenDAO {
   Future<bool> deleteScreen(ScreenShootModel screen) async {
     Box<ScreenShootModel> box = objectbox.store.box<ScreenShootModel>();
     bool result = box.remove(screen.id!);
-    DirectoryManager().deleteScreen(
+    DirectoryManager().deleteImage(p.join(
         '${screen.video.target!.software.target!.id}_${screen.video.target!.software.target!.title!}',
         screen.video.target!.name!,
-        screen.imageName!
-    );
+        screen.imageName!));
     return result;
   }
 }

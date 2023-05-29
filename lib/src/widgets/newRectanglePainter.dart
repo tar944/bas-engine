@@ -1,14 +1,13 @@
+import 'package:bas_dataset_generator_engine/src/data/models/scenePartModel.dart';
 import 'package:bas_dataset_generator_engine/src/widgets/rectanglePainter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-
-import '../data/models/rectangleModel.dart';
 
 class NewRectanglePainter extends HookWidget {
   NewRectanglePainter({Key? key, required this.onNewListener})
       : super(key: key);
 
-  ValueSetter<RectangleModel> onNewListener;
+  ValueSetter<ScenePartModel> onNewListener;
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +34,8 @@ class NewRectanglePainter extends HookWidget {
       },
       onPointerUp: (e) {
         isPainting.value = false;
-        print(
-            'top =>${top.value} ** left =>${left.value} ** bottom =>${bottom.value} ** right =>${right.value} ');
-        onNewListener!(RectangleModel(
+        onNewListener(ScenePartModel(
+            0,
             right.value > left.value ? left.value : right.value,
             right.value > left.value ? right.value : left.value,
             top.value > bottom.value ? bottom.value : top.value,
@@ -49,7 +47,7 @@ class NewRectanglePainter extends HookWidget {
       },
       child: CustomPaint(
         painter: RectanglePainter(
-            RectangleModel(left.value, right.value, top.value, bottom.value)),
+            ScenePartModel(0,left.value, right.value, top.value, bottom.value)),
       ),
     );
   }

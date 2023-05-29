@@ -31,7 +31,7 @@ class LabelingItem extends HookWidget {
             ),
           ),
         ),
-        Positioned.fill(child: PartRegionExplorer()),
+        Positioned.fill(child: PartRegionExplorer(screenId:item.id!,allParts: item.sceneParts ?? [],)),
         Positioned(
           top: 350,
           right: 0,
