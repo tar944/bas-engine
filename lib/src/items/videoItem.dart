@@ -79,7 +79,7 @@ class VideoItem extends HookWidget {
                     shape: BoxShape.circle,
                     color: Colors.grey[170].withOpacity(0.5),
                   ),
-                  child:const Padding(
+                  child: const Padding(
                     padding: EdgeInsets.only(left: 5),
                     child: Icon(
                       CupertinoIcons.play,
@@ -90,45 +90,53 @@ class VideoItem extends HookWidget {
               onPressed: () => onActionCaller!('play&&${video.id}')),
           const Spacer(),
           Container(
-            height: 40,
-            width: double.infinity,
-            decoration: BoxDecoration(
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(10),
-                  bottomRight: Radius.circular(10),
-                ),
-                color: Colors.grey[170].withOpacity(0.7)),
-            child: Row(
-              children: [
-                Expanded(
-                    flex: 14,
-                    child: FlyoutTarget(
-                        key: GlobalKey(),
-                        controller: controller,
-                        child: IconButton(
-                            icon: Icon(
-                              FluentIcons.delete,
-                              color: Colors.red,
-                            ),
-                            onPressed: () => showFlyDelete(
-                                "Are you sure?",
-                                "yeh",
-                                controller,
-                                FlyoutPlacementMode.topCenter,
-                                video.id,
-                                onActionCaller)))),
-                Expanded(
-                    flex: 86,
-                    child: IconButton(
-                      onPressed: ()=>onActionCaller!('goto&&${video.id}'),
-                      icon: Text(
-                        'Watch screens',
-                        style: TextSystem.textS(Colors.white),
-                      ),
-                    )),
-              ],
-            )
-          ),
+              height: 40,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    bottomRight: Radius.circular(10),
+                  ),
+                  color: Colors.grey[190].withOpacity(0.7)),
+              child: Row(
+                children: [
+                  Expanded(
+                      flex: 14,
+                      child: FlyoutTarget(
+                          key: GlobalKey(),
+                          controller: controller,
+                          child: IconButton(
+                              icon: Icon(
+                                FluentIcons.delete,
+                                color: Colors.red,
+                              ),
+                              onPressed: () => showFlyDelete(
+                                  "Are you sure?",
+                                  "yeh",
+                                  controller,
+                                  FlyoutPlacementMode.topCenter,
+                                  video.id,
+                                  onActionCaller)))),
+                  Expanded(
+                      flex: 26,
+                      child: IconButton(
+                        onPressed: () => onActionCaller!('screens&&${video.id}'),
+                        icon: Text(
+                          'Screens',
+                          style: TextSystem.textS(Colors.white),
+                        ),
+                      )),
+                  Expanded(
+                      flex: 60,
+                      child: IconButton(
+                        onPressed: () => onActionCaller!('labeling&&${video.id}'),
+                        icon: Text(
+                          'Labeling page',
+                          style: TextSystem.textS(Colors.magenta.lighter),
+                        ),
+                      )),
+                ],
+              )),
         ],
       ),
     );

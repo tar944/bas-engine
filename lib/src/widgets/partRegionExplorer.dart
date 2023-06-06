@@ -9,47 +9,23 @@ import 'newRectanglePainter.dart';
 class PartRegionExplorer extends HookWidget {
   PartRegionExplorer( {
     Key? key,
+    required this.onNewPartHandler,
     required this.allParts,
     required this.screenId,
   }) : super(key: key);
 
   final List<ScenePartModel> allParts;
   final int screenId;
+  final ValueSetter<ScenePartModel> onNewPartHandler;
 
   @override
   Widget build(BuildContext context) {
-    final allRectangles = useState(allParts);
 
-    onNewRectangleHandler(ScenePartModel newPart) {
-      allRectangles.value = [...allRectangles.value..add(newPart)];
+    onNewRectangleHandler(ScenePartModel newPart) async{
+      onNewPartHandler(newPart);
     }
 
-    onPartSaveHandler(String action) async{
-      print(action);
-      var actions = action.split('&&');
-      ScenePartModel? part = await PartDAO().getPart(int.parse(actions[1]));
-      switch (actions[0]) {
-        case 'edit':
-          part!.type = actions[2];
-          part.description = actions[3];
-          part.status = 'finished';
-          await PartDAO().updatePart(part);
-          allRectangles.value = await ScreenDAO().getAllParts(screenId);
-          break;
-        case 'delete':
-          await PartDAO().deletePart(part!);
-          allRectangles.value = await ScreenDAO().getAllParts(screenId);
-          break;
-        case 'show':
-          // for (final item in allScreens.value) {
-          //   if (item.id == screen!.id) {
-          //     indexImage.value = allScreens.value.indexOf(item);
-          //     break;
-          //   }
-          // }
-          break;
-      }
-    }
+    print(allParts.length);
 
     return Stack(children: [
       Positioned(
@@ -58,10 +34,11 @@ class PartRegionExplorer extends HookWidget {
         right: 0.0,
         left: 0.0,
         child: NewRectanglePainter(
+          screenId: screenId,
           onNewListener: onNewRectangleHandler,
         ),
       ),
-      ...allRectangles.value.map((item) {
+      ...allParts.map((item) {
         return Positioned(
           top: item.top,
           left: item.left,

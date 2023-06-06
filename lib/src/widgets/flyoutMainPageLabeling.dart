@@ -28,84 +28,81 @@ class FlyoutMainPageLabeling extends HookWidget {
       'submenu',
       'rightMenu'
     ];
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(10, 0, 10, 10),
-      child: Container(
-        height: 60,
-        width: 595,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.grey[200],
-        ),
-        child: Padding(
-          padding: const EdgeInsets.only(left: 10, right: 10),
-          child: Row(
-            children: [
-              Container(
-                height: 40,
-                decoration: BoxDecoration(
-                    color: Colors.grey[150], borderRadius: BorderRadius.circular(5)),
-                child: Padding(
-                  padding: const EdgeInsets.only(left: 5, right: 5),
-                  child: Row(
-                    children: [
-                      FlyoutMainPageLabelingItem(
-                        title: titleList[0],
-                        isSelected: titleList[0]==screen.type,
-                        description: screen.description!=null?screen.description!:'',
-                        onActionListener: onSaveHandler,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      FlyoutMainPageLabelingItem(
-                        title: titleList[1],
-                        isSelected: titleList[1]==screen.type,
-                        description:  screen.description!=null?screen.description!:'',
-                        onActionListener: onSaveHandler,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      FlyoutMainPageLabelingItem(
-                        title: titleList[2],
-                        isSelected: titleList[2]==screen.type,
-                        description:  screen.description!=null?screen.description!:'',
-                        onActionListener: onSaveHandler,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      FlyoutMainPageLabelingItem(
-                        title: titleList[3],
-                        isSelected: titleList[3]==screen.type,
-                        description:  screen.description!=null?screen.description!:'',
-                        onActionListener: onSaveHandler,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      FlyoutMainPageLabelingItem(
-                        title: titleList[4],
-                        isSelected: titleList[4]==screen.type,
-                        description:  screen.description!=null?screen.description!:'',
-                        onActionListener: onSaveHandler,
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      FlyoutMainPageLabelingItem(
-                        title: titleList[5],
-                        isSelected: titleList[5]==screen.type,
-                        description:  screen.description!=null?screen.description!:'',
-                        onActionListener: onSaveHandler,
-                      ),
-                    ],
-                  ),
+    return Container(
+      height: 60,
+      width: 595,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.grey[200],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.only(left: 10, right: 10),
+        child: Row(
+          children: [
+            Container(
+              height: 40,
+              decoration: BoxDecoration(
+                  color: Colors.grey[150], borderRadius: BorderRadius.circular(5)),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 5, right: 5),
+                child: Row(
+                  children: [
+                    FlyoutMainPageLabelingItem(
+                      title: titleList[0],
+                      isSelected: titleList[0]==screen.type,
+                      description: screen.description!=null?screen.description!:'',
+                      onActionListener: onSaveHandler,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    FlyoutMainPageLabelingItem(
+                      title: titleList[1],
+                      isSelected: titleList[1]==screen.type,
+                      description:  screen.description!=null?screen.description!:'',
+                      onActionListener: onSaveHandler,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    FlyoutMainPageLabelingItem(
+                      title: titleList[2],
+                      isSelected: titleList[2]==screen.type,
+                      description:  screen.description!=null?screen.description!:'',
+                      onActionListener: onSaveHandler,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    FlyoutMainPageLabelingItem(
+                      title: titleList[3],
+                      isSelected: titleList[3]==screen.type,
+                      description:  screen.description!=null?screen.description!:'',
+                      onActionListener: onSaveHandler,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    FlyoutMainPageLabelingItem(
+                      title: titleList[4],
+                      isSelected: titleList[4]==screen.type,
+                      description:  screen.description!=null?screen.description!:'',
+                      onActionListener: onSaveHandler,
+                    ),
+                    const SizedBox(
+                      width: 5,
+                    ),
+                    FlyoutMainPageLabelingItem(
+                      title: titleList[5],
+                      isSelected: titleList[5]==screen.type,
+                      description:  screen.description!=null?screen.description!:'',
+                      onActionListener: onSaveHandler,
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

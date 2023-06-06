@@ -94,8 +94,11 @@ class VideoList extends HookWidget with WindowListener {
           await VideoDAO().deleteVideo(video!);
           videos.value = await SoftwareDAO().getAllVideos(softwareId!);
           break;
-        case 'goto':
+        case 'labeling':
           context.goNamed('labeling',params: {'videoId':video!.id.toString()});
+          break;
+        case 'screens':
+          context.goNamed('screensList',params: {'videoId':video!.id.toString()});
           break;
       }
     }
@@ -168,7 +171,7 @@ class VideoList extends HookWidget with WindowListener {
                                       scrollDirection: Axis.vertical,
                                       gridDelegate:
                                           const SliverGridDelegateWithMaxCrossAxisExtent(
-                                              maxCrossAxisExtent: 300,
+                                              maxCrossAxisExtent: 305,
                                               childAspectRatio: 3 / 1.8,
                                               crossAxisSpacing: 20,
                                               mainAxisSpacing: 20),

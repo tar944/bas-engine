@@ -1,13 +1,15 @@
+import 'package:bas_dataset_generator_engine/src/data/dao/screenShotDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/scenePartModel.dart';
 import 'package:bas_dataset_generator_engine/src/widgets/rectanglePainter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class NewRectanglePainter extends HookWidget {
-  NewRectanglePainter({Key? key, required this.onNewListener})
+  NewRectanglePainter({Key? key, required this.onNewListener,required this.screenId})
       : super(key: key);
 
   ValueSetter<ScenePartModel> onNewListener;
+  int screenId;
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +34,16 @@ class NewRectanglePainter extends HookWidget {
           bottom.value = e.localPosition.dy;
         }
       },
-      onPointerUp: (e) {
+      onPointerUp: (e) async{
         isPainting.value = false;
-        onNewListener(ScenePartModel(
+        final part =ScenePartModel(
             0,
             right.value > left.value ? left.value : right.value,
             right.value > left.value ? right.value : left.value,
             top.value > bottom.value ? bottom.value : top.value,
-            top.value > bottom.value ? top.value : bottom.value));
+            top.value > bottom.value ? top.value : bottom.value);
+        part.screen.target=await ScreenDAO().getScreen(screenId);
+        onNewListener(part);
         top.value = 0.0;
         left.value = 0.0;
         right.value = 0.0;

@@ -131,6 +131,7 @@ class PagePartLabeling extends HookWidget with WindowListener {
                           item: imageList[indexImage.value],
                           nextClick: nextImage,
                           perviousClick: perviousImage,
+                          onPartsChanged: (String value) {  },
                         ),
                       ),
                       Positioned(
