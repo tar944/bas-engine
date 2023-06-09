@@ -66,6 +66,17 @@ class DirectoryManager {
       return true;
     }
   }
+  Future<String> createGroupDir(String softwareName, String groupName) async {
+    final docsDir = await getApplicationDocumentsDirectory();
+    var path =
+        Directory(p.join(docsDir.path, appDirName, softwareName, groupName));
+    if (path.existsSync()) {
+      return path.path;
+    } else {
+      path.create();
+      return path.path;
+    }
+  }
 
   Future<String> getPartDir(String softwareName, String videoName) async {
     final docsDir = await getApplicationDocumentsDirectory();
@@ -99,6 +110,14 @@ class DirectoryManager {
     final docsDir = await getApplicationDocumentsDirectory();
     var path =
         Directory(p.join(docsDir.path, appDirName, softwareName, videoName));
+    if (path.existsSync()) {
+      path.deleteSync(recursive: true);
+    }
+  }
+  deleteGroupDirectory(String softwareName, String groupName) async {
+    final docsDir = await getApplicationDocumentsDirectory();
+    var path =
+        Directory(p.join(docsDir.path, appDirName, softwareName, groupName));
     if (path.existsSync()) {
       path.deleteSync(recursive: true);
     }

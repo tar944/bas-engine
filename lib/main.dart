@@ -1,8 +1,9 @@
 import 'package:bas_dataset_generator_engine/src/data/dao/objectBox.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage.dart';
+import 'package:bas_dataset_generator_engine/src/pages/recordPage.dart';
 import 'package:bas_dataset_generator_engine/src/pages/screensPage.dart';
+import 'package:bas_dataset_generator_engine/src/pages/screensSource.dart';
 import 'package:bas_dataset_generator_engine/src/pages/softwaresList.dart';
-import 'package:bas_dataset_generator_engine/src/pages/videoList.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:bas_dataset_generator_engine/src/utility/theme.dart';
@@ -90,9 +91,9 @@ class MyApp extends StatelessWidget {
 final router = GoRouter(
   routes: [
     GoRoute(
-      path: '/video/:softwareId',
-      name: 'videoList',
-      builder: (context, state) => VideoList(int.parse(state.params['softwareId']!)),
+      path: '/screensSource/:softwareId',
+      name: 'screensSource',
+      builder: (context, state) => ScreensSource(int.parse(state.params['softwareId']!)),
     ),
     GoRoute(
       path: '/',
@@ -100,14 +101,19 @@ final router = GoRouter(
       builder: (context, state) => SoftWaresList(),
     ),
     GoRoute(
-      path: '/screens/:videoId',
+      path: '/screens/:groupId',
       name: 'screensList',
-      builder: (context, state) => ScreensPage(int.parse(state.params['videoId']!)),
+      builder: (context, state) => ScreensPage(int.parse(state.params['groupId']!)),
     ),
     GoRoute(
       path: '/labeling/:videoId',
       name: 'labeling',
       builder: (context, state) => LabelingPage(int.parse(state.params['videoId']!)),
+    ),
+    GoRoute(
+      path: '/recordScreens/:groupId',
+      name: 'recordScreens',
+      builder: (context, state) => RecordPage(int.parse(state.params['groupId']!)),
     ),
   ],
 );

@@ -7,9 +7,12 @@ list(APPEND FLUTTER_PLUGIN_LIST
   flutter_acrylic
   flutter_meedu_videoplayer
   fullscreen_window
+  keyboard_event
   media_kit_libs_windows_video
   media_kit_video
+  mouse_event
   screen_brightness_windows
+  screen_capturer
   screen_retriever
   system_theme
   window_manager

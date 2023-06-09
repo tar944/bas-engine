@@ -1,4 +1,5 @@
 import 'package:bas_dataset_generator_engine/main.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/recordedScreenGroup.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/softwareModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
@@ -27,6 +28,14 @@ class SoftwareDAO {
     return software.allVideos.toList();
   }
 
+  Future<List<RecordedScreenGroup>> getAllGroups(int id) async{
+    final software = await getSoftware(id);
+    if(software==null){
+      return [];
+    }
+    return software.allGroups.toList();
+  }
+
   Future<int> addSoftware(SoftwareModel newSoftware) async{
     Box<SoftwareModel> box = objectbox.store.box<SoftwareModel>();
     int result = box.put(newSoftware);
@@ -39,6 +48,16 @@ class SoftwareDAO {
       return false;
     }
     software.allVideos.add(video);
+    updateSoftware(software);
+    return true;
+  }
+
+  Future<bool> addAGroup(int id,RecordedScreenGroup group) async{
+    final software = await getSoftware(id);
+    if(software==null){
+      return false;
+    }
+    software.allGroups.add(group);
     updateSoftware(software);
     return true;
   }

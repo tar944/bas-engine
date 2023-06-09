@@ -15,4 +15,18 @@ class PythonHelper extends Flython {
     finalize();
     return result;
   }
+
+  Future<dynamic> findPartsOnScreen(
+      String imgPath,
+      String templateFilesPath,
+      ) async {
+    initialize("py", "./lib/src/python/findTemplates.py", true);
+    var command = {
+      "imgPath": imgPath,
+      "templateFilesPath": templateFilesPath,
+    };
+    final result = await runCommand(command);
+    finalize();
+    return result;
+  }
 }

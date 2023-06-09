@@ -1,9 +1,7 @@
+import 'package:bas_dataset_generator_engine/src/data/dao/recordedScreenGroupsDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/screenShotDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/dao/videoDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/screenShootModel.dart';
 import 'package:bas_dataset_generator_engine/src/items/screenItem.dart';
-import 'package:bas_dataset_generator_engine/src/python/pythonHelper.dart';
-import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -15,9 +13,9 @@ import '../parts/topBarPanel.dart';
 import '../utility/platform_util.dart';
 
 class ScreensPage extends HookWidget with WindowListener {
-  int? videoId;
+  int? groupId;
 
-  ScreensPage(this.videoId, {super.key});
+  ScreensPage(this.groupId, {super.key});
 
   void _init() async {
     // Add this line to override the default close handler
@@ -71,29 +69,15 @@ class ScreensPage extends HookWidget with WindowListener {
     useEffect(() {
       _init();
       Future<void>.microtask(() async {
-        final video = await VideoDAO().getVideo(videoId!);
-        if (video!.screenShoots.toList().isNotEmpty) {
-          allScreens.value = video.screenShoots.toList();
+        final group = await RecordedScreenGroupDAO().getGroup(groupId!);
+        if (group!.screenShoots.toList().isNotEmpty) {
+          allScreens.value = group.screenShoots.toList();
           for (final screen in allScreens.value) {
             if (screen.status == 'created') {
               indexImage.value = allScreens.value.indexOf(screen);
               break;
             }
           }
-        } else {
-          final screenResult = await PythonHelper().generateScreenShoots(
-              video.path,
-              await DirectoryManager().getScreenDirectoryPath(
-                  '${video.software.target!.id}_${video.software.target!.title!}',
-                  video.name!));
-          for (var screen in screenResult) {
-            print(screen['path']);
-            final newScreen = ScreenShootModel(0, screen['hashDifference'],
-                screen['imageName'], screen['path'], 'created');
-            newScreen.video.target = video;
-            ScreenDAO().addScreen(newScreen);
-          }
-          allScreens.value = await VideoDAO().getAllScreens(videoId!);
         }
       });
       return null;
@@ -107,7 +91,7 @@ class ScreensPage extends HookWidget with WindowListener {
       switch (actions[0]) {
         case 'delete':
           await ScreenDAO().deleteScreen(screen!);
-          allScreens.value = await VideoDAO().getAllScreens(videoId!);
+          allScreens.value = await RecordedScreenGroupDAO().getAllScreens(groupId!);
           break;
       }
     }
@@ -126,9 +110,30 @@ class ScreensPage extends HookWidget with WindowListener {
                 child: Container(
                   alignment: Alignment.center,
                   color: Colors.grey[150],
-                  child: Text(
-                    "please waiting ...",
-                    style: TextSystem.textL(Colors.white),
+                  child: Column(
+                    children: [
+                      const SizedBox(
+                        height: 150,
+                      ),
+                      Container(
+                        height: 350,
+                        width: 350,
+                        decoration: const BoxDecoration(
+                          image: DecorationImage(
+                            image: AssetImage(
+                                'lib/assets/images/emptyBox.png'),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 50,
+                      ),
+                      Text(
+                        'your Screen list is empty...',
+                        style: TextSystem.textL(Colors.white),
+                      ),
+                    ],
                   ),
                 ),
               )

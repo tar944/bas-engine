@@ -93,7 +93,7 @@ class LabelingPage extends HookWidget with WindowListener {
             final newScreen = ScreenShootModel(0, screen['hashDifference'],
                 screen['imageName'], screen['path'], 'created');
             newScreen.video.target = video;
-            ScreenDAO().addScreen(newScreen);
+            ScreenDAO().addScreenToVideo(newScreen);
           }
           allScreens.value = await VideoDAO().getAllScreens(videoId!);
         }

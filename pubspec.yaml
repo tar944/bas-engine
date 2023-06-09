@@ -50,10 +50,14 @@ dependencies:
   objectbox: ^2.0.0
   flython: ^0.2.0
   image: ^4.0.17
-
+  mouse_event: ^0.1.1
+  keyboard_event: ^0.3.4
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
+  screen_capturer:
+    path: ./packages/screen_capturer
+
 
 dev_dependencies:
   flutter_test:

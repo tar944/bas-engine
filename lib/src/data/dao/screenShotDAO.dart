@@ -1,7 +1,9 @@
+import 'package:bas_dataset_generator_engine/src/data/dao/recordedScreenGroupsDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/videoDAO.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import '../../../main.dart';
 import '../../../objectbox.g.dart';
+import '../models/actionModel.dart';
 import '../models/scenePartModel.dart';
 import '../models/screenShootModel.dart';
 
@@ -20,12 +22,27 @@ class ScreenDAO {
     return screen.sceneParts.toList();
   }
 
-  Future<int> addScreen(ScreenShootModel newScreen) async {
+  Future<int> addScreenToVideo(ScreenShootModel newScreen) async {
     Box<ScreenShootModel> box = objectbox.store.box<ScreenShootModel>();
     int result = box.put(newScreen);
     newScreen.id = result;
     VideoDAO().addAScreenShoot(newScreen.video.target!.id, newScreen);
     return result;
+  }
+
+  Future<int> addScreenToGroup(ScreenShootModel newScreen) async {
+    Box<ScreenShootModel> box = objectbox.store.box<ScreenShootModel>();
+    int result = box.put(newScreen);
+    newScreen.id = result;
+    RecordedScreenGroupDAO().addAScreenShoot(newScreen.group.target!.id, newScreen);
+    return result;
+  }
+
+  Future<ActionModel> addAction(ActionModel newAction) async {
+    Box<ActionModel> box = objectbox.store.box<ActionModel>();
+    int result = box.put(newAction);
+    newAction.id = result;
+    return newAction;
   }
 
   Future<bool> addAPart(int id, ScenePartModel part) async {

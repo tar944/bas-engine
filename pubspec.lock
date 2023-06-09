@@ -229,10 +229,10 @@ packages:
     dependency: transitive
     description:
       name: ffi
-      sha256: a38574032c5f1dd06c4aee541789906c12ccaab8ba01446e800d9c5b79c4a978
+      sha256: ed5337a5660c506388a9f012be0288fb38b49020ce2b45fe1f8b8323fe429f99
       url: "https://pub.dev"
     source: hosted
-    version: "2.0.1"
+    version: "2.0.2"
   file:
     dependency: transitive
     description:
@@ -485,6 +485,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.8.1"
+  keyboard_event:
+    dependency: "direct main"
+    description:
+      name: keyboard_event
+      sha256: "8549ac054a7620c4a7d11a1256c5a15df5a8f8b20a6f4106a1c98ed2afb213b8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.3.4"
   lints:
     dependency: transitive
     description:
@@ -493,6 +501,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.1"
+  logger:
+    dependency: transitive
+    description:
+      name: logger
+      sha256: "7ad7215c15420a102ec687bb320a7312afd449bac63bfb1c60d9787c27b9767f"
+      url: "https://pub.dev"
+    source: hosted
+    version: "1.4.0"
   logging:
     dependency: transitive
     description:
@@ -605,6 +621,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  mouse_event:
+    dependency: "direct main"
+    description:
+      name: mouse_event
+      sha256: "527731432e41d7b997021bf6b2bbab65970f6268975be154b9a97367e2d11f8d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.1"
   mutex:
     dependency: transitive
     description:
@@ -837,6 +861,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.1.1"
+  screen_capturer:
+    dependency: "direct main"
+    description:
+      path: "packages/screen_capturer"
+      relative: true
+    source: path
+    version: "0.1.5"
   screen_retriever:
     dependency: "direct main"
     description:
@@ -925,6 +956,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.4"
+  shell_executor:
+    dependency: transitive
+    description:
+      name: shell_executor
+      sha256: f89eb17bb2660568a255bb5612f2773ba9295792d7bb6b96e3ef87985a9457fa
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.1.4"
   simple_animations:
     dependency: "direct main"
     description:

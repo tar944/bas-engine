@@ -13,7 +13,9 @@ import 'package:flat_buffers/flat_buffers.dart' as fb;
 import 'package:objectbox/internal.dart'; // generated code can access "internal" functionality
 import 'package:objectbox/objectbox.dart';
 
+import 'src/data/models/actionModel.dart';
 import 'src/data/models/partObjectModel.dart';
+import 'src/data/models/recordedScreenGroup.dart';
 import 'src/data/models/scenePartModel.dart';
 import 'src/data/models/screenShootModel.dart';
 import 'src/data/models/softwareModel.dart';
@@ -175,7 +177,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(3, 1597679080181769401),
       name: 'ScreenShootModel',
-      lastPropertyId: const IdUid(9, 9200597527566909841),
+      lastPropertyId: const IdUid(11, 4786145739648791479),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -224,7 +226,21 @@ final _entities = <ModelEntity>[
             type: 11,
             flags: 520,
             indexId: const IdUid(3, 9102685703102770362),
-            relationTarget: 'VideoModel')
+            relationTarget: 'VideoModel'),
+        ModelProperty(
+            id: const IdUid(10, 7786409238732528863),
+            name: 'actionId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(7, 7590538489349267442),
+            relationTarget: 'ActionModel'),
+        ModelProperty(
+            id: const IdUid(11, 4786145739648791479),
+            name: 'groupId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(8, 8485429454284523408),
+            relationTarget: 'RecordedScreenGroup')
       ],
       relations: <ModelRelation>[
         ModelRelation(
@@ -279,7 +295,11 @@ final _entities = <ModelEntity>[
         ModelRelation(
             id: const IdUid(3, 3142818417267476908),
             name: 'allVideos',
-            targetId: const IdUid(5, 8704043719060779501))
+            targetId: const IdUid(5, 8704043719060779501)),
+        ModelRelation(
+            id: const IdUid(6, 2308983244739403012),
+            name: 'allGroups',
+            targetId: const IdUid(6, 9017281774192133442))
       ],
       backlinks: <ModelBacklink>[]),
   ModelEntity(
@@ -327,6 +347,91 @@ final _entities = <ModelEntity>[
             name: 'screenShoots',
             targetId: const IdUid(3, 1597679080181769401))
       ],
+      backlinks: <ModelBacklink>[]),
+  ModelEntity(
+      id: const IdUid(6, 9017281774192133442),
+      name: 'RecordedScreenGroup',
+      lastPropertyId: const IdUid(6, 6936433750103159329),
+      flags: 0,
+      properties: <ModelProperty>[
+        ModelProperty(
+            id: const IdUid(1, 4018237723287730103),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        ModelProperty(
+            id: const IdUid(2, 6713964104879476433),
+            name: 'name',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(3, 3023257593502409746),
+            name: 'description',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(4, 4647387367503344126),
+            name: 'path',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(5, 1464569696793758529),
+            name: 'imgNumber',
+            type: 6,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(6, 6936433750103159329),
+            name: 'softwareId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(6, 4230942784128615785),
+            relationTarget: 'SoftwareModel')
+      ],
+      relations: <ModelRelation>[
+        ModelRelation(
+            id: const IdUid(5, 7908712069285349255),
+            name: 'screenShoots',
+            targetId: const IdUid(3, 1597679080181769401))
+      ],
+      backlinks: <ModelBacklink>[]),
+  ModelEntity(
+      id: const IdUid(7, 2700096272836654076),
+      name: 'ActionModel',
+      lastPropertyId: const IdUid(6, 2819315822133627876),
+      flags: 0,
+      properties: <ModelProperty>[
+        ModelProperty(
+            id: const IdUid(1, 5917866481269124257),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        ModelProperty(
+            id: const IdUid(2, 2837853266455970129),
+            name: 'isMouse',
+            type: 1,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(3, 239330927059933361),
+            name: 'actionType',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(4, 4387130054909200501),
+            name: 'typedText',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(5, 2321597769615988385),
+            name: 'x',
+            type: 6,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(6, 2819315822133627876),
+            name: 'y',
+            type: 6,
+            flags: 0)
+      ],
+      relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[])
 ];
 
@@ -350,9 +455,9 @@ Store openStore(
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
-      lastEntityId: const IdUid(5, 8704043719060779501),
-      lastIndexId: const IdUid(5, 6611679611590200189),
-      lastRelationId: const IdUid(4, 3601124264196646975),
+      lastEntityId: const IdUid(7, 2700096272836654076),
+      lastIndexId: const IdUid(8, 8485429454284523408),
+      lastRelationId: const IdUid(6, 2308983244739403012),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [],
       retiredIndexUids: const [2805705393685960525, 6611679611590200189],
@@ -518,7 +623,8 @@ ModelDefinition getObjectBoxModel() {
         }),
     ScreenShootModel: EntityDefinition<ScreenShootModel>(
         model: _entities[2],
-        toOneRelations: (ScreenShootModel object) => [object.video],
+        toOneRelations: (ScreenShootModel object) =>
+            [object.video, object.action, object.group],
         toManyRelations: (ScreenShootModel object) => {
               RelInfo<ScreenShootModel>.toMany(2, object.id!): object.sceneParts
             },
@@ -541,7 +647,7 @@ ModelDefinition getObjectBoxModel() {
               object.type == null ? null : fbb.writeString(object.type!);
           final statusOffset =
               object.status == null ? null : fbb.writeString(object.status!);
-          fbb.startTable(10);
+          fbb.startTable(12);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, imageNameOffset);
           fbb.addOffset(2, pathOffset);
@@ -551,6 +657,8 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(6, statusOffset);
           fbb.addInt64(7, object.hashDifference);
           fbb.addInt64(8, object.video.targetId);
+          fbb.addInt64(9, object.action.targetId);
+          fbb.addInt64(10, object.group.targetId);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -576,6 +684,12 @@ ModelDefinition getObjectBoxModel() {
           object.video.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 20, 0);
           object.video.attach(store);
+          object.action.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 22, 0);
+          object.action.attach(store);
+          object.group.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 24, 0);
+          object.group.attach(store);
           InternalToManyAccess.setRelInfo<ScreenShootModel>(object.sceneParts,
               store, RelInfo<ScreenShootModel>.toMany(2, object.id!));
           return object;
@@ -583,8 +697,10 @@ ModelDefinition getObjectBoxModel() {
     SoftwareModel: EntityDefinition<SoftwareModel>(
         model: _entities[3],
         toOneRelations: (SoftwareModel object) => [],
-        toManyRelations: (SoftwareModel object) =>
-            {RelInfo<SoftwareModel>.toMany(3, object.id): object.allVideos},
+        toManyRelations: (SoftwareModel object) => {
+              RelInfo<SoftwareModel>.toMany(3, object.id): object.allVideos,
+              RelInfo<SoftwareModel>.toMany(6, object.id): object.allGroups
+            },
         getId: (SoftwareModel object) => object.id,
         setId: (SoftwareModel object, int id) {
           object.id = id;
@@ -637,6 +753,8 @@ ModelDefinition getObjectBoxModel() {
                   .vTableGetNullable(buffer, rootOffset, 16));
           InternalToManyAccess.setRelInfo<SoftwareModel>(object.allVideos,
               store, RelInfo<SoftwareModel>.toMany(3, object.id));
+          InternalToManyAccess.setRelInfo<SoftwareModel>(object.allGroups,
+              store, RelInfo<SoftwareModel>.toMany(6, object.id));
           return object;
         }),
     VideoModel: EntityDefinition<VideoModel>(
@@ -684,6 +802,95 @@ ModelDefinition getObjectBoxModel() {
           object.software.attach(store);
           InternalToManyAccess.setRelInfo<VideoModel>(object.screenShoots,
               store, RelInfo<VideoModel>.toMany(4, object.id));
+          return object;
+        }),
+    RecordedScreenGroup: EntityDefinition<RecordedScreenGroup>(
+        model: _entities[5],
+        toOneRelations: (RecordedScreenGroup object) => [object.software],
+        toManyRelations: (RecordedScreenGroup object) => {
+              RelInfo<RecordedScreenGroup>.toMany(5, object.id):
+                  object.screenShoots
+            },
+        getId: (RecordedScreenGroup object) => object.id,
+        setId: (RecordedScreenGroup object, int id) {
+          object.id = id;
+        },
+        objectToFB: (RecordedScreenGroup object, fb.Builder fbb) {
+          final nameOffset =
+              object.name == null ? null : fbb.writeString(object.name!);
+          final descriptionOffset = object.description == null
+              ? null
+              : fbb.writeString(object.description!);
+          final pathOffset = fbb.writeString(object.path);
+          fbb.startTable(7);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, nameOffset);
+          fbb.addOffset(2, descriptionOffset);
+          fbb.addOffset(3, pathOffset);
+          fbb.addInt64(4, object.imgNumber);
+          fbb.addInt64(5, object.software.targetId);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+
+          final object = RecordedScreenGroup(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0),
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 6),
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 10, ''),
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 8),
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0));
+          object.software.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
+          object.software.attach(store);
+          InternalToManyAccess.setRelInfo<RecordedScreenGroup>(
+              object.screenShoots,
+              store,
+              RelInfo<RecordedScreenGroup>.toMany(5, object.id));
+          return object;
+        }),
+    ActionModel: EntityDefinition<ActionModel>(
+        model: _entities[6],
+        toOneRelations: (ActionModel object) => [],
+        toManyRelations: (ActionModel object) => {},
+        getId: (ActionModel object) => object.id,
+        setId: (ActionModel object, int id) {
+          object.id = id;
+        },
+        objectToFB: (ActionModel object, fb.Builder fbb) {
+          final actionTypeOffset = fbb.writeString(object.actionType);
+          final typedTextOffset = object.typedText == null
+              ? null
+              : fbb.writeString(object.typedText!);
+          fbb.startTable(7);
+          fbb.addInt64(0, object.id);
+          fbb.addBool(1, object.isMouse);
+          fbb.addOffset(2, actionTypeOffset);
+          fbb.addOffset(3, typedTextOffset);
+          fbb.addInt64(4, object.x);
+          fbb.addInt64(5, object.y);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+
+          final object = ActionModel(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0),
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 6, false),
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 12),
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 14),
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 8, ''))
+            ..typedText = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 10);
+
           return object;
         })
   };
@@ -840,6 +1047,15 @@ class ScreenShootModel_ {
   static final video = QueryRelationToOne<ScreenShootModel, VideoModel>(
       _entities[2].properties[8]);
 
+  /// see [ScreenShootModel.action]
+  static final action = QueryRelationToOne<ScreenShootModel, ActionModel>(
+      _entities[2].properties[9]);
+
+  /// see [ScreenShootModel.group]
+  static final group =
+      QueryRelationToOne<ScreenShootModel, RecordedScreenGroup>(
+          _entities[2].properties[10]);
+
   /// see [ScreenShootModel.sceneParts]
   static final sceneParts =
       QueryRelationToMany<ScreenShootModel, ScenePartModel>(
@@ -879,6 +1095,11 @@ class SoftwareModel_ {
   /// see [SoftwareModel.allVideos]
   static final allVideos =
       QueryRelationToMany<SoftwareModel, VideoModel>(_entities[3].relations[0]);
+
+  /// see [SoftwareModel.allGroups]
+  static final allGroups =
+      QueryRelationToMany<SoftwareModel, RecordedScreenGroup>(
+          _entities[3].relations[1]);
 }
 
 /// [VideoModel] entity fields to define ObjectBox queries.
@@ -910,4 +1131,64 @@ class VideoModel_ {
   /// see [VideoModel.screenShoots]
   static final screenShoots = QueryRelationToMany<VideoModel, ScreenShootModel>(
       _entities[4].relations[0]);
+}
+
+/// [RecordedScreenGroup] entity fields to define ObjectBox queries.
+class RecordedScreenGroup_ {
+  /// see [RecordedScreenGroup.id]
+  static final id =
+      QueryIntegerProperty<RecordedScreenGroup>(_entities[5].properties[0]);
+
+  /// see [RecordedScreenGroup.name]
+  static final name =
+      QueryStringProperty<RecordedScreenGroup>(_entities[5].properties[1]);
+
+  /// see [RecordedScreenGroup.description]
+  static final description =
+      QueryStringProperty<RecordedScreenGroup>(_entities[5].properties[2]);
+
+  /// see [RecordedScreenGroup.path]
+  static final path =
+      QueryStringProperty<RecordedScreenGroup>(_entities[5].properties[3]);
+
+  /// see [RecordedScreenGroup.imgNumber]
+  static final imgNumber =
+      QueryIntegerProperty<RecordedScreenGroup>(_entities[5].properties[4]);
+
+  /// see [RecordedScreenGroup.software]
+  static final software =
+      QueryRelationToOne<RecordedScreenGroup, SoftwareModel>(
+          _entities[5].properties[5]);
+
+  /// see [RecordedScreenGroup.screenShoots]
+  static final screenShoots =
+      QueryRelationToMany<RecordedScreenGroup, ScreenShootModel>(
+          _entities[5].relations[0]);
+}
+
+/// [ActionModel] entity fields to define ObjectBox queries.
+class ActionModel_ {
+  /// see [ActionModel.id]
+  static final id =
+      QueryIntegerProperty<ActionModel>(_entities[6].properties[0]);
+
+  /// see [ActionModel.isMouse]
+  static final isMouse =
+      QueryBooleanProperty<ActionModel>(_entities[6].properties[1]);
+
+  /// see [ActionModel.actionType]
+  static final actionType =
+      QueryStringProperty<ActionModel>(_entities[6].properties[2]);
+
+  /// see [ActionModel.typedText]
+  static final typedText =
+      QueryStringProperty<ActionModel>(_entities[6].properties[3]);
+
+  /// see [ActionModel.x]
+  static final x =
+      QueryIntegerProperty<ActionModel>(_entities[6].properties[4]);
+
+  /// see [ActionModel.y]
+  static final y =
+      QueryIntegerProperty<ActionModel>(_entities[6].properties[5]);
 }

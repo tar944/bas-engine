@@ -17,7 +17,7 @@ def main(input):
     current_frame = 1
     current_hash = imagehash.average_hash(Image.open('./lib/assets/images/defaultImage.jpg'))
 
-    cutoff = 10  # maximum bits that could be different between the hashes.
+    cutoff = 5  # maximum bits that could be different between the hashes.
     screenShootsMetaData=[]
 
     if not cap.isOpened():

@@ -95,7 +95,7 @@ class SoftWaresList extends HookWidget with WindowListener {
           software.value = await SoftwareDAO().getAllSoftware();
           break;
         case 'goto':
-          context.goNamed('videoList',params: {'softwareId':soft!.id.toString()});
+          context.goNamed('screensSource',params: {'softwareId':soft!.id.toString()});
           break;
       }
     }

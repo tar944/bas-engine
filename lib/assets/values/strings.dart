@@ -30,6 +30,7 @@ class Strings{
   static const String panel = "Panel";
   static const String createACourse = "Create";
   static const String addSoftware = "Software";
+  static const String addScreens = "Screens";
   static const String openACourse = "open";
   static const String openVideo = "Video";
   static const String pageLibrary = "Library";
@@ -54,7 +55,9 @@ class Strings{
   static const String dlgTextTitle = "Type your text";
   static const String dlgVoiceRecorder = "Voice recorder";
   static const String dlgNewSoftware = "New software";
+  static const String dlgNewGroup = "New group";
   static const String dlgEditSoftware = "Edit software";
+  static const String dlgEditGroup = "Edit group";
   static const String dlgChapter = "Chapter info";
   static const String dlgLesson = "Lesson info";
   static const String dlgNewChapter = "New chapter";
@@ -70,6 +73,7 @@ class Strings{
   static const String chapterDescriptionTextHint = "type a description about your chapter here";
   static const String lessonDescriptionTextHint = "type a description about your lesson here";
   static const String softwareDescriptionHint = "type a description for this software";
+  static const String groupDescriptionHint = "type a description for this group";
 
   static const String chapters="Chapters";
   static const String lessons="Lessons";

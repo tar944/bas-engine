@@ -1,9 +1,7 @@
-import 'dart:io';
-import 'package:bas_dataset_generator_engine/src/data/dao/videoDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
-import 'package:bas_dataset_generator_engine/src/dialogs/dlgPlayVideo.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/recordedScreenGroup.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/dlgNewScreenGroup.dart';
+import 'package:bas_dataset_generator_engine/src/items/groupItem.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
@@ -11,17 +9,16 @@ import 'package:window_manager/window_manager.dart';
 import '../../assets/values/dimens.dart';
 import '../../assets/values/strings.dart';
 import '../../assets/values/textStyle.dart';
+import '../data/dao/recordedScreenGroupsDAO.dart';
 import '../data/dao/softwareDAO.dart';
-import '../items/videoItem.dart';
 import '../parts/addsOnPanel.dart';
 import '../parts/topBarPanel.dart';
 import '../utility/platform_util.dart';
-import 'package:path/path.dart' as p;
 
-class VideoList extends HookWidget with WindowListener {
+class ScreensSource extends HookWidget with WindowListener {
   int? softwareId;
 
-  VideoList(this.softwareId);
+  ScreensSource(this.softwareId);
 
   Offset _lastShownPosition = Offset.zero;
 
@@ -71,54 +68,64 @@ class VideoList extends HookWidget with WindowListener {
 
   @override
   Widget build(BuildContext context) {
-    final videos = useState([]);
+    final groups = useState([]);
 
     useEffect(() {
       _init();
       Future<void>.microtask(() async {
-        videos.value = await SoftwareDAO().getAllVideos(softwareId!);
+        groups.value = await SoftwareDAO().getAllGroups(softwareId!);
       });
       return null;
     }, const []);
 
-    void onVideoActionHandler(String action) async{
-      VideoModel? video=  await VideoDAO().getVideo(int.parse(action.split('&&')[1]));
+    void onSourceActionHandler(String action) async{
+      RecordedScreenGroup? group=  await RecordedScreenGroupDAO().getGroup(int.parse(action.split('&&')[1]));
       switch(action.split('&&')[0]){
-        case 'play':
-          showDialog(
-            context: context,
-            barrierDismissible: true,
-            builder: (context) =>DlgPlayVideo(video: video,),);
+        case 'record':
+          context.goNamed('recordScreens',params: {'groupId':group!.id.toString()});
+          Navigator.pop(context);
           break;
         case 'delete':
-          await VideoDAO().deleteVideo(video!);
-          videos.value = await SoftwareDAO().getAllVideos(softwareId!);
+          await RecordedScreenGroupDAO().deleteGroup(group!);
+          groups.value = await SoftwareDAO().getAllGroups(softwareId!);
           break;
         case 'labeling':
-          context.goNamed('labeling',params: {'videoId':video!.id.toString()});
+          context.goNamed('labeling',params: {'groupId':group!.id.toString()});
           break;
         case 'screens':
-          context.goNamed('screensList',params: {'videoId':video!.id.toString()});
+          context.goNamed('screensList',params: {'groupId':group!.id.toString()});
           break;
       }
     }
-    void onCreateCourseHandler(String createdSoftware) {}
+    void onCreateCourseHandler(RecordedScreenGroup group) async{
+      final software = await SoftwareDAO().getSoftware(softwareId!);
+      group.software.target=software;
+      final id = await RecordedScreenGroupDAO().addGroup(group);
+      group.path=await DirectoryManager().createGroupDir('${softwareId}_${software!.title!}',  '${id}_${group.name!}');
+      await RecordedScreenGroupDAO().updateGroup(group);
+      groups.value = await SoftwareDAO().getAllGroups(softwareId!);
+    }
 
     void onActionHandler(String action) async {
-      FilePickerResult? result =
-          await FilePicker.platform.pickFiles(allowMultiple: true);
-
-      if (result != null) {
-        final software = await SoftwareDAO().getSoftware(softwareId!);
-        for (var path in result.paths) {
-          File newVideo = File(path!);
-          final video = VideoModel(0, p.basename(newVideo.path),'', newVideo.path, '00:00');
-          video.software.target=software;
-          VideoDAO().addVideo(video);
-          await DirectoryManager().createVideoDir('${softwareId}_${software!.title!}',  p.basename(newVideo.path));
-        }
-        videos.value = await SoftwareDAO().getAllVideos(softwareId!);
-      }
+      showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) =>
+              DlgNewScreenGroup(onSaveCaller: onCreateCourseHandler));
+      // FilePickerResult? result =
+      //     await FilePicker.platform.pickFiles(allowMultiple: true);
+      //
+      // if (result != null) {
+      //   final software = await SoftwareDAO().getSoftware(softwareId!);
+      //   for (var path in result.paths) {
+      //     File newVideo = File(path!);
+      //     final video = VideoModel(0, p.basename(newVideo.path),'', newVideo.path, '00:00');
+      //     video.software.target=software;
+      //     VideoDAO().addVideo(video);
+      //     await DirectoryManager().createVideoDir('${softwareId}_${software!.title!}',  p.basename(newVideo.path));
+      //   }
+      //   videos.value = await SoftwareDAO().getAllVideos(softwareId!);
+      // }
     }
 
     return ScaffoldPage(
@@ -157,8 +164,8 @@ class VideoList extends HookWidget with WindowListener {
                                 (Dimens.actionBtnW + 15),
                             height: MediaQuery.of(context).size.height -
                                 (Dimens.topBarHeight + Dimens.tabHeight + 60),
-                            child: videos.value != null &&
-                                    videos.value!.isNotEmpty
+                            child: groups.value != null &&
+                                    groups.value!.isNotEmpty
                                 ? SizedBox(
                                     width: MediaQuery.of(context).size.width -
                                         (Dimens.actionBtnW + 15),
@@ -175,8 +182,8 @@ class VideoList extends HookWidget with WindowListener {
                                               childAspectRatio: 3 / 1.8,
                                               crossAxisSpacing: 20,
                                               mainAxisSpacing: 20),
-                                      children: videos.value
-                                          .map((item) => VideoItem(video: item,onActionCaller: onVideoActionHandler,))
+                                      children: groups.value
+                                          .map((item) => GroupItem(group: item,onActionCaller: onSourceActionHandler,))
                                           .toList(),
                                     ),
                                   )
@@ -200,7 +207,7 @@ class VideoList extends HookWidget with WindowListener {
                                         height: 50,
                                       ),
                                       Text(
-                                        'your Video list is empty...',
+                                        'your Groups list is empty...',
                                         style: TextSystem.textL(Colors.white),
                                       ),
                                     ],

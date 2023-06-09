@@ -29,12 +29,12 @@ class AddsOnPanel extends HookWidget {
           children: [
             kind=="video"?
 
-              ActionButton(
-                icon: FluentIcons.open_file,
-                title: Strings.openVideo,
-                toolTip: "Add some video",
-                isSelected:  activeOne==Strings.openVideo,
-                onActionListener: onActionListener,):
+            ActionButton(
+              icon: FluentIcons.add,
+              title: Strings.addScreens,
+              toolTip: "Record new screenshots",
+              isSelected: activeOne==Strings.addScreens,
+              onActionListener: onActionListener,):
             ActionButton(
               icon: FluentIcons.add,
               title: Strings.addSoftware,

@@ -157,7 +157,7 @@
     },
     {
       "id": "3:1597679080181769401",
-      "lastPropertyId": "9:9200597527566909841",
+      "lastPropertyId": "11:4786145739648791479",
       "name": "ScreenShootModel",
       "properties": [
         {
@@ -208,6 +208,22 @@
           "flags": 520,
           "indexId": "3:9102685703102770362",
           "relationTarget": "VideoModel"
+        },
+        {
+          "id": "10:7786409238732528863",
+          "name": "actionId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "7:7590538489349267442",
+          "relationTarget": "ActionModel"
+        },
+        {
+          "id": "11:4786145739648791479",
+          "name": "groupId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "8:8485429454284523408",
+          "relationTarget": "RecordedScreenGroup"
         }
       ],
       "relations": [
@@ -265,6 +281,11 @@
           "id": "3:3142818417267476908",
           "name": "allVideos",
           "targetId": "5:8704043719060779501"
+        },
+        {
+          "id": "6:2308983244739403012",
+          "name": "allGroups",
+          "targetId": "6:9017281774192133442"
         }
       ]
     },
@@ -315,11 +336,98 @@
           "targetId": "3:1597679080181769401"
         }
       ]
+    },
+    {
+      "id": "6:9017281774192133442",
+      "lastPropertyId": "6:6936433750103159329",
+      "name": "RecordedScreenGroup",
+      "properties": [
+        {
+          "id": "1:4018237723287730103",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:6713964104879476433",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:3023257593502409746",
+          "name": "description",
+          "type": 9
+        },
+        {
+          "id": "4:4647387367503344126",
+          "name": "path",
+          "type": 9
+        },
+        {
+          "id": "5:1464569696793758529",
+          "name": "imgNumber",
+          "type": 6
+        },
+        {
+          "id": "6:6936433750103159329",
+          "name": "softwareId",
+          "type": 11,
+          "flags": 520,
+          "indexId": "6:4230942784128615785",
+          "relationTarget": "SoftwareModel"
+        }
+      ],
+      "relations": [
+        {
+          "id": "5:7908712069285349255",
+          "name": "screenShoots",
+          "targetId": "3:1597679080181769401"
+        }
+      ]
+    },
+    {
+      "id": "7:2700096272836654076",
+      "lastPropertyId": "6:2819315822133627876",
+      "name": "ActionModel",
+      "properties": [
+        {
+          "id": "1:5917866481269124257",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:2837853266455970129",
+          "name": "isMouse",
+          "type": 1
+        },
+        {
+          "id": "3:239330927059933361",
+          "name": "actionType",
+          "type": 9
+        },
+        {
+          "id": "4:4387130054909200501",
+          "name": "typedText",
+          "type": 9
+        },
+        {
+          "id": "5:2321597769615988385",
+          "name": "x",
+          "type": 6
+        },
+        {
+          "id": "6:2819315822133627876",
+          "name": "y",
+          "type": 6
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "5:8704043719060779501",
-  "lastIndexId": "5:6611679611590200189",
-  "lastRelationId": "4:3601124264196646975",
+  "lastEntityId": "7:2700096272836654076",
+  "lastIndexId": "8:8485429454284523408",
+  "lastRelationId": "6:2308983244739403012",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,

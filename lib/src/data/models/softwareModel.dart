@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/src/data/models/recordedScreenGroup.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
 import 'package:objectbox/objectbox.dart';
 
@@ -12,6 +13,7 @@ class SoftwareModel {
   String? icon;
   String? companyLogo;
   final  allVideos= ToMany<VideoModel>();
+  final  allGroups= ToMany<RecordedScreenGroup>();
 
   SoftwareModel(this.id, this.title, this.companyId, this.companyName,
       this.description, this.icon, this.companyLogo);
