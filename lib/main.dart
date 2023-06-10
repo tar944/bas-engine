@@ -106,9 +106,9 @@ final router = GoRouter(
       builder: (context, state) => ScreensPage(int.parse(state.params['groupId']!)),
     ),
     GoRoute(
-      path: '/labeling/:videoId',
+      path: '/labeling/:groupId',
       name: 'labeling',
-      builder: (context, state) => LabelingPage(int.parse(state.params['videoId']!)),
+      builder: (context, state) => LabelingPage(int.parse(state.params['groupId']!)),
     ),
     GoRoute(
       path: '/recordScreens/:groupId',

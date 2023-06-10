@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:bas_dataset_generator_engine/src/data/dao/screenShotDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/actionModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/screenShootModel.dart';
+import 'package:flutter/services.dart';
+import 'package:go_router/go_router.dart';
 import 'package:path/path.dart' as p;
 import 'package:bas_dataset_generator_engine/src/data/dao/recordedScreenGroupsDAO.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgRecordMenu.dart';
@@ -104,8 +108,9 @@ class RecordPage extends HookWidget with WindowListener {
     void onRecordActionListener(String action) {
       switch (action) {
         case Strings.saveAndExit:
-          break;
+          exit(0);
         case Strings.saveNext:
+          context.goNamed('screensList',params: {'groupId':groupId.toString()});
           break;
         case "record":
           break;
@@ -128,7 +133,7 @@ class RecordPage extends HookWidget with WindowListener {
                     : 300));
             await screenCapturer.capture(
               mode: CaptureMode.screen,
-              imagePath: p.join(dirPath.value, 'screen_${imgNumber.value}.jpg'),
+              imagePath: p.join(dirPath.value, 'screen_${imgNumber.value}.png'),
               copyToClipboard: false,
               silent: true,
             );
@@ -139,8 +144,8 @@ class RecordPage extends HookWidget with WindowListener {
             ScreenShootModel screen = ScreenShootModel(
                 0,
                 0,
-                'screen_${imgNumber.value}.jpg',
-                p.join(dirPath.value, 'screen_${imgNumber.value}.jpg'),
+                'screen_${imgNumber.value}.png',
+                p.join(dirPath.value, 'screen_${imgNumber.value}.png'),
                 'created');
             screen.action.target = action;
             screen.group.target = group;

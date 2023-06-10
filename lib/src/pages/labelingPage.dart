@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/src/data/dao/recordedScreenGroupsDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/screenShotDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/videoDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/screenShootModel.dart';
@@ -17,9 +18,9 @@ import '../utility/platform_util.dart';
 import '../widgets/flyoutMainPageLabeling.dart';
 
 class LabelingPage extends HookWidget with WindowListener {
-  int? videoId;
+  int? groupId;
 
-  LabelingPage(this.videoId, {super.key});
+  LabelingPage(this.groupId, {super.key});
 
   void _init() async {
     // Add this line to override the default close handler
@@ -74,28 +75,15 @@ class LabelingPage extends HookWidget with WindowListener {
     useEffect(() {
       _init();
       Future<void>.microtask(() async {
-        final video = await VideoDAO().getVideo(videoId!);
-        if (video!.screenShoots.toList().isNotEmpty) {
-          allScreens.value = video.screenShoots.toList();
+        final group = await RecordedScreenGroupDAO().getGroup(groupId!);
+        if (group!.screenShoots.toList().isNotEmpty) {
+          allScreens.value = group.screenShoots.toList();
           for (final screen in allScreens.value) {
             if (screen.status == 'created') {
               indexImage.value = allScreens.value.indexOf(screen);
               break;
             }
           }
-        } else {
-          final screenResult = await PythonHelper().generateScreenShoots(
-              video.path,
-              await DirectoryManager().getScreenDirectoryPath(
-                  '${video.software.target!.id}_${video.software.target!.title!}',
-                  video.name!));
-          for (var screen in screenResult) {
-            final newScreen = ScreenShootModel(0, screen['hashDifference'],
-                screen['imageName'], screen['path'], 'created');
-            newScreen.video.target = video;
-            ScreenDAO().addScreenToVideo(newScreen);
-          }
-          allScreens.value = await VideoDAO().getAllScreens(videoId!);
         }
       });
       return null;
@@ -120,18 +108,18 @@ class LabelingPage extends HookWidget with WindowListener {
           await ScreenDAO().getScreen(int.parse(actions[1]));
       switch (actions[0]) {
         case 'refreshParts':
-          allScreens.value = await VideoDAO().getAllScreens(videoId!);
+          allScreens.value = await RecordedScreenGroupDAO().getAllScreens(groupId!);
           break;
         case 'edit':
           screen!.type = actions[2];
           screen.description = actions[3];
           screen.status = 'finished';
           await ScreenDAO().updateScreen(screen);
-          allScreens.value = await VideoDAO().getAllScreens(videoId!);
+          allScreens.value = await RecordedScreenGroupDAO().getAllScreens(groupId!);
           break;
         case 'delete':
           await ScreenDAO().deleteScreen(screen!);
-          allScreens.value = await VideoDAO().getAllScreens(videoId!);
+          allScreens.value = await RecordedScreenGroupDAO().getAllScreens(groupId!);
           break;
         case 'show':
           for (final item in allScreens.value) {
