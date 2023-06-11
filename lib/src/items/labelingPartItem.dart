@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:bas_dataset_generator_engine/src/data/models/labelingDataModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/regionDataModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -8,15 +8,15 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import '../../assets/values/dimens.dart';
 import '../dialogs/flyDlgDelete.dart';
 
-class LabelingScreenItem extends HookWidget {
-  const LabelingScreenItem(
+class LabelingPartItem extends HookWidget {
+  const LabelingPartItem(
       {Key? key,
-      required this.data,
+      required this.part,
       required this.isSelected,
       required this.onActionCaller})
       : super(key: key);
 
-  final LabelingDataModel data;
+  final RegionDataModel part;
   final bool isSelected;
 
   final ValueSetter<String> onActionCaller;
@@ -26,7 +26,7 @@ class LabelingScreenItem extends HookWidget {
     final controller = FlyoutController();
 
     return GestureDetector(
-      onTap: () => onActionCaller(isSelected?'goto&&${data.getId()}':'show&&${data.getId()}'),
+      onTap: () => onActionCaller('show&&${part.id}'),
       child: Padding(
         padding: const EdgeInsets.all(5),
         child: Container(
@@ -39,18 +39,18 @@ class LabelingScreenItem extends HookWidget {
                 ? Border.all(color: Colors.teal.lighter, width: 4)
                 : null,
             image: DecorationImage(
-              image: Image.file(File(data.getPath()!)).image,
+              image: Image.file(File(part.path!)).image,
               fit: BoxFit.cover,
             ),
           ),
           child: Stack(
             children: [
-              if (isSelected && data.getRegionsList()!.isNotEmpty)
+              if (isSelected && part.objectsList.isNotEmpty)
                 Expanded(
                   child: IconButton(
                     style:
                         ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
-                    onPressed: () => onActionCaller('goto&&${data.getId()}'),
+                    onPressed: () => onActionCaller('goto&&${part.id}'),
                     icon: Container(
                       alignment: Alignment.center,
                       decoration:
@@ -59,7 +59,7 @@ class LabelingScreenItem extends HookWidget {
                     ),
                   ),
                 ),
-              if ((data.getType() != null && data.getType()!.isNotEmpty)) ...[
+              if ((part.type != null && part.type!.isNotEmpty)) ...[
                 Positioned(
                   top: 5,
                   left: 5,
@@ -71,8 +71,8 @@ class LabelingScreenItem extends HookWidget {
                         shape: BoxShape.circle, color: Colors.green.lighter),
                   ),
                 ),
-                if (data.getDescription() != null &&
-                    data.getDescription()!.isNotEmpty)
+                if (part.description != null &&
+                    part.description!.isNotEmpty)
                   Positioned(
                     top: 5,
                     left: 18,
@@ -116,7 +116,7 @@ class LabelingScreenItem extends HookWidget {
                                 "yeh",
                                 controller,
                                 FlyoutPlacementMode.topCenter,
-                                data.getId()!,
+                                part.id!,
                                 onActionCaller))),
                   ],
                 ),

@@ -1,14 +1,19 @@
 import 'package:bas_dataset_generator_engine/src/data/dao/screenShotDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/scenePartModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/regionDataModel.dart';
 import 'package:bas_dataset_generator_engine/src/widgets/rectanglePainter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
 class NewRectanglePainter extends HookWidget {
-  NewRectanglePainter({Key? key, required this.onNewListener,required this.screenId})
+  NewRectanglePainter(
+      {Key? key,
+      required this.kind,
+      required this.onNewListener,
+      required this.screenId})
       : super(key: key);
 
-  ValueSetter<ScenePartModel> onNewListener;
+  ValueSetter<RegionDataModel> onNewListener;
+  String kind;
   int screenId;
 
   @override
@@ -34,15 +39,18 @@ class NewRectanglePainter extends HookWidget {
           bottom.value = e.localPosition.dy;
         }
       },
-      onPointerUp: (e) async{
+      onPointerUp: (e) async {
         isPainting.value = false;
-        final part =ScenePartModel(
+        final part = RegionDataModel(
             0,
+            kind,
             right.value > left.value ? left.value : right.value,
             right.value > left.value ? right.value : left.value,
             top.value > bottom.value ? bottom.value : top.value,
-            top.value > bottom.value ? top.value : bottom.value);
-        part.screen.target=await ScreenDAO().getScreen(screenId);
+            top.value > bottom.value ? top.value : bottom.value,
+            'created'
+        );
+        part.screen.target = await ScreenDAO().getScreen(screenId);
         onNewListener(part);
         top.value = 0.0;
         left.value = 0.0;
@@ -50,8 +58,8 @@ class NewRectanglePainter extends HookWidget {
         bottom.value = 0.0;
       },
       child: CustomPaint(
-        painter: RectanglePainter(
-            ScenePartModel(0,left.value, right.value, top.value, bottom.value)),
+        painter: RectanglePainter(RegionDataModel(
+            0,kind, left.value, right.value, top.value, bottom.value,'created')),
       ),
     );
   }

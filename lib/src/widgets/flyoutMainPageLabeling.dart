@@ -1,21 +1,21 @@
-import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/labelingDataModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/screenShootModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../items/floutMainPageLabelingItem.dart';
+import '../parts/LabelingDetails.dart';
 
-class FlyoutMainPageLabeling extends HookWidget {
-  const FlyoutMainPageLabeling(
-      {Key? key, required this.onActionCaller, required this.screen})
+class LabelingDetails extends HookWidget {
+  const LabelingDetails(
+      {Key? key, required this.onActionCaller, required this.data})
       : super(key: key);
 
-  final ScreenShootModel screen;
+  final LabelingDataModel data;
   final ValueSetter<String> onActionCaller;
 
   onSaveHandler(String newValue){
-    onActionCaller('edit&&${screen.id}&&$newValue');
+    onActionCaller('edit&&${data.getId()}&&$newValue');
   }
 
   @override
@@ -49,8 +49,8 @@ class FlyoutMainPageLabeling extends HookWidget {
                   children: [
                     FlyoutMainPageLabelingItem(
                       title: titleList[0],
-                      isSelected: titleList[0]==screen.type,
-                      description: screen.description!=null?screen.description!:'',
+                      isSelected: titleList[0]==data.getType(),
+                      description: data.getDescription()!=null?data.getDescription()!:'',
                       onActionListener: onSaveHandler,
                     ),
                     const SizedBox(
@@ -58,8 +58,8 @@ class FlyoutMainPageLabeling extends HookWidget {
                     ),
                     FlyoutMainPageLabelingItem(
                       title: titleList[1],
-                      isSelected: titleList[1]==screen.type,
-                      description:  screen.description!=null?screen.description!:'',
+                      isSelected: titleList[1]==data.getType(),
+                      description: data.getDescription()!=null?data.getDescription()!:'',
                       onActionListener: onSaveHandler,
                     ),
                     const SizedBox(
@@ -67,8 +67,8 @@ class FlyoutMainPageLabeling extends HookWidget {
                     ),
                     FlyoutMainPageLabelingItem(
                       title: titleList[2],
-                      isSelected: titleList[2]==screen.type,
-                      description:  screen.description!=null?screen.description!:'',
+                      isSelected: titleList[2]==data.getType(),
+                      description: data.getDescription()!=null?data.getDescription()!:'',
                       onActionListener: onSaveHandler,
                     ),
                     const SizedBox(
@@ -76,8 +76,8 @@ class FlyoutMainPageLabeling extends HookWidget {
                     ),
                     FlyoutMainPageLabelingItem(
                       title: titleList[3],
-                      isSelected: titleList[3]==screen.type,
-                      description:  screen.description!=null?screen.description!:'',
+                      isSelected: titleList[3]==data.getType(),
+                      description: data.getDescription()!=null?data.getDescription()!:'',
                       onActionListener: onSaveHandler,
                     ),
                     const SizedBox(
@@ -85,8 +85,8 @@ class FlyoutMainPageLabeling extends HookWidget {
                     ),
                     FlyoutMainPageLabelingItem(
                       title: titleList[4],
-                      isSelected: titleList[4]==screen.type,
-                      description:  screen.description!=null?screen.description!:'',
+                      isSelected: titleList[4]==data.getType(),
+                      description: data.getDescription()!=null?data.getDescription()!:'',
                       onActionListener: onSaveHandler,
                     ),
                     const SizedBox(
@@ -94,8 +94,8 @@ class FlyoutMainPageLabeling extends HookWidget {
                     ),
                     FlyoutMainPageLabelingItem(
                       title: titleList[5],
-                      isSelected: titleList[5]==screen.type,
-                      description:  screen.description!=null?screen.description!:'',
+                      isSelected: titleList[5]==data.getType(),
+                      description: data.getDescription()!=null?data.getDescription()!:'',
                       onActionListener: onSaveHandler,
                     ),
                   ],

@@ -14,9 +14,8 @@ import 'package:objectbox/internal.dart'; // generated code can access "internal
 import 'package:objectbox/objectbox.dart';
 
 import 'src/data/models/actionModel.dart';
-import 'src/data/models/partObjectModel.dart';
 import 'src/data/models/recordedScreenGroup.dart';
-import 'src/data/models/scenePartModel.dart';
+import 'src/data/models/regionDataModel.dart';
 import 'src/data/models/screenShootModel.dart';
 import 'src/data/models/softwareModel.dart';
 import 'src/data/models/videoModel.dart';
@@ -24,156 +23,6 @@ import 'src/data/models/videoModel.dart';
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
 final _entities = <ModelEntity>[
-  ModelEntity(
-      id: const IdUid(1, 5922885288332288138),
-      name: 'PartObjectModel',
-      lastPropertyId: const IdUid(13, 2118667474981069231),
-      flags: 0,
-      properties: <ModelProperty>[
-        ModelProperty(
-            id: const IdUid(1, 2499940764790309662),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        ModelProperty(
-            id: const IdUid(2, 8539448575626686583),
-            name: 'left',
-            type: 8,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(3, 1756235525460106639),
-            name: 'right',
-            type: 8,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(4, 4027477781195997805),
-            name: 'top',
-            type: 8,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(5, 3528762213549066877),
-            name: 'bottom',
-            type: 8,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(6, 7879993695700189823),
-            name: 'color',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(7, 2790378843541322856),
-            name: 'imageName',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(8, 7818238208987796591),
-            name: 'path',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(9, 533588271424915937),
-            name: 'description',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(10, 918939126606934192),
-            name: 'label',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(11, 4788626507602896507),
-            name: 'type',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(12, 194160298915799660),
-            name: 'status',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(13, 2118667474981069231),
-            name: 'actionKind',
-            type: 9,
-            flags: 0)
-      ],
-      relations: <ModelRelation>[],
-      backlinks: <ModelBacklink>[]),
-  ModelEntity(
-      id: const IdUid(2, 1511157904358265259),
-      name: 'ScenePartModel',
-      lastPropertyId: const IdUid(15, 2205741989534374320),
-      flags: 0,
-      properties: <ModelProperty>[
-        ModelProperty(
-            id: const IdUid(1, 1962129822223855595),
-            name: 'id',
-            type: 6,
-            flags: 1),
-        ModelProperty(
-            id: const IdUid(2, 5161238095427950572),
-            name: 'left',
-            type: 8,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(3, 851009505196112053),
-            name: 'right',
-            type: 8,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(4, 4985530005039131169),
-            name: 'top',
-            type: 8,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(5, 8120794572590322291),
-            name: 'bottom',
-            type: 8,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(7, 4114126750303806628),
-            name: 'imageName',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(8, 7355176820899515523),
-            name: 'path',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(9, 5844064191119127598),
-            name: 'description',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(10, 7324499478361269917),
-            name: 'label',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(11, 2380622141480846707),
-            name: 'status',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(12, 6629873035293510143),
-            name: 'screenId',
-            type: 11,
-            flags: 520,
-            indexId: const IdUid(4, 5077230280801065317),
-            relationTarget: 'ScreenShootModel'),
-        ModelProperty(
-            id: const IdUid(15, 2205741989534374320),
-            name: 'type',
-            type: 9,
-            flags: 0)
-      ],
-      relations: <ModelRelation>[
-        ModelRelation(
-            id: const IdUid(1, 7154955083376384755),
-            name: 'partObjects',
-            targetId: const IdUid(1, 5922885288332288138))
-      ],
-      backlinks: <ModelBacklink>[]),
   ModelEntity(
       id: const IdUid(3, 1597679080181769401),
       name: 'ScreenShootModel',
@@ -244,9 +93,9 @@ final _entities = <ModelEntity>[
       ],
       relations: <ModelRelation>[
         ModelRelation(
-            id: const IdUid(2, 7096364116743183016),
-            name: 'sceneParts',
-            targetId: const IdUid(2, 1511157904358265259))
+            id: const IdUid(8, 3903017910301198765),
+            name: 'partsList',
+            targetId: const IdUid(8, 7519792149997907067))
       ],
       backlinks: <ModelBacklink>[]),
   ModelEntity(
@@ -432,6 +281,104 @@ final _entities = <ModelEntity>[
             flags: 0)
       ],
       relations: <ModelRelation>[],
+      backlinks: <ModelBacklink>[]),
+  ModelEntity(
+      id: const IdUid(8, 7519792149997907067),
+      name: 'RegionDataModel',
+      lastPropertyId: const IdUid(16, 245144734813337382),
+      flags: 0,
+      properties: <ModelProperty>[
+        ModelProperty(
+            id: const IdUid(1, 5562409889496848900),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        ModelProperty(
+            id: const IdUid(2, 7594578219878453668),
+            name: 'left',
+            type: 8,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(3, 7834160924787204874),
+            name: 'right',
+            type: 8,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(4, 5354752581547886527),
+            name: 'top',
+            type: 8,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(5, 605712471619754918),
+            name: 'bottom',
+            type: 8,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(6, 1930246537800128631),
+            name: 'kind',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(7, 1490248681159816392),
+            name: 'color',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(8, 6398271985395206580),
+            name: 'imageName',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(9, 2078705865812849615),
+            name: 'path',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(10, 8111318749703218091),
+            name: 'description',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(11, 8652814554617726621),
+            name: 'label',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(12, 7382600257722930033),
+            name: 'type',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(13, 1381923561209100769),
+            name: 'status',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(14, 5827270774663624382),
+            name: 'actionKind',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(15, 1458922637572425683),
+            name: 'screenId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(11, 3152363992180013685),
+            relationTarget: 'ScreenShootModel'),
+        ModelProperty(
+            id: const IdUid(16, 245144734813337382),
+            name: 'partId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(12, 7787389054076459701),
+            relationTarget: 'RegionDataModel')
+      ],
+      relations: <ModelRelation>[
+        ModelRelation(
+            id: const IdUid(7, 8568086870357184084),
+            name: 'objectsList',
+            targetId: const IdUid(8, 7519792149997907067))
+      ],
       backlinks: <ModelBacklink>[])
 ];
 
@@ -455,179 +402,62 @@ Store openStore(
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
-      lastEntityId: const IdUid(7, 2700096272836654076),
-      lastIndexId: const IdUid(8, 8485429454284523408),
-      lastRelationId: const IdUid(6, 2308983244739403012),
+      lastEntityId: const IdUid(8, 7519792149997907067),
+      lastIndexId: const IdUid(12, 7787389054076459701),
+      lastRelationId: const IdUid(8, 3903017910301198765),
       lastSequenceId: const IdUid(0, 0),
-      retiredEntityUids: const [],
-      retiredIndexUids: const [2805705393685960525, 6611679611590200189],
+      retiredEntityUids: const [5922885288332288138, 1511157904358265259],
+      retiredIndexUids: const [
+        2805705393685960525,
+        6611679611590200189,
+        9109145890961680612
+      ],
       retiredPropertyUids: const [
         4568898860801454124,
         849727135604059823,
         6542381401667717635,
-        3519223867602794168
+        3519223867602794168,
+        2861927139316778099,
+        2499940764790309662,
+        8539448575626686583,
+        1756235525460106639,
+        4027477781195997805,
+        3528762213549066877,
+        7879993695700189823,
+        2790378843541322856,
+        7818238208987796591,
+        533588271424915937,
+        918939126606934192,
+        4788626507602896507,
+        194160298915799660,
+        2118667474981069231,
+        3661027274911993305,
+        1962129822223855595,
+        5161238095427950572,
+        851009505196112053,
+        4985530005039131169,
+        8120794572590322291,
+        4114126750303806628,
+        7355176820899515523,
+        5844064191119127598,
+        7324499478361269917,
+        2380622141480846707,
+        6629873035293510143,
+        2205741989534374320,
+        2021594605780541537
       ],
-      retiredRelationUids: const [],
+      retiredRelationUids: const [7096364116743183016],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
       version: 1);
 
   final bindings = <Type, EntityDefinition>{
-    PartObjectModel: EntityDefinition<PartObjectModel>(
-        model: _entities[0],
-        toOneRelations: (PartObjectModel object) => [],
-        toManyRelations: (PartObjectModel object) => {},
-        getId: (PartObjectModel object) => object.id,
-        setId: (PartObjectModel object, int id) {
-          object.id = id;
-        },
-        objectToFB: (PartObjectModel object, fb.Builder fbb) {
-          final colorOffset =
-              object.color == null ? null : fbb.writeString(object.color!);
-          final imageNameOffset = object.imageName == null
-              ? null
-              : fbb.writeString(object.imageName!);
-          final pathOffset =
-              object.path == null ? null : fbb.writeString(object.path!);
-          final descriptionOffset = object.description == null
-              ? null
-              : fbb.writeString(object.description!);
-          final labelOffset =
-              object.label == null ? null : fbb.writeString(object.label!);
-          final typeOffset =
-              object.type == null ? null : fbb.writeString(object.type!);
-          final statusOffset =
-              object.status == null ? null : fbb.writeString(object.status!);
-          final actionKindOffset = object.actionKind == null
-              ? null
-              : fbb.writeString(object.actionKind!);
-          fbb.startTable(14);
-          fbb.addInt64(0, object.id ?? 0);
-          fbb.addFloat64(1, object.left);
-          fbb.addFloat64(2, object.right);
-          fbb.addFloat64(3, object.top);
-          fbb.addFloat64(4, object.bottom);
-          fbb.addOffset(5, colorOffset);
-          fbb.addOffset(6, imageNameOffset);
-          fbb.addOffset(7, pathOffset);
-          fbb.addOffset(8, descriptionOffset);
-          fbb.addOffset(9, labelOffset);
-          fbb.addOffset(10, typeOffset);
-          fbb.addOffset(11, statusOffset);
-          fbb.addOffset(12, actionKindOffset);
-          fbb.finish(fbb.endTable());
-          return object.id ?? 0;
-        },
-        objectFromFB: (Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-
-          final object = PartObjectModel()
-            ..id =
-                const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4)
-            ..left = const fb.Float64Reader()
-                .vTableGetNullable(buffer, rootOffset, 6)
-            ..right = const fb.Float64Reader()
-                .vTableGetNullable(buffer, rootOffset, 8)
-            ..top = const fb.Float64Reader()
-                .vTableGetNullable(buffer, rootOffset, 10)
-            ..bottom = const fb.Float64Reader()
-                .vTableGetNullable(buffer, rootOffset, 12)
-            ..color = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 14)
-            ..imageName = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 16)
-            ..path = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 18)
-            ..description = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 20)
-            ..label = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 22)
-            ..type = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 24)
-            ..status = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 26)
-            ..actionKind = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 28);
-
-          return object;
-        }),
-    ScenePartModel: EntityDefinition<ScenePartModel>(
-        model: _entities[1],
-        toOneRelations: (ScenePartModel object) => [object.screen],
-        toManyRelations: (ScenePartModel object) =>
-            {RelInfo<ScenePartModel>.toMany(1, object.id!): object.partObjects},
-        getId: (ScenePartModel object) => object.id,
-        setId: (ScenePartModel object, int id) {
-          object.id = id;
-        },
-        objectToFB: (ScenePartModel object, fb.Builder fbb) {
-          final imageNameOffset = object.imageName == null
-              ? null
-              : fbb.writeString(object.imageName!);
-          final pathOffset =
-              object.path == null ? null : fbb.writeString(object.path!);
-          final descriptionOffset = object.description == null
-              ? null
-              : fbb.writeString(object.description!);
-          final labelOffset =
-              object.label == null ? null : fbb.writeString(object.label!);
-          final statusOffset =
-              object.status == null ? null : fbb.writeString(object.status!);
-          final typeOffset =
-              object.type == null ? null : fbb.writeString(object.type!);
-          fbb.startTable(16);
-          fbb.addInt64(0, object.id ?? 0);
-          fbb.addFloat64(1, object.left);
-          fbb.addFloat64(2, object.right);
-          fbb.addFloat64(3, object.top);
-          fbb.addFloat64(4, object.bottom);
-          fbb.addOffset(6, imageNameOffset);
-          fbb.addOffset(7, pathOffset);
-          fbb.addOffset(8, descriptionOffset);
-          fbb.addOffset(9, labelOffset);
-          fbb.addOffset(10, statusOffset);
-          fbb.addInt64(11, object.screen.targetId);
-          fbb.addOffset(14, typeOffset);
-          fbb.finish(fbb.endTable());
-          return object.id ?? 0;
-        },
-        objectFromFB: (Store store, ByteData fbData) {
-          final buffer = fb.BufferContext(fbData);
-          final rootOffset = buffer.derefObject(0);
-
-          final object = ScenePartModel(
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4),
-              const fb.Float64Reader().vTableGet(buffer, rootOffset, 6, 0),
-              const fb.Float64Reader().vTableGet(buffer, rootOffset, 8, 0),
-              const fb.Float64Reader().vTableGet(buffer, rootOffset, 10, 0),
-              const fb.Float64Reader().vTableGet(buffer, rootOffset, 12, 0))
-            ..imageName = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 16)
-            ..path = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 18)
-            ..description = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 20)
-            ..label = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 22)
-            ..status = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 24)
-            ..type = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 32);
-          object.screen.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 26, 0);
-          object.screen.attach(store);
-          InternalToManyAccess.setRelInfo<ScenePartModel>(object.partObjects,
-              store, RelInfo<ScenePartModel>.toMany(1, object.id!));
-          return object;
-        }),
     ScreenShootModel: EntityDefinition<ScreenShootModel>(
-        model: _entities[2],
+        model: _entities[0],
         toOneRelations: (ScreenShootModel object) =>
             [object.video, object.action, object.group],
-        toManyRelations: (ScreenShootModel object) => {
-              RelInfo<ScreenShootModel>.toMany(2, object.id!): object.sceneParts
-            },
+        toManyRelations: (ScreenShootModel object) =>
+            {RelInfo<ScreenShootModel>.toMany(8, object.id!): object.partsList},
         getId: (ScreenShootModel object) => object.id,
         setId: (ScreenShootModel object, int id) {
           object.id = id;
@@ -690,12 +520,12 @@ ModelDefinition getObjectBoxModel() {
           object.group.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 24, 0);
           object.group.attach(store);
-          InternalToManyAccess.setRelInfo<ScreenShootModel>(object.sceneParts,
-              store, RelInfo<ScreenShootModel>.toMany(2, object.id!));
+          InternalToManyAccess.setRelInfo<ScreenShootModel>(object.partsList,
+              store, RelInfo<ScreenShootModel>.toMany(8, object.id!));
           return object;
         }),
     SoftwareModel: EntityDefinition<SoftwareModel>(
-        model: _entities[3],
+        model: _entities[1],
         toOneRelations: (SoftwareModel object) => [],
         toManyRelations: (SoftwareModel object) => {
               RelInfo<SoftwareModel>.toMany(3, object.id): object.allVideos,
@@ -758,7 +588,7 @@ ModelDefinition getObjectBoxModel() {
           return object;
         }),
     VideoModel: EntityDefinition<VideoModel>(
-        model: _entities[4],
+        model: _entities[2],
         toOneRelations: (VideoModel object) => [object.software],
         toManyRelations: (VideoModel object) =>
             {RelInfo<VideoModel>.toMany(4, object.id): object.screenShoots},
@@ -805,7 +635,7 @@ ModelDefinition getObjectBoxModel() {
           return object;
         }),
     RecordedScreenGroup: EntityDefinition<RecordedScreenGroup>(
-        model: _entities[5],
+        model: _entities[3],
         toOneRelations: (RecordedScreenGroup object) => [object.software],
         toManyRelations: (RecordedScreenGroup object) => {
               RelInfo<RecordedScreenGroup>.toMany(5, object.id):
@@ -855,7 +685,7 @@ ModelDefinition getObjectBoxModel() {
           return object;
         }),
     ActionModel: EntityDefinition<ActionModel>(
-        model: _entities[6],
+        model: _entities[4],
         toOneRelations: (ActionModel object) => [],
         toManyRelations: (ActionModel object) => {},
         getId: (ActionModel object) => object.id,
@@ -892,303 +722,353 @@ ModelDefinition getObjectBoxModel() {
                 .vTableGetNullable(buffer, rootOffset, 10);
 
           return object;
+        }),
+    RegionDataModel: EntityDefinition<RegionDataModel>(
+        model: _entities[5],
+        toOneRelations: (RegionDataModel object) =>
+            [object.screen, object.part],
+        toManyRelations: (RegionDataModel object) => {
+              RelInfo<RegionDataModel>.toMany(7, object.id!): object.objectsList
+            },
+        getId: (RegionDataModel object) => object.id,
+        setId: (RegionDataModel object, int id) {
+          object.id = id;
+        },
+        objectToFB: (RegionDataModel object, fb.Builder fbb) {
+          final kindOffset = fbb.writeString(object.kind);
+          final colorOffset =
+              object.color == null ? null : fbb.writeString(object.color!);
+          final imageNameOffset = object.imageName == null
+              ? null
+              : fbb.writeString(object.imageName!);
+          final pathOffset =
+              object.path == null ? null : fbb.writeString(object.path!);
+          final descriptionOffset = object.description == null
+              ? null
+              : fbb.writeString(object.description!);
+          final labelOffset =
+              object.label == null ? null : fbb.writeString(object.label!);
+          final typeOffset =
+              object.type == null ? null : fbb.writeString(object.type!);
+          final statusOffset = fbb.writeString(object.status);
+          final actionKindOffset = object.actionKind == null
+              ? null
+              : fbb.writeString(object.actionKind!);
+          fbb.startTable(17);
+          fbb.addInt64(0, object.id ?? 0);
+          fbb.addFloat64(1, object.left);
+          fbb.addFloat64(2, object.right);
+          fbb.addFloat64(3, object.top);
+          fbb.addFloat64(4, object.bottom);
+          fbb.addOffset(5, kindOffset);
+          fbb.addOffset(6, colorOffset);
+          fbb.addOffset(7, imageNameOffset);
+          fbb.addOffset(8, pathOffset);
+          fbb.addOffset(9, descriptionOffset);
+          fbb.addOffset(10, labelOffset);
+          fbb.addOffset(11, typeOffset);
+          fbb.addOffset(12, statusOffset);
+          fbb.addOffset(13, actionKindOffset);
+          fbb.addInt64(14, object.screen.targetId);
+          fbb.addInt64(15, object.part.targetId);
+          fbb.finish(fbb.endTable());
+          return object.id ?? 0;
+        },
+        objectFromFB: (Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+
+          final object = RegionDataModel(
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4),
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 14, ''),
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 6, 0),
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 8, 0),
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 10, 0),
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 12, 0),
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 28, ''))
+            ..color = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 16)
+            ..imageName = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 18)
+            ..path = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 20)
+            ..description = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 22)
+            ..label = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 24)
+            ..type = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 26)
+            ..actionKind = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 30);
+          object.screen.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 32, 0);
+          object.screen.attach(store);
+          object.part.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 34, 0);
+          object.part.attach(store);
+          InternalToManyAccess.setRelInfo<RegionDataModel>(object.objectsList,
+              store, RelInfo<RegionDataModel>.toMany(7, object.id!));
+          return object;
         })
   };
 
   return ModelDefinition(model, bindings);
 }
 
-/// [PartObjectModel] entity fields to define ObjectBox queries.
-class PartObjectModel_ {
-  /// see [PartObjectModel.id]
-  static final id =
-      QueryIntegerProperty<PartObjectModel>(_entities[0].properties[0]);
-
-  /// see [PartObjectModel.left]
-  static final left =
-      QueryDoubleProperty<PartObjectModel>(_entities[0].properties[1]);
-
-  /// see [PartObjectModel.right]
-  static final right =
-      QueryDoubleProperty<PartObjectModel>(_entities[0].properties[2]);
-
-  /// see [PartObjectModel.top]
-  static final top =
-      QueryDoubleProperty<PartObjectModel>(_entities[0].properties[3]);
-
-  /// see [PartObjectModel.bottom]
-  static final bottom =
-      QueryDoubleProperty<PartObjectModel>(_entities[0].properties[4]);
-
-  /// see [PartObjectModel.color]
-  static final color =
-      QueryStringProperty<PartObjectModel>(_entities[0].properties[5]);
-
-  /// see [PartObjectModel.imageName]
-  static final imageName =
-      QueryStringProperty<PartObjectModel>(_entities[0].properties[6]);
-
-  /// see [PartObjectModel.path]
-  static final path =
-      QueryStringProperty<PartObjectModel>(_entities[0].properties[7]);
-
-  /// see [PartObjectModel.description]
-  static final description =
-      QueryStringProperty<PartObjectModel>(_entities[0].properties[8]);
-
-  /// see [PartObjectModel.label]
-  static final label =
-      QueryStringProperty<PartObjectModel>(_entities[0].properties[9]);
-
-  /// see [PartObjectModel.type]
-  static final type =
-      QueryStringProperty<PartObjectModel>(_entities[0].properties[10]);
-
-  /// see [PartObjectModel.status]
-  static final status =
-      QueryStringProperty<PartObjectModel>(_entities[0].properties[11]);
-
-  /// see [PartObjectModel.actionKind]
-  static final actionKind =
-      QueryStringProperty<PartObjectModel>(_entities[0].properties[12]);
-}
-
-/// [ScenePartModel] entity fields to define ObjectBox queries.
-class ScenePartModel_ {
-  /// see [ScenePartModel.id]
-  static final id =
-      QueryIntegerProperty<ScenePartModel>(_entities[1].properties[0]);
-
-  /// see [ScenePartModel.left]
-  static final left =
-      QueryDoubleProperty<ScenePartModel>(_entities[1].properties[1]);
-
-  /// see [ScenePartModel.right]
-  static final right =
-      QueryDoubleProperty<ScenePartModel>(_entities[1].properties[2]);
-
-  /// see [ScenePartModel.top]
-  static final top =
-      QueryDoubleProperty<ScenePartModel>(_entities[1].properties[3]);
-
-  /// see [ScenePartModel.bottom]
-  static final bottom =
-      QueryDoubleProperty<ScenePartModel>(_entities[1].properties[4]);
-
-  /// see [ScenePartModel.imageName]
-  static final imageName =
-      QueryStringProperty<ScenePartModel>(_entities[1].properties[5]);
-
-  /// see [ScenePartModel.path]
-  static final path =
-      QueryStringProperty<ScenePartModel>(_entities[1].properties[6]);
-
-  /// see [ScenePartModel.description]
-  static final description =
-      QueryStringProperty<ScenePartModel>(_entities[1].properties[7]);
-
-  /// see [ScenePartModel.label]
-  static final label =
-      QueryStringProperty<ScenePartModel>(_entities[1].properties[8]);
-
-  /// see [ScenePartModel.status]
-  static final status =
-      QueryStringProperty<ScenePartModel>(_entities[1].properties[9]);
-
-  /// see [ScenePartModel.screen]
-  static final screen = QueryRelationToOne<ScenePartModel, ScreenShootModel>(
-      _entities[1].properties[10]);
-
-  /// see [ScenePartModel.type]
-  static final type =
-      QueryStringProperty<ScenePartModel>(_entities[1].properties[11]);
-
-  /// see [ScenePartModel.partObjects]
-  static final partObjects =
-      QueryRelationToMany<ScenePartModel, PartObjectModel>(
-          _entities[1].relations[0]);
-}
-
 /// [ScreenShootModel] entity fields to define ObjectBox queries.
 class ScreenShootModel_ {
   /// see [ScreenShootModel.id]
   static final id =
-      QueryIntegerProperty<ScreenShootModel>(_entities[2].properties[0]);
+      QueryIntegerProperty<ScreenShootModel>(_entities[0].properties[0]);
 
   /// see [ScreenShootModel.imageName]
   static final imageName =
-      QueryStringProperty<ScreenShootModel>(_entities[2].properties[1]);
+      QueryStringProperty<ScreenShootModel>(_entities[0].properties[1]);
 
   /// see [ScreenShootModel.path]
   static final path =
-      QueryStringProperty<ScreenShootModel>(_entities[2].properties[2]);
+      QueryStringProperty<ScreenShootModel>(_entities[0].properties[2]);
 
   /// see [ScreenShootModel.description]
   static final description =
-      QueryStringProperty<ScreenShootModel>(_entities[2].properties[3]);
+      QueryStringProperty<ScreenShootModel>(_entities[0].properties[3]);
 
   /// see [ScreenShootModel.label]
   static final label =
-      QueryStringProperty<ScreenShootModel>(_entities[2].properties[4]);
+      QueryStringProperty<ScreenShootModel>(_entities[0].properties[4]);
 
   /// see [ScreenShootModel.type]
   static final type =
-      QueryStringProperty<ScreenShootModel>(_entities[2].properties[5]);
+      QueryStringProperty<ScreenShootModel>(_entities[0].properties[5]);
 
   /// see [ScreenShootModel.status]
   static final status =
-      QueryStringProperty<ScreenShootModel>(_entities[2].properties[6]);
+      QueryStringProperty<ScreenShootModel>(_entities[0].properties[6]);
 
   /// see [ScreenShootModel.hashDifference]
   static final hashDifference =
-      QueryIntegerProperty<ScreenShootModel>(_entities[2].properties[7]);
+      QueryIntegerProperty<ScreenShootModel>(_entities[0].properties[7]);
 
   /// see [ScreenShootModel.video]
   static final video = QueryRelationToOne<ScreenShootModel, VideoModel>(
-      _entities[2].properties[8]);
+      _entities[0].properties[8]);
 
   /// see [ScreenShootModel.action]
   static final action = QueryRelationToOne<ScreenShootModel, ActionModel>(
-      _entities[2].properties[9]);
+      _entities[0].properties[9]);
 
   /// see [ScreenShootModel.group]
   static final group =
       QueryRelationToOne<ScreenShootModel, RecordedScreenGroup>(
-          _entities[2].properties[10]);
+          _entities[0].properties[10]);
 
-  /// see [ScreenShootModel.sceneParts]
-  static final sceneParts =
-      QueryRelationToMany<ScreenShootModel, ScenePartModel>(
-          _entities[2].relations[0]);
+  /// see [ScreenShootModel.partsList]
+  static final partsList =
+      QueryRelationToMany<ScreenShootModel, RegionDataModel>(
+          _entities[0].relations[0]);
 }
 
 /// [SoftwareModel] entity fields to define ObjectBox queries.
 class SoftwareModel_ {
   /// see [SoftwareModel.id]
   static final id =
-      QueryIntegerProperty<SoftwareModel>(_entities[3].properties[0]);
+      QueryIntegerProperty<SoftwareModel>(_entities[1].properties[0]);
 
   /// see [SoftwareModel.title]
   static final title =
-      QueryStringProperty<SoftwareModel>(_entities[3].properties[1]);
+      QueryStringProperty<SoftwareModel>(_entities[1].properties[1]);
 
   /// see [SoftwareModel.companyId]
   static final companyId =
-      QueryStringProperty<SoftwareModel>(_entities[3].properties[2]);
+      QueryStringProperty<SoftwareModel>(_entities[1].properties[2]);
 
   /// see [SoftwareModel.companyName]
   static final companyName =
-      QueryStringProperty<SoftwareModel>(_entities[3].properties[3]);
+      QueryStringProperty<SoftwareModel>(_entities[1].properties[3]);
 
   /// see [SoftwareModel.description]
   static final description =
-      QueryStringProperty<SoftwareModel>(_entities[3].properties[4]);
+      QueryStringProperty<SoftwareModel>(_entities[1].properties[4]);
 
   /// see [SoftwareModel.icon]
   static final icon =
-      QueryStringProperty<SoftwareModel>(_entities[3].properties[5]);
+      QueryStringProperty<SoftwareModel>(_entities[1].properties[5]);
 
   /// see [SoftwareModel.companyLogo]
   static final companyLogo =
-      QueryStringProperty<SoftwareModel>(_entities[3].properties[6]);
+      QueryStringProperty<SoftwareModel>(_entities[1].properties[6]);
 
   /// see [SoftwareModel.allVideos]
   static final allVideos =
-      QueryRelationToMany<SoftwareModel, VideoModel>(_entities[3].relations[0]);
+      QueryRelationToMany<SoftwareModel, VideoModel>(_entities[1].relations[0]);
 
   /// see [SoftwareModel.allGroups]
   static final allGroups =
       QueryRelationToMany<SoftwareModel, RecordedScreenGroup>(
-          _entities[3].relations[1]);
+          _entities[1].relations[1]);
 }
 
 /// [VideoModel] entity fields to define ObjectBox queries.
 class VideoModel_ {
   /// see [VideoModel.id]
   static final id =
-      QueryIntegerProperty<VideoModel>(_entities[4].properties[0]);
+      QueryIntegerProperty<VideoModel>(_entities[2].properties[0]);
 
   /// see [VideoModel.name]
   static final name =
-      QueryStringProperty<VideoModel>(_entities[4].properties[1]);
+      QueryStringProperty<VideoModel>(_entities[2].properties[1]);
 
   /// see [VideoModel.path]
   static final path =
-      QueryStringProperty<VideoModel>(_entities[4].properties[2]);
+      QueryStringProperty<VideoModel>(_entities[2].properties[2]);
 
   /// see [VideoModel.time]
   static final time =
-      QueryStringProperty<VideoModel>(_entities[4].properties[3]);
+      QueryStringProperty<VideoModel>(_entities[2].properties[3]);
 
   /// see [VideoModel.thumbnailPath]
   static final thumbnailPath =
-      QueryStringProperty<VideoModel>(_entities[4].properties[4]);
+      QueryStringProperty<VideoModel>(_entities[2].properties[4]);
 
   /// see [VideoModel.software]
   static final software =
-      QueryRelationToOne<VideoModel, SoftwareModel>(_entities[4].properties[5]);
+      QueryRelationToOne<VideoModel, SoftwareModel>(_entities[2].properties[5]);
 
   /// see [VideoModel.screenShoots]
   static final screenShoots = QueryRelationToMany<VideoModel, ScreenShootModel>(
-      _entities[4].relations[0]);
+      _entities[2].relations[0]);
 }
 
 /// [RecordedScreenGroup] entity fields to define ObjectBox queries.
 class RecordedScreenGroup_ {
   /// see [RecordedScreenGroup.id]
   static final id =
-      QueryIntegerProperty<RecordedScreenGroup>(_entities[5].properties[0]);
+      QueryIntegerProperty<RecordedScreenGroup>(_entities[3].properties[0]);
 
   /// see [RecordedScreenGroup.name]
   static final name =
-      QueryStringProperty<RecordedScreenGroup>(_entities[5].properties[1]);
+      QueryStringProperty<RecordedScreenGroup>(_entities[3].properties[1]);
 
   /// see [RecordedScreenGroup.description]
   static final description =
-      QueryStringProperty<RecordedScreenGroup>(_entities[5].properties[2]);
+      QueryStringProperty<RecordedScreenGroup>(_entities[3].properties[2]);
 
   /// see [RecordedScreenGroup.path]
   static final path =
-      QueryStringProperty<RecordedScreenGroup>(_entities[5].properties[3]);
+      QueryStringProperty<RecordedScreenGroup>(_entities[3].properties[3]);
 
   /// see [RecordedScreenGroup.imgNumber]
   static final imgNumber =
-      QueryIntegerProperty<RecordedScreenGroup>(_entities[5].properties[4]);
+      QueryIntegerProperty<RecordedScreenGroup>(_entities[3].properties[4]);
 
   /// see [RecordedScreenGroup.software]
   static final software =
       QueryRelationToOne<RecordedScreenGroup, SoftwareModel>(
-          _entities[5].properties[5]);
+          _entities[3].properties[5]);
 
   /// see [RecordedScreenGroup.screenShoots]
   static final screenShoots =
       QueryRelationToMany<RecordedScreenGroup, ScreenShootModel>(
-          _entities[5].relations[0]);
+          _entities[3].relations[0]);
 }
 
 /// [ActionModel] entity fields to define ObjectBox queries.
 class ActionModel_ {
   /// see [ActionModel.id]
   static final id =
-      QueryIntegerProperty<ActionModel>(_entities[6].properties[0]);
+      QueryIntegerProperty<ActionModel>(_entities[4].properties[0]);
 
   /// see [ActionModel.isMouse]
   static final isMouse =
-      QueryBooleanProperty<ActionModel>(_entities[6].properties[1]);
+      QueryBooleanProperty<ActionModel>(_entities[4].properties[1]);
 
   /// see [ActionModel.actionType]
   static final actionType =
-      QueryStringProperty<ActionModel>(_entities[6].properties[2]);
+      QueryStringProperty<ActionModel>(_entities[4].properties[2]);
 
   /// see [ActionModel.typedText]
   static final typedText =
-      QueryStringProperty<ActionModel>(_entities[6].properties[3]);
+      QueryStringProperty<ActionModel>(_entities[4].properties[3]);
 
   /// see [ActionModel.x]
   static final x =
-      QueryIntegerProperty<ActionModel>(_entities[6].properties[4]);
+      QueryIntegerProperty<ActionModel>(_entities[4].properties[4]);
 
   /// see [ActionModel.y]
   static final y =
-      QueryIntegerProperty<ActionModel>(_entities[6].properties[5]);
+      QueryIntegerProperty<ActionModel>(_entities[4].properties[5]);
+}
+
+/// [RegionDataModel] entity fields to define ObjectBox queries.
+class RegionDataModel_ {
+  /// see [RegionDataModel.id]
+  static final id =
+      QueryIntegerProperty<RegionDataModel>(_entities[5].properties[0]);
+
+  /// see [RegionDataModel.left]
+  static final left =
+      QueryDoubleProperty<RegionDataModel>(_entities[5].properties[1]);
+
+  /// see [RegionDataModel.right]
+  static final right =
+      QueryDoubleProperty<RegionDataModel>(_entities[5].properties[2]);
+
+  /// see [RegionDataModel.top]
+  static final top =
+      QueryDoubleProperty<RegionDataModel>(_entities[5].properties[3]);
+
+  /// see [RegionDataModel.bottom]
+  static final bottom =
+      QueryDoubleProperty<RegionDataModel>(_entities[5].properties[4]);
+
+  /// see [RegionDataModel.kind]
+  static final kind =
+      QueryStringProperty<RegionDataModel>(_entities[5].properties[5]);
+
+  /// see [RegionDataModel.color]
+  static final color =
+      QueryStringProperty<RegionDataModel>(_entities[5].properties[6]);
+
+  /// see [RegionDataModel.imageName]
+  static final imageName =
+      QueryStringProperty<RegionDataModel>(_entities[5].properties[7]);
+
+  /// see [RegionDataModel.path]
+  static final path =
+      QueryStringProperty<RegionDataModel>(_entities[5].properties[8]);
+
+  /// see [RegionDataModel.description]
+  static final description =
+      QueryStringProperty<RegionDataModel>(_entities[5].properties[9]);
+
+  /// see [RegionDataModel.label]
+  static final label =
+      QueryStringProperty<RegionDataModel>(_entities[5].properties[10]);
+
+  /// see [RegionDataModel.type]
+  static final type =
+      QueryStringProperty<RegionDataModel>(_entities[5].properties[11]);
+
+  /// see [RegionDataModel.status]
+  static final status =
+      QueryStringProperty<RegionDataModel>(_entities[5].properties[12]);
+
+  /// see [RegionDataModel.actionKind]
+  static final actionKind =
+      QueryStringProperty<RegionDataModel>(_entities[5].properties[13]);
+
+  /// see [RegionDataModel.screen]
+  static final screen = QueryRelationToOne<RegionDataModel, ScreenShootModel>(
+      _entities[5].properties[14]);
+
+  /// see [RegionDataModel.part]
+  static final part = QueryRelationToOne<RegionDataModel, RegionDataModel>(
+      _entities[5].properties[15]);
+
+  /// see [RegionDataModel.objectsList]
+  static final objectsList =
+      QueryRelationToMany<RegionDataModel, RegionDataModel>(
+          _entities[5].relations[0]);
 }

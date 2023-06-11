@@ -1,10 +1,10 @@
 import 'package:bas_dataset_generator_engine/src/data/dao/recordedScreenGroupsDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/videoDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/regionDataModel.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import '../../../main.dart';
 import '../../../objectbox.g.dart';
 import '../models/actionModel.dart';
-import '../models/scenePartModel.dart';
 import '../models/screenShootModel.dart';
 
 class ScreenDAO {
@@ -14,12 +14,12 @@ class ScreenDAO {
     return screen;
   }
 
-  Future<List<ScenePartModel>> getAllParts(int id) async {
+  Future<List<RegionDataModel>> getAllParts(int id) async {
     final screen = await getScreen(id);
     if (screen == null) {
       return [];
     }
-    return screen.sceneParts.toList();
+    return screen.partsList.toList();
   }
 
   Future<int> addScreenToVideo(ScreenShootModel newScreen) async {
@@ -45,22 +45,22 @@ class ScreenDAO {
     return newAction;
   }
 
-  Future<bool> addAPart(int id, ScenePartModel part) async {
+  Future<bool> addAPart(int id, RegionDataModel part) async {
     final screen = await getScreen(id);
     if (screen == null) {
       return false;
     }
-    screen.sceneParts.add(part);
+    screen.partsList.add(part);
     updateScreen(screen);
     return true;
   }
 
-  Future<bool> removeAPart(int id, ScenePartModel part) async {
+  Future<bool> removeAPart(int id, RegionDataModel part) async {
     final screen = await getScreen(id);
     if (screen == null) {
       return false;
     }
-    screen.sceneParts.remove(part);
+    screen.partsList.remove(part);
     updateScreen(screen);
     return true;
   }

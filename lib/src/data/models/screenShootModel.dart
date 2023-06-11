@@ -1,6 +1,6 @@
 import 'package:bas_dataset_generator_engine/src/data/models/actionModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/recordedScreenGroup.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/scenePartModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/regionDataModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
 import 'package:objectbox/objectbox.dart';
 
@@ -18,7 +18,7 @@ class ScreenShootModel {
   final video = ToOne<VideoModel>();
   final group = ToOne<RecordedScreenGroup>();
   final action = ToOne<ActionModel>();
-  final sceneParts = ToMany<ScenePartModel>();
+  final partsList = ToMany<RegionDataModel>();
 
   ScreenShootModel(this.id, this.hashDifference, this.imageName, this.path, this.status);
 }

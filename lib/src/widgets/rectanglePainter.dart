@@ -1,8 +1,8 @@
-import 'package:bas_dataset_generator_engine/src/data/models/scenePartModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/regionDataModel.dart';
 import 'package:flutter/material.dart';
 
 class RectanglePainter extends CustomPainter {
-  ScenePartModel? rectangle;
+  RegionDataModel? rectangle;
 
   RectanglePainter(this.rectangle);
 
