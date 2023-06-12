@@ -94,7 +94,6 @@ class LabelingPage extends HookWidget with WindowListener {
 
     setPartAsData(List<RegionDataModel> partList) {
       curList.value = 'part';
-      indexImage.value = 0;
       listData.value = partList
           .toList()
           .map((e) => LabelingDataModel(curList.value)..part = e)
@@ -156,6 +155,7 @@ class LabelingPage extends HookWidget with WindowListener {
           ScreenShootModel? screen =
               await ScreenDAO().getScreen(int.parse(actions[1]));
           selectedScreenId.value = listData.value[indexImage.value].getId();
+          indexImage.value = 0;
           setPartAsData(screen!.partsList);
           break;
       }
