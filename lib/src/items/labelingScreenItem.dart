@@ -55,7 +55,7 @@ class LabelingScreenItem extends HookWidget {
                       alignment: Alignment.center,
                       decoration:
                           BoxDecoration(color: Colors.black.withOpacity(.5)),
-                      child: const Text('Show parts'),
+                      child: const Text('Show children'),
                     ),
                   ),
                 ),

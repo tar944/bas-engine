@@ -1,11 +1,12 @@
 import 'package:bas_dataset_generator_engine/src/data/dao/recordedScreenGroupsDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/screenPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/screenShotDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelingDataModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/regionDataModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/screenShootModel.dart';
 import 'package:bas_dataset_generator_engine/src/items/labelingItem.dart';
-import 'package:bas_dataset_generator_engine/src/items/labelingPartItem.dart';
 import 'package:bas_dataset_generator_engine/src/items/labelingScreenItem.dart';
+import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -15,7 +16,7 @@ import '../../assets/values/strings.dart';
 import '../../assets/values/textStyle.dart';
 import '../parts/topBarPanel.dart';
 import '../utility/platform_util.dart';
-import '../widgets/flyoutMainPageLabeling.dart';
+import '../widgets/LabelingDetails.dart';
 
 class LabelingPage extends HookWidget with WindowListener {
   int? groupId;
@@ -70,16 +71,30 @@ class LabelingPage extends HookWidget with WindowListener {
   Widget build(BuildContext context) {
     final listData = useState([]);
     final indexImage = useState(0);
+    final selectedScreenId = useState(-1);
     final curList = useState('screen');
 
-    setScreenAsData(List<ScreenShootModel> screenList) {
-      listData.value = screenList
-          .toList()
-          .map((e) => LabelingDataModel(curList.value)..screen = e)
-          .toList();
+    setScreenAsData() async {
+      curList.value = 'screen';
+      indexImage.value = 0;
+      final group = await RecordedScreenGroupDAO().getGroup(groupId!);
+      if (group!.screenShoots.toList().isNotEmpty) {
+        listData.value = group.screenShoots
+            .toList()
+            .map((e) => LabelingDataModel(curList.value)..screen = e)
+            .toList();
+        for (final screen in listData.value) {
+          if (screen.getStatus() == 'created') {
+            indexImage.value = listData.value.indexOf(screen);
+            break;
+          }
+        }
+      }
     }
 
     setPartAsData(List<RegionDataModel> partList) {
+      curList.value = 'part';
+      indexImage.value = 0;
       listData.value = partList
           .toList()
           .map((e) => LabelingDataModel(curList.value)..part = e)
@@ -89,16 +104,7 @@ class LabelingPage extends HookWidget with WindowListener {
     useEffect(() {
       _init();
       Future<void>.microtask(() async {
-        final group = await RecordedScreenGroupDAO().getGroup(groupId!);
-        if (group!.screenShoots.toList().isNotEmpty) {
-          setScreenAsData(group.screenShoots.toList());
-          for (final screen in listData.value) {
-            if (screen.getStatus() == 'created') {
-              indexImage.value = listData.value.indexOf(screen);
-              break;
-            }
-          }
-        }
+        await setScreenAsData();
       });
       return null;
     }, const []);
@@ -116,33 +122,29 @@ class LabelingPage extends HookWidget with WindowListener {
     }
 
     doScreenAction(String action) async {
-      print(action);
       var actions = action.split('&&');
       switch (actions[0]) {
         case 'refreshParts':
-          setScreenAsData(
-              await RecordedScreenGroupDAO().getAllScreens(groupId!));
+          await setScreenAsData();
           break;
         case 'edit':
           ScreenShootModel? screen =
-          await ScreenDAO().getScreen(int.parse(actions[1]));
+              await ScreenDAO().getScreen(int.parse(actions[1]));
           screen!.type = actions[2];
           screen.description = actions[3];
           screen.status = 'finished';
           await ScreenDAO().updateScreen(screen);
-          setScreenAsData(
-              await RecordedScreenGroupDAO().getAllScreens(groupId!));
+          await setScreenAsData();
           break;
         case 'delete':
           ScreenShootModel? screen =
-          await ScreenDAO().getScreen(int.parse(actions[1]));
+              await ScreenDAO().getScreen(int.parse(actions[1]));
           await ScreenDAO().deleteScreen(screen!);
-          setScreenAsData(
-              await RecordedScreenGroupDAO().getAllScreens(groupId!));
+          await setScreenAsData();
           break;
         case 'show':
           ScreenShootModel? screen =
-          await ScreenDAO().getScreen(int.parse(actions[1]));
+              await ScreenDAO().getScreen(int.parse(actions[1]));
           for (final item in listData.value) {
             if (item.getId() == screen!.id) {
               indexImage.value = listData.value.indexOf(item);
@@ -151,20 +153,61 @@ class LabelingPage extends HookWidget with WindowListener {
           }
           break;
         case 'goto':
-          // curList.value = 'part';
-          // allScreens.value = screen!.sceneParts;
-          // indexImage.value = 0;
+          ScreenShootModel? screen =
+              await ScreenDAO().getScreen(int.parse(actions[1]));
+          selectedScreenId.value = listData.value[indexImage.value].getId();
+          setPartAsData(screen!.partsList);
           break;
       }
     }
 
-    doPartAction(String action) {}
+    doPartAction(String action) async {
+      print(action);
+      var actions = action.split('&&');
+      switch (actions[0]) {
+        case 'refreshParts':
+          await setScreenAsData();
+          break;
+        case 'edit':
+          RegionDataModel? part =
+              await PartDAO().getPart(int.parse(actions[1]));
+          part!.type = actions[2];
+          part.description = actions[3];
+          part.status = 'finished';
+          await PartDAO().updatePart(part);
+          setPartAsData(await ScreenDAO().getAllParts(selectedScreenId.value));
+          break;
+        case 'delete':
+          ScreenShootModel? screen =
+              await ScreenDAO().getScreen(int.parse(actions[1]));
+          await ScreenDAO().deleteScreen(screen!);
+          await setScreenAsData();
+          break;
+        case 'show':
+          ScreenShootModel? screen =
+              await ScreenDAO().getScreen(int.parse(actions[1]));
+          for (final item in listData.value) {
+            if (item.getId() == screen!.id) {
+              indexImage.value = listData.value.indexOf(item);
+              break;
+            }
+          }
+          break;
+        case 'goto':
+          ScreenShootModel? screen =
+              await ScreenDAO().getScreen(int.parse(actions[1]));
+          curList.value = 'part';
+          setPartAsData(screen!.partsList);
+          indexImage.value = 0;
+          break;
+      }
+    }
 
     doObjectAction(String action) {}
 
     onActionHandler(String action) async {
-      switch(curList.value){
-        case'screen':
+      switch (curList.value) {
+        case 'screen':
           doScreenAction(action);
           break;
         case 'part':
@@ -175,7 +218,6 @@ class LabelingPage extends HookWidget with WindowListener {
           break;
       }
     }
-
 
     return ScaffoldPage(
         padding: const EdgeInsets.only(top: 0, bottom: 0),
@@ -203,8 +245,7 @@ class LabelingPage extends HookWidget with WindowListener {
                         width: 350,
                         decoration: const BoxDecoration(
                           image: DecorationImage(
-                            image: AssetImage(
-                                'lib/assets/images/emptyBox.png'),
+                            image: AssetImage('lib/assets/images/emptyBox.png'),
                             fit: BoxFit.cover,
                           ),
                         ),
@@ -223,11 +264,13 @@ class LabelingPage extends HookWidget with WindowListener {
             else
               Stack(
                 children: [
-                  SizedBox(
+                  Container(
                     width: MediaQuery.of(context).size.width,
                     height: MediaQuery.of(context).size.height -
                         (Dimens.topBarHeight),
+                    color: Colors.grey[180],
                     child: LabelingItem(
+                      itemKind: curList.value,
                       item: listData.value[indexImage.value],
                       nextClick: nextImage,
                       perviousClick: perviousImage,
@@ -242,9 +285,11 @@ class LabelingPage extends HookWidget with WindowListener {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                          if (listData.value[indexImage.value].getDescription() !=
+                          if (listData.value[indexImage.value]
+                                      .getDescription() !=
                                   null &&
-                              listData.value[indexImage.value].getDescription() !=
+                              listData.value[indexImage.value]
+                                      .getDescription() !=
                                   '')
                             Padding(
                               padding:
@@ -289,8 +334,11 @@ class LabelingPage extends HookWidget with WindowListener {
                                             FluentIcons.chevron_left_med,
                                             size: 25,
                                           )),
-                                      onPressed: () => {}),
+                                      onPressed: () async {
+                                        await setScreenAsData();
+                                      }),
                                 LabelingDetails(
+                                  labelList: curList.value=='screen'?PageType.values.map((e) => e.name).toList():PartType.values.map((e) => e.name).toList(),
                                   onActionCaller: onActionHandler,
                                   data: listData.value[indexImage.value],
                                 ),
@@ -319,12 +367,11 @@ class LabelingPage extends HookWidget with WindowListener {
                                       itemCount: listData.value.length,
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder: (context, index) {
-                                            return LabelingScreenItem(
-                                              data: listData.value[index],
-                                              onActionCaller: onActionHandler,
-                                              isSelected:
-                                                  indexImage.value == index,
-                                            );
+                                        return LabelingScreenItem(
+                                          data: listData.value[index],
+                                          onActionCaller: onActionHandler,
+                                          isSelected: indexImage.value == index,
+                                        );
                                       }),
                                 ),
                               ),

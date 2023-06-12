@@ -14,11 +14,13 @@ import 'package:path/path.dart' as p;
 class LabelingItem extends HookWidget {
   const LabelingItem({
     Key? key,
+    required this.itemKind,
     required this.item,
     required this.onPartsChanged,
     required this.nextClick,
     required this.perviousClick,
   }) : super(key: key);
+  final String itemKind;
   final LabelingDataModel item;
   final ValueSetter<String> onPartsChanged;
   final VoidCallback nextClick;
@@ -73,7 +75,7 @@ class LabelingItem extends HookWidget {
           decoration: BoxDecoration(
             image: DecorationImage(
               image: Image.file(File(item.getPath()!)).image,
-              fit: BoxFit.fill,
+              fit: itemKind=='screen'?BoxFit.fill:BoxFit.none,
             ),
           ),
         ),
