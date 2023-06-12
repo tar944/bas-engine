@@ -8,13 +8,11 @@ class NewRectanglePainter extends HookWidget {
   NewRectanglePainter(
       {Key? key,
       required this.kind,
-      required this.onNewListener,
-      required this.screenId})
+      required this.onNewListener})
       : super(key: key);
 
   ValueSetter<RegionDataModel> onNewListener;
   String kind;
-  int screenId;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +48,6 @@ class NewRectanglePainter extends HookWidget {
             top.value > bottom.value ? top.value : bottom.value,
             'created'
         );
-        part.screen.target = await ScreenDAO().getScreen(screenId);
         onNewListener(part);
         top.value = 0.0;
         left.value = 0.0;

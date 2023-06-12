@@ -60,9 +60,8 @@ class PartDAO {
     final screen = part.screen.target;
     DirectoryManager().deleteImage(
         p.join(await DirectoryManager().getPartDir(
-            '${screen!.video.target!.software.target!.id}_${screen.video.target!
-                .software.target!.title!}',
-            screen.video.target!.name!),part.imageName!));
+            '${screen!.group.target!.software.target!.id}_${screen.group.target!.software.target!.title!}',
+            '${screen.group.target!.id}_${screen.group.target!.name!}'),part.imageName!));
     return result;
   }
 }

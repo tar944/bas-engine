@@ -91,7 +91,7 @@ class LabelingDataModel{
     return '';
   }
 
-  Future<String> getGroupDir()async{
+  Future<String> getPartPath()async{
     SoftwareModel? software;
     RecordedScreenGroup? group;
     switch (kind){
@@ -104,6 +104,23 @@ class LabelingDataModel{
     }
     software=group!.software.target;
     return await DirectoryManager().getPartImagePath(
+        '${software!.id}_${software.title!}',
+        '${group.id}_${group.name!}');
+  }
+
+  Future<String> getObjectPath()async{
+    SoftwareModel? software;
+    RecordedScreenGroup? group;
+    switch (kind){
+      case 'screen':
+        group = _screen!.group.target;
+        break;
+      case 'part':
+        group =_part!.screen.target!.group.target;
+        break;
+    }
+    software=group!.software.target;
+    return await DirectoryManager().getObjectImagePath(
         '${software!.id}_${software.title!}',
         '${group.id}_${group.name!}');
   }

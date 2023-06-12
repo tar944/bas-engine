@@ -89,11 +89,6 @@ class DirectoryManager {
       return path.path;
     }
   }
-
-  Future<String> getPartImagePath(String softwareName, String videoName) async {
-    return p.join(await getPartDir(softwareName, videoName),'${getRandomString(10)}.jpg');
-  }
-
   Future<String> getObjectDir(String softwareName, String videoName) async {
     final docsDir = await getApplicationDocumentsDirectory();
     var path =
@@ -104,6 +99,14 @@ class DirectoryManager {
       path.create();
       return path.path;
     }
+  }
+
+  Future<String> getPartImagePath(String softwareName, String videoName) async {
+    return p.join(await getPartDir(softwareName, videoName),'${getRandomString(10)}.jpg');
+  }
+
+  Future<String> getObjectImagePath(String softwareName, String videoName) async {
+    return p.join(await getObjectDir(softwareName, videoName),'${getRandomString(10)}.jpg');
   }
 
   deleteVideoDirectory(String softwareName, String videoName) async {
@@ -132,12 +135,8 @@ class DirectoryManager {
   }
 
   deleteImage(String imagePath) async {
-    print('11');
-    print(imagePath);
     final docsDir = await getApplicationDocumentsDirectory();
     var path = File(p.join(docsDir.path, imagePath));
-    print('22');
-    print(path);
     if (path.existsSync()) {
       path.deleteSync(recursive: true);
     }

@@ -5,15 +5,13 @@ import 'exploredPartRegion.dart';
 import 'newRectanglePainter.dart';
 
 class PartRegionExplorer extends HookWidget {
-  PartRegionExplorer( {
+  const PartRegionExplorer( {
     Key? key,
     required this.onNewPartHandler,
     required this.allParts,
-    required this.screenId,
   }) : super(key: key);
 
   final List<RegionDataModel> allParts;
-  final int screenId;
   final ValueSetter<RegionDataModel> onNewPartHandler;
 
   @override
@@ -30,7 +28,6 @@ class PartRegionExplorer extends HookWidget {
         left: 0.0,
         child: NewRectanglePainter(
           kind: 'part',
-          screenId: screenId,
           onNewListener: onNewRectangleHandler,
         ),
       ),

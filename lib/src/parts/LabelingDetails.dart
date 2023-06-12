@@ -1,50 +1,53 @@
-import 'package:bas_dataset_generator_engine/src/dialogs/flyScreenDescription.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/labelingDataModel.dart';
+import 'package:bas_dataset_generator_engine/src/items/labelingItem.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../../assets/values/textStyle.dart';
-
-class FlyoutMainPageLabelingItem extends StatelessWidget {
-  const FlyoutMainPageLabelingItem(
-      {Key? key,
-      required this.title,
-      required this.isSelected,
-      required this.onActionListener,
-      required this.description})
+class LabelingDetails extends HookWidget {
+  const LabelingDetails(
+      {Key? key,required this.labelList, required this.onActionCaller, required this.data})
       : super(key: key);
-  final String title;
-  final String description;
-  final ValueSetter<String> onActionListener;
-  final bool isSelected;
 
-  onSaveHandler(String newDescription) {
-    onActionListener('$title&&$newDescription');
+  final LabelingDataModel data;
+  final List<String> labelList;
+  final ValueSetter<String> onActionCaller;
+
+  onSaveHandler(String newValue){
+    onActionCaller('edit&&${data.getId()}&&$newValue');
   }
 
   @override
   Widget build(BuildContext context) {
-    final controller = FlyoutController();
-    return FlyoutTarget(
-        key: GlobalKey(),
-        controller: controller,
-        child: GestureDetector(
-          onTap: () => showFlyDescription(description, controller,
-              FlyoutPlacementMode.topCenter, onSaveHandler),
-          child: Container(
-            width: 90,
-            height: 30,
-            decoration: BoxDecoration(
-              color: isSelected ? Colors.grey[210] : Colors.grey[180],
-              border: Border.all(
-                  color: isSelected ? Colors.blue : Colors.transparent,
-                  width: 2),
-              borderRadius: BorderRadius.circular(5),
-            ),
-            child: Center(
-                child: Text(
-              title,
-              style: TextSystem.textS(Colors.white),
-            )),
-          ),
-        ));
+    return Container(
+      height: 60,
+      width: 22+(labelList.length * 99.25),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: Colors.grey[200],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          height: 40,
+          decoration: BoxDecoration(
+              color: Colors.grey[150], borderRadius: BorderRadius.circular(5)),
+          child: ListView.builder(
+              itemCount: labelList.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.all(5.0),
+                  child: LabelingItem(
+                    title: labelList[index],
+                    isSelected: labelList[index]==data.getType(),
+                    description: data.getDescription()!=null?data.getDescription()!:'',
+                    onActionListener: onSaveHandler,
+                  ),
+                );
+              }),
+        ),
+      ),
+    );
   }
 }
