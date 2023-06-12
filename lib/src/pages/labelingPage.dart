@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/src/data/dao/partObjectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/recordedScreenGroupsDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/screenPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/screenShotDAO.dart';
@@ -72,6 +73,7 @@ class LabelingPage extends HookWidget with WindowListener {
     final listData = useState([]);
     final indexImage = useState(0);
     final selectedScreenId = useState(-1);
+    final selectedPartId = useState(-1);
     final curList = useState('screen');
 
     setScreenAsData() async {
@@ -100,6 +102,24 @@ class LabelingPage extends HookWidget with WindowListener {
       listData.value = screen!.partsList
           .toList()
           .map((e) => LabelingDataModel(curList.value)..part = e)
+          .toList();
+      if(selectedPartId.value!=-1){
+        for (final part in listData.value) {
+          if (part.getId() == selectedPartId.value) {
+            indexImage.value = listData.value.indexOf(part);
+            break;
+          }
+        }
+      }
+    }
+
+    setObjectAsData(int partId) async{
+      RegionDataModel? part =
+          await PartDAO().getPart(partId);
+      curList.value = 'object';
+      listData.value = part!.objectsList
+          .toList()
+          .map((e) => LabelingDataModel(curList.value)..object = e)
           .toList();
     }
 
@@ -169,7 +189,6 @@ class LabelingPage extends HookWidget with WindowListener {
     }
 
     doPartAction(String action) async {
-      print(action);
       var actions = action.split('&&');
       switch (actions[0]) {
         case 'refreshObjects':
@@ -201,16 +220,44 @@ class LabelingPage extends HookWidget with WindowListener {
           }
           break;
         case 'goto':
-          ScreenShootModel? screen =
-              await ScreenDAO().getScreen(int.parse(actions[1]));
-          curList.value = 'part';
-          // setPartAsData(screen!.partsList);
+          selectedPartId.value = listData.value[indexImage.value].getId();
           indexImage.value = 0;
+          setObjectAsData(selectedPartId.value);
           break;
       }
     }
 
-    doObjectAction(String action) {}
+    doObjectAction(String action) async{
+      var actions = action.split('&&');
+      switch (actions[0]) {
+        case 'edit':
+          RegionDataModel? object =
+              await PartObjectDAO().getObject(int.parse(actions[1]));
+          object!.type = actions[2];
+          object.description = actions[3];
+          object.actionOne = actions[4];
+          object.actionTwo = actions[5];
+          object.status = 'finished';
+          await PartObjectDAO().updateObject(object);
+          await setObjectAsData(selectedPartId.value);
+          break;
+        case 'delete':
+          RegionDataModel? object =
+              await PartObjectDAO().getObject(int.parse(actions[1]));
+          await PartObjectDAO().deleteObject(object!);
+          await setObjectAsData(selectedPartId.value);
+          break;
+        case 'show':
+          RegionDataModel? object = await PartObjectDAO().getObject(int.parse(actions[1]));
+          for (final item in listData.value) {
+            if (item.getId() == object!.id) {
+              indexImage.value = listData.value.indexOf(item);
+              break;
+            }
+          }
+          break;
+      }
+    }
 
     onActionHandler(String action) async {
       switch (curList.value) {
@@ -342,8 +389,13 @@ class LabelingPage extends HookWidget with WindowListener {
                                             size: 25,
                                           )),
                                       onPressed: () async {
-                                        await setScreenAsData();
-                                        selectedScreenId.value=-1;
+                                        if(curList.value=='part') {
+                                          await setScreenAsData();
+                                          selectedScreenId.value = -1;
+                                        }else if(curList.value=='object'){
+                                          await setPartAsData(selectedScreenId.value);
+                                          selectedPartId.value = -1;
+                                        }
                                       }),
                                 LabelingDetails(
                                   labelList: curList.value=='screen'?PageType.values.map((e) => e.name).toList():PartType.values.map((e) => e.name).toList(),

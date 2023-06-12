@@ -130,10 +130,10 @@ class RegionManager extends HookWidget {
                   : BoxFit.none,
             ),
           ),
-          child: PartRegionExplorer(
+          child: itemKind!='object'?PartRegionExplorer(
             allParts: item.getRegionsList() ?? [],
             onNewPartHandler: itemKind=='screen'?onNewPartCreatedHandler:onNewObjectCreatedHandler,
-          ),
+          ):SizedBox(width: 0,height: 0,),
         ),
         Positioned(
           top: 350,

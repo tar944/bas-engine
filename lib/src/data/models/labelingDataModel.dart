@@ -9,6 +9,7 @@ class LabelingDataModel{
   String kind;
   ScreenShootModel? _screen;
   RegionDataModel? _part;
+  RegionDataModel? _object;
 
   LabelingDataModel(this.kind);
 
@@ -18,6 +19,8 @@ class LabelingDataModel{
         return _screen!.id;
       case 'part':
         return _part!.id;
+      case 'object':
+        return _object!.id;
     }
     return -1;
   }
@@ -28,6 +31,8 @@ class LabelingDataModel{
         return _screen!.path;
       case 'part':
         return _part!.path;
+      case 'object':
+        return _object!.path;
     }
     return '';
   }
@@ -38,6 +43,8 @@ class LabelingDataModel{
         return _screen!.status;
       case 'part':
         return _part!.status;
+      case 'object':
+        return _object!.status;
     }
     return '';
   }
@@ -57,6 +64,8 @@ class LabelingDataModel{
         return _screen!.imageName;
       case 'part':
         return _part!.imageName;
+      case 'object':
+        return _object!.imageName;
     }
     return 'notSet';
   }
@@ -67,6 +76,8 @@ class LabelingDataModel{
         return _screen!.description;
       case 'part':
         return _part!.description;
+      case 'object':
+        return _object!.description;
     }
     return '';
   }
@@ -77,6 +88,8 @@ class LabelingDataModel{
         return _screen!.label;
       case 'part':
         return _part!.label;
+      case 'object':
+        return _object!.label;
     }
     return '';
   }
@@ -87,6 +100,8 @@ class LabelingDataModel{
         return _screen!.type;
       case 'part':
         return _part!.type;
+      case 'object':
+        return _object!.type;
     }
     return '';
   }
@@ -123,6 +138,10 @@ class LabelingDataModel{
     return await DirectoryManager().getObjectImagePath(
         '${software!.id}_${software.title!}',
         '${group.id}_${group.name!}');
+  }
+
+  set object(RegionDataModel value) {
+    _object = value;
   }
 
   set part(RegionDataModel value) {

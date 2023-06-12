@@ -17,7 +17,7 @@ class RegionDataModel {
   String? label;
   String? type;
   String status;
-  String? actionKind;
+  String? actionOne,actionTwo;
   final screen = ToOne<ScreenShootModel>();
   final part = ToOne<RegionDataModel>();
   final objectsList = ToMany<RegionDataModel>();

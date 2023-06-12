@@ -285,7 +285,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(8, 7519792149997907067),
       name: 'RegionDataModel',
-      lastPropertyId: const IdUid(16, 245144734813337382),
+      lastPropertyId: const IdUid(18, 3400226446235154169),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -354,11 +354,6 @@ final _entities = <ModelEntity>[
             type: 9,
             flags: 0),
         ModelProperty(
-            id: const IdUid(14, 5827270774663624382),
-            name: 'actionKind',
-            type: 9,
-            flags: 0),
-        ModelProperty(
             id: const IdUid(15, 1458922637572425683),
             name: 'screenId',
             type: 11,
@@ -371,7 +366,17 @@ final _entities = <ModelEntity>[
             type: 11,
             flags: 520,
             indexId: const IdUid(12, 7787389054076459701),
-            relationTarget: 'RegionDataModel')
+            relationTarget: 'RegionDataModel'),
+        ModelProperty(
+            id: const IdUid(17, 1675292515585985723),
+            name: 'actionOne',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(18, 3400226446235154169),
+            name: 'actionTwo',
+            type: 9,
+            flags: 0)
       ],
       relations: <ModelRelation>[
         ModelRelation(
@@ -444,7 +449,8 @@ ModelDefinition getObjectBoxModel() {
         2380622141480846707,
         6629873035293510143,
         2205741989534374320,
-        2021594605780541537
+        2021594605780541537,
+        5827270774663624382
       ],
       retiredRelationUids: const [7096364116743183016],
       modelVersion: 5,
@@ -751,10 +757,13 @@ ModelDefinition getObjectBoxModel() {
           final typeOffset =
               object.type == null ? null : fbb.writeString(object.type!);
           final statusOffset = fbb.writeString(object.status);
-          final actionKindOffset = object.actionKind == null
+          final actionOneOffset = object.actionOne == null
               ? null
-              : fbb.writeString(object.actionKind!);
-          fbb.startTable(17);
+              : fbb.writeString(object.actionOne!);
+          final actionTwoOffset = object.actionTwo == null
+              ? null
+              : fbb.writeString(object.actionTwo!);
+          fbb.startTable(19);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addFloat64(1, object.left);
           fbb.addFloat64(2, object.right);
@@ -768,9 +777,10 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(10, labelOffset);
           fbb.addOffset(11, typeOffset);
           fbb.addOffset(12, statusOffset);
-          fbb.addOffset(13, actionKindOffset);
           fbb.addInt64(14, object.screen.targetId);
           fbb.addInt64(15, object.part.targetId);
+          fbb.addOffset(16, actionOneOffset);
+          fbb.addOffset(17, actionTwoOffset);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -800,8 +810,10 @@ ModelDefinition getObjectBoxModel() {
                 .vTableGetNullable(buffer, rootOffset, 24)
             ..type = const fb.StringReader(asciiOptimization: true)
                 .vTableGetNullable(buffer, rootOffset, 26)
-            ..actionKind = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 30);
+            ..actionOne = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 36)
+            ..actionTwo = const fb.StringReader(asciiOptimization: true)
+                .vTableGetNullable(buffer, rootOffset, 38);
           object.screen.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 32, 0);
           object.screen.attach(store);
@@ -1055,17 +1067,21 @@ class RegionDataModel_ {
   static final status =
       QueryStringProperty<RegionDataModel>(_entities[5].properties[12]);
 
-  /// see [RegionDataModel.actionKind]
-  static final actionKind =
-      QueryStringProperty<RegionDataModel>(_entities[5].properties[13]);
-
   /// see [RegionDataModel.screen]
   static final screen = QueryRelationToOne<RegionDataModel, ScreenShootModel>(
-      _entities[5].properties[14]);
+      _entities[5].properties[13]);
 
   /// see [RegionDataModel.part]
   static final part = QueryRelationToOne<RegionDataModel, RegionDataModel>(
-      _entities[5].properties[15]);
+      _entities[5].properties[14]);
+
+  /// see [RegionDataModel.actionOne]
+  static final actionOne =
+      QueryStringProperty<RegionDataModel>(_entities[5].properties[15]);
+
+  /// see [RegionDataModel.actionTwo]
+  static final actionTwo =
+      QueryStringProperty<RegionDataModel>(_entities[5].properties[16]);
 
   /// see [RegionDataModel.objectsList]
   static final objectsList =
