@@ -140,6 +140,10 @@ class LabelingDataModel{
         '${group.id}_${group.name!}');
   }
 
+  List<String> getActions(){
+    return [_object!.actionOne,_object!.actionTwo];
+  }
+
   set object(RegionDataModel value) {
     _object = value;
   }

@@ -1,4 +1,4 @@
-enum PageType { mainPage, subPage, dialog, menu, submenu, rightMenu }
+enum PageType { mainPage, subPage, dialog, menu, submenu, rightMenu,openDialog,saveDialog }
 
 enum PartType {
   menuBar,
@@ -14,18 +14,20 @@ enum PartType {
 }
 
 enum ObjectType {
-  checkbox,
+  checkRegion,
   label,
   button,
-  radioButton,
+  radioRegion,
   icon,
+  iconBTN,
+  tab,
+  switchBTN,
   selectBox,
   table,
   chart,
   menu,
   menuItem,
   cell,
-  editBox,
   textBox,
   richEditBox
 }
@@ -33,6 +35,9 @@ enum ObjectType {
 enum ImageStatus { finished, created }
 
 enum ActionKind {
+  nothing,
+  selectMulti,
+  selectOne,
   click,
   doubleClick,
   wheelDown,
@@ -43,7 +48,9 @@ enum ActionKind {
   scrollHorizontal,
   scrollVertical,
   type,
-  drag,
+  dragAndDropUpAndDown,
+  dragAndDropLeftAndRight,
+  dragAndDrop,
   hold,
   typeNumber
 }

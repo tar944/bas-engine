@@ -234,9 +234,8 @@ class LabelingPage extends HookWidget with WindowListener {
           RegionDataModel? object =
               await PartObjectDAO().getObject(int.parse(actions[1]));
           object!.type = actions[2];
-          object.description = actions[3];
-          object.actionOne = actions[4];
-          object.actionTwo = actions[5];
+          object.actionOne = actions[3];
+          object.actionTwo = actions[4];
           object.status = 'finished';
           await PartObjectDAO().updateObject(object);
           await setObjectAsData(selectedPartId.value);
@@ -398,7 +397,6 @@ class LabelingPage extends HookWidget with WindowListener {
                                         }
                                       }),
                                 LabelingDetails(
-                                  labelList: curList.value=='screen'?PageType.values.map((e) => e.name).toList():PartType.values.map((e) => e.name).toList(),
                                   onActionCaller: onActionHandler,
                                   data: listData.value[indexImage.value],
                                 ),

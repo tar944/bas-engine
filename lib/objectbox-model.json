@@ -377,9 +377,33 @@
           "targetId": "8:7519792149997907067"
         }
       ]
+    },
+    {
+      "id": "9:4904567446919175383",
+      "lastPropertyId": "3:3906633095853360931",
+      "name": "LabelTypeModel",
+      "properties": [
+        {
+          "id": "1:7728659078620245349",
+          "name": "id",
+          "type": 6,
+          "flags": 1
+        },
+        {
+          "id": "2:5649643688079043407",
+          "name": "name",
+          "type": 9
+        },
+        {
+          "id": "3:3906633095853360931",
+          "name": "isFor",
+          "type": 9
+        }
+      ],
+      "relations": []
     }
   ],
-  "lastEntityId": "8:7519792149997907067",
+  "lastEntityId": "9:4904567446919175383",
   "lastIndexId": "12:7787389054076459701",
   "lastRelationId": "8:3903017910301198765",
   "lastSequenceId": "0:0",

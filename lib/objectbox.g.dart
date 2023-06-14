@@ -14,6 +14,7 @@ import 'package:objectbox/internal.dart'; // generated code can access "internal
 import 'package:objectbox/objectbox.dart';
 
 import 'src/data/models/actionModel.dart';
+import 'src/data/models/labelTypeModel.dart';
 import 'src/data/models/recordedScreenGroup.dart';
 import 'src/data/models/regionDataModel.dart';
 import 'src/data/models/screenShootModel.dart';
@@ -384,6 +385,30 @@ final _entities = <ModelEntity>[
             name: 'objectsList',
             targetId: const IdUid(8, 7519792149997907067))
       ],
+      backlinks: <ModelBacklink>[]),
+  ModelEntity(
+      id: const IdUid(9, 4904567446919175383),
+      name: 'LabelTypeModel',
+      lastPropertyId: const IdUid(3, 3906633095853360931),
+      flags: 0,
+      properties: <ModelProperty>[
+        ModelProperty(
+            id: const IdUid(1, 7728659078620245349),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        ModelProperty(
+            id: const IdUid(2, 5649643688079043407),
+            name: 'name',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(3, 3906633095853360931),
+            name: 'isFor',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[])
 ];
 
@@ -407,7 +432,7 @@ Store openStore(
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
-      lastEntityId: const IdUid(8, 7519792149997907067),
+      lastEntityId: const IdUid(9, 4904567446919175383),
       lastIndexId: const IdUid(12, 7787389054076459701),
       lastRelationId: const IdUid(8, 3903017910301198765),
       lastSequenceId: const IdUid(0, 0),
@@ -757,12 +782,8 @@ ModelDefinition getObjectBoxModel() {
           final typeOffset =
               object.type == null ? null : fbb.writeString(object.type!);
           final statusOffset = fbb.writeString(object.status);
-          final actionOneOffset = object.actionOne == null
-              ? null
-              : fbb.writeString(object.actionOne!);
-          final actionTwoOffset = object.actionTwo == null
-              ? null
-              : fbb.writeString(object.actionTwo!);
+          final actionOneOffset = fbb.writeString(object.actionOne);
+          final actionTwoOffset = fbb.writeString(object.actionTwo);
           fbb.startTable(19);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addFloat64(1, object.left);
@@ -811,9 +832,9 @@ ModelDefinition getObjectBoxModel() {
             ..type = const fb.StringReader(asciiOptimization: true)
                 .vTableGetNullable(buffer, rootOffset, 26)
             ..actionOne = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 36)
+                .vTableGet(buffer, rootOffset, 36, '')
             ..actionTwo = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 38);
+                .vTableGet(buffer, rootOffset, 38, '');
           object.screen.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 32, 0);
           object.screen.attach(store);
@@ -822,6 +843,37 @@ ModelDefinition getObjectBoxModel() {
           object.part.attach(store);
           InternalToManyAccess.setRelInfo<RegionDataModel>(object.objectsList,
               store, RelInfo<RegionDataModel>.toMany(7, object.id!));
+          return object;
+        }),
+    LabelTypeModel: EntityDefinition<LabelTypeModel>(
+        model: _entities[6],
+        toOneRelations: (LabelTypeModel object) => [],
+        toManyRelations: (LabelTypeModel object) => {},
+        getId: (LabelTypeModel object) => object.id,
+        setId: (LabelTypeModel object, int id) {
+          object.id = id;
+        },
+        objectToFB: (LabelTypeModel object, fb.Builder fbb) {
+          final nameOffset = fbb.writeString(object.name);
+          final isForOffset = fbb.writeString(object.isFor);
+          fbb.startTable(4);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, nameOffset);
+          fbb.addOffset(2, isForOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+
+          final object = LabelTypeModel(
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0),
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 6, ''),
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 8, ''));
+
           return object;
         })
   };
@@ -1087,4 +1139,19 @@ class RegionDataModel_ {
   static final objectsList =
       QueryRelationToMany<RegionDataModel, RegionDataModel>(
           _entities[5].relations[0]);
+}
+
+/// [LabelTypeModel] entity fields to define ObjectBox queries.
+class LabelTypeModel_ {
+  /// see [LabelTypeModel.id]
+  static final id =
+      QueryIntegerProperty<LabelTypeModel>(_entities[6].properties[0]);
+
+  /// see [LabelTypeModel.name]
+  static final name =
+      QueryStringProperty<LabelTypeModel>(_entities[6].properties[1]);
+
+  /// see [LabelTypeModel.isFor]
+  static final isFor =
+      QueryStringProperty<LabelTypeModel>(_entities[6].properties[2]);
 }
