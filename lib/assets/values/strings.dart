@@ -56,6 +56,7 @@ class Strings{
   static const String dlgVoiceRecorder = "Voice recorder";
   static const String dlgNewSoftware = "New software";
   static const String dlgNewGroup = "New group";
+  static const String dlgLabeling = "Manage labels";
   static const String dlgEditSoftware = "Edit software";
   static const String dlgEditGroup = "Edit group";
   static const String dlgChapter = "Chapter info";
@@ -86,4 +87,5 @@ class Strings{
   static const String infoPanel="Info panel";
   static const String profilePanel="Profile panel";
 
+  static const String createNewLabel="Create new label";
 }

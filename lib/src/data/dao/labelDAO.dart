@@ -9,6 +9,12 @@ class LabelDAO {
     return labels;
   }
 
+  Future<LabelTypeModel?> getLabel(int id) async {
+    Box<LabelTypeModel> box = objectbox.store.box<LabelTypeModel>();
+    LabelTypeModel? label = box.get(id);
+    return label;
+  }
+
   Future<int> addLabel(LabelTypeModel newObject) async {
     print(newObject.name);
     Box<LabelTypeModel> box = objectbox.store.box<LabelTypeModel>();
@@ -37,7 +43,7 @@ class LabelDAO {
     box.removeAll();
   }
 
-  Future<bool> deleteObject(int id) async {
+  Future<bool> deleteLabel(int id) async {
     Box<LabelTypeModel> box = objectbox.store.box<LabelTypeModel>();
     bool result = box.remove(id);
     return result;
