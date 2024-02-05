@@ -19,7 +19,8 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 0.1.5
 
 environment:
-  sdk: '>=2.19.2 <3.0.0'
+  sdk: '>=3.0.0 <4.0.0'
+  flutter: '>=3.10.0'
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -32,7 +33,7 @@ dependencies:
     sdk: flutter
 
   go_router: ^6.0.4
-  fluent_ui: ^4.4.0
+  fluent_ui: ^4.7.3
   window_manager: ^0.3.0
   provider: ^6.0.5
   system_theme: ^2.1.0
@@ -47,9 +48,11 @@ dependencies:
   indexed: ^0.0.8
   flutter_meedu_videoplayer: ^4.2.1
   fc_native_video_thumbnail: ^0.4.0
-  objectbox: ^2.0.0
+  objectbox: 2.2.1
+  objectbox_flutter_libs: 2.2.1
   flython: ^0.2.0
   image: ^4.0.17
+  pmvvm: ^4.0.1
   mouse_event: ^0.1.1
   keyboard_event: ^0.3.4
   # The following adds the Cupertino Icons font to your application.

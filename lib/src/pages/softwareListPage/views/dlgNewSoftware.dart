@@ -1,13 +1,13 @@
 
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import '../../assets/values/dimens.dart';
+import '../../../../assets/values/dimens.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../../assets/values/strings.dart';
-import '../data/models/softwareModel.dart';
-import '../parts/dialogTitleBar.dart';
-import '../widgets/CButton.dart';
+import '../../../../assets/values/strings.dart';
+import '../../../data/models/softwareModel.dart';
+import '../../../parts/dialogTitleBar.dart';
+import '../../../widgets/CButton.dart';
 
 class DlgNewSoftware extends HookWidget {
   DlgNewSoftware({

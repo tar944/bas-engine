@@ -1,7 +1,15 @@
 import 'dart:core';
 
 class Strings{
-  static const String exitTitle="Exit from BeAndKnow";
+  static const String name="";
+  static const String appName="BAS Data set generator engine";
+  static const String software="Software";
+  static const String groups="Groups";
+  static const String screenLabeling="Screen labeling";
+  static const String partLabeling="Part labeling";
+  static const String allGroups="All groups";
+  static const String emptySoftware="your software list is empty for creating a software click on pluse button...";
+  static const String exitTitle="Exit from Be a senior";
   static const String exitWarnString="You have changes to save,what you want to do?";
   static const String confirm="Confirm";
   static const String saveAndExit="Save and Exit";
@@ -78,7 +86,6 @@ class Strings{
 
   static const String chapters="Chapters";
   static const String lessons="Lessons";
-  static const String groups="Groups";
   static const String actions="Actions";
 
   static const String cvcPanel="CVC panel";

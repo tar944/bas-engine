@@ -121,7 +121,6 @@ class RecordPage extends HookWidget with WindowListener {
 
     onRecordBtnListener() async {
       isRecording.value = !isRecording.value;
-      await Future.delayed(const Duration(milliseconds: 100));
       if (isRecording.value) {
         MouseEventPlugin.startListening((mouseEvent) async {
           if (mouseEvent.mouseMsg == MouseEventMsg.WM_LBUTTONUP ||

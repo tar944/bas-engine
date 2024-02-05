@@ -10,10 +10,10 @@
 #include <flutter_acrylic/flutter_acrylic_plugin.h>
 #include <flutter_meedu_videoplayer/flutter_meedu_videoplayer_plugin_c_api.h>
 #include <fullscreen_window/fullscreen_window_plugin_c_api.h>
+#include <fvp/fvp_plugin_c_api.h>
 #include <keyboard_event/keyboard_event_plugin.h>
-#include <media_kit_libs_windows_video/media_kit_libs_windows_video_plugin_c_api.h>
-#include <media_kit_video/media_kit_video_plugin_c_api.h>
 #include <mouse_event/mouse_event_plugin.h>
+#include <objectbox_flutter_libs/objectbox_flutter_libs_plugin.h>
 #include <screen_brightness_windows/screen_brightness_windows_plugin.h>
 #include <screen_capturer/screen_capturer_plugin.h>
 #include <screen_retriever/screen_retriever_plugin.h>
@@ -29,14 +29,14 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
       registry->GetRegistrarForPlugin("FlutterMeeduVideoplayerPluginCApi"));
   FullscreenWindowPluginCApiRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("FullscreenWindowPluginCApi"));
+  FvpPluginCApiRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("FvpPluginCApi"));
   KeyboardEventPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("KeyboardEventPlugin"));
-  MediaKitLibsWindowsVideoPluginCApiRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("MediaKitLibsWindowsVideoPluginCApi"));
-  MediaKitVideoPluginCApiRegisterWithRegistrar(
-      registry->GetRegistrarForPlugin("MediaKitVideoPluginCApi"));
   MouseEventPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("MouseEventPlugin"));
+  ObjectboxFlutterLibsPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("ObjectboxFlutterLibsPlugin"));
   ScreenBrightnessWindowsPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("ScreenBrightnessWindowsPlugin"));
   ScreenCapturerPluginRegisterWithRegistrar(

@@ -12,6 +12,7 @@ import 'dart:typed_data';
 import 'package:flat_buffers/flat_buffers.dart' as fb;
 import 'package:objectbox/internal.dart'; // generated code can access "internal" functionality
 import 'package:objectbox/objectbox.dart';
+import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'src/data/models/actionModel.dart';
 import 'src/data/models/labelTypeModel.dart';
@@ -412,23 +413,30 @@ final _entities = <ModelEntity>[
       backlinks: <ModelBacklink>[])
 ];
 
-/// Open an ObjectBox store with the model declared in this file.
-Store openStore(
+/// Shortcut for [Store.new] that passes [getObjectBoxModel] and for Flutter
+/// apps by default a [directory] using `defaultStoreDirectory()` from the
+/// ObjectBox Flutter library.
+///
+/// Note: for desktop apps it is recommended to specify a unique [directory].
+///
+/// See [Store.new] for an explanation of all parameters.
+Future<Store> openStore(
         {String? directory,
         int? maxDBSizeInKB,
         int? fileMode,
         int? maxReaders,
         bool queriesCaseSensitiveDefault = true,
-        String? macosApplicationGroup}) =>
+        String? macosApplicationGroup}) async =>
     Store(getObjectBoxModel(),
-        directory: directory,
+        directory: directory ?? (await defaultStoreDirectory()).path,
         maxDBSizeInKB: maxDBSizeInKB,
         fileMode: fileMode,
         maxReaders: maxReaders,
         queriesCaseSensitiveDefault: queriesCaseSensitiveDefault,
         macosApplicationGroup: macosApplicationGroup);
 
-/// ObjectBox model definition, pass it to [Store] - Store(getObjectBoxModel())
+/// Returns the ObjectBox model definition for this project for use with
+/// [Store.new].
 ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
@@ -526,16 +534,18 @@ ModelDefinition getObjectBoxModel() {
         objectFromFB: (Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
-
-          final object = ScreenShootModel(
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4),
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 18),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 6),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 8),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 16))
+          final idParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+          final hashDifferenceParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 18);
+          final imageNameParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 6);
+          final pathParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 8);
+          final statusParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 16);
+          final object = ScreenShootModel(idParam, hashDifferenceParam,
+              imageNameParam, pathParam, statusParam)
             ..description = const fb.StringReader(asciiOptimization: true)
                 .vTableGetNullable(buffer, rootOffset, 10)
             ..label = const fb.StringReader(asciiOptimization: true)
@@ -597,21 +607,25 @@ ModelDefinition getObjectBoxModel() {
         objectFromFB: (Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
-
-          final object = SoftwareModel(
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0),
+          final idParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final titleParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 6);
+          final companyIdParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 8);
+          final companyNameParam =
               const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 6),
+                  .vTableGetNullable(buffer, rootOffset, 10);
+          final descriptionParam =
               const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 8),
+                  .vTableGetNullable(buffer, rootOffset, 12);
+          final iconParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 14);
+          final companyLogoParam =
               const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 10),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 12),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 14),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 16));
+                  .vTableGetNullable(buffer, rootOffset, 16);
+          final object = SoftwareModel(idParam, titleParam, companyIdParam,
+              companyNameParam, descriptionParam, iconParam, companyLogoParam);
           InternalToManyAccess.setRelInfo<SoftwareModel>(object.allVideos,
               store, RelInfo<SoftwareModel>.toMany(3, object.id));
           InternalToManyAccess.setRelInfo<SoftwareModel>(object.allGroups,
@@ -647,17 +661,19 @@ ModelDefinition getObjectBoxModel() {
         objectFromFB: (Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
-
+          final idParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final nameParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 6);
+          final thumbnailPathParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 14, '');
+          final pathParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 8, '');
+          final timeParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 10);
           final object = VideoModel(
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 6),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 14, ''),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 8, ''),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 10));
+              idParam, nameParam, thumbnailPathParam, pathParam, timeParam);
           object.software.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
           object.software.attach(store);
@@ -696,16 +712,19 @@ ModelDefinition getObjectBoxModel() {
         objectFromFB: (Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
-
+          final idParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final nameParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGetNullable(buffer, rootOffset, 6);
+          final pathParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 10, '');
+          final descriptionParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGetNullable(buffer, rootOffset, 8);
+          final imgNumberParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0);
           final object = RecordedScreenGroup(
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 6),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 10, ''),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGetNullable(buffer, rootOffset, 8),
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 12, 0));
+              idParam, nameParam, pathParam, descriptionParam, imgNumberParam);
           object.software.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 14, 0);
           object.software.attach(store);
@@ -741,14 +760,18 @@ ModelDefinition getObjectBoxModel() {
         objectFromFB: (Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
-
+          final idParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final isMouseParam =
+              const fb.BoolReader().vTableGet(buffer, rootOffset, 6, false);
+          final xParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 12);
+          final yParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 14);
+          final actionTypeParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 8, '');
           final object = ActionModel(
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0),
-              const fb.BoolReader().vTableGet(buffer, rootOffset, 6, false),
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 12),
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 14),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 8, ''))
+              idParam, isMouseParam, xParam, yParam, actionTypeParam)
             ..typedText = const fb.StringReader(asciiOptimization: true)
                 .vTableGetNullable(buffer, rootOffset, 10);
 
@@ -808,17 +831,22 @@ ModelDefinition getObjectBoxModel() {
         objectFromFB: (Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
-
-          final object = RegionDataModel(
-              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 14, ''),
-              const fb.Float64Reader().vTableGet(buffer, rootOffset, 6, 0),
-              const fb.Float64Reader().vTableGet(buffer, rootOffset, 8, 0),
-              const fb.Float64Reader().vTableGet(buffer, rootOffset, 10, 0),
-              const fb.Float64Reader().vTableGet(buffer, rootOffset, 12, 0),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 28, ''))
+          final idParam =
+              const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+          final kindParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 14, '');
+          final leftParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 6, 0);
+          final rightParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 8, 0);
+          final topParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 10, 0);
+          final bottomParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 12, 0);
+          final statusParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 28, '');
+          final object = RegionDataModel(idParam, kindParam, leftParam,
+              rightParam, topParam, bottomParam, statusParam)
             ..color = const fb.StringReader(asciiOptimization: true)
                 .vTableGetNullable(buffer, rootOffset, 16)
             ..imageName = const fb.StringReader(asciiOptimization: true)
@@ -866,13 +894,13 @@ ModelDefinition getObjectBoxModel() {
         objectFromFB: (Store store, ByteData fbData) {
           final buffer = fb.BufferContext(fbData);
           final rootOffset = buffer.derefObject(0);
-
-          final object = LabelTypeModel(
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 6, ''),
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 8, ''));
+          final idParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final nameParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final isForParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 8, '');
+          final object = LabelTypeModel(idParam, nameParam, isForParam);
 
           return object;
         })

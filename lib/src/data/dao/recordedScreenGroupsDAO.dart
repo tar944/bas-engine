@@ -45,6 +45,7 @@ class RecordedScreenGroupDAO {
       return false;
     }
     group.screenShoots.remove(screen);
+    group.imgNumber -= 1;
     updateGroup(group);
     return true;
   }

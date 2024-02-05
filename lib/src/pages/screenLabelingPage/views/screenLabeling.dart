@@ -1,21 +1,19 @@
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/recordedScreenGroupsDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/screenShotDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/screenShootModel.dart';
 import 'package:bas_dataset_generator_engine/src/items/screenItem.dart';
+import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:window_manager/window_manager.dart';
-import '../../assets/values/dimens.dart';
-import '../../assets/values/strings.dart';
-import '../../assets/values/textStyle.dart';
-import '../parts/topBarPanel.dart';
-import '../utility/platform_util.dart';
 
-class ScreensPage extends HookWidget with WindowListener {
+class ScreenLabeling extends HookWidget with WindowListener {
   int? groupId;
 
-  ScreensPage(this.groupId, {super.key});
+  ScreenLabeling(this.groupId, {super.key});
 
   void _init() async {
     // Add this line to override the default close handler
@@ -105,12 +103,6 @@ class ScreensPage extends HookWidget with WindowListener {
         padding: const EdgeInsets.only(top: 0, bottom: 0),
         content: SizedBox.expand(
           child: Column(children: [
-            TopBarPanel(
-              title: allScreens.value.isNotEmpty?'${Strings.screensPage+'   ( ' + allScreens.value[indexImage.value].imageName} )':Strings.screensPage,
-              needBack: true,
-              needHelp: false,
-              onBackCaller: onBackClicked,
-            ),
             if (allScreens.value.isEmpty)
               Expanded(
                 child: Container(

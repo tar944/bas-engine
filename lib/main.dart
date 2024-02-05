@@ -2,10 +2,8 @@ import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectBox.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelTypeModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage.dart';
+import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/mainPage.dart';
 import 'package:bas_dataset_generator_engine/src/pages/recordPage.dart';
-import 'package:bas_dataset_generator_engine/src/pages/screensPage.dart';
-import 'package:bas_dataset_generator_engine/src/pages/screensSource.dart';
-import 'package:bas_dataset_generator_engine/src/pages/softwaresList.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
@@ -67,19 +65,19 @@ class MyApp extends StatelessWidget {
           themeMode: appTheme.mode,
           debugShowCheckedModeBanner: false,
           color: Colors.transparent,
-          darkTheme: ThemeData(
+          darkTheme: FluentThemeData(
             brightness: Brightness.dark,
             accentColor: appTheme.color,
             visualDensity: VisualDensity.standard,
             focusTheme: FocusThemeData(
-              glowFactor: is10footScreen() ? 2.0 : 0.0,
+              glowFactor: is10footScreen(context) ? 2.0 : 0.0,
             ),
           ),
-          theme: ThemeData(
+          theme: FluentThemeData(
             accentColor: appTheme.color,
             visualDensity: VisualDensity.standard,
             focusTheme: FocusThemeData(
-              glowFactor: is10footScreen() ? 2.0 : 0.0,
+              glowFactor: is10footScreen(context) ? 2.0 : 0.0,
             ),
           ),
           locale: appTheme.locale,
@@ -109,27 +107,15 @@ class MyApp extends StatelessWidget {
 final router = GoRouter(
   routes: [
     GoRoute(
-      path: '/screensSource/:softwareId',
-      name: 'screensSource',
-      builder: (context, state) =>
-          ScreensSource(int.parse(state.params['softwareId']!)),
-    ),
-    GoRoute(
       path: '/',
-      name: 'softwareList',
-      builder: (context, state) => SoftWaresList(),
+      name: 'mainPage',
+      builder: (context, state) => const MainPage(),
     ),
     GoRoute(
-      path: '/screens/:groupId',
-      name: 'screensList',
-      builder: (context, state) =>
-          ScreensPage(int.parse(state.params['groupId']!)),
-    ),
-    GoRoute(
-      path: '/labeling/:groupId',
+      path: '/labeling/:groupId/:softId',
       name: 'labeling',
       builder: (context, state) =>
-          LabelingPage(int.parse(state.params['groupId']!)),
+          LabelingPage(int.parse(state.params['groupId']!),int.parse(state.params['softId']!)),
     ),
     GoRoute(
       path: '/recordScreens/:groupId',

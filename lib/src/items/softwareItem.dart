@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -60,7 +61,7 @@ class SoftwareItem extends HookWidget {
                 Row(
                   children: [
                     Expanded(
-                        flex: 28,
+                        flex: 30,
                         child: Row(
                           children: [
                             FlyoutTarget(
@@ -83,11 +84,11 @@ class SoftwareItem extends HookWidget {
                           ],
                         )),
                     Expanded(
-                        flex: 72,
+                        flex: 70,
                         child: IconButton(
                           onPressed: ()=>onActionCaller!('goto&&${software.id}'),
                           icon: Text(
-                            'All videos',
+                            Strings.allGroups,
                             style: TextSystem.textS(Colors.white),
                           ),
                         )),

@@ -1,5 +1,7 @@
 enum PageType { mainPage, subPage, dialog, menu, submenu, rightMenu,openDialog,saveDialog }
 
+enum HeaderTabs {software,groups,screenLabel,partLabel}
+
 enum PartType {
   menuBar,
   statusBar,

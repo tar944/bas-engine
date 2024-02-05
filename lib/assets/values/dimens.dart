@@ -4,6 +4,9 @@ class Dimens {
   static const double btmSwitchSmallW = 100;
   static const double btmCellsH = 200;
   static const double btmCellsW = 300;
+  static const double tabWidth = 150;
+  static const double tabHeightSmall = 35;
+  static const double mainHeaderH = 80;
 
   static const double btmChapterH = 220;
   static const double btmLessonH = 205;

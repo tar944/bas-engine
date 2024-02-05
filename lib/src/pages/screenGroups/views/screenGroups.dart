@@ -1,24 +1,25 @@
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/recordedScreenGroupsDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/softwareDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/recordedScreenGroup.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/dlgNewScreenGroup.dart';
 import 'package:bas_dataset_generator_engine/src/items/groupItem.dart';
+import 'package:bas_dataset_generator_engine/src/parts/addsOnPanel.dart';
+import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
+import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:go_router/go_router.dart';
 import 'package:window_manager/window_manager.dart';
-import '../../assets/values/dimens.dart';
-import '../../assets/values/strings.dart';
-import '../../assets/values/textStyle.dart';
-import '../data/dao/recordedScreenGroupsDAO.dart';
-import '../data/dao/softwareDAO.dart';
-import '../parts/addsOnPanel.dart';
-import '../parts/topBarPanel.dart';
-import '../utility/platform_util.dart';
 
-class ScreensSource extends HookWidget with WindowListener {
+
+class ScreenGroups extends HookWidget with WindowListener {
   int? softwareId;
 
-  ScreensSource(this.softwareId);
+  ScreenGroups(this.softwareId, {super.key});
 
   Offset _lastShownPosition = Offset.zero;
 
@@ -64,8 +65,6 @@ class ScreensSource extends HookWidget with WindowListener {
     }
   }
 
-  void onBackHandler(bool kind) {}
-
   @override
   Widget build(BuildContext context) {
     final groups = useState([]);
@@ -90,10 +89,10 @@ class ScreensSource extends HookWidget with WindowListener {
           groups.value = await SoftwareDAO().getAllGroups(softwareId!);
           break;
         case 'labeling':
-          context.goNamed('labeling',params: {'groupId':group!.id.toString()});
+          context.goNamed('labeling',params: {'groupId':group!.id.toString(),'softId':softwareId.toString()});
           break;
         case 'screens':
-          context.goNamed('screensList',params: {'groupId':group!.id.toString()});
+          context.goNamed('screensList',params: {'groupId':group!.id.toString(),'softId':softwareId.toString()});
           break;
       }
     }
@@ -128,6 +127,10 @@ class ScreensSource extends HookWidget with WindowListener {
       // }
     }
 
+    void onBackHandler() {
+      context.goNamed('softwareList');
+    }
+
     return ScaffoldPage(
         padding: const EdgeInsets.only(top: 0, bottom: 0),
         content: SizedBox.expand(
@@ -136,6 +139,7 @@ class ScreensSource extends HookWidget with WindowListener {
               title: Strings.pageVideo,
               needBack: true,
               needHelp: false,
+              onBackCaller: onBackHandler,
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,

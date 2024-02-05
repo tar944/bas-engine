@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -27,10 +29,7 @@ class TopBarPanel extends StatelessWidget {
       width: MediaQuery.of(context).size.width,
       alignment: Alignment.centerLeft,
       decoration: BoxDecoration(
-          color: Colors.grey[210],
-          borderRadius: const BorderRadius.only(
-              topLeft: Radius.circular(Dimens.dialogCornerRadius),
-              topRight: Radius.circular(Dimens.dialogCornerRadius))),
+          color: Colors.grey[220],),
       child: Row(
         children: [
           if (needBack)
@@ -62,10 +61,6 @@ class TopBarPanel extends StatelessWidget {
                     "( $description )",
                     style: TextSystem.textXs(Colors.grey[130]),
                   ),
-
-
-
-
               ],
             ),
           ),
@@ -88,7 +83,7 @@ class TopBarPanel extends StatelessWidget {
                       )),
                   onPressed: () => onBackCaller),
             ),
-          IconButton(icon: Icon(CupertinoIcons.xmark,color: Colors.white,), onPressed: (){Navigator.of(context).pop();}),
+          IconButton(icon: Icon(CupertinoIcons.xmark,color: Colors.white,), onPressed: (){exit(0);}),
         ],
       ),
     );

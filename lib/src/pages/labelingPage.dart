@@ -7,7 +7,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/regionDataModel.dar
 import 'package:bas_dataset_generator_engine/src/data/models/screenShootModel.dart';
 import 'package:bas_dataset_generator_engine/src/items/labelingScreenItem.dart';
 import 'package:bas_dataset_generator_engine/src/parts/regionManager.dart';
-import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
+import 'package:go_router/go_router.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -21,8 +21,9 @@ import '../parts/LabelingDetails.dart';
 
 class LabelingPage extends HookWidget with WindowListener {
   int? groupId;
+  int? softId;
 
-  LabelingPage(this.groupId, {super.key});
+  LabelingPage(this.groupId,this.softId, {super.key});
 
   void _init() async {
     // Add this line to override the default close handler
@@ -272,6 +273,10 @@ class LabelingPage extends HookWidget with WindowListener {
       }
     }
 
+    onBackClicked(){
+      context.goNamed('screensSource',params: {'softwareId':softId.toString()});
+    }
+
     return ScaffoldPage(
         padding: const EdgeInsets.only(top: 0, bottom: 0),
         content: SizedBox.expand(
@@ -282,6 +287,7 @@ class LabelingPage extends HookWidget with WindowListener {
                   : Strings.pageLabeling,
               needBack: true,
               needHelp: false,
+              onBackCaller: onBackClicked,
             ),
             if (listData.value.isEmpty)
               Expanded(
