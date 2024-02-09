@@ -77,16 +77,20 @@ class ProjectDAO {
     return true;
   }
 
-  Future<int> update(ProjectModel project) async{
+  Future<int> update(ProjectModel prj) async{
+    final project = await getDetails(prj.id);
+    if(project==null){
+      return -1;
+    }
     Box<ProjectModel> box = objectbox.store.box<ProjectModel>();
-    int result=box.put(project);
+    int result=box.put(prj);
     return result;
   }
 
   Future<bool>  delete(ProjectModel project) async{
     Box<ProjectModel> box = objectbox.store.box<ProjectModel>();
     bool result =box.remove(project.id);
-    DirectoryManager().deleteSoftwareDirectory('${project.id}_${project.title}');
+    await DirectoryManager().deleteProjectDirectory(project.uuid);
     return result;
   }
 }

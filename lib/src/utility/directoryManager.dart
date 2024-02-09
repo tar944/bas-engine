@@ -50,7 +50,7 @@ class DirectoryManager {
     if (path.existsSync()) {
       return false;
     } else {
-      path.create();
+      await path.create();
       return true;
     }
   }
@@ -114,9 +114,9 @@ class DirectoryManager {
     }
   }
 
-  deleteSoftwareDirectory(String prjName) async {
+  deleteProjectDirectory(String prjUUID) async {
     final docsDir = await getApplicationDocumentsDirectory();
-    var path = Directory(p.join(docsDir.path, appDirName, prjName));
+    var path = Directory(p.join(docsDir.path, appDirName, prjUUID));
     if (path.existsSync()) {
       path.deleteSync(recursive: true);
     }

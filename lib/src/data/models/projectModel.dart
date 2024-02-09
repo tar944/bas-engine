@@ -6,7 +6,7 @@ import 'package:objectbox/objectbox.dart';
 class ProjectModel {
   @Id()
   int id;
-  String uuid="";
+  String uuid;
   String? title;
   String? companyId;
   String? companyName;
@@ -18,6 +18,7 @@ class ProjectModel {
 
   ProjectModel(
       this.id,
+      this.uuid,
       this.title,
       this.companyId,
       this.companyName,

@@ -3,25 +3,30 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class HeaderViewModel extends ViewModel {
-  HeaderTabs curTab=HeaderTabs.project;
+  HeaderTabs curTab = HeaderTabs.project;
 
   final ValueSetter<HeaderTabs> onActionCaller;
   final String guideText;
-  HeaderViewModel(this.onActionCaller,this.guideText);
-  @override
-  void init() async {
-  }
-  onTabChanged(HeaderTabs tab){
-    curTab =tab;
+
+  HeaderViewModel(this.onActionCaller, this.guideText);
+
+  onTabChanged(HeaderTabs tab) {
+    if (tab != HeaderTabs.addProject && tab != HeaderTabs.addPart) {
+      curTab = tab;
+      notifyListeners();
+    }
     onActionCaller(tab);
-    notifyListeners();
   }
-  bool showTab(HeaderTabs tab){
-    if(curTab==tab){
+
+  bool showTab(HeaderTabs tab) {
+    if (curTab == tab) {
       return true;
-    }else if(tab==HeaderTabs.projectParts&&(curTab==HeaderTabs.objectLabeling||curTab==HeaderTabs.imageGroups)){
+    } else if (tab == HeaderTabs.projectParts &&
+        (curTab == HeaderTabs.objectLabeling ||
+            curTab == HeaderTabs.imageGroups)) {
       return true;
-    }else if(tab == HeaderTabs.objectLabeling&&curTab==HeaderTabs.imageGroups){
+    } else if (tab == HeaderTabs.objectLabeling &&
+        curTab == HeaderTabs.imageGroups) {
       return true;
     }
     return false;

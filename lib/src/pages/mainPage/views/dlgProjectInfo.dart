@@ -7,6 +7,7 @@ import 'package:bas_dataset_generator_engine/src/parts/dialogTitleBar.dart';
 import 'package:bas_dataset_generator_engine/src/widgets/CButton.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:uuid/uuid.dart';
 
 class DlgProjectInfo extends HookWidget {
   DlgProjectInfo({
@@ -36,7 +37,7 @@ class DlgProjectInfo extends HookWidget {
       }
       if (project == null) {
         onSaveCaller(
-            ProjectModel(0, ctlTitle.text, '', '', ctlDescription.text, '', ''));
+            ProjectModel(0,const Uuid().v4(), ctlTitle.text, '', '', ctlDescription.text, '', ''));
       } else {
         project!.title = ctlTitle.text;
         project!.description = ctlDescription.text;

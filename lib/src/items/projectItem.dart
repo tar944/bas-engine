@@ -73,8 +73,8 @@ class ProjectItem extends HookWidget {
                                       color: Colors.red,
                                     ),
                                     onPressed: () => showFlyDelete(
-                                        "Are you sure?",
-                                        "yeh",
+                                        Strings.deleteProject,
+                                        Strings.yes,
                                         controller,
                                         FlyoutPlacementMode.topCenter,
                                         project.id,
@@ -88,7 +88,7 @@ class ProjectItem extends HookWidget {
                         child: IconButton(
                           onPressed: ()=>onActionCaller!('goto&&${project.id}'),
                           icon: Text(
-                            Strings.allGroups,
+                            Strings.allParts,
                             style: TextSystem.textS(Colors.white),
                           ),
                         )),

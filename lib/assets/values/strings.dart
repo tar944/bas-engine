@@ -2,12 +2,13 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String deleteProject="Are you sure to delete this project?";
   static const String guideObjectLabeling="";
   static const String guideImageGroup="";
   static const String guideParts="You can choose one of your previous parts 👇 or create a new one 👆";
   static const String guideEmptyParts="You can add a new part with add button 👆";
-  static const String guideProjects="You can choose one of your previous projects 👇 or create a new one 👆";
-  static const String guideEmptyProject="You can add a new project with add button 👆";
+  static const String guideProjects="You can create a new project 👆 or choose one of your previous projects 👇";
+  static const String guideEmptyProject="You can create a new project 👆";
   static const String partDescriptionHint="Enter a description for this part";
   static const String appName="BAS Data set generator engine";
   static const String software="Software";
@@ -15,12 +16,14 @@ class Strings{
   static const String screenLabeling="Screen labeling";
   static const String partLabeling="Part labeling";
   static const String allGroups="All groups";
+  static const String allParts="All parts";
   static const String emptySoftware="your projects list is empty for creating a new project click on plus button...";
   static const String exitTitle="Exit from Be a senior";
   static const String exitWarnString="You have changes to save,what you want to do?";
   static const String confirm="Confirm";
   static const String saveAndExit="Save and Exit";
   static const String cancel = "Cancel";
+  static const String yes = "Yes";
   static const String save = "Save";
   static const String removeAction = "remove this action";
   static const String saveNext = "Save and Next";

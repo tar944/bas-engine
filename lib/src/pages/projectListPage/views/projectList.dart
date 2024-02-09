@@ -8,16 +8,17 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class ProjectsList extends StatelessWidget {
-  ProjectsList({super.key,required this.projects,required this.onProjectActionCaller});
+  ProjectsList({super.key,required this.projects,required this.onDeleteProjectCaller,required this.onEditProjectCaller});
 
-  ValueSetter<ProjectModel> onProjectActionCaller;
+  ValueSetter<ProjectModel> onEditProjectCaller;
+  ValueSetter<int> onDeleteProjectCaller;
   List<ProjectModel> projects;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: ProjectViewModel(projects,onProjectActionCaller),
+      viewModel: ProjectViewModel(projects,onEditProjectCaller,onDeleteProjectCaller),
     );
   }
 }

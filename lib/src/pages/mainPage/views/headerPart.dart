@@ -30,7 +30,6 @@ class _View extends StatelessView<HeaderViewModel> {
 
   @override
   Widget render(context, HeaderViewModel vm) {
-    print(vm.guideText);
     return Container(
       width: double.infinity,
       height: Dimens.mainHeaderH,
@@ -59,7 +58,7 @@ class _View extends StatelessView<HeaderViewModel> {
                           width: Dimens.tabHeightSmall+10,
                           height: Dimens.tabHeightSmall+10,
                           child: Icon(FluentIcons.add,size: 17,color: Colors.teal,)),
-                      onPressed: () {}),
+                      onPressed: ()=>vm.onTabChanged(HeaderTabs.addProject)),
                 ),
               if (vm.showTab(HeaderTabs.projectParts))
                 HeaderBtn(
@@ -75,13 +74,13 @@ class _View extends StatelessView<HeaderViewModel> {
                   padding: const EdgeInsets.only(top: 10.0, left: 10.0),
                   child: Button(
                       style:ButtonStyle(
-                          padding: ButtonState.all(EdgeInsets.zero)
+                          padding: ButtonState.all(EdgeInsets.zero),
                       ),
                       child: Container(
                           width: Dimens.tabHeightSmall+10,
                           height: Dimens.tabHeightSmall+10,
                           child: Icon(FluentIcons.add,size: 17,color: Colors.teal,)),
-                      onPressed: () {}),
+                      onPressed: ()=>vm.onTabChanged(HeaderTabs.addPart)),
                 ),
               if (vm.showTab(HeaderTabs.imageGroups))
                 HeaderBtn(

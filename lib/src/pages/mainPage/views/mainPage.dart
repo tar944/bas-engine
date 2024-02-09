@@ -37,7 +37,7 @@ class _View extends StatelessView<MainPageViewModel> {
             Padding(
               padding: const EdgeInsets.only(left: 10.0),
               child: HeaderPart(
-                key:GlobalKey() ,
+                  key: GlobalKey(),
                   onActionCaller: vm.onNavigationChanged,
                   guideText: vm.guideText),
             ),
@@ -55,13 +55,28 @@ class _View extends StatelessView<MainPageViewModel> {
                   controller: vm.controller,
                   children: <Widget>[
                     Center(
-                      child: ProjectsList(projects: vm.projects,onProjectActionCaller: vm.onProjectActionHandler,),
+                      child: ProjectsList(
+                        key: GlobalKey(),
+                        projects: vm.projects,
+                        onEditProjectCaller: vm.onProjectEditHandler,
+                        onDeleteProjectCaller: vm.onDeleteProjectHandler,
+                      ),
                     ),
                     Center(
-                      child: ProjectsList(projects: vm.projects,onProjectActionCaller: vm.onProjectActionHandler,),
+                      child: ProjectsList(
+                        key: GlobalKey(),
+                        projects: vm.projects,
+                        onEditProjectCaller: vm.onProjectEditHandler,
+                        onDeleteProjectCaller: vm.onDeleteProjectHandler,
+                      ),
                     ),
                     Center(
-                      child: ProjectsList(projects: vm.projects,onProjectActionCaller: vm.onProjectActionHandler,),
+                      child: ProjectsList(
+                        key: GlobalKey(),
+                        projects: vm.projects,
+                        onEditProjectCaller: vm.onProjectEditHandler,
+                        onDeleteProjectCaller: vm.onDeleteProjectHandler,
+                      ),
                     ),
                   ],
                 ),

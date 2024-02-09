@@ -745,6 +745,8 @@ ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
           final idParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final uuidParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 18, '');
           final titleParam = const fb.StringReader(asciiOptimization: true)
               .vTableGetNullable(buffer, rootOffset, 6);
           final companyIdParam = const fb.StringReader(asciiOptimization: true)
@@ -760,10 +762,15 @@ ModelDefinition getObjectBoxModel() {
           final companyLogoParam =
               const fb.StringReader(asciiOptimization: true)
                   .vTableGetNullable(buffer, rootOffset, 16);
-          final object = ProjectModel(idParam, titleParam, companyIdParam,
-              companyNameParam, descriptionParam, iconParam, companyLogoParam)
-            ..uuid = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 18, '');
+          final object = ProjectModel(
+              idParam,
+              uuidParam,
+              titleParam,
+              companyIdParam,
+              companyNameParam,
+              descriptionParam,
+              iconParam,
+              companyLogoParam);
           InternalToManyAccess.setRelInfo<ProjectModel>(object.allVideos, store,
               RelInfo<ProjectModel>.toMany(11, object.id));
           InternalToManyAccess.setRelInfo<ProjectModel>(object.allParts, store,

@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/dlgProjectInfo.dart';
+import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -21,11 +23,7 @@ class MainPageViewModel extends ViewModel with WindowListener {
   void init() async {
     // Add this line to override the default close handler
     await windowManager.setPreventClose(true);
-
-    projects=await ProjectDAO().getAll();
-    guideText=projects.isEmpty?Strings.guideEmptyProject:Strings.guideProjects;
-    notifyListeners();
-
+    updateProjectData();
     windowManager.waitUntilReadyToShow().then((_) async {
       if (kIsLinux || kIsWindows) {
         if (kIsLinux) {
@@ -68,6 +66,11 @@ class MainPageViewModel extends ViewModel with WindowListener {
       await windowManager.focus();
     }
   }
+  updateProjectData()async{
+    projects=await ProjectDAO().getAll();
+    guideText=projects.isEmpty?Strings.guideEmptyProject:Strings.guideProjects;
+    notifyListeners();
+  }
 
   void onCloseListener() {
     exit(0);
@@ -79,18 +82,50 @@ class MainPageViewModel extends ViewModel with WindowListener {
   @override
   void onWindowClose() async {}
 
-  void onProjectActionHandler(ProjectModel project) async{
+  void onProjectEditHandler(ProjectModel project) async{
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) =>
+          DlgProjectInfo(onSaveCaller: onEditProjectHandler, project: project),
+    );
+  }
 
+  void onEditProjectHandler(ProjectModel curProject) async {
+    await ProjectDAO().update(curProject);
+    updateProjectData();
+  }
+
+  void onDeleteProjectHandler(int prjID)async{
+    var curProject=await ProjectDAO().getDetails(prjID);
+    await ProjectDAO().delete(curProject!);
+    updateProjectData();
+  }
+
+  void onCreateProjectHandler(ProjectModel curProject) async {
+    await ProjectDAO().addProject(curProject);
+    await DirectoryManager().createPrjDir(curProject.uuid);
+    updateProjectData();
   }
 
   onNavigationChanged(HeaderTabs selTab){
-    if(selTab!=curTab){
-      if(selTab==HeaderTabs.projectParts){
-        controller.jumpToPage(1);
-      }else if(selTab==HeaderTabs.imageGroups){
-        controller.jumpToPage(2);
-      }else if(selTab==HeaderTabs.objectLabeling){
-        controller.jumpToPage(3);
+    if(selTab==HeaderTabs.addProject){
+      showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) =>
+              DlgProjectInfo(onSaveCaller: onCreateProjectHandler));
+    }else if(selTab==HeaderTabs.addPart){
+
+    }else{
+      if(selTab!=curTab){
+        if(selTab==HeaderTabs.projectParts){
+          controller.jumpToPage(1);
+        }else if(selTab==HeaderTabs.imageGroups){
+          controller.jumpToPage(2);
+        }else if(selTab==HeaderTabs.objectLabeling){
+          controller.jumpToPage(3);
+        }
       }
     }
   }
