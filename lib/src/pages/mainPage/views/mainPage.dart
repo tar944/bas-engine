@@ -57,25 +57,22 @@ class _View extends StatelessView<MainPageViewModel> {
                     Center(
                       child: ProjectsList(
                         key: GlobalKey(),
-                        projects: vm.projects,
-                        onEditProjectCaller: vm.onProjectEditHandler,
-                        onDeleteProjectCaller: vm.onDeleteProjectHandler,
+                        onProjectActionCaller: vm.onProjectActionHandler,
+                        controller:vm.setProjectController,
                       ),
                     ),
                     Center(
                       child: ProjectsList(
                         key: GlobalKey(),
-                        projects: vm.projects,
-                        onEditProjectCaller: vm.onProjectEditHandler,
-                        onDeleteProjectCaller: vm.onDeleteProjectHandler,
+                        onProjectActionCaller: vm.onProjectActionHandler,
+                        controller:vm.setProjectController,
                       ),
                     ),
                     Center(
                       child: ProjectsList(
                         key: GlobalKey(),
-                        projects: vm.projects,
-                        onEditProjectCaller: vm.onProjectEditHandler,
-                        onDeleteProjectCaller: vm.onDeleteProjectHandler,
+                        onProjectActionCaller: vm.onProjectActionHandler,
+                        controller:vm.setProjectController,
                       ),
                     ),
                   ],

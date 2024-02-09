@@ -17,13 +17,13 @@ class MainPageViewModel extends ViewModel with WindowListener {
   String guideText="";
   final PageController controller = PageController();
   HeaderTabs curTab=HeaderTabs.project;
-  List<ProjectModel> projects=[];
+  late void Function() projectController;
 
   @override
   void init() async {
     // Add this line to override the default close handler
     await windowManager.setPreventClose(true);
-    updateProjectData();
+    setGuideText();
     windowManager.waitUntilReadyToShow().then((_) async {
       if (kIsLinux || kIsWindows) {
         if (kIsLinux) {
@@ -40,7 +40,12 @@ class MainPageViewModel extends ViewModel with WindowListener {
       await Future.delayed(const Duration(milliseconds: 100));
       await _windowShow();
     });
+  }
 
+  setGuideText()async{
+    var projects = await ProjectDAO().getAll();
+    guideText=projects.isEmpty?Strings.guideEmptyProject:Strings.guideProjects;
+    notifyListeners();
   }
 
   Future<void> _windowShow({
@@ -66,11 +71,6 @@ class MainPageViewModel extends ViewModel with WindowListener {
       await windowManager.focus();
     }
   }
-  updateProjectData()async{
-    projects=await ProjectDAO().getAll();
-    guideText=projects.isEmpty?Strings.guideEmptyProject:Strings.guideProjects;
-    notifyListeners();
-  }
 
   void onCloseListener() {
     exit(0);
@@ -82,41 +82,20 @@ class MainPageViewModel extends ViewModel with WindowListener {
   @override
   void onWindowClose() async {}
 
-  void onProjectEditHandler(ProjectModel project) async{
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (context) =>
-          DlgProjectInfo(onSaveCaller: onEditProjectHandler, project: project),
-    );
+  setProjectController(BuildContext context, void Function() methodOfProject) {
+    projectController = methodOfProject;
   }
 
-  void onEditProjectHandler(ProjectModel curProject) async {
-    await ProjectDAO().update(curProject);
-    updateProjectData();
-  }
-
-  void onDeleteProjectHandler(int prjID)async{
-    var curProject=await ProjectDAO().getDetails(prjID);
-    await ProjectDAO().delete(curProject!);
-    updateProjectData();
-  }
-
-  void onCreateProjectHandler(ProjectModel curProject) async {
-    await ProjectDAO().addProject(curProject);
-    await DirectoryManager().createPrjDir(curProject.uuid);
-    updateProjectData();
+  onProjectActionHandler(int prjId)async{
+    if(prjId==-1){
+      await setGuideText();
+    }
   }
 
   onNavigationChanged(HeaderTabs selTab){
     if(selTab==HeaderTabs.addProject){
-      showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) =>
-              DlgProjectInfo(onSaveCaller: onCreateProjectHandler));
+      projectController.call();
     }else if(selTab==HeaderTabs.addPart){
-
     }else{
       if(selTab!=curTab){
         if(selTab==HeaderTabs.projectParts){
