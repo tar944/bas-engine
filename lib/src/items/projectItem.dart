@@ -1,19 +1,19 @@
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/projectModel.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
+import 'package:bas_dataset_generator_engine/src/utility/measureSize.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import '../../assets/values/dimens.dart';
-import '../../assets/values/textStyle.dart';
-import '../data/models/softwareModel.dart';
-import '../dialogs/flyDlgDelete.dart';
-import '../utility/measureSize.dart';
 
-class SoftwareItem extends HookWidget {
-  const SoftwareItem(
-      {Key? key, required this.software, required this.onActionCaller})
+class ProjectItem extends HookWidget {
+  const ProjectItem(
+      {Key? key, required this.project, required this.onActionCaller})
       : super(key: key);
 
-  final SoftwareModel software;
+  final ProjectModel project;
   final ValueSetter<String>? onActionCaller;
 
   @override
@@ -42,7 +42,7 @@ class SoftwareItem extends HookWidget {
                 SizedBox(
                   width: size.value.width,
                   child: Text(
-                    software.title!,
+                    project.title!,
                     style: TextSystem.textS(Colors.white),
                     maxLines: 2,
                   ),
@@ -53,7 +53,7 @@ class SoftwareItem extends HookWidget {
                 SizedBox(
                     width: (size.value.width),
                     child: Text(
-                      software.description!,
+                      project.description!,
                       style: TextSystem.textXs(Colors.white),
                       maxLines: 4,
                     )),
@@ -77,16 +77,16 @@ class SoftwareItem extends HookWidget {
                                         "yeh",
                                         controller,
                                         FlyoutPlacementMode.topCenter,
-                                        software.id,
+                                        project.id,
                                         onActionCaller))),
                             IconButton(
-                                icon: const Icon(FluentIcons.edit), onPressed: ()=>onActionCaller!("edit&&${software.id}"))
+                                icon: const Icon(FluentIcons.edit), onPressed: ()=>onActionCaller!("edit&&${project.id}"))
                           ],
                         )),
                     Expanded(
                         flex: 70,
                         child: IconButton(
-                          onPressed: ()=>onActionCaller!('goto&&${software.id}'),
+                          onPressed: ()=>onActionCaller!('goto&&${project.id}'),
                           icon: Text(
                             Strings.allGroups,
                             style: TextSystem.textS(Colors.white),

@@ -1,14 +1,12 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
-import 'package:bas_dataset_generator_engine/src/data/dao/recordedScreenGroupsDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/dao/softwareDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/recordedScreenGroup.dart';
-import 'package:bas_dataset_generator_engine/src/dialogs/dlgNewScreenGroup.dart';
-import 'package:bas_dataset_generator_engine/src/items/groupItem.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/dlgProjectPart.dart';
+import 'package:bas_dataset_generator_engine/src/items/projectPartItem.dart';
 import 'package:bas_dataset_generator_engine/src/parts/addsOnPanel.dart';
 import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
-import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -16,10 +14,10 @@ import 'package:go_router/go_router.dart';
 import 'package:window_manager/window_manager.dart';
 
 
-class ScreenGroups extends HookWidget with WindowListener {
-  int? softwareId;
+class ProjectParts extends HookWidget with WindowListener {
+  int? partId;
 
-  ScreenGroups(this.softwareId, {super.key});
+  ProjectParts(this.partId, {super.key});
 
   Offset _lastShownPosition = Offset.zero;
 
@@ -72,45 +70,46 @@ class ScreenGroups extends HookWidget with WindowListener {
     useEffect(() {
       _init();
       Future<void>.microtask(() async {
-        groups.value = await SoftwareDAO().getAllGroups(softwareId!);
+        groups.value = await ProjectPartDAO().getAllGroups(partId!);
       });
       return null;
     }, const []);
 
     void onSourceActionHandler(String action) async{
-      RecordedScreenGroup? group=  await RecordedScreenGroupDAO().getGroup(int.parse(action.split('&&')[1]));
       switch(action.split('&&')[0]){
         case 'record':
-          context.goNamed('recordScreens',params: {'groupId':group!.id.toString()});
+          // context.goNamed('recordScreens',params: {'groupId':group!.id.toString()});
           Navigator.pop(context);
           break;
         case 'delete':
-          await RecordedScreenGroupDAO().deleteGroup(group!);
-          groups.value = await SoftwareDAO().getAllGroups(softwareId!);
+          // await RecordedScreenGroupDAO().deleteGroup(group!);
+          // groups.value = await SoftwareDAO().getAllGroups(softwareId!);
           break;
         case 'labeling':
-          context.goNamed('labeling',params: {'groupId':group!.id.toString(),'softId':softwareId.toString()});
+          // context.goNamed('labeling',params: {'groupId':group!.id.toString(),'softId':softwareId.toString()});
           break;
         case 'screens':
-          context.goNamed('screensList',params: {'groupId':group!.id.toString(),'softId':softwareId.toString()});
+          // context.goNamed('screensList',params: {'groupId':group!.id.toString(),'softId':softwareId.toString()});
           break;
       }
     }
-    void onCreateCourseHandler(RecordedScreenGroup group) async{
-      final software = await SoftwareDAO().getSoftware(softwareId!);
-      group.software.target=software;
-      final id = await RecordedScreenGroupDAO().addGroup(group);
-      group.path=await DirectoryManager().createGroupDir('${softwareId}_${software!.title!}',  '${id}_${group.name!}');
-      await RecordedScreenGroupDAO().updateGroup(group);
-      groups.value = await SoftwareDAO().getAllGroups(softwareId!);
+    void onCreateCourseHandler(ProjectPartModel part) async{
+      // final software = await SoftwareDAO().getSoftware(softwareId!);
+      // group.software.target=software;
+      // final id = await RecordedScreenGroupDAO().addGroup(group);
+      // group.path=await DirectoryManager().createGroupDir('${softwareId}_${software!.title!}',  '${id}_${group.name!}');
+      // await RecordedScreenGroupDAO().updateGroup(group);
+      // groups.value = await SoftwareDAO().getAllGroups(softwareId!);
     }
 
-    void onActionHandler(String action) async {
+    void onActionHandler(String action) async{
+      ProjectPartModel? part=  await ProjectPartDAO().getDetails(partId!);
+
       showDialog(
           context: context,
           barrierDismissible: true,
           builder: (context) =>
-              DlgNewScreenGroup(onSaveCaller: onCreateCourseHandler));
+              DlgProjectPart(onSaveCaller: onCreateCourseHandler,prjUUID: part!.prjUUID,));
       // FilePickerResult? result =
       //     await FilePicker.platform.pickFiles(allowMultiple: true);
       //
@@ -187,7 +186,7 @@ class ScreenGroups extends HookWidget with WindowListener {
                                               crossAxisSpacing: 20,
                                               mainAxisSpacing: 20),
                                       children: groups.value
-                                          .map((item) => GroupItem(group: item,onActionCaller: onSourceActionHandler,))
+                                          .map((item) => ProjectPartItem(part: item,onActionCaller: onSourceActionHandler,))
                                           .toList(),
                                     ),
                                   )

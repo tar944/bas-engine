@@ -2,6 +2,7 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String partDescriptionHint="Enter a description for this part";
   static const String appName="BAS Data set generator engine";
   static const String software="Software";
   static const String groups="Groups";

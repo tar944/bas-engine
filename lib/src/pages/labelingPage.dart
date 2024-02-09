@@ -1,23 +1,16 @@
-import 'package:bas_dataset_generator_engine/src/data/dao/partObjectDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/dao/recordedScreenGroupsDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/dao/screenPartDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/dao/screenShotDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/labelingDataModel.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/regionDataModel.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/screenShootModel.dart';
-import 'package:bas_dataset_generator_engine/src/items/labelingScreenItem.dart';
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
+import 'package:bas_dataset_generator_engine/src/items/labelingObjectItem.dart';
+import 'package:bas_dataset_generator_engine/src/parts/LabelingDetails.dart';
 import 'package:bas_dataset_generator_engine/src/parts/regionManager.dart';
+import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
+import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:go_router/go_router.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:window_manager/window_manager.dart';
-import '../../assets/values/dimens.dart';
-import '../../assets/values/strings.dart';
-import '../../assets/values/textStyle.dart';
-import '../parts/topBarPanel.dart';
-import '../utility/platform_util.dart';
-import '../parts/LabelingDetails.dart';
 
 class LabelingPage extends HookWidget with WindowListener {
   int? groupId;
@@ -78,50 +71,50 @@ class LabelingPage extends HookWidget with WindowListener {
     final curList = useState('screen');
 
     setScreenAsData() async {
-      curList.value = 'screen';
-      final group = await RecordedScreenGroupDAO().getGroup(groupId!);
-      if (group!.screenShoots.toList().isNotEmpty) {
-        listData.value = group.screenShoots
-            .toList()
-            .map((e) => LabelingDataModel(curList.value)..screen = e)
-            .toList();
-        if(selectedScreenId.value!=-1){
-          for (final screen in listData.value) {
-            if (screen.getId() == selectedScreenId.value) {
-              indexImage.value = listData.value.indexOf(screen);
-              break;
-            }
-          }
-        }
-      }
+      // curList.value = 'screen';
+      // final group = await RecordedScreenGroupDAO().getGroup(groupId!);
+      // if (group!.screenShoots.toList().isNotEmpty) {
+      //   listData.value = group.screenShoots
+      //       .toList()
+      //       .map((e) => LabelingDataModel(curList.value)..screen = e)
+      //       .toList();
+      //   if(selectedScreenId.value!=-1){
+      //     for (final screen in listData.value) {
+      //       if (screen.getId() == selectedScreenId.value) {
+      //         indexImage.value = listData.value.indexOf(screen);
+      //         break;
+      //       }
+      //     }
+      //   }
+      // }
     }
 
     setPartAsData(int screenId) async{
-      ScreenShootModel? screen =
-          await ScreenDAO().getScreen(screenId);
-      curList.value = 'part';
-      listData.value = screen!.partsList
-          .toList()
-          .map((e) => LabelingDataModel(curList.value)..part = e)
-          .toList();
-      if(selectedPartId.value!=-1){
-        for (final part in listData.value) {
-          if (part.getId() == selectedPartId.value) {
-            indexImage.value = listData.value.indexOf(part);
-            break;
-          }
-        }
-      }
+      // ScreenShootModel? screen =
+      //     await ScreenDAO().getScreen(screenId);
+      // curList.value = 'part';
+      // listData.value = screen!.partsList
+      //     .toList()
+      //     .map((e) => LabelingDataModel(curList.value)..part = e)
+      //     .toList();
+      // if(selectedPartId.value!=-1){
+      //   for (final part in listData.value) {
+      //     if (part.getId() == selectedPartId.value) {
+      //       indexImage.value = listData.value.indexOf(part);
+      //       break;
+      //     }
+      //   }
+      // }
     }
 
     setObjectAsData(int partId) async{
-      RegionDataModel? part =
-          await PartDAO().getPart(partId);
-      curList.value = 'object';
-      listData.value = part!.objectsList
-          .toList()
-          .map((e) => LabelingDataModel(curList.value)..object = e)
-          .toList();
+      // RegionDataModel? part =
+      //     await PartDAO().getPart(partId);
+      // curList.value = 'object';
+      // listData.value = part!.objectsList
+      //     .toList()
+      //     .map((e) => LabelingDataModel(curList.value)..object = e)
+      //     .toList();
     }
 
     useEffect(() {
@@ -157,29 +150,29 @@ class LabelingPage extends HookWidget with WindowListener {
           await setScreenAsData();
           break;
         case 'edit':
-          ScreenShootModel? screen =
-              await ScreenDAO().getScreen(int.parse(actions[1]));
-          screen!.type = actions[2];
-          screen.description = actions[3];
-          screen.status = 'finished';
-          await ScreenDAO().updateScreen(screen);
-          await setScreenAsData();
+          // ScreenShootModel? screen =
+          //     await ScreenDAO().getScreen(int.parse(actions[1]));
+          // screen!.type = actions[2];
+          // screen.description = actions[3];
+          // screen.status = 'finished';
+          // await ScreenDAO().updateScreen(screen);
+          // await setScreenAsData();
           break;
         case 'delete':
-          ScreenShootModel? screen =
-              await ScreenDAO().getScreen(int.parse(actions[1]));
-          await ScreenDAO().deleteScreen(screen!);
-          await setScreenAsData();
+          // ScreenShootModel? screen =
+          //     await ScreenDAO().getScreen(int.parse(actions[1]));
+          // await ScreenDAO().deleteScreen(screen!);
+          // await setScreenAsData();
           break;
         case 'show':
-          ScreenShootModel? screen =
-              await ScreenDAO().getScreen(int.parse(actions[1]));
-          for (final item in listData.value) {
-            if (item.getId() == screen!.id) {
-              indexImage.value = listData.value.indexOf(item);
-              break;
-            }
-          }
+          // ScreenShootModel? screen =
+          //     await ScreenDAO().getScreen(int.parse(actions[1]));
+          // for (final item in listData.value) {
+          //   if (item.getId() == screen!.id) {
+          //     indexImage.value = listData.value.indexOf(item);
+          //     break;
+          //   }
+          // }
           break;
         case 'goto':
           selectedScreenId.value = listData.value[indexImage.value].getId();
@@ -196,29 +189,29 @@ class LabelingPage extends HookWidget with WindowListener {
           await setPartAsData(selectedScreenId.value);
           break;
         case 'edit':
-          RegionDataModel? part =
-              await PartDAO().getPart(int.parse(actions[1]));
-          part!.type = actions[2];
-          part.description = actions[3];
-          part.status = 'finished';
-          await PartDAO().updatePart(part);
-          await setPartAsData(selectedScreenId.value);
+          // RegionDataModel? part =
+          //     await PartDAO().getPart(int.parse(actions[1]));
+          // part!.type = actions[2];
+          // part.description = actions[3];
+          // part.status = 'finished';
+          // await PartDAO().updatePart(part);
+          // await setPartAsData(selectedScreenId.value);
           break;
         case 'delete':
-          RegionDataModel? part =
-              await PartDAO().getPart(int.parse(actions[1]));
-          await PartDAO().deletePart(part!);
-          await setPartAsData(selectedScreenId.value);
+          // RegionDataModel? part =
+          //     await PartDAO().getPart(int.parse(actions[1]));
+          // await PartDAO().deletePart(part!);
+          // await setPartAsData(selectedScreenId.value);
           break;
         case 'show':
-          RegionDataModel? part =
-              await PartDAO().getPart(int.parse(actions[1]));
-          for (final item in listData.value) {
-            if (item.getId() == part!.id) {
-              indexImage.value = listData.value.indexOf(item);
-              break;
-            }
-          }
+          // RegionDataModel? part =
+          //     await PartDAO().getPart(int.parse(actions[1]));
+          // for (final item in listData.value) {
+          //   if (item.getId() == part!.id) {
+          //     indexImage.value = listData.value.indexOf(item);
+          //     break;
+          //   }
+          // }
           break;
         case 'goto':
           selectedPartId.value = listData.value[indexImage.value].getId();
@@ -232,29 +225,29 @@ class LabelingPage extends HookWidget with WindowListener {
       var actions = action.split('&&');
       switch (actions[0]) {
         case 'edit':
-          RegionDataModel? object =
-              await PartObjectDAO().getObject(int.parse(actions[1]));
-          object!.type = actions[2];
-          object.actionOne = actions[3];
-          object.actionTwo = actions[4];
-          object.status = 'finished';
-          await PartObjectDAO().updateObject(object);
-          await setObjectAsData(selectedPartId.value);
+          // RegionDataModel? object =
+          //     await PartObjectDAO().getObject(int.parse(actions[1]));
+          // object!.type = actions[2];
+          // object.actionOne = actions[3];
+          // object.actionTwo = actions[4];
+          // object.status = 'finished';
+          // await PartObjectDAO().updateObject(object);
+          // await setObjectAsData(selectedPartId.value);
           break;
         case 'delete':
-          RegionDataModel? object =
-              await PartObjectDAO().getObject(int.parse(actions[1]));
-          await PartObjectDAO().deleteObject(object!);
-          await setObjectAsData(selectedPartId.value);
+          // RegionDataModel? object =
+          //     await PartObjectDAO().getObject(int.parse(actions[1]));
+          // await PartObjectDAO().deleteObject(object!);
+          // await setObjectAsData(selectedPartId.value);
           break;
         case 'show':
-          RegionDataModel? object = await PartObjectDAO().getObject(int.parse(actions[1]));
-          for (final item in listData.value) {
-            if (item.getId() == object!.id) {
-              indexImage.value = listData.value.indexOf(item);
-              break;
-            }
-          }
+          // RegionDataModel? object = await PartObjectDAO().getObject(int.parse(actions[1]));
+          // for (final item in listData.value) {
+          //   if (item.getId() == object!.id) {
+          //     indexImage.value = listData.value.indexOf(item);
+          //     break;
+          //   }
+          // }
           break;
       }
     }
@@ -283,7 +276,7 @@ class LabelingPage extends HookWidget with WindowListener {
           child: Column(children: [
             TopBarPanel(
               title: listData.value.isNotEmpty
-                  ? '${Strings.pageLabeling + '   ( ' + listData.value[indexImage.value].getName()} )'
+                  ? '${'${Strings.pageLabeling}   ( ' + listData.value[indexImage.value].getName()} )'
                   : Strings.pageLabeling,
               needBack: true,
               needHelp: false,
@@ -431,7 +424,7 @@ class LabelingPage extends HookWidget with WindowListener {
                                       itemCount: listData.value.length,
                                       scrollDirection: Axis.horizontal,
                                       itemBuilder: (context, index) {
-                                        return LabelingScreenItem(
+                                        return LabelingObjectItem(
                                           data: listData.value[index],
                                           onActionCaller: onActionHandler,
                                           isSelected: indexImage.value == index,

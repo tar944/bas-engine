@@ -1,5 +1,4 @@
-import 'package:bas_dataset_generator_engine/src/data/dao/screenShotDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/regionDataModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/widgets/rectanglePainter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -11,7 +10,7 @@ class NewRectanglePainter extends HookWidget {
       required this.onNewListener})
       : super(key: key);
 
-  ValueSetter<RegionDataModel> onNewListener;
+  ValueSetter<ObjectModel> onNewListener;
   String kind;
 
   @override
@@ -39,9 +38,8 @@ class NewRectanglePainter extends HookWidget {
       },
       onPointerUp: (e) async {
         isPainting.value = false;
-        final part = RegionDataModel(
+        final part = ObjectModel(
             0,
-            kind,
             right.value > left.value ? left.value : right.value,
             right.value > left.value ? right.value : left.value,
             top.value > bottom.value ? bottom.value : top.value,
@@ -55,8 +53,8 @@ class NewRectanglePainter extends HookWidget {
         bottom.value = 0.0;
       },
       child: CustomPaint(
-        painter: RectanglePainter(RegionDataModel(
-            0,kind, left.value, right.value, top.value, bottom.value,'created')),
+        painter: RectanglePainter(ObjectModel(
+            0, left.value, right.value, top.value, bottom.value,'created')),
       ),
     );
   }

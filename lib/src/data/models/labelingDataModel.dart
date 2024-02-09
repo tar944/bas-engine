@@ -1,22 +1,18 @@
-import 'package:bas_dataset_generator_engine/src/data/models/recordedScreenGroup.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/regionDataModel.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/screenShootModel.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/softwareModel.dart';
-
-import '../../utility/directoryManager.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 
 class LabelingDataModel{
   String kind;
-  ScreenShootModel? _screen;
-  RegionDataModel? _part;
-  RegionDataModel? _object;
+  ImageModel? _image;
+  ObjectModel? _part;
+  ObjectModel? _object;
 
   LabelingDataModel(this.kind);
 
   int? getId(){
     switch (kind){
       case 'screen':
-        return _screen!.id;
+        return _image!.id;
       case 'part':
         return _part!.id;
       case 'object':
@@ -28,19 +24,17 @@ class LabelingDataModel{
   String? getPath(){
     switch (kind){
       case 'screen':
-        return _screen!.path;
+        return _image!.path;
       case 'part':
-        return _part!.path;
+        return _part!.image.target!.path;
       case 'object':
-        return _object!.path;
+        return _object!.image.target!.path;
     }
     return '';
   }
 
   String? getStatus(){
     switch (kind){
-      case 'screen':
-        return _screen!.status;
       case 'part':
         return _part!.status;
       case 'object':
@@ -48,12 +42,10 @@ class LabelingDataModel{
     }
     return '';
   }
-  List<RegionDataModel>? getRegionsList(){
+  List<ObjectModel>? getObjectList(){
     switch (kind){
-      case 'screen':
-        return _screen!.partsList;
       case 'part':
-        return _part!.objectsList;
+        return _part!.allSubObjects;
     }
     return [];
   }
@@ -61,19 +53,17 @@ class LabelingDataModel{
   String? getName(){
     switch (kind){
       case 'screen':
-        return _screen!.imageName;
+        return _image!.name;
       case 'part':
-        return _part!.imageName;
+        return _part!.image.target!.name;
       case 'object':
-        return _object!.imageName;
+        return _object!.image.target!.name;
     }
     return 'notSet';
   }
 
   String? getDescription(){
     switch (kind){
-      case 'screen':
-        return _screen!.description;
       case 'part':
         return _part!.description;
       case 'object':
@@ -84,8 +74,6 @@ class LabelingDataModel{
 
   String? getLabel(){
     switch (kind){
-      case 'screen':
-        return _screen!.label;
       case 'part':
         return _part!.label;
       case 'object':
@@ -96,8 +84,6 @@ class LabelingDataModel{
 
   String? getType(){
     switch (kind){
-      case 'screen':
-        return _screen!.type;
       case 'part':
         return _part!.type;
       case 'object':
@@ -107,52 +93,50 @@ class LabelingDataModel{
   }
 
   Future<String> getPartPath()async{
-    SoftwareModel? software;
-    RecordedScreenGroup? group;
-    switch (kind){
-      case 'screen':
-        group = _screen!.group.target;
-        break;
-      case 'part':
-        group =_part!.screen.target!.group.target;
-        break;
-    }
-    software=group!.software.target;
-    return await DirectoryManager().getPartImagePath(
-        '${software!.id}_${software.title!}',
-        '${group.id}_${group.name!}');
+    // SoftwareModel? software;
+    // RecordedScreenGroup? group;
+    // switch (kind){
+    //   case 'screen':
+    //     group = _image!.group.target;
+    //     break;
+    //   case 'part':
+    //     group =_part!.screen.target!.group.target;
+    //     break;
+    // }
+    // software=group!.software.target;
+    // return await DirectoryManager().getPartImagePath(
+    //     '${software!.id}_${software.title!}',
+    //     '${group.id}_${group.name!}');
+    return "";
   }
 
   Future<String> getObjectPath()async{
-    SoftwareModel? software;
-    RecordedScreenGroup? group;
-    switch (kind){
-      case 'screen':
-        group = _screen!.group.target;
-        break;
-      case 'part':
-        group =_part!.screen.target!.group.target;
-        break;
-    }
-    software=group!.software.target;
-    return await DirectoryManager().getObjectImagePath(
-        '${software!.id}_${software.title!}',
-        '${group.id}_${group.name!}');
+    // SoftwareModel? software;
+    // RecordedScreenGroup? group;
+    // switch (kind){
+    //   case 'screen':
+    //     group = _image!.group.target;
+    //     break;
+    //   case 'part':
+    //     group =_part!.screen.target!.group.target;
+    //     break;
+    // }
+    // software=group!.software.target;
+    // return await DirectoryManager().getObjectImagePath(
+    //     '${software!.id}_${software.title!}',
+    //     '${group.id}_${group.name!}');
+    return "";
   }
 
-  List<String> getActions(){
-    return [_object!.actionOne,_object!.actionTwo];
-  }
-
-  set object(RegionDataModel value) {
+  set object(ObjectModel value) {
     _object = value;
   }
 
-  set part(RegionDataModel value) {
+  set part(ObjectModel value) {
     _part = value;
   }
 
-  set screen(ScreenShootModel value) {
-    _screen = value;
+  set screen(ImageModel value) {
+    _image = value;
   }
 }

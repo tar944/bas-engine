@@ -1,15 +1,14 @@
 import 'dart:io';
 
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelingDataModel.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../../assets/values/dimens.dart';
-import '../dialogs/flyDlgDelete.dart';
-
-class LabelingScreenItem extends HookWidget {
-  const LabelingScreenItem(
+class LabelingObjectItem extends HookWidget {
+  const LabelingObjectItem(
       {Key? key,
       required this.data,
       required this.isSelected,
@@ -45,7 +44,7 @@ class LabelingScreenItem extends HookWidget {
           ),
           child: Stack(
             children: [
-              if (isSelected && data.getRegionsList()!.isNotEmpty)
+              if (isSelected && data.getObjectList()!.isNotEmpty)
                 Expanded(
                   child: IconButton(
                     style:

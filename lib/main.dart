@@ -1,6 +1,6 @@
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectBox.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/labelTypeModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/mainPage.dart';
 import 'package:bas_dataset_generator_engine/src/pages/recordPage.dart';
@@ -37,15 +37,15 @@ Future<void> main() async {
   objectbox = await ObjectBox.create();
   if (await LabelDAO().needAddDefaultValue()) {
     await LabelDAO().addList(PageType.values
-        .map((e) => LabelTypeModel(0, e.name, 'screen'))
+        .map((e) => LabelModel(0, e.name, 'screen'))
         .toList());
     await LabelDAO().addList(
-        PartType.values.map((e) => LabelTypeModel(0, e.name, 'part')).toList());
+        PartType.values.map((e) => LabelModel(0, e.name, 'part')).toList());
     await LabelDAO().addList(ObjectType.values
-        .map((e) => LabelTypeModel(0, e.name, 'object'))
+        .map((e) => LabelModel(0, e.name, 'object'))
         .toList());
     await LabelDAO().addList(ActionKind.values
-        .map((e) => LabelTypeModel(0, e.name, 'action'))
+        .map((e) => LabelModel(0, e.name, 'action'))
         .toList());
   }
   runApp(const MyApp());

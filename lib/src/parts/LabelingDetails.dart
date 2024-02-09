@@ -1,5 +1,5 @@
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/labelTypeModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelingDataModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/dlgLabelingManagement.dart';
 import 'package:bas_dataset_generator_engine/src/items/labelingItem.dart';
@@ -24,7 +24,7 @@ class LabelingDetails extends HookWidget {
     final actions = useState(['','']);
     final labelList = useState([]);
     useEffect(() {
-      actions.value=data.kind=='object'?data.getActions():[];
+      // actions.value=data.kind=='object'?data.getActions():[];
       Future<void>.microtask(() async {
        labelList.value=await LabelDAO().getLabelList(data.kind);
       });
@@ -53,7 +53,7 @@ class LabelingDetails extends HookWidget {
                 context: context,
                 barrierDismissible: true,
                 builder: (context) => DlgLabelingManagement(
-                      labelList: labelList.value as List<LabelTypeModel>,
+                      labelList: labelList.value as List<LabelModel>,
                       isFor: data.kind,
                       onDlgCloseCaller: onDlgCloseHandler,
                     ),

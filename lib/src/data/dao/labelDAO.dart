@@ -1,34 +1,34 @@
-import 'package:bas_dataset_generator_engine/src/data/models/labelTypeModel.dart';
-import '../../../main.dart';
-import '../../../objectbox.g.dart';
+import 'package:bas_dataset_generator_engine/main.dart';
+import 'package:bas_dataset_generator_engine/objectbox.g.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 
 class LabelDAO {
-  Future<List<LabelTypeModel>> getLabelList(String isFor) async {
-    Box<LabelTypeModel> box = objectbox.store.box<LabelTypeModel>();
-    List<LabelTypeModel> labels=box.query(LabelTypeModel_.isFor.equals(isFor)).build().find();
+  Future<List<LabelModel>> getLabelList(String isFor) async {
+    Box<LabelModel> box = objectbox.store.box<LabelModel>();
+    List<LabelModel> labels=box.query(LabelModel_.isFor.equals(isFor)).build().find();
     return labels;
   }
 
-  Future<LabelTypeModel?> getLabel(int id) async {
-    Box<LabelTypeModel> box = objectbox.store.box<LabelTypeModel>();
-    LabelTypeModel? label = box.get(id);
+  Future<LabelModel?> getLabel(int id) async {
+    Box<LabelModel> box = objectbox.store.box<LabelModel>();
+    LabelModel? label = box.get(id);
     return label;
   }
 
-  Future<int> addLabel(LabelTypeModel newObject) async {
+  Future<int> addLabel(LabelModel newObject) async {
     print(newObject.name);
-    Box<LabelTypeModel> box = objectbox.store.box<LabelTypeModel>();
+    Box<LabelModel> box = objectbox.store.box<LabelModel>();
     return box.put(newObject);
   }
 
-  addList(List<LabelTypeModel>list)async{
+  addList(List<LabelModel>list)async{
     for(var item in list){
       await addLabel(item);
     }
   }
 
-  Future<int> updateLabel(LabelTypeModel object) async {
-    Box<LabelTypeModel> box = objectbox.store.box<LabelTypeModel>();
+  Future<int> updateLabel(LabelModel object) async {
+    Box<LabelModel> box = objectbox.store.box<LabelModel>();
     return box.put(object);
   }
 
@@ -39,12 +39,12 @@ class LabelDAO {
   }
 
   deleteAll()async{
-    Box<LabelTypeModel> box = objectbox.store.box<LabelTypeModel>();
+    Box<LabelModel> box = objectbox.store.box<LabelModel>();
     box.removeAll();
   }
 
   Future<bool> deleteLabel(int id) async {
-    Box<LabelTypeModel> box = objectbox.store.box<LabelTypeModel>();
+    Box<LabelModel> box = objectbox.store.box<LabelModel>();
     bool result = box.remove(id);
     return result;
   }

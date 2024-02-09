@@ -1,23 +1,17 @@
 import 'dart:io';
-
-import 'package:bas_dataset_generator_engine/src/data/dao/videoDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/recordedScreenGroup.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
-import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:fc_native_video_thumbnail/fc_native_video_thumbnail.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../../assets/values/dimens.dart';
-import '../../assets/values/textStyle.dart';
-import '../dialogs/flyDlgDelete.dart';
-
-class GroupItem extends HookWidget {
-  GroupItem({Key? key, required this.group, this.onActionCaller})
+class ProjectPartItem extends HookWidget {
+  ProjectPartItem({Key? key, required this.part, this.onActionCaller})
       : super(key: key);
 
-  final RecordedScreenGroup group;
+  final ProjectPartModel part;
 
   final ValueSetter<String>? onActionCaller;
 
@@ -34,9 +28,9 @@ class GroupItem extends HookWidget {
         color: Colors.grey[170],
         border: Border.all(color: Colors.magenta, width: 1.5),
         image: DecorationImage(
-          image: group.screenShoots.isEmpty
+          image: part.allGroups.isEmpty
               ? const AssetImage('lib/assets/testImages/testImg1.png')
-              : Image.file(File(group.screenShoots[0].path!)).image,
+              : Image.file(File(part.allGroups[0].allImages[0].path!)).image,
           fit: BoxFit.fill,
         ),
       ),
@@ -64,7 +58,7 @@ class GroupItem extends HookWidget {
                       size: 45,
                     ),
                   )),
-              onPressed: () => onActionCaller!('record&&${group.id}')),
+              onPressed: () => onActionCaller!('record&&${part.id}')),
           const Spacer(),
           Container(
               height: 40,
@@ -92,12 +86,12 @@ class GroupItem extends HookWidget {
                                   "yeh",
                                   controller,
                                   FlyoutPlacementMode.topCenter,
-                                  group.id,
+                                  part.id,
                                   onActionCaller)))),
                   Expanded(
                       flex: 26,
                       child: IconButton(
-                        onPressed: () => onActionCaller!('screens&&${group.id}'),
+                        onPressed: () => onActionCaller!('screens&&${part.id}'),
                         icon: Text(
                           'Screens',
                           style: TextSystem.textS(Colors.white),
@@ -106,7 +100,7 @@ class GroupItem extends HookWidget {
                   Expanded(
                       flex: 60,
                       child: IconButton(
-                        onPressed: () => onActionCaller!('labeling&&${group.id}'),
+                        onPressed: () => onActionCaller!('labeling&&${part.id}'),
                         icon: Text(
                           'Labeling page',
                           style: TextSystem.textS(Colors.magenta.lighter),

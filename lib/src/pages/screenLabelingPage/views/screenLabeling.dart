@@ -1,9 +1,8 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
-import 'package:bas_dataset_generator_engine/src/data/dao/recordedScreenGroupsDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/dao/screenShotDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/screenShootModel.dart';
-import 'package:bas_dataset_generator_engine/src/items/screenItem.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
+import 'package:bas_dataset_generator_engine/src/items/objectItem.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
@@ -11,9 +10,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:window_manager/window_manager.dart';
 
 class ScreenLabeling extends HookWidget with WindowListener {
-  int? groupId;
+  int? partId;
 
-  ScreenLabeling(this.groupId, {super.key});
+  ScreenLabeling(this.partId, {super.key});
 
   void _init() async {
     // Add this line to override the default close handler
@@ -67,16 +66,7 @@ class ScreenLabeling extends HookWidget with WindowListener {
     useEffect(() {
       _init();
       Future<void>.microtask(() async {
-        final group = await RecordedScreenGroupDAO().getGroup(groupId!);
-        if (group!.screenShoots.toList().isNotEmpty) {
-          allScreens.value = group.screenShoots.toList();
-          for (final screen in allScreens.value) {
-            if (screen.status == 'created') {
-              indexImage.value = allScreens.value.indexOf(screen);
-              break;
-            }
-          }
-        }
+        allScreens.value = await ProjectPartDAO().getAllObjects(partId!);
       });
       return null;
     }, const []);
@@ -84,13 +74,12 @@ class ScreenLabeling extends HookWidget with WindowListener {
     onImageHandler(String action) async {
       print(action);
       var actions = action.split('&&');
-      ScreenShootModel? screen =
-          await ScreenDAO().getScreen(int.parse(actions[1]));
+      var obj = await ObjectDAO().getObject(int.parse(actions[1]));
       switch (actions[0]) {
         case 'delete':
-          await ScreenDAO().deleteScreen(screen!);
-          await RecordedScreenGroupDAO().removeAScreenShoot(groupId!, screen);
-          allScreens.value = await RecordedScreenGroupDAO().getAllScreens(groupId!);
+          await ObjectDAO().deleteObject(obj!);
+          await ProjectPartDAO().removeObject(partId!, obj);
+          allScreens.value = await ProjectPartDAO().getAllObjects(partId!);
           break;
       }
     }
@@ -156,7 +145,7 @@ class ScreenLabeling extends HookWidget with WindowListener {
                         crossAxisSpacing: 10,
                         mainAxisSpacing: 10),
                     children: allScreens.value
-                        .map((item) => ScreenItem(screen: item,onActionCaller: onImageHandler,))
+                        .map((item) => ImageItem(obj: item,onActionCaller: onImageHandler,))
                         .toList(),
                   ),
                 ),

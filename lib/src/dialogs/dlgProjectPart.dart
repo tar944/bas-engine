@@ -1,23 +1,26 @@
 
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
+import 'package:bas_dataset_generator_engine/src/parts/dialogTitleBar.dart';
+import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
+import 'package:bas_dataset_generator_engine/src/widgets/CButton.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import '../../../../assets/values/dimens.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:uuid/uuid.dart';
 
-import '../../../../assets/values/strings.dart';
-import '../../../data/models/softwareModel.dart';
-import '../../../parts/dialogTitleBar.dart';
-import '../../../widgets/CButton.dart';
-
-class DlgNewSoftware extends HookWidget {
-  DlgNewSoftware({
+class DlgProjectPart extends HookWidget {
+  DlgProjectPart({
     Key? key,
-    this.software,
+    this.part,
+    required this.prjUUID,
     required this.onSaveCaller,
   }) : super(key: key);
 
-  final ValueSetter<SoftwareModel> onSaveCaller;
-  SoftwareModel? software;
+  final ValueSetter<ProjectPartModel> onSaveCaller;
+  ProjectPartModel? part;
+  String prjUUID;
 
   @override
   Widget build(BuildContext context) {
@@ -25,23 +28,24 @@ class DlgNewSoftware extends HookWidget {
       Navigator.pop(context);
     }
 
-    var ctlTitle = TextEditingController(text:software!=null?software!.title:"");
-    var ctlDescription = TextEditingController(text:software!=null?software!.description:"");
+    var ctlTitle = TextEditingController(text:part!=null?part!.name:"");
+    var ctlDescription = TextEditingController(text:part!=null?part!.description:"");
 
 
-    void onBtnSaveListener() {
+    void onBtnSaveListener() async{
       if (ctlTitle.text == "") {
         Toast("You should enter a title for software", false)
             .showWarning(context);
         return;
       }
-      if (software == null) {
+      if (part == null) {
+        String partUUID=const Uuid().v4();
         onSaveCaller(
-            SoftwareModel(0, ctlTitle.text, '', '', ctlDescription.text, '', ''));
+            ProjectPartModel(0,prjUUID,partUUID, ctlTitle.text,await DirectoryManager().getPartDir(prjUUID, partUUID), ctlDescription.text));
       } else {
-        software!.title = ctlTitle.text;
-        software!.description = ctlDescription.text;
-        onSaveCaller(software!);
+        part!.name = ctlTitle.text;
+        part!.description = ctlDescription.text;
+        onSaveCaller(part!);
       }
       Navigator.pop(context);
     }
@@ -64,7 +68,7 @@ class DlgNewSoftware extends HookWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   DialogTitleBar(
-                    title: software!=null?Strings.dlgEditSoftware:Strings.dlgNewSoftware,
+                    title: part!=null?Strings.dlgEditGroup:Strings.dlgNewGroup,
                     onActionListener: onCloseClicked,
                   ),
                   const SizedBox(
@@ -100,7 +104,7 @@ class DlgNewSoftware extends HookWidget {
                                             controller: ctlDescription,
                                             maxLines: 8,
                                             placeholder:
-                                                Strings.softwareDescriptionHint,
+                                                Strings.partDescriptionHint,
                                           ),
                                         ],
                                       ))),

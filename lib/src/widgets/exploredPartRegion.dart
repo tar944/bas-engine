@@ -1,27 +1,26 @@
-import 'package:bas_dataset_generator_engine/src/data/models/regionDataModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/widgets/rectanglePainter.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 class ExploredPartRegion extends StatelessWidget {
-  ExploredPartRegion({Key? key, required this.curRectangle}) : super(key: key);
+  ExploredPartRegion({Key? key, required this.curObject}) : super(key: key);
 
-  RegionDataModel curRectangle;
+  ObjectModel curObject;
 
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: (curRectangle.right - curRectangle.left).abs(),
-      height: (curRectangle.bottom - curRectangle.top).abs() + 30,
+      width: (curObject.right - curObject.left).abs(),
+      height: (curObject.bottom - curObject.top).abs() + 30,
       child: Stack(
         children: [
           CustomPaint(
-            painter: RectanglePainter(RegionDataModel(
+            painter: RectanglePainter(ObjectModel(
                 0,
-                'part',
                 0.0,
-                curRectangle.right - curRectangle.left,
+                curObject.right - curObject.left,
                 0.0,
-                curRectangle.bottom - curRectangle.top,'created')),
+                curObject.bottom - curObject.top,'created')),
           ),
         ],
       ),

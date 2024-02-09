@@ -1,4 +1,4 @@
-enum PageType { mainPage, subPage, dialog, menu, submenu, rightMenu,openDialog,saveDialog }
+enum PageType { mainPage,page, subPage, dialog, menu, submenu, rightMenu,openDialog,saveDialog }
 
 enum HeaderTabs {software,groups,screenLabel,partLabel}
 

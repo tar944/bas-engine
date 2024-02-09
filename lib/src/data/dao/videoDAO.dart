@@ -1,9 +1,9 @@
-import 'package:bas_dataset_generator_engine/src/data/dao/softwareDAO.dart';
+import 'package:bas_dataset_generator_engine/main.dart';
+import 'package:bas_dataset_generator_engine/objectbox.g.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
-import '../../../main.dart';
-import '../../../objectbox.g.dart';
-import '../models/screenShootModel.dart';
 
 class VideoDAO{
 
@@ -13,38 +13,38 @@ class VideoDAO{
     return software;
   }
 
-  Future<List<ScreenShootModel>> getAllScreens(int id) async{
+  Future<List<ImageModel>> getAllScreens(int id) async{
     final video = await getVideo(id);
     if(video==null){
       return [];
     }
-    return video.screenShoots.toList();
+    return video.allImages.toList();
   }
 
   Future<int> addVideo(VideoModel newVideo) async{
     Box<VideoModel> box = objectbox.store.box<VideoModel>();
     int result = box.put(newVideo);
     newVideo.id = result;
-    SoftwareDAO().addAVideo(newVideo.software.target!.id, newVideo);
+    ProjectDAO().addAVideo(newVideo.prjUUID, newVideo);
     return result;
   }
 
-  Future<bool> addAScreenShoot(int id,ScreenShootModel screen) async{
+  Future<bool> addAScreenShoot(int id,ImageModel screen) async{
     final video = await getVideo(id);
     if(video==null){
       return false;
     }
-    video.screenShoots.add(screen);
+    video.allImages.add(screen);
     updateVideo(video);
     return true;
   }
 
-  Future<bool> removeAScreenShoot(int id,ScreenShootModel screen) async{
+  Future<bool> removeAScreenShoot(int id,ImageModel screen) async{
     final video = await getVideo(id);
     if(video==null){
       return false;
     }
-    video.screenShoots.remove(screen);
+    video.allImages.remove(screen);
     updateVideo(video);
     return true;
   }
@@ -58,7 +58,7 @@ class VideoDAO{
   Future<bool>  deleteVideo(VideoModel video) async{
     Box<VideoModel> box = objectbox.store.box<VideoModel>();
     bool result =box.remove(video.id);
-    DirectoryManager().deleteVideoDirectory('${video.software.target!.id}_${video.software.target!.title!}', video.name!);
+    // DirectoryManager().deleteVideoDirectory('${video.software.target!.id}_${video.software.target!.title!}', video.name!);
     return result;
   }
 }

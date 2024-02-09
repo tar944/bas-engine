@@ -2,9 +2,7 @@ import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/viewModels/mainViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/headerPart.dart';
-import 'package:bas_dataset_generator_engine/src/pages/screenGroups/views/screenGroups.dart';
-import 'package:bas_dataset_generator_engine/src/pages/screenLabelingPage/views/screenLabeling.dart';
-import 'package:bas_dataset_generator_engine/src/pages/softwareListPage/views/softwareList.dart';
+import 'package:bas_dataset_generator_engine/src/pages/projectListPage/views/projectList.dart';
 import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
@@ -54,13 +52,13 @@ class _View extends StatelessView<MainPageViewModel> {
                   controller: vm.controller,
                   children: <Widget>[
                     Center(
-                      child: SoftwareList(),
+                      child: ProjectsList(),
                     ),
                     Center(
-                      child: SoftwareList(),
+                      child: ProjectsList(),
                     ),
                     Center(
-                      child: SoftwareList(),
+                      child: ProjectsList(),
                     ),
                   ],
                 ),

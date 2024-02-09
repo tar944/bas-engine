@@ -1,17 +1,18 @@
 import 'dart:io';
-import 'package:bas_dataset_generator_engine/src/data/dao/partObjectDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/dao/screenShotDAO.dart';
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelingDataModel.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/regionDataModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/widgets/partRegionExplorer.dart';
 import 'package:image/image.dart' as i;
-import 'package:bas_dataset_generator_engine/src/data/dao/screenPartDAO.dart';
+import 'package:path/path.dart' as p;
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import '../../assets/values/dimens.dart';
-import '../widgets/partRegionExplorer.dart';
-import 'package:path/path.dart' as p;
+import 'package:uuid/uuid.dart';
 
 class RegionManager extends HookWidget {
   const RegionManager({
@@ -69,7 +70,7 @@ class RegionManager extends HookWidget {
       }
     }
 
-    onNewPartCreatedHandler(RegionDataModel newPart) async {
+    onNewPartCreatedHandler(ObjectModel newPart) async {
       final path = await item.getPartPath();
       final cmd = i.Command()
         ..decodeImageFile(item.getPath()!)
@@ -82,16 +83,13 @@ class RegionManager extends HookWidget {
             height: (getY(newPart.bottom.toInt()) - getY(newPart.top.toInt())))
         ..writeToFile(path);
       await cmd.executeThread();
-      newPart.imageName = p.basename(path);
-      newPart.screen.target = await ScreenDAO().getScreen(item.getId()!);
-      newPart.path = path;
-      newPart.kind='part';
+      newPart.image.target = await ImageDAO().getDetails(item.getId()!);
       newPart.status = 'created';
-      await PartDAO().addPart(newPart);
+      await ObjectDAO().addObject(newPart);
       onPartsChanged('refreshParts&&${item.getId()}');
     }
 
-    onNewObjectCreatedHandler(RegionDataModel newObject) async {
+    onNewObjectCreatedHandler(ObjectModel newObject) async {
       final path = await item.getObjectPath();
       final cmd = i.Command()
         ..decodeImageFile(item.getPath()!)
@@ -104,12 +102,12 @@ class RegionManager extends HookWidget {
             height: (getY(newObject.bottom.toInt()) - getY(newObject.top.toInt())))
         ..writeToFile(path);
       await cmd.executeThread();
-      newObject.imageName = p.basename(path);
-      newObject.path = path;
-      newObject.part.target = await PartDAO().getPart(item.getId()!);
-      newObject.kind='object';
+      newObject.uuid=const Uuid().v4();
+      var img = ImageModel(-1,const Uuid().v4(), newObject.uuid, p.basename(path), path);
+      img.id=await ImageDAO().add(img);
+      newObject.image.target=img;
       newObject.status = 'created';
-      await PartObjectDAO().addObject(newObject);
+      await ObjectDAO().addObject(newObject);
       onPartsChanged('refreshObjects&&${item.getId()}');
     }
 
@@ -131,8 +129,8 @@ class RegionManager extends HookWidget {
             ),
           ),
           child: itemKind!='object'?PartRegionExplorer(
-            allParts: item.getRegionsList() ?? [],
-            onNewPartHandler: itemKind=='screen'?onNewPartCreatedHandler:onNewObjectCreatedHandler,
+            allObjects: item.getObjectList() ?? [],
+            onNewObjectHandler: itemKind=='screen'?onNewPartCreatedHandler:onNewObjectCreatedHandler,
           ):SizedBox(width: 0,height: 0,),
         ),
         Positioned(

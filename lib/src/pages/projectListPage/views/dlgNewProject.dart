@@ -1,23 +1,22 @@
 
-import 'package:bas_dataset_generator_engine/src/data/models/recordedScreenGroup.dart';
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/projectModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
+import 'package:bas_dataset_generator_engine/src/parts/dialogTitleBar.dart';
+import 'package:bas_dataset_generator_engine/src/widgets/CButton.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import '../../assets/values/dimens.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-import '../../assets/values/strings.dart';
-import '../parts/dialogTitleBar.dart';
-import '../widgets/CButton.dart';
-
-class DlgNewScreenGroup extends HookWidget {
-  DlgNewScreenGroup({
+class DlgNewProject extends HookWidget {
+  DlgNewProject({
     Key? key,
-    this.group,
+    this.project,
     required this.onSaveCaller,
   }) : super(key: key);
 
-  final ValueSetter<RecordedScreenGroup> onSaveCaller;
-  RecordedScreenGroup? group;
+  final ValueSetter<ProjectModel> onSaveCaller;
+  ProjectModel? project;
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +24,8 @@ class DlgNewScreenGroup extends HookWidget {
       Navigator.pop(context);
     }
 
-    var ctlTitle = TextEditingController(text:group!=null?group!.name:"");
-    var ctlDescription = TextEditingController(text:group!=null?group!.description:"");
+    var ctlTitle = TextEditingController(text:project!=null?project!.title:"");
+    var ctlDescription = TextEditingController(text:project!=null?project!.description:"");
 
 
     void onBtnSaveListener() {
@@ -35,13 +34,13 @@ class DlgNewScreenGroup extends HookWidget {
             .showWarning(context);
         return;
       }
-      if (group == null) {
+      if (project == null) {
         onSaveCaller(
-            RecordedScreenGroup(0, ctlTitle.text, '', ctlDescription.text,0));
+            ProjectModel(0, ctlTitle.text, '', '', ctlDescription.text, '', ''));
       } else {
-        group!.name = ctlTitle.text;
-        group!.description = ctlDescription.text;
-        onSaveCaller(group!);
+        project!.title = ctlTitle.text;
+        project!.description = ctlDescription.text;
+        onSaveCaller(project!);
       }
       Navigator.pop(context);
     }
@@ -64,7 +63,7 @@ class DlgNewScreenGroup extends HookWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   DialogTitleBar(
-                    title: group!=null?Strings.dlgEditGroup:Strings.dlgNewGroup,
+                    title: project!=null?Strings.dlgEditSoftware:Strings.dlgNewSoftware,
                     onActionListener: onCloseClicked,
                   ),
                   const SizedBox(
@@ -100,7 +99,7 @@ class DlgNewScreenGroup extends HookWidget {
                                             controller: ctlDescription,
                                             maxLines: 8,
                                             placeholder:
-                                                Strings.groupDescriptionHint,
+                                                Strings.softwareDescriptionHint,
                                           ),
                                         ],
                                       ))),

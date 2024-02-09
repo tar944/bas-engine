@@ -1,10 +1,10 @@
-import 'package:bas_dataset_generator_engine/src/data/models/regionDataModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:flutter/material.dart';
 
 class RectanglePainter extends CustomPainter {
-  RegionDataModel? rectangle;
+  ObjectModel? object;
 
-  RectanglePainter(this.rectangle);
+  RectanglePainter(this.object);
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -13,7 +13,7 @@ class RectanglePainter extends CustomPainter {
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 
-    Rect rect = Rect.fromLTRB(rectangle!.left, rectangle!.top, rectangle!.right, rectangle!.bottom);
+    Rect rect = Rect.fromLTRB(object!.left, object!.top, object!.right, object!.bottom);
     canvas.drawRect(rect, paint);
   }
 

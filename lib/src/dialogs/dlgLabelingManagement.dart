@@ -1,12 +1,11 @@
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/labelTypeModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/items/dlgLabelManagementItem.dart';
+import 'package:bas_dataset_generator_engine/src/parts/dialogTitleBar.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import '../../assets/values/dimens.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-
-import '../../assets/values/strings.dart';
-import '../parts/dialogTitleBar.dart';
 
 class DlgLabelingManagement extends HookWidget {
   DlgLabelingManagement({
@@ -17,7 +16,7 @@ class DlgLabelingManagement extends HookWidget {
   }) : super(key: key);
 
   final VoidCallback onDlgCloseCaller;
-  final List<LabelTypeModel> labelList;
+  final List<LabelModel> labelList;
   final String isFor;
 
   @override
@@ -41,7 +40,7 @@ class DlgLabelingManagement extends HookWidget {
       var actions = action.split('&&');
       switch (actions[0]) {
         case 'save':
-          LabelTypeModel? label =
+          LabelModel? label =
               await LabelDAO().getLabel(int.parse(actions[1]));
           label!.name = actions[2];
           await LabelDAO().updateLabel(label);
@@ -51,7 +50,7 @@ class DlgLabelingManagement extends HookWidget {
           await LabelDAO().deleteLabel(int.parse(actions[1]));
           break;
         case 'create':
-          await LabelDAO().addLabel(LabelTypeModel(0, actions[1], isFor));
+          await LabelDAO().addLabel(LabelModel(0, actions[1], isFor));
           break;
       }
       labelList.value=await LabelDAO().getLabelList(isFor);

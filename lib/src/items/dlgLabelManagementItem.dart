@@ -1,7 +1,6 @@
-import 'package:bas_dataset_generator_engine/src/data/models/labelTypeModel.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-
-import '../../assets/values/strings.dart';
 
 class DlgLabelManagementItem extends StatelessWidget {
   const DlgLabelManagementItem({
@@ -9,7 +8,7 @@ class DlgLabelManagementItem extends StatelessWidget {
     required this.label,
     required this.onActionListener, required this.isFor,
   }) : super(key: key);
-  final LabelTypeModel label;
+  final LabelModel label;
   final String isFor;
   final ValueSetter<String> onActionListener;
 

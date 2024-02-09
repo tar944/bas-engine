@@ -21,32 +21,32 @@ class DirectoryManager {
   }
 
   Future<String> generateThumbnailPath(
-      String softwareName, String videoName) async {
+      String prjUUID, String vidUUID) async {
     final docsDir = await getApplicationDocumentsDirectory();
     var path = Directory(p.join(
-        docsDir.path, appDirName, softwareName, videoName, "thumbnailDir"));
+        docsDir.path, appDirName, prjUUID, vidUUID, "thumbnailDir"));
     if (!path.existsSync()) {
       path.create();
     }
-    return p.join(docsDir.path, appDirName, softwareName, videoName,
+    return p.join(docsDir.path, appDirName, prjUUID, vidUUID,
         "thumbnailDir", '${getRandomString(10)}.jpg');
   }
 
   Future<String> getScreenDirectoryPath(
-      String softwareName, String videoName) async {
+      String prjUUID, String vidUUID) async {
     final docsDir = await getApplicationDocumentsDirectory();
     var path = Directory(p.join(
-        docsDir.path, appDirName, softwareName, videoName, "screenShotsDir"));
+        docsDir.path, appDirName, prjUUID, vidUUID, "screenShotsDir"));
     if (!path.existsSync()) {
       path.create();
     }
     return p.join(
-        docsDir.path, appDirName, softwareName, videoName, "screenShotsDir");
+        docsDir.path, appDirName, prjUUID, vidUUID, "screenShotsDir");
   }
 
-  Future<bool> createSoftwareDir(String softwareName) async {
+  Future<bool> createPrjDir(String prjUUID) async {
     final docsDir = await getApplicationDocumentsDirectory();
-    var path = Directory(p.join(docsDir.path, appDirName, softwareName));
+    var path = Directory(p.join(docsDir.path, appDirName, prjUUID));
     if (path.existsSync()) {
       return false;
     } else {
@@ -55,10 +55,10 @@ class DirectoryManager {
     }
   }
 
-  Future<bool> createVideoDir(String softwareName, String videoName) async {
+  Future<bool> createVideoDir(String prjUUID, String vidUUID) async {
     final docsDir = await getApplicationDocumentsDirectory();
     var path =
-        Directory(p.join(docsDir.path, appDirName, softwareName, videoName));
+        Directory(p.join(docsDir.path, appDirName, prjUUID, vidUUID));
     if (path.existsSync()) {
       return false;
     } else {
@@ -66,69 +66,57 @@ class DirectoryManager {
       return true;
     }
   }
-  Future<String> createGroupDir(String softwareName, String groupName) async {
+  Future<String> createPartDir(String prjUUID, String partUUID) async {
     final docsDir = await getApplicationDocumentsDirectory();
     var path =
-        Directory(p.join(docsDir.path, appDirName, softwareName, groupName));
+        Directory(p.join(docsDir.path, appDirName, prjUUID, partUUID));
     if (path.existsSync()) {
       return path.path;
     } else {
-      path.create();
+      await path.create();
       return path.path;
     }
   }
 
-  Future<String> getPartDir(String softwareName, String videoName) async {
+  Future<String> getPartDir(String prjUUID, String partUUID) async {
     final docsDir = await getApplicationDocumentsDirectory();
-    var path =
-        Directory(p.join(docsDir.path, appDirName, softwareName, videoName,'partDir'));
+    var path = Directory(p.join(docsDir.path, appDirName, prjUUID, partUUID));
     if (path.existsSync()) {
       return path.path;
     } else {
-      path.create();
-      return path.path;
-    }
-  }
-  Future<String> getObjectDir(String softwareName, String videoName) async {
-    final docsDir = await getApplicationDocumentsDirectory();
-    var path =
-        Directory(p.join(docsDir.path, appDirName, softwareName, videoName,'objectDir'));
-    if (path.existsSync()) {
-      return path.path;
-    } else {
-      path.create();
+      await path.create();
+      await Directory(path.path).create();
+      await Directory(p.join(path.path, 'images')).create();
+      await Directory(p.join(path.path, 'objectImages')).create();
       return path.path;
     }
   }
 
-  Future<String> getPartImagePath(String softwareName, String videoName) async {
-    return p.join(await getPartDir(softwareName, videoName),'${getRandomString(10)}.jpg');
+  Future<String> getObjectImagePath(String prjUUID, String partUUId) async {
+    return p.join(await getPartDir(prjUUID, partUUId),'objectImages','${getRandomString(10)}.jpg');
   }
 
-  Future<String> getObjectImagePath(String softwareName, String videoName) async {
-    return p.join(await getObjectDir(softwareName, videoName),'${getRandomString(10)}.jpg');
-  }
-
-  deleteVideoDirectory(String softwareName, String videoName) async {
+  deleteVideoDirectory(String prjUUID, String vidUUID) async {
     final docsDir = await getApplicationDocumentsDirectory();
     var path =
-        Directory(p.join(docsDir.path, appDirName, softwareName, videoName));
+        Directory(p.join(docsDir.path, appDirName, prjUUID, vidUUID));
     if (path.existsSync()) {
       path.deleteSync(recursive: true);
     }
   }
-  deleteGroupDirectory(String softwareName, String groupName) async {
+  
+  deletePartDirectory(String prjUUID, String partUUID) async {
     final docsDir = await getApplicationDocumentsDirectory();
     var path =
-        Directory(p.join(docsDir.path, appDirName, softwareName, groupName));
+        Directory(p.join(docsDir.path, appDirName, prjUUID, partUUID));
     if (path.existsSync()) {
       path.deleteSync(recursive: true);
     }
   }
 
-  deleteSoftwareDirectory(String softwareName) async {
+  deleteSoftwareDirectory(String prjName) async {
     final docsDir = await getApplicationDocumentsDirectory();
-    var path = Directory(p.join(docsDir.path, appDirName, softwareName));
+    var path = Directory(p.join(docsDir.path, appDirName, prjName));
     if (path.existsSync()) {
       path.deleteSync(recursive: true);
     }

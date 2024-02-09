@@ -1,21 +1,22 @@
 import 'dart:io';
-
-import 'package:bas_dataset_generator_engine/src/data/dao/screenShotDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/actionModel.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/screenShootModel.dart';
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path/path.dart' as p;
-import 'package:bas_dataset_generator_engine/src/data/dao/recordedScreenGroupsDAO.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgRecordMenu.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:screen_capturer/screen_capturer.dart';
+import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
-import '../../assets/values/dimens.dart';
-import '../../assets/values/strings.dart';
-import '../../assets/values/textStyle.dart';
-import '../utility/platform_util.dart';
 import 'package:simple_animations/movie_tween/movie_tween.dart';
 import 'package:simple_animations/animation_builder/custom_animation_builder.dart';
 import 'package:screen_retriever/screen_retriever.dart';
@@ -24,9 +25,9 @@ import 'package:mouse_event/mouse_event.dart';
 class RecordPage extends HookWidget with WindowListener {
   Offset _lastShownPosition = Offset.zero;
 
-  int? groupId;
+  int? partId;
 
-  RecordPage(this.groupId);
+  RecordPage(this.partId);
 
   void _init(BuildContext context) async {
     // Add this line to override the default close handler
@@ -98,9 +99,9 @@ class RecordPage extends HookWidget with WindowListener {
     useEffect(() {
       _init(context);
       Future<void>.microtask(() async {
-        final group = await RecordedScreenGroupDAO().getGroup(groupId!);
-        dirPath.value = group!.path;
-        imgNumber.value = group.imgNumber;
+        final part = await ProjectPartDAO().getDetails(partId!);
+        dirPath.value = part!.path;
+        imgNumber.value = part.allObjects.length+1;
       });
       return null;
     }, const []);
@@ -110,7 +111,7 @@ class RecordPage extends HookWidget with WindowListener {
         case Strings.saveAndExit:
           exit(0);
         case Strings.saveNext:
-          context.goNamed('screensList',params: {'groupId':groupId.toString()});
+          context.goNamed('screensList',params: {'partId':partId.toString()});
           break;
         case "record":
           break;
@@ -130,25 +131,29 @@ class RecordPage extends HookWidget with WindowListener {
                 milliseconds: mouseEvent.mouseMsg == MouseEventMsg.WM_LBUTTONUP
                     ? 100
                     : 300));
+            var imgPath = p.join(dirPath.value, 'screen_${imgNumber.value}.png');
             await screenCapturer.capture(
               mode: CaptureMode.screen,
-              imagePath: p.join(dirPath.value, 'screen_${imgNumber.value}.png'),
+              imagePath: imgPath,
               copyToClipboard: false,
               silent: true,
             );
-            final group = await RecordedScreenGroupDAO().getGroup(groupId!);
-            ActionModel action = ActionModel(0, true, mouseEvent.x,
-                mouseEvent.y, mouseEvent.mouseMsg.toString());
-            action = await ScreenDAO().addAction(action);
-            ScreenShootModel screen = ScreenShootModel(
+
+            ObjectModel obj = ObjectModel(
+              -1,
                 0,
                 0,
-                'screen_${imgNumber.value}.png',
-                p.join(dirPath.value, 'screen_${imgNumber.value}.png'),
+                0,
+                0,
                 'created');
-            screen.action.target = action;
-            screen.group.target = group;
-            ScreenDAO().addScreenToGroup(screen);
+            obj.actionType = mouseEvent.mouseMsg.toString();
+            obj.actX=mouseEvent.x;
+            obj.actY=mouseEvent.y;
+            var img =ImageModel(-1, const Uuid().v4(), obj.uuid, 'screen_${imgNumber.value}.png', imgPath);
+            img.id= await ImageDAO().add(img);
+            obj.image.target=img;
+            obj.id=await ObjectDAO().addObject(obj);
+            await ProjectPartDAO().addObject(partId!, obj);
             imgNumber.value += 1;
           }
         });
