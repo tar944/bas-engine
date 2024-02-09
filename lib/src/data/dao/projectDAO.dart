@@ -67,6 +67,16 @@ class ProjectDAO {
     return true;
   }
 
+  Future<bool> removeAPart(int id,ProjectPartModel part) async{
+    final project = await getDetails(id);
+    if(project==null){
+      return false;
+    }
+    project.allParts.removeWhere((element) => element.id == part.id);
+    update(project);
+    return true;
+  }
+
   Future<bool> removeAVideo(int id,VideoModel video) async{
     final project = await getDetails(id);
     if(project==null){

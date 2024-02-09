@@ -56,9 +56,7 @@ class ProjectPartDAO {
   Future<bool> delete(ProjectPartModel part) async {
     Box<ProjectPartModel> box = objectbox.store.box<ProjectPartModel>();
     bool result = box.remove(part.id);
-    DirectoryManager().deletePartDirectory(
-        '${part.prjUUID}_${part.uuid}',
-        '${part.id}_${part.name!}');
+    DirectoryManager().deletePartDirectory(part.prjUUID, part.uuid);
     return result;
   }
 }

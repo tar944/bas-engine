@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/dlgProjectInfo.dart';
+import 'package:bas_dataset_generator_engine/src/pages/projectListPage/views/dlgProjectInfo.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
@@ -17,13 +17,15 @@ class MainPageViewModel extends ViewModel with WindowListener {
   String guideText="";
   final PageController controller = PageController();
   HeaderTabs curTab=HeaderTabs.project;
+  ProjectModel? curProject;
   late void Function() projectController;
+  late void Function() partController;
 
   @override
   void init() async {
     // Add this line to override the default close handler
     await windowManager.setPreventClose(true);
-    setGuideText();
+    setProjectGuideText();
     windowManager.waitUntilReadyToShow().then((_) async {
       if (kIsLinux || kIsWindows) {
         if (kIsLinux) {
@@ -42,9 +44,14 @@ class MainPageViewModel extends ViewModel with WindowListener {
     });
   }
 
-  setGuideText()async{
+  setProjectGuideText()async{
     var projects = await ProjectDAO().getAll();
     guideText=projects.isEmpty?Strings.guideEmptyProject:Strings.guideProjects;
+    notifyListeners();
+  }
+
+  setPartGuideText()async{
+    guideText=curProject!.allParts.isEmpty?Strings.guideEmptyParts:Strings.guideParts;
     notifyListeners();
   }
 
@@ -86,9 +93,26 @@ class MainPageViewModel extends ViewModel with WindowListener {
     projectController = methodOfProject;
   }
 
+  setPartController(BuildContext context, void Function() methodOfPart) {
+    partController = methodOfPart;
+  }
+
   onProjectActionHandler(int prjId)async{
     if(prjId==-1){
-      await setGuideText();
+      await setProjectGuideText();
+    }else{
+      curProject = await ProjectDAO().getDetails(prjId);
+      onNavigationChanged(HeaderTabs.projectParts);
+      curTab = HeaderTabs.projectParts;
+      await setPartGuideText();
+      notifyListeners();
+    }
+  }
+
+  onPartActionHandler(int partId)async{
+    if(partId==-1){
+      curProject = await ProjectDAO().getDetails(curProject!.id);
+      await setPartGuideText();
     }
   }
 
@@ -96,6 +120,7 @@ class MainPageViewModel extends ViewModel with WindowListener {
     if(selTab==HeaderTabs.addProject){
       projectController.call();
     }else if(selTab==HeaderTabs.addPart){
+      partController.call();
     }else{
       if(selTab!=curTab){
         if(selTab==HeaderTabs.projectParts){

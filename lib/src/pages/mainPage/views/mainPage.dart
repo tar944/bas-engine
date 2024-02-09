@@ -3,6 +3,7 @@ import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/viewModels/mainViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/headerPart.dart';
 import 'package:bas_dataset_generator_engine/src/pages/projectListPage/views/projectList.dart';
+import 'package:bas_dataset_generator_engine/src/pages/projectPart/views/projectParts.dart';
 import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
@@ -38,6 +39,7 @@ class _View extends StatelessView<MainPageViewModel> {
               padding: const EdgeInsets.only(left: 10.0),
               child: HeaderPart(
                   key: GlobalKey(),
+                  curTab: vm.curTab,
                   onActionCaller: vm.onNavigationChanged,
                   guideText: vm.guideText),
             ),
@@ -62,10 +64,11 @@ class _View extends StatelessView<MainPageViewModel> {
                       ),
                     ),
                     Center(
-                      child: ProjectsList(
+                      child: ProjectParts(
                         key: GlobalKey(),
-                        onProjectActionCaller: vm.onProjectActionHandler,
-                        controller:vm.setProjectController,
+                        prjId: vm.curProject==null?-1:vm.curProject!.id,
+                        onPartActionCaller: vm.onPartActionHandler,
+                        controller:vm.setPartController,
                       ),
                     ),
                     Center(

@@ -72,7 +72,7 @@ class _View extends StatelessView<ProjectViewModel> {
                     height: 50,
                   ),
                   Text(
-                    Strings.emptySoftware,
+                    Strings.emptyProject,
                     style: TextSystem.textL(Colors.white),
                   ),
                 ],

@@ -3,12 +3,12 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class HeaderViewModel extends ViewModel {
-  HeaderTabs curTab = HeaderTabs.project;
+  HeaderTabs curTab;
 
   final ValueSetter<HeaderTabs> onActionCaller;
   final String guideText;
 
-  HeaderViewModel(this.onActionCaller, this.guideText);
+  HeaderViewModel(this.onActionCaller, this.guideText,this.curTab);
 
   onTabChanged(HeaderTabs tab) {
     if (tab != HeaderTabs.addProject && tab != HeaderTabs.addPart) {

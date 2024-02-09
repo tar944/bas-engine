@@ -10,17 +10,18 @@ import 'package:pmvvm/pmvvm.dart';
 class HeaderPart extends StatelessWidget {
   const HeaderPart({
     Key? key,
-    required this.onActionCaller, required this.guideText,
+    required this.onActionCaller,required this.curTab, required this.guideText,
   }) : super(key: key);
 
   final ValueSetter<HeaderTabs> onActionCaller;
+  final HeaderTabs curTab;
   final String guideText;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: HeaderViewModel(onActionCaller,guideText),
+      viewModel: HeaderViewModel(onActionCaller,guideText,curTab),
     );
   }
 }
