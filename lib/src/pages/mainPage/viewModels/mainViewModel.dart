@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/projectModel.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -10,13 +12,19 @@ import 'package:window_manager/window_manager.dart';
 class MainPageViewModel extends ViewModel with WindowListener {
 
   bool isLoading=false;
+  String guideText="";
   final PageController controller = PageController();
-  HeaderTabs curTab=HeaderTabs.software;
+  HeaderTabs curTab=HeaderTabs.project;
+  List<ProjectModel> projects=[];
 
   @override
   void init() async {
     // Add this line to override the default close handler
     await windowManager.setPreventClose(true);
+
+    projects=await ProjectDAO().getAll();
+    guideText=projects.isEmpty?Strings.guideEmptyProject:Strings.guideProjects;
+    notifyListeners();
 
     windowManager.waitUntilReadyToShow().then((_) async {
       if (kIsLinux || kIsWindows) {
@@ -34,6 +42,7 @@ class MainPageViewModel extends ViewModel with WindowListener {
       await Future.delayed(const Duration(milliseconds: 100));
       await _windowShow();
     });
+
   }
 
   Future<void> _windowShow({
@@ -70,18 +79,17 @@ class MainPageViewModel extends ViewModel with WindowListener {
   @override
   void onWindowClose() async {}
 
-  void onActionHandler(String action) async{
-    if (action == Strings.createACourse) {
-    }
+  void onProjectActionHandler(ProjectModel project) async{
+
   }
 
   onNavigationChanged(HeaderTabs selTab){
     if(selTab!=curTab){
-      if(selTab==HeaderTabs.groups){
+      if(selTab==HeaderTabs.projectParts){
         controller.jumpToPage(1);
-      }else if(selTab==HeaderTabs.screenLabel){
+      }else if(selTab==HeaderTabs.imageGroups){
         controller.jumpToPage(2);
-      }else if(selTab==HeaderTabs.partLabel){
+      }else if(selTab==HeaderTabs.objectLabeling){
         controller.jumpToPage(3);
       }
     }

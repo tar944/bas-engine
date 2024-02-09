@@ -3,11 +3,11 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class HeaderViewModel extends ViewModel {
-  HeaderTabs curTab=HeaderTabs.partLabel;
+  HeaderTabs curTab=HeaderTabs.project;
 
   final ValueSetter<HeaderTabs> onActionCaller;
-
-  HeaderViewModel(this.onActionCaller);
+  final String guideText;
+  HeaderViewModel(this.onActionCaller,this.guideText);
   @override
   void init() async {
   }
@@ -19,9 +19,9 @@ class HeaderViewModel extends ViewModel {
   bool showTab(HeaderTabs tab){
     if(curTab==tab){
       return true;
-    }else if(tab==HeaderTabs.groups&&(curTab==HeaderTabs.screenLabel||curTab==HeaderTabs.partLabel)){
+    }else if(tab==HeaderTabs.projectParts&&(curTab==HeaderTabs.objectLabeling||curTab==HeaderTabs.imageGroups)){
       return true;
-    }else if(tab == HeaderTabs.screenLabel&&curTab==HeaderTabs.partLabel){
+    }else if(tab == HeaderTabs.objectLabeling&&curTab==HeaderTabs.imageGroups){
       return true;
     }
     return false;

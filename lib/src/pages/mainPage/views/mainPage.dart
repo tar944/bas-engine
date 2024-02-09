@@ -36,29 +36,32 @@ class _View extends StatelessView<MainPageViewModel> {
             ),
             Padding(
               padding: const EdgeInsets.only(left: 10.0),
-              child: HeaderPart(onActionCaller: vm.onNavigationChanged),
+              child: HeaderPart(
+                key:GlobalKey() ,
+                  onActionCaller: vm.onNavigationChanged,
+                  guideText: vm.guideText),
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
               child: Container(
                 width: MediaQuery.sizeOf(context).width,
-                height: MediaQuery.sizeOf(context).height-(Dimens.mainHeaderH+Dimens.topBarHeight+20),
+                height: MediaQuery.sizeOf(context).height -
+                    (Dimens.mainHeaderH + Dimens.topBarHeight + 20),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
-                  color: Colors.grey[190]
-                ),
+                    color: Colors.grey[190]),
                 child: PageView(
                   physics: const NeverScrollableScrollPhysics(),
                   controller: vm.controller,
                   children: <Widget>[
                     Center(
-                      child: ProjectsList(),
+                      child: ProjectsList(projects: vm.projects,onProjectActionCaller: vm.onProjectActionHandler,),
                     ),
                     Center(
-                      child: ProjectsList(),
+                      child: ProjectsList(projects: vm.projects,onProjectActionCaller: vm.onProjectActionHandler,),
                     ),
                     Center(
-                      child: ProjectsList(),
+                      child: ProjectsList(projects: vm.projects,onProjectActionCaller: vm.onProjectActionHandler,),
                     ),
                   ],
                 ),

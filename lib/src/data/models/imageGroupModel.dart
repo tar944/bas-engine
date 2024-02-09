@@ -9,13 +9,15 @@ class ImageGroupModel {
   int id;
   String uuid="";
   String partUUID;
+  String groupUUID;
   String? name;
   String? type;
   String path;
   final allImages = ToMany<ImageModel>();
   final mainImage = ToOne<ImageModel>();
-  final allParts = ToMany<ObjectModel>();
+  final allObjects = ToMany<ObjectModel>();
+  final allGroups = ToMany<ImageGroupModel>();
   final label = ToOne<LabelModel>();
 
-  ImageGroupModel(this.id,this.partUUID, this.name, this.path);
+  ImageGroupModel(this.id,this.partUUID,this.groupUUID, this.name, this.path);
 }

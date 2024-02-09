@@ -1,6 +1,6 @@
 import 'package:pmvvm/pmvvm.dart';
 
-class NewSoftwareViewModel extends ViewModel {
+class ProjectInfoViewModel extends ViewModel {
 
   @override
   void init() async {

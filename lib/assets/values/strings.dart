@@ -2,6 +2,12 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String guideObjectLabeling="";
+  static const String guideImageGroup="";
+  static const String guideParts="You can choose one of your previous parts 👇 or create a new one 👆";
+  static const String guideEmptyParts="You can add a new part with add button 👆";
+  static const String guideProjects="You can choose one of your previous projects 👇 or create a new one 👆";
+  static const String guideEmptyProject="You can add a new project with add button 👆";
   static const String partDescriptionHint="Enter a description for this part";
   static const String appName="BAS Data set generator engine";
   static const String software="Software";
@@ -9,7 +15,7 @@ class Strings{
   static const String screenLabeling="Screen labeling";
   static const String partLabeling="Part labeling";
   static const String allGroups="All groups";
-  static const String emptySoftware="your software list is empty for creating a software click on pluse button...";
+  static const String emptySoftware="your projects list is empty for creating a new project click on plus button...";
   static const String exitTitle="Exit from Be a senior";
   static const String exitWarnString="You have changes to save,what you want to do?";
   static const String confirm="Confirm";

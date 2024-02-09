@@ -1,6 +1,6 @@
 enum PageType { mainPage,page, subPage, dialog, menu, submenu, rightMenu,openDialog,saveDialog }
 
-enum HeaderTabs {software,groups,screenLabel,partLabel}
+enum HeaderTabs {project,projectParts,imageGroups,objectLabeling}
 
 enum PartType {
   menuBar,

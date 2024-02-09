@@ -1,70 +1,37 @@
 
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
-import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectModel.dart';
 import 'package:bas_dataset_generator_engine/src/items/projectItem.dart';
-import 'package:bas_dataset_generator_engine/src/pages/projectListPage/views/dlgNewProject.dart';
-import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
+import 'package:bas_dataset_generator_engine/src/pages/projectListPage/viewModels/projectViewModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:go_router/go_router.dart';
+import 'package:pmvvm/pmvvm.dart';
 
-class ProjectsList extends HookWidget{
+class ProjectsList extends StatelessWidget {
+  ProjectsList({super.key,required this.projects,required this.onProjectActionCaller});
 
-  void _init() async {
-  }
+  ValueSetter<ProjectModel> onProjectActionCaller;
+  List<ProjectModel> projects;
 
   @override
   Widget build(BuildContext context) {
-    final projects = useState([]);
+    return MVVM(
+      view: () => const _View(),
+      viewModel: ProjectViewModel(projects,onProjectActionCaller),
+    );
+  }
+}
 
-    useEffect(() {
-      _init();
-      Future<void>.microtask(() async {
-        projects.value = await ProjectDAO().getAll();
-      });
-      return null;
-    }, const []);
+class _View extends StatelessView<ProjectViewModel> {
+  const _View({Key? key}) : super(key: key);
 
-    void onCreateCourseHandler(ProjectModel curProject) async {
-      final id = await ProjectDAO().update(curProject);
-      await DirectoryManager().createPrjDir(curProject.uuid);
-      projects.value = await ProjectDAO().getAll();
-    }
-
-    void onSoftwareSelect(String action) async{
-      ProjectModel? prj =  await ProjectDAO().getDetails(int.parse(action.split('&&')[1]));
-      switch(action.split('&&')[0]){
-        case 'edit':
-          showDialog(
-              context: context,
-              barrierDismissible: true,
-              builder: (context) =>DlgNewProject(onSaveCaller: onCreateCourseHandler,project:prj),);
-          break;
-        case 'delete':
-          await ProjectDAO().delete(prj!);
-          projects.value = await ProjectDAO().getAll();
-          break;
-        case 'goto':
-          context.goNamed('screensSource',params: {'projectId':prj!.id.toString()});
-          break;
-      }
-    }
-
-    void onNewSoftwareHandler(String action) {
-      showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) =>
-              DlgNewProject(onSaveCaller: onCreateCourseHandler));
-    }
-
-    return Container(
+  @override
+  Widget render(context, ProjectViewModel vm) {
+    return SizedBox(
       height: double.infinity,
       child: Padding(
         padding: const EdgeInsets.only(top: 20, bottom: 20,left: 20,right: 20),
-        child: projects.value.isNotEmpty
+        child: vm.projects.isNotEmpty
             ? GridView(
           controller: ScrollController(
               keepScrollOffset: false),
@@ -76,11 +43,11 @@ class ProjectsList extends HookWidget{
               childAspectRatio: 3 / 1.8,
               crossAxisSpacing: 20,
               mainAxisSpacing: 20),
-          children: projects.value
+          children: vm.projects
               .map((item) => ProjectItem(
               project: item,
               onActionCaller:
-              onSoftwareSelect))
+              vm.onProjectSelect))
               .toList(),
         )
             : Column(
