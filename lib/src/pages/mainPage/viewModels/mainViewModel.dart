@@ -123,7 +123,13 @@ class MainPageViewModel extends ViewModel with WindowListener {
       partController.call();
     }else{
       if(selTab!=curTab){
-        if(selTab==HeaderTabs.projectParts){
+        if(selTab==HeaderTabs.project){
+          controller.jumpToPage(0);
+          curProject=null;
+          curTab=HeaderTabs.project;
+          setProjectGuideText();
+          notifyListeners();
+        }else if(selTab==HeaderTabs.projectParts){
           controller.jumpToPage(1);
         }else if(selTab==HeaderTabs.imageGroups){
           controller.jumpToPage(2);

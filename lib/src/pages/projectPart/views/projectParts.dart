@@ -46,8 +46,8 @@ class _View extends StatelessView<ProjectPartsViewModel> {
                 scrollDirection: Axis.vertical,
                 gridDelegate:
                     const SliverGridDelegateWithMaxCrossAxisExtent(
-                        maxCrossAxisExtent: 305,
-                        childAspectRatio: 3 / 1.8,
+                        maxCrossAxisExtent: 280,
+                        childAspectRatio: 3.2 / 3.2,
                         crossAxisSpacing: 20,
                         mainAxisSpacing: 20),
                 children: vm.parts

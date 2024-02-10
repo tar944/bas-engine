@@ -11,8 +11,8 @@ class Strings{
   static const String guideEmptyProject="You can create a new project 👆";
   static const String partDescriptionHint="Enter a description for this part";
   static const String appName="BAS Data set generator engine";
-  static const String software="Software";
-  static const String groups="Groups";
+  static const String project="Project";
+  static const String projectParts="Project parts";
   static const String screenLabeling="Screen labeling";
   static const String partLabeling="Part labeling";
   static const String allGroups="All groups";

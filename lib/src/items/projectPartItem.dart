@@ -18,7 +18,7 @@ class ProjectPartItem extends HookWidget {
   @override
   Widget build(BuildContext context) {
     final controller = FlyoutController();
-
+    print(part.description!.length);
     return Container(
       width: double.infinity,
       height: double.infinity,
@@ -27,88 +27,90 @@ class ProjectPartItem extends HookWidget {
             const BorderRadius.all(Radius.circular(Dimens.dialogCornerRadius)),
         color: Colors.grey[170],
         border: Border.all(color: Colors.magenta, width: 1.5),
-        image: DecorationImage(
-          image: part.allGroups.isEmpty
-              ? const AssetImage('lib/assets/testImages/testImg1.png')
-              : Image.file(File(part.allGroups[0].allImages[0].path!)).image,
-          fit: BoxFit.fill,
-        ),
       ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 35,
-          ),
-          IconButton(
-              icon: Container(
-                  width: 60,
-                  height: 60,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.grey[190].withOpacity(0.5),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 2),
-                    child: Icon(
-                      CupertinoIcons.add,
-                      color: Colors.red.lightest,
-                      size: 45,
-                    ),
-                  )),
-              onPressed: () => onActionCaller!('record&&${part.id}')),
-          const Spacer(),
-          Container(
-              height: 40,
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
-                    bottomRight: Radius.circular(10),
-                  ),
-                  color: Colors.grey[190].withOpacity(0.7)),
+      child: Padding(
+        padding: const EdgeInsets.all(5.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Text(
+              part.name!,
+              style: TextSystem.textL(Colors.white),
+            ),
+            const SizedBox(height: 3,),
+            Text(
+              part.description!.length<75?part.description!:"${part.description!.substring(0,75)} ...",
+              style: TextSystem.textS(Colors.white.withOpacity(0.7)),
+            ),
+            const Spacer(),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5.0),
               child: Row(
                 children: [
-                  Expanded(
-                      flex: 14,
-                      child: FlyoutTarget(
-                          key: GlobalKey(),
-                          controller: controller,
-                          child: IconButton(
-                              icon: Icon(
-                                FluentIcons.delete,
-                                color: Colors.red,
-                              ),
-                              onPressed: () => showFlyDelete(
-                                  "Are you sure?",
-                                  "yeh",
-                                  controller,
-                                  FlyoutPlacementMode.topCenter,
-                                  part.id,
-                                  onActionCaller)))),
-                  Expanded(
-                      flex: 26,
-                      child: IconButton(
-                        onPressed: () => onActionCaller!('screens&&${part.id}'),
-                        icon: Text(
-                          'Screens',
-                          style: TextSystem.textS(Colors.white),
+                  FlyoutTarget(
+                    key: GlobalKey(),
+                    controller: controller,
+                    child: IconButton(
+                        icon: Icon(
+                          FluentIcons.delete,
+                          color: Colors.red,
+                          size: 20,
                         ),
-                      )),
-                  Expanded(
-                      flex: 60,
-                      child: IconButton(
-                        onPressed: () => onActionCaller!('labeling&&${part.id}'),
-                        icon: Text(
-                          'Labeling page',
-                          style: TextSystem.textS(Colors.magenta.lighter),
+                        onPressed: () => showFlyDelete(
+                            "Are you sure?",
+                            "yeh",
+                            controller,
+                            FlyoutPlacementMode.topCenter,
+                            part.id,
+                            onActionCaller)),
+                  ),
+                  IconButton(
+                      icon: Icon(
+                        FluentIcons.edit,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      onPressed: ()=> onActionCaller!("edit&&${part.id}")),
+                  IconButton(
+                      icon: Icon(
+                        FluentIcons.photo2_add,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      onPressed: ()=> onActionCaller!("chooseImages&&${part.id}")),
+                  IconButton(
+                      icon: Container(
+                        width: 20,
+                        height: 20,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
+                          color: Colors.red.dark
                         ),
-                      )),
+                      ),
+                      onPressed: ()=> onActionCaller!("record&&${part.id}")),
                 ],
-              )),
-        ],
+              ),
+            ),
+            Container(
+              width: double.infinity,
+              height: 145,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(
+                    Radius.circular(Dimens.dialogCornerRadius)),
+                color: Colors.grey[170],
+                border: Border.all(color: Colors.magenta, width: 1.5),
+                image: DecorationImage(
+                  image: part.allGroups.isEmpty
+                      ? const AssetImage('lib/assets/testImages/testImg1.png')
+                      : Image.file(File(part.allGroups[0].allImages[0].path!))
+                          .image,
+                  fit: BoxFit.fill,
+                ),
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

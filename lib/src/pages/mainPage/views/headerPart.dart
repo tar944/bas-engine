@@ -42,7 +42,7 @@ class _View extends StatelessView<HeaderViewModel> {
             children: [
               HeaderBtn(
                   isFirst: true,
-                  text: Strings.software,
+                  text: Strings.project,
                   tabKind: HeaderTabs.project,
                   onPressed: vm.onTabChanged,
                   status: vm.curTab.name == HeaderTabs.project.name
@@ -64,7 +64,7 @@ class _View extends StatelessView<HeaderViewModel> {
               if (vm.showTab(HeaderTabs.projectParts))
                 HeaderBtn(
                     isFirst: false,
-                    text: Strings.groups,
+                    text: Strings.projectParts,
                     tabKind: HeaderTabs.projectParts,
                     onPressed: vm.onTabChanged,
                     status: vm.curTab.name == HeaderTabs.projectParts.name
