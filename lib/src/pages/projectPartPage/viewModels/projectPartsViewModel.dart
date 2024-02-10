@@ -6,7 +6,7 @@ import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/projectPart/views/dlgProjectPart.dart';
+import 'package:bas_dataset_generator_engine/src/pages/projectPartPage/views/dlgProjectPart.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';

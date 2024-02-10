@@ -1,8 +1,7 @@
-import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
-import 'package:bas_dataset_generator_engine/src/pages/projectPart/viewModels/projectPartsViewModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/projectPart/views/projectPartItem.dart';
+import 'package:bas_dataset_generator_engine/src/pages/projectPartPage/viewModels/projectPartsViewModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/projectPartPage/views/projectPartItem.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 

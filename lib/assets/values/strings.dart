@@ -5,7 +5,7 @@ class Strings{
   static const String chooseImages="Choose images";
   static const String deleteProject="Are you sure to delete this project?";
   static const String guideObjectLabeling="";
-  static const String guideImageGroup="";
+  static const String guideImageGroup="Please sort the similar images into groups 👇 ";
   static const String guideParts="Please choose one of previous parts 👇 or create a new one 👆";
   static const String guideEmptyParts="Your list is empty,you can add a new part with add button 👆";
   static const String guideProjects="You can create a new project 👆 or choose one of your previous projects 👇";

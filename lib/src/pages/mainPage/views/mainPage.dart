@@ -3,7 +3,7 @@ import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/viewModels/mainViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/headerPart.dart';
 import 'package:bas_dataset_generator_engine/src/pages/projectListPage/views/projectList.dart';
-import 'package:bas_dataset_generator_engine/src/pages/projectPart/views/projectParts.dart';
+import 'package:bas_dataset_generator_engine/src/pages/projectPartPage/views/projectParts.dart';
 import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';

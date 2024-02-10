@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/projectListPage/views/dlgProjectInfo.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
@@ -18,6 +20,7 @@ class MainPageViewModel extends ViewModel with WindowListener {
   final PageController controller = PageController();
   HeaderTabs curTab=HeaderTabs.project;
   ProjectModel? curProject;
+  ProjectPartModel? curPart;
   late void Function() projectController;
   late void Function() partController;
 
@@ -113,6 +116,12 @@ class MainPageViewModel extends ViewModel with WindowListener {
     if(partId==-1){
       curProject = await ProjectDAO().getDetails(curProject!.id);
       await setPartGuideText();
+    }else{
+      curPart = await ProjectPartDAO().getDetails(partId);
+      onNavigationChanged(HeaderTabs.imageGroups);
+      curTab = HeaderTabs.imageGroups;
+      guideText=Strings.guideImageGroup;
+      notifyListeners();
     }
   }
 
