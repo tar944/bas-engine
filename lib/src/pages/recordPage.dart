@@ -7,6 +7,7 @@ import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -100,7 +101,7 @@ class RecordPage extends HookWidget with WindowListener {
       _init(context);
       Future<void>.microtask(() async {
         final part = await ProjectPartDAO().getDetails(partId!);
-        dirPath.value = part!.path;
+        dirPath.value=part!.path;
         imgNumber.value = part.allObjects.length+1;
       });
       return null;
@@ -131,7 +132,7 @@ class RecordPage extends HookWidget with WindowListener {
                 milliseconds: mouseEvent.mouseMsg == MouseEventMsg.WM_LBUTTONUP
                     ? 100
                     : 300));
-            var imgPath = p.join(dirPath.value, 'screen_${imgNumber.value}.png');
+            var imgPath = p.join(dirPath.value,'images', 'screen_${DateTime.now().millisecondsSinceEpoch}.png');
             await screenCapturer.capture(
               mode: CaptureMode.screen,
               imagePath: imgPath,
@@ -149,7 +150,7 @@ class RecordPage extends HookWidget with WindowListener {
             obj.actionType = mouseEvent.mouseMsg.toString();
             obj.actX=mouseEvent.x;
             obj.actY=mouseEvent.y;
-            var img =ImageModel(-1, const Uuid().v4(), obj.uuid, 'screen_${imgNumber.value}.png', imgPath);
+            var img =ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(imgPath), imgPath);
             img.id= await ImageDAO().add(img);
             obj.image.target=img;
             obj.id=await ObjectDAO().addObject(obj);

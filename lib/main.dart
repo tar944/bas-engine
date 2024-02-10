@@ -118,10 +118,10 @@ final router = GoRouter(
           LabelingPage(int.parse(state.params['groupId']!),int.parse(state.params['softId']!)),
     ),
     GoRoute(
-      path: '/recordScreens/:groupId',
+      path: '/recordScreens/:partId',
       name: 'recordScreens',
       builder: (context, state) =>
-          RecordPage(int.parse(state.params['groupId']!)),
+          RecordPage(int.parse(state.params['partId']!)),
     ),
   ],
 );

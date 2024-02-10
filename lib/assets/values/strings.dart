@@ -2,6 +2,7 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String chooseImages="Choose images";
   static const String deleteProject="Are you sure to delete this project?";
   static const String guideObjectLabeling="";
   static const String guideImageGroup="";

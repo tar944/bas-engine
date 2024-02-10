@@ -92,6 +92,12 @@ class DirectoryManager {
     }
   }
 
+
+
+  Future<String> getPartImageDirectoryPath(String prjUUID, String partUUId) async {
+    return p.join(await getPartDir(prjUUID, partUUId),'images');
+  }
+
   Future<String> getObjectImagePath(String prjUUID, String partUUId) async {
     return p.join(await getPartDir(prjUUID, partUUId),'objectImages','${getRandomString(10)}.jpg');
   }
@@ -112,6 +118,15 @@ class DirectoryManager {
     if (path.existsSync()) {
       path.deleteSync(recursive: true);
     }
+  }
+
+  Future<String> copyFile(String srcPath,String desPath) async {
+    File desFile = File(desPath);
+    if(desFile.existsSync()==false){
+      File file = File(srcPath);
+      file.copySync(desPath);
+    }
+    return desPath;
   }
 
   deleteProjectDirectory(String prjUUID) async {
