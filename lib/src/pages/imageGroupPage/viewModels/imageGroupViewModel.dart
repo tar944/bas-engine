@@ -1,10 +1,7 @@
-import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/projectPartPage/views/dlgProjectPart.dart';
-import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pmvvm/pmvvm.dart';
@@ -12,10 +9,11 @@ import 'package:pmvvm/pmvvm.dart';
 class ImageGroupsViewModel extends ViewModel {
   List<ObjectModel> objects = [];
   List<ImageGroupModel> groups = [];
+  List<int> selectedObjects=[];
   int partId;
   int groupId=-1;
   String partUUID="";
-  ValueSetter<int> onGroupActionCaller;
+  ValueSetter<String> onGroupActionCaller;
 
   ImageGroupsViewModel(this.partId, this.onGroupActionCaller);
 
@@ -55,7 +53,24 @@ class ImageGroupsViewModel extends ViewModel {
         updateProjectData();
         break;
       case 'goto':
-        onGroupActionCaller(part!.id);
+        onGroupActionCaller(part!.id.toString());
+        break;
+    }
+  }
+
+  onObjectActionHandler(String action)async{
+    switch (action.split('&&')[0]) {
+      case 'clicked':
+        int objId = int.parse(action.split('&&')[1]);
+        if(selectedObjects.contains(objId)){
+          selectedObjects.removeWhere((element) => element==objId);
+        }else{
+          selectedObjects.add(objId);
+        }
+        notifyListeners();
+        break;
+      case 'setGroup':
+
         break;
     }
   }

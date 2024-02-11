@@ -111,6 +111,9 @@ class MainPageViewModel extends ViewModel with WindowListener {
       notifyListeners();
     }
   }
+  onGroupActionHandler(String action)async{
+
+  }
 
   onPartActionHandler(int partId)async{
     if(partId==-1){
