@@ -356,10 +356,6 @@ final _entities = <ModelEntity>[
       ],
       relations: <ModelRelation>[
         ModelRelation(
-            id: const IdUid(19, 4432505387344085307),
-            name: 'allImages',
-            targetId: const IdUid(14, 6822118099532867753)),
-        ModelRelation(
             id: const IdUid(24, 1774651405903369676),
             name: 'allObjects',
             targetId: const IdUid(15, 8892823931225835339)),
@@ -600,7 +596,8 @@ ModelDefinition getObjectBoxModel() {
         6490752590319845341,
         3601124264196646975,
         5357330969673175979,
-        3750078866380978121
+        3750078866380978121,
+        4432505387344085307
       ],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -904,7 +901,6 @@ ModelDefinition getObjectBoxModel() {
         toOneRelations: (ImageGroupModel object) =>
             [object.mainImage, object.label],
         toManyRelations: (ImageGroupModel object) => {
-              RelInfo<ImageGroupModel>.toMany(19, object.id): object.allImages,
               RelInfo<ImageGroupModel>.toMany(24, object.id): object.allObjects,
               RelInfo<ImageGroupModel>.toMany(25, object.id): object.allGroups
             },
@@ -959,8 +955,6 @@ ModelDefinition getObjectBoxModel() {
           object.label.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0);
           object.label.attach(store);
-          InternalToManyAccess.setRelInfo<ImageGroupModel>(object.allImages,
-              store, RelInfo<ImageGroupModel>.toMany(19, object.id));
           InternalToManyAccess.setRelInfo<ImageGroupModel>(object.allObjects,
               store, RelInfo<ImageGroupModel>.toMany(24, object.id));
           InternalToManyAccess.setRelInfo<ImageGroupModel>(object.allGroups,
@@ -1259,18 +1253,14 @@ class ImageGroupModel_ {
   static final groupUUID =
       QueryStringProperty<ImageGroupModel>(_entities[5].properties[8]);
 
-  /// see [ImageGroupModel.allImages]
-  static final allImages = QueryRelationToMany<ImageGroupModel, ImageModel>(
-      _entities[5].relations[0]);
-
   /// see [ImageGroupModel.allObjects]
   static final allObjects = QueryRelationToMany<ImageGroupModel, ObjectModel>(
-      _entities[5].relations[1]);
+      _entities[5].relations[0]);
 
   /// see [ImageGroupModel.allGroups]
   static final allGroups =
       QueryRelationToMany<ImageGroupModel, ImageGroupModel>(
-          _entities[5].relations[2]);
+          _entities[5].relations[1]);
 }
 
 /// [ProjectPartModel] entity fields to define ObjectBox queries.

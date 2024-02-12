@@ -23,6 +23,7 @@ class MainPageViewModel extends ViewModel with WindowListener {
   ProjectPartModel? curPart;
   late void Function() projectController;
   late void Function() partController;
+  late void Function() groupController;
 
   @override
   void init() async {
@@ -100,6 +101,10 @@ class MainPageViewModel extends ViewModel with WindowListener {
     partController = methodOfPart;
   }
 
+  setGroupController(BuildContext context, void Function() methodOfGroup) {
+    groupController = methodOfGroup;
+  }
+
   onProjectActionHandler(int prjId)async{
     if(prjId==-1){
       await setProjectGuideText();
@@ -133,6 +138,8 @@ class MainPageViewModel extends ViewModel with WindowListener {
       projectController.call();
     }else if(selTab==HeaderTabs.addPart){
       partController.call();
+    }else if(selTab==HeaderTabs.addGroup){
+      groupController.call();
     }else{
       if(selTab!=curTab){
         if(selTab==HeaderTabs.project){

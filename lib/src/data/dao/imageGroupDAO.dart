@@ -10,14 +10,6 @@ class ImageGroupModelDAO {
     return part;
   }
 
-  Future<List<ImageModel>> getAllImages(int id) async {
-    final part = await getDetails(id);
-    if (part == null) {
-      return [];
-    }
-    return part.allImages.toList();
-  }
-
   Future<int> add(ImageGroupModel newPart) async {
     Box<ImageGroupModel> box = objectbox.store.box<ImageGroupModel>();
     int result = box.put(newPart);

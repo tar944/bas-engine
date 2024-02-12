@@ -2,10 +2,13 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String images="images";
+  static const String remindImages="remind to sort";
+  static const String back="back";
   static const String chooseImages="Choose images";
   static const String deleteProject="Are you sure to delete this project?";
   static const String guideObjectLabeling="";
-  static const String guideImageGroup="Please sort the similar images into groups 👇 ";
+  static const String guideImageGroup="You can sort the similar images into groups 👇 or choose a group or create a new one 👆";
   static const String guideParts="Please choose one of previous parts 👇 or create a new one 👆";
   static const String guideEmptyParts="Your list is empty,you can add a new part with add button 👆";
   static const String guideProjects="You can create a new project 👆 or choose one of your previous projects 👇";
@@ -14,7 +17,7 @@ class Strings{
   static const String appName="BAS Data set generator engine";
   static const String project="Project";
   static const String projectParts="Project parts";
-  static const String screenLabeling="Screen labeling";
+  static const String imageGroups="Image groups";
   static const String partLabeling="Part labeling";
   static const String allGroups="All groups";
   static const String allParts="All parts";

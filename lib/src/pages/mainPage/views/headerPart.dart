@@ -31,7 +31,8 @@ class _View extends StatelessView<HeaderViewModel> {
 
   @override
   Widget render(context, HeaderViewModel vm) {
-    return Container(
+    print(vm.curTab);
+    return SizedBox(
       width: double.infinity,
       height: Dimens.mainHeaderH,
       child: Column(
@@ -55,7 +56,7 @@ class _View extends StatelessView<HeaderViewModel> {
                     style:ButtonStyle(
                       padding: ButtonState.all(EdgeInsets.zero)
                     ),
-                      child: Container(
+                      child: SizedBox(
                           width: Dimens.tabHeightSmall+10,
                           height: Dimens.tabHeightSmall+10,
                           child: Icon(FluentIcons.add,size: 17,color: Colors.teal,)),
@@ -77,7 +78,7 @@ class _View extends StatelessView<HeaderViewModel> {
                       style:ButtonStyle(
                           padding: ButtonState.all(EdgeInsets.zero),
                       ),
-                      child: Container(
+                      child: SizedBox(
                           width: Dimens.tabHeightSmall+10,
                           height: Dimens.tabHeightSmall+10,
                           child: Icon(FluentIcons.add,size: 17,color: Colors.teal,)),
@@ -86,12 +87,25 @@ class _View extends StatelessView<HeaderViewModel> {
               if (vm.showTab(HeaderTabs.imageGroups))
                 HeaderBtn(
                     isFirst: false,
-                    text: Strings.screenLabeling,
+                    text: Strings.imageGroups,
                     tabKind: HeaderTabs.imageGroups,
                     onPressed: vm.onTabChanged,
-                    status: vm.curTab.name == HeaderTabs.objectLabeling.name
+                    status: vm.curTab.name == HeaderTabs.imageGroups.name
                         ? "active"
                         : "notActive"),
+              if (vm.curTab == HeaderTabs.imageGroups)
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0, left: 10.0),
+                  child: Button(
+                      style:ButtonStyle(
+                          padding: ButtonState.all(EdgeInsets.zero)
+                      ),
+                      child: SizedBox(
+                          width: Dimens.tabHeightSmall+10,
+                          height: Dimens.tabHeightSmall+10,
+                          child: Icon(FluentIcons.add,size: 17,color: Colors.teal,)),
+                      onPressed: ()=>vm.onTabChanged(HeaderTabs.addGroup)),
+                ),
               if (vm.showTab(HeaderTabs.objectLabeling))
                 HeaderBtn(
                     isFirst: false,

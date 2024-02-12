@@ -11,7 +11,7 @@ class HeaderViewModel extends ViewModel {
   HeaderViewModel(this.onActionCaller, this.guideText,this.curTab);
 
   onTabChanged(HeaderTabs tab) {
-    if (tab != HeaderTabs.addProject && tab != HeaderTabs.addPart) {
+    if (tab != HeaderTabs.addProject && tab != HeaderTabs.addPart&&tab!=HeaderTabs.addGroup) {
       curTab = tab;
       notifyListeners();
     }
@@ -21,12 +21,9 @@ class HeaderViewModel extends ViewModel {
   bool showTab(HeaderTabs tab) {
     if (curTab == tab) {
       return true;
-    } else if (tab == HeaderTabs.projectParts &&
-        (curTab == HeaderTabs.objectLabeling ||
-            curTab == HeaderTabs.imageGroups)) {
+    } else if (tab == HeaderTabs.projectParts && (curTab == HeaderTabs.objectLabeling || curTab == HeaderTabs.imageGroups)) {
       return true;
-    } else if (tab == HeaderTabs.objectLabeling &&
-        curTab == HeaderTabs.imageGroups) {
+    }else if(tab == HeaderTabs.imageGroups&&curTab==HeaderTabs.objectLabeling){
       return true;
     }
     return false;

@@ -13,7 +13,6 @@ class ImageGroupModel {
   String? name;
   String? type;
   String path;
-  final allImages = ToMany<ImageModel>();//todo: need to delete this line?
   final mainImage = ToOne<ImageModel>();
   final allObjects = ToMany<ObjectModel>();
   final allGroups = ToMany<ImageGroupModel>();

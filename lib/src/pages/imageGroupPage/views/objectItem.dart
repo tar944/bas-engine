@@ -39,7 +39,7 @@ class _View extends StatelessView<ObjectItemViewModel> {
           borderRadius:
           const BorderRadius.all(Radius.circular(Dimens.dialogCornerRadius)),
           color: Colors.grey[170],
-          border: Border.all(color: vm.isSelected?Colors.teal:Colors.grey, width: 1.0),
+          border: Border.all(color: vm.isSelected?Colors.teal:Colors.grey, width: 1.3),
         ),
         child: Padding(
           padding: const EdgeInsets.all(5.0),

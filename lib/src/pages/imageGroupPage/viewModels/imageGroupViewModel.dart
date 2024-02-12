@@ -1,7 +1,9 @@
+import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/imageGroupPage/views/dlgImageGroup.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pmvvm/pmvvm.dart';
@@ -10,6 +12,7 @@ class ImageGroupsViewModel extends ViewModel {
   List<ObjectModel> objects = [];
   List<ImageGroupModel> groups = [];
   List<int> selectedObjects=[];
+  ImageGroupModel? curGroup;
   int partId;
   int groupId=-1;
   String partUUID="";
@@ -75,12 +78,12 @@ class ImageGroupsViewModel extends ViewModel {
     }
   }
 
-  void onEditPartHandler(ProjectPartModel curPart) async {
-    await ProjectPartDAO().update(curPart);
+  void onEditGroupHandler(ImageGroupModel curGroup) async {
+    await ImageGroupModelDAO().update(curGroup);
     updateProjectData();
   }
 
-  void onCreateGroupHandler(String group) async {
+  void onCreateGroupHandler(ImageGroupModel group) async {
     // curPart.id = await ProjectPartDAO().add(curPart);
     // await ProjectDAO().addAPart(prjID, curPart);
     // await DirectoryManager().createPartDir(curPart.prjUUID, curPart.uuid);
@@ -88,13 +91,13 @@ class ImageGroupsViewModel extends ViewModel {
     updateProjectData();
   }
 
-  createPart() {
-    // showDialog(
-    //     context: context,
-    //     barrierDismissible: true,
-    //     builder: (context) => DlgProjectPart(
-    //           onSaveCaller: onCreateProjectHandler,
-    //           prjUUID: prjUUID,
-    //         ));
+  createGroup() {
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => DlgImageGroup(
+              onSaveCaller: onCreateGroupHandler,
+              partUUID: partUUID,
+            ));
   }
 }
