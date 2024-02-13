@@ -1,8 +1,10 @@
 import 'dart:io';
 
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/projectListPage/views/dlgProjectInfo.dart';
@@ -21,6 +23,7 @@ class MainPageViewModel extends ViewModel with WindowListener {
   HeaderTabs curTab=HeaderTabs.project;
   ProjectModel? curProject;
   ProjectPartModel? curPart;
+  ImageGroupModel? curGroup;
   late void Function() projectController;
   late void Function() partController;
   late void Function() groupController;
@@ -117,7 +120,13 @@ class MainPageViewModel extends ViewModel with WindowListener {
     }
   }
   onGroupActionHandler(String action)async{
-
+    if(action=="refreshPart"){
+      curPart=await ProjectPartDAO().getDetails(curPart!.id);
+      notifyListeners();
+    }else if(action=="refreshGroup"){
+      curGroup = await ImageGroupDAO().getDetails(curProject!.id);
+      await setPartGuideText();
+    }
   }
 
   onPartActionHandler(int partId)async{

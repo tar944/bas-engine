@@ -3,7 +3,7 @@ import 'package:bas_dataset_generator_engine/objectbox.g.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 
-class ImageGroupModelDAO {
+class ImageGroupDAO {
   Future<ImageGroupModel?> getDetails(int id) async {
     Box<ImageGroupModel> box = objectbox.store.box<ImageGroupModel>();
     ImageGroupModel? part = box.get(id);
@@ -25,9 +25,6 @@ class ImageGroupModelDAO {
   Future<bool> delete(ImageGroupModel part) async {
     Box<ImageGroupModel> box = objectbox.store.box<ImageGroupModel>();
     bool result = box.remove(part.id);
-    // DirectoryManager().deletePartDirectory(
-    //     '${part.prjUUID}_${part.uuid}',
-    //     '${part.id}_${part.name!}');
     return result;
   }
 }

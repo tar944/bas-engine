@@ -79,15 +79,14 @@ class ImageGroupsViewModel extends ViewModel {
   }
 
   void onEditGroupHandler(ImageGroupModel curGroup) async {
-    await ImageGroupModelDAO().update(curGroup);
+    await ImageGroupDAO().update(curGroup);
     updateProjectData();
   }
 
   void onCreateGroupHandler(ImageGroupModel group) async {
-    // curPart.id = await ProjectPartDAO().add(curPart);
-    // await ProjectDAO().addAPart(prjID, curPart);
-    // await DirectoryManager().createPartDir(curPart.prjUUID, curPart.uuid);
-    // onGroupActionCaller(-1);
+    group.id = await ImageGroupDAO().add(group);
+    await ProjectPartDAO().addGroup(partId, group);
+    onGroupActionCaller('refresh');
     updateProjectData();
   }
 

@@ -41,6 +41,26 @@ class ProjectPartDAO {
     update(part);
   }
 
+  Future<bool> addGroup(int partId,ImageGroupModel grp)async{
+    ProjectPartModel? part = await getDetails(partId);
+    if(part == null) {
+      return false;
+    }
+    part.allGroups.add(grp);
+    update(part);
+    return true;
+  }
+
+  Future<bool> removeGroup(int partId,ImageGroupModel grp)async{
+    ProjectPartModel? part = await getDetails(partId);
+    if(part==null) {
+      return false;
+    }
+    part.allObjects.removeWhere((element) => element.id == grp.id);
+    update(part);
+    return true;
+  }
+
   Future<int> add(ProjectPartModel newPart) async {
     Box<ProjectPartModel> box = objectbox.store.box<ProjectPartModel>();
     int result = box.put(newPart);

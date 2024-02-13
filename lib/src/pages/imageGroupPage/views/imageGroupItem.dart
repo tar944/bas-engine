@@ -1,162 +1,105 @@
 import 'dart:io';
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
-import 'package:bas_dataset_generator_engine/src/pages/projectPartPage/viewModels/partItemViewModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/imageGroupPage/viewModels/groupItemViewModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pmvvm/pmvvm.dart';
 
-class ProjectPartItem extends StatelessWidget {
-  ProjectPartItem({Key? key, required this.part, this.onActionCaller})
+class ImageGroupItem extends StatelessWidget {
+  ImageGroupItem({Key? key, required this.group, this.onActionCaller})
       : super(key: key);
 
-  final ProjectPartModel part;
+  final ImageGroupModel group;
   final ValueSetter<String>? onActionCaller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: PartItemViewModel(part,onActionCaller),
+      viewModel: GroupItemViewModel(group,onActionCaller),
     );
   }
 }
 
-class _View extends StatelessView<PartItemViewModel> {
+class _View extends StatelessView<GroupItemViewModel> {
   const _View({Key? key}) : super(key: key);
 
   @override
-  Widget render(context, PartItemViewModel vm) {
+  Widget render(context, GroupItemViewModel vm) {
     final controller = FlyoutController();
     return IconButton(
-      onPressed: () => vm.onActionCaller!("goto&&${vm.part.id}"),
+      onPressed: () => vm.onActionCaller!("goto&&${vm.group.id}"),
       style: ButtonStyle(
           padding: ButtonState.all(const EdgeInsets.all(0.0))),
       icon: Container(
-        width: double.infinity,
+        width: 100,
         height: double.infinity,
         decoration: BoxDecoration(
           borderRadius:
-          const BorderRadius.all(Radius.circular(Dimens.dialogCornerRadius)),
-          color: Colors.grey[170],
-          border: Border.all(color: Colors.magenta, width: 1.5),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(5.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(
-                vm.part.name!,
-                style: TextSystem.textL(Colors.white),
-              ),
-              const SizedBox(
-                height: 3,
-              ),
-              Text(
-                vm.part.description!.length < 75
-                    ? vm.part.description!
-                    : "${vm.part.description!.substring(0, 75)} ...",
-                style: TextSystem.textS(Colors.white.withOpacity(0.7)),
-              ),
-              const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 5.0),
-                child: Row(
-                  children: [
-                    FlyoutTarget(
-                      key: GlobalKey(),
-                      controller: controller,
-                      child: IconButton(
-                          icon: Icon(
-                            FluentIcons.delete,
-                            color: Colors.red,
-                            size: 20,
-                          ),
-                          onPressed: () => showFlyDelete(
-                              "Are you sure?",
-                              "yeh",
-                              controller,
-                              FlyoutPlacementMode.topCenter,
-                              vm.part.id,
-                              vm.onActionCaller)),
-                    ),
-                    IconButton(
-                        icon: const Icon(
-                          FluentIcons.edit,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        onPressed: () => vm.onActionCaller!("edit&&${vm.part.id}")),
-                    IconButton(
-                        icon: const Icon(
-                          FluentIcons.photo2_add,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        onPressed: () =>
-                            vm.onActionCaller!("chooseImages&&${vm.part.id}")),
-                    IconButton(
-                        icon: Container(
-                          width: 20,
-                          height: 20,
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(8)),
-                              color: Colors.red.dark),
-                        ),
-                        onPressed: () => vm.onActionCaller!("record&&${vm.part.id}")),
-                  ],
-                ),
-              ),
-              Stack(
-                children: [
-                  Container(
-                    width: double.infinity,
-                    height: 145,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                          Radius.circular(Dimens.dialogCornerRadius)),
-                      color: Colors.grey[170],
-                      border: Border.all(color: Colors.magenta, width: 1.5),
-                      image: DecorationImage(
-                        image: vm.getImagePath()==""
-                            ? const AssetImage(
-                            'lib/assets/testImages/testImg1.png')
-                            : Image.file(
-                            File(vm.getImagePath())).image,
-                        fit: BoxFit.fill,
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                      left: 9,
-                      bottom: 9,
-                      child: Container(
-                        width: 28,
-                        height: 28,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(Radius.circular(14)),
-                            color: Colors.grey[200].withOpacity(0.7)
-                        ),
-                        child: Text(vm.allImagesNumber.toString(),style: TextSystem.textXs(Colors.white),),
-                      )),
-                  Positioned(
-                      left: 5,
-                      bottom: 5,
-                      child: ProgressRing(
-                        value: vm.donePercent,
-                        backgroundColor: Colors.magenta.withOpacity(0.3),
-                        activeColor: vm.donePercent==100?Colors.teal:Colors.magenta,
-                      )
-                  )
-                ],
-              )
-            ],
+          const BorderRadius.all(Radius.circular(Dimens.dialogCornerRadius-3)),
+          border: Border.all(color: Colors.grey[150], width: 1.0),
+          image: DecorationImage(
+            image: vm.group.mainImage.target ==null
+                ? const AssetImage(
+                'lib/assets/testImages/testImg1.png')
+                : Image.file(
+                File(vm.group.mainImage.target!.path!)).image,
+            fit: BoxFit.fill,
           ),
+        ),
+        child: Stack(
+          children: [
+            Positioned(
+                top:0,
+                left:0,
+                right:0,
+                bottom:0,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(Dimens.dialogCornerRadius-3)),
+                    color: Colors.grey[170].withOpacity(.7),
+                  ),
+                )
+            ),
+            Text(
+              vm.group.name!,
+              style: TextSystem.textM(Colors.white),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(bottom: 5.0),
+              child: Row(
+                children: [
+                  FlyoutTarget(
+                    key: GlobalKey(),
+                    controller: controller,
+                    child: IconButton(
+                        icon: Icon(
+                          FluentIcons.delete,
+                          color: Colors.red,
+                          size: 20,
+                        ),
+                        onPressed: () => showFlyDelete(
+                            "Are you sure?",
+                            "yeh",
+                            controller,
+                            FlyoutPlacementMode.topCenter,
+                            vm.group.id,
+                            vm.onActionCaller)),
+                  ),
+                  IconButton(
+                      icon: const Icon(
+                        FluentIcons.edit,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                      onPressed: () => vm.onActionCaller!("edit&&${vm.group.id}")),
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );
