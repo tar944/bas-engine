@@ -166,6 +166,7 @@ class _View extends StatelessView<ImageGroupsViewModel> {
                     .map((item) =>
                     ObjectItem(
                       key: GlobalKey(),
+                      allGroups: vm.groups,
                       object: item,
                       isSelected:
                       vm.selectedObjects.contains(item.id),
