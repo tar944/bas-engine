@@ -58,7 +58,7 @@ class _View extends StatelessView<ImageGroupsViewModel> {
                     Padding(
                       padding: const EdgeInsets.only(left: 6.0),
                       child: IconButton(
-                        onPressed: () => {},
+                        onPressed: vm.onBackClickHandler,
                         style: ButtonStyle(
                             padding: ButtonState.all(EdgeInsets.zero)),
                         icon: Container(
@@ -72,10 +72,7 @@ class _View extends StatelessView<ImageGroupsViewModel> {
                               border: Border.all(color: Colors.grey[150]),
                               image: vm.curGroup != null
                                   ? DecorationImage(
-                                image: Image
-                                    .file(
-                                    File(vm.curGroup!.mainImage.target!.path!))
-                                    .image,
+                                image: Image.file(File(vm.curGroup!.allObjects[0].image.target!.path!)).image,
                                 fit: BoxFit.fill,
                               )
                                   : null,
@@ -92,11 +89,8 @@ class _View extends StatelessView<ImageGroupsViewModel> {
                                     width: double.infinity,
                                     height: double.infinity,
                                     decoration: BoxDecoration(
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(
-                                                Dimens.dialogCornerRadius - 3)),
-                                        color:
-                                            Colors.grey[190].withOpacity(0.7)),
+                                        borderRadius: const BorderRadius.all(Radius.circular(Dimens.dialogCornerRadius - 3)),
+                                        color: Colors.grey[190].withOpacity(0.7)),
                                     child: Row(
                                       children: [
                                         const SizedBox(
@@ -126,8 +120,7 @@ class _View extends StatelessView<ImageGroupsViewModel> {
                           height: 75,
                           alignment: Alignment.centerLeft,
                           decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(Dimens.dialogCornerRadius - 3)),
+                            borderRadius: const BorderRadius.all(Radius.circular(Dimens.dialogCornerRadius - 3)),
                             color: Colors.grey[180],
                             border: Border.all(color: Colors.grey[150]),
                           ),
@@ -135,10 +128,9 @@ class _View extends StatelessView<ImageGroupsViewModel> {
                           Padding(
                             padding: const EdgeInsets.only(left: 10.0),
                             child: Text(Strings.emptyGroup,
-                              style: TextSystem.textL(
-                                  Colors.white.withOpacity(0.7)),),
+                              style: TextSystem.textL(Colors.white.withOpacity(0.7)),),
                           ) : Padding(
-                            padding: const EdgeInsets.all(5.0),
+                            padding: const EdgeInsets.only(top: 5.0,bottom: 5.0,right: 5.0),
                             child: ListView.builder(
                               key: GlobalKey(),
                               itemCount: vm.groups.length,
@@ -176,39 +168,38 @@ class _View extends StatelessView<ImageGroupsViewModel> {
                     .map((item) =>
                     ObjectItem(
                       key: GlobalKey(),
-                      allGroups: vm.groups,
+                      allGroups: vm.curGroup==null?vm.groups:[vm.curGroup!],
                       object: item,
-                      isSelected:
-                      vm.selectedObjects.contains(item.id),
+                      isSubGroup:vm.curGroup!=null,
                       onActionCaller: vm.onObjectActionHandler,
                     ))
                     .toList(),
               )
                   : Column(
-                children: [
-                  const SizedBox(
-                    height: 150,
-                  ),
-                  Container(
-                    height: 350,
-                    width: 350,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image:
-                        AssetImage('lib/assets/images/emptyBox.png'),
-                        fit: BoxFit.cover,
-                      ),
+                      children: [
+                        const SizedBox(
+                          height: 150,
+                        ),
+                        Container(
+                          height: 350,
+                          width: 350,
+                          decoration: const BoxDecoration(
+                            image: DecorationImage(
+                              image:
+                                  AssetImage('lib/assets/images/emptyBox.png'),
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(
+                          height: 50,
+                        ),
+                        Text(
+                          Strings.emptyUnSortObjects,
+                          style: TextSystem.textL(Colors.white),
+                        ),
+                      ],
                     ),
-                  ),
-                  const SizedBox(
-                    height: 50,
-                  ),
-                  Text(
-                    Strings.emptyPart,
-                    style: TextSystem.textL(Colors.white),
-                  ),
-                ],
-              ),
             ),
           ],
         ),

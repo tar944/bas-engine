@@ -1,5 +1,6 @@
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
@@ -11,10 +12,8 @@ import 'package:pmvvm/pmvvm.dart';
 class ImageGroupsViewModel extends ViewModel {
   List<ObjectModel> objects = [];
   List<ImageGroupModel> groups = [];
-  List<int> selectedObjects=[];
   ImageGroupModel? curGroup;
   int partId;
-  int groupId=-1;
   String partUUID="";
   ValueSetter<String> onGroupActionCaller;
 
@@ -22,14 +21,20 @@ class ImageGroupsViewModel extends ViewModel {
 
   @override
   void init() async {
-    updateProjectData();
+    updateProjectData(-1);
   }
 
-  updateProjectData() async {
-    var part = await ProjectPartDAO().getDetails(partId);
-    partUUID = part!.uuid;
-    objects = part.allObjects;
-    groups = part.allGroups;
+  updateProjectData(groupId) async {
+    if(groupId==-1){
+      var part = await ProjectPartDAO().getDetails(partId);
+      partUUID = part!.uuid;
+      objects = part.allObjects;
+      curGroup=null;
+      groups = part.allGroups;
+    }else{
+      curGroup = await ImageGroupDAO().getDetails(groupId);
+      objects = curGroup!.allObjects;
+    }
     notifyListeners();
   }
 
@@ -54,41 +59,46 @@ class ImageGroupsViewModel extends ViewModel {
         }
         await ImageGroupDAO().delete(group);
         onGroupActionCaller('refresh');
-        updateProjectData();
+        updateProjectData(-1);
         break;
       case 'goto':
-        onGroupActionCaller(group!.id.toString());
+        updateProjectData(int.parse(action.split("&&")[1]));
         break;
     }
   }
 
   onObjectActionHandler(String action)async{
     switch (action.split('&&')[0]) {
-      case 'clicked':
-        int objId = int.parse(action.split('&&')[1]);
-        if(selectedObjects.contains(objId)){
-          selectedObjects.removeWhere((element) => element==objId);
-        }else{
-          selectedObjects.add(objId);
-        }
-        notifyListeners();
+      case 'addToGroup':
+        var obj = await ObjectDAO().getObject(int.parse(action.split("&&")[2]));
+        await ProjectPartDAO().removeObject(partId, obj!);
+        await ImageGroupDAO().addObject(int.parse(action.split("&&")[1]), obj);
+        updateProjectData(-1);
         break;
-      case 'setGroup':
-
+      case 'removeFromGroup':
+        var obj = await ObjectDAO().getObject(int.parse(action.split("&&")[2]));
+        await ProjectPartDAO().addObject(partId, obj!);
+        await ImageGroupDAO().removeObject(int.parse(action.split("&&")[1]), obj);
+        updateProjectData(curGroup!.id);
         break;
     }
   }
 
   void onEditGroupHandler(ImageGroupModel curGroup) async {
     await ImageGroupDAO().update(curGroup);
-    updateProjectData();
+    updateProjectData(-1);
   }
 
   void onCreateGroupHandler(ImageGroupModel group) async {
     group.id = await ImageGroupDAO().add(group);
     await ProjectPartDAO().addGroup(partId, group);
     onGroupActionCaller('refresh');
-    updateProjectData();
+    updateProjectData(-1);
+  }
+
+  onBackClickHandler(){
+    curGroup=null;
+    updateProjectData(-1);
   }
 
   createGroup() async{

@@ -13,7 +13,6 @@ class ImageGroupModel {
   String? name;
   String? type;
   String path;
-  final mainImage = ToOne<ImageModel>();
   final allObjects = ToMany<ObjectModel>();
   final allGroups = ToMany<ImageGroupModel>();
   final label = ToOne<LabelModel>();

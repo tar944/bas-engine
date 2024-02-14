@@ -35,9 +35,9 @@ class ProjectPartDAO {
     update(part);
   }
 
-  removeObject(int partId,ObjectModel img)async{
+  removeObject(int partId,ObjectModel obj)async{
     ProjectPartModel? part = await getDetails(partId);
-    part!.allObjects.removeWhere((element) => element.id == img.id);
+    part!.allObjects.removeWhere((element) => element.id == obj.id);
     update(part);
   }
 

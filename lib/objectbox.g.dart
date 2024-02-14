@@ -335,13 +335,6 @@ final _entities = <ModelEntity>[
             type: 9,
             flags: 0),
         ModelProperty(
-            id: const IdUid(7, 4291958494173271157),
-            name: 'mainImageId',
-            type: 11,
-            flags: 520,
-            indexId: const IdUid(18, 5503554711709891192),
-            relationTarget: 'ImageModel'),
-        ModelProperty(
             id: const IdUid(8, 1229418524994533953),
             name: 'labelId',
             type: 11,
@@ -465,7 +458,8 @@ ModelDefinition getObjectBoxModel() {
         9102685703102770362,
         8485429454284523408,
         4390184275348585787,
-        2867568999367445977
+        2867568999367445977,
+        5503554711709891192
       ],
       retiredPropertyUids: const [
         4568898860801454124,
@@ -586,7 +580,8 @@ ModelDefinition getObjectBoxModel() {
         6509670852060955200,
         74590857641547405,
         600920114426525750,
-        2813440565600476362
+        2813440565600476362,
+        4291958494173271157
       ],
       retiredRelationUids: const [
         7096364116743183016,
@@ -898,8 +893,7 @@ ModelDefinition getObjectBoxModel() {
         }),
     ImageGroupModel: EntityDefinition<ImageGroupModel>(
         model: _entities[5],
-        toOneRelations: (ImageGroupModel object) =>
-            [object.mainImage, object.label],
+        toOneRelations: (ImageGroupModel object) => [object.label],
         toManyRelations: (ImageGroupModel object) => {
               RelInfo<ImageGroupModel>.toMany(24, object.id): object.allObjects,
               RelInfo<ImageGroupModel>.toMany(25, object.id): object.allGroups
@@ -924,7 +918,6 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(3, nameOffset);
           fbb.addOffset(4, typeOffset);
           fbb.addOffset(5, pathOffset);
-          fbb.addInt64(6, object.mainImage.targetId);
           fbb.addInt64(7, object.label.targetId);
           fbb.addOffset(8, groupUUIDOffset);
           fbb.finish(fbb.endTable());
@@ -949,9 +942,6 @@ ModelDefinition getObjectBoxModel() {
                 .vTableGet(buffer, rootOffset, 6, '')
             ..type = const fb.StringReader(asciiOptimization: true)
                 .vTableGetNullable(buffer, rootOffset, 12);
-          object.mainImage.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 16, 0);
-          object.mainImage.attach(store);
           object.label.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0);
           object.label.attach(store);
@@ -1241,17 +1231,13 @@ class ImageGroupModel_ {
   static final path =
       QueryStringProperty<ImageGroupModel>(_entities[5].properties[5]);
 
-  /// see [ImageGroupModel.mainImage]
-  static final mainImage = QueryRelationToOne<ImageGroupModel, ImageModel>(
-      _entities[5].properties[6]);
-
   /// see [ImageGroupModel.label]
   static final label = QueryRelationToOne<ImageGroupModel, LabelModel>(
-      _entities[5].properties[7]);
+      _entities[5].properties[6]);
 
   /// see [ImageGroupModel.groupUUID]
   static final groupUUID =
-      QueryStringProperty<ImageGroupModel>(_entities[5].properties[8]);
+      QueryStringProperty<ImageGroupModel>(_entities[5].properties[7]);
 
   /// see [ImageGroupModel.allObjects]
   static final allObjects = QueryRelationToMany<ImageGroupModel, ObjectModel>(

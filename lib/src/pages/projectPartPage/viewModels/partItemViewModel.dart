@@ -33,7 +33,7 @@ class PartItemViewModel extends ViewModel {
     if(part.allObjects.isNotEmpty){
       return part.allObjects[0].image.target!.path!;
     }else if(part.allGroups.isNotEmpty){
-      return part.allGroups[0].mainImage.target!.path!;
+      return part.allGroups[0].allObjects[0].image.target!.path!;
     }
     return "";
   }

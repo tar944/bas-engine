@@ -24,6 +24,7 @@ class Strings{
   static const String partLabeling="Part labeling";
   static const String allGroups="All groups";
   static const String allParts="All parts";
+  static const String emptyUnSortObjects="You sorted all objects 👏, Please select a group on top bar 👆";
   static const String emptyPart="your part list is empty for creating a new part click on plus button";
   static const String emptyProject="your projects list is empty for creating a new project click on plus button";
   static const String exitTitle="Exit from Be a senior";

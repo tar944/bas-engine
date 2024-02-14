@@ -6,15 +6,17 @@ import 'package:pmvvm/pmvvm.dart';
 class ObjectItemViewModel extends ViewModel {
 
   final ObjectModel object;
-  final bool isSelected;
+  final bool isSubGroup;
   final List<ImageGroupModel> allGroups;
   final ValueSetter<String> onActionCaller;
 
-  ObjectItemViewModel(this.isSelected,this.allGroups,this.object, this.onActionCaller);
+  ObjectItemViewModel(this.isSubGroup,this.allGroups,this.object, this.onActionCaller);
 
   onGroupSelected(List<int> allSelected,int curSelectedItem){
-    allGroups.removeAt(curSelectedItem);
-    onActionCaller("addToGroup&&${allGroups[curSelectedItem].id}");
-    notifyListeners();
+    if(isSubGroup){
+      onActionCaller("removeFromGroup&&$curSelectedItem&&${object.id}");
+    }else{
+      onActionCaller("addToGroup&&$curSelectedItem&&${object.id}");
+    }
   }
 }
