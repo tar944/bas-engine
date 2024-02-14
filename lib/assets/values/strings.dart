@@ -2,6 +2,8 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String deleteGroupError="There is some content in this group, you can not delete it";
+  static const String maxGroupNumberError="Each part only can have 8 groups";
   static const String emptyGroup="💔 Your image group list is empty,please create one of them ⬆️";
   static const String images="images";
   static const String remindImages="remind to sort";

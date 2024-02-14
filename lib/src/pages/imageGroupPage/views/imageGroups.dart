@@ -82,30 +82,40 @@ class _View extends StatelessView<ImageGroupsViewModel> {
                             ),
                             child: vm.curGroup == null
                                 ? const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text("13 ${Strings.images}"),
-                                Text(Strings.remindImages),
-                              ],
-                            )
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text("13 ${Strings.images}"),
+                                      Text(Strings.remindImages),
+                                    ],
+                                  )
                                 : Container(
-                              width: double.infinity,
-                              height: double.infinity,
-                              decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(
-                                          Dimens.dialogCornerRadius - 3)),
-                                  color: Colors.grey[190].withOpacity(0.7)
-                              ),
-                              child: Row(children: [
-                                const SizedBox(width: 15,),
-                                const Icon(FluentIcons.back, size: 20,),
-                                const SizedBox(width: 18,),
-                                Text(Strings.back,
-                                  style: TextSystem.textM(Colors.white),)
-                              ],),
-                            )
-                        ),
+                                    width: double.infinity,
+                                    height: double.infinity,
+                                    decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(
+                                                Dimens.dialogCornerRadius - 3)),
+                                        color:
+                                            Colors.grey[190].withOpacity(0.7)),
+                                    child: Row(
+                                      children: [
+                                        const SizedBox(
+                                          width: 15,
+                                        ),
+                                        const Icon(
+                                          FluentIcons.back,
+                                          size: 20,
+                                        ),
+                                        const SizedBox(
+                                          width: 18,
+                                        ),
+                                        Text(
+                                          Strings.back,
+                                          style: TextSystem.textM(Colors.white),
+                                        )
+                                      ],
+                                    ),
+                                  )),
                       ),
                     ),
                   Expanded(
@@ -138,7 +148,7 @@ class _View extends StatelessView<ImageGroupsViewModel> {
                               itemBuilder: (context, index) {
                                 return ImageGroupItem(
                                   group: vm.groups[index],
-                                  onActionCaller: vm.onGroupActionCaller,
+                                  onActionCaller: vm.onGroupSelect,
                                 );
                               },
                             ),

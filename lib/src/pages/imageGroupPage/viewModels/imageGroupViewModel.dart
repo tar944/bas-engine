@@ -1,11 +1,11 @@
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/imageGroupPage/views/dlgImageGroup.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class ImageGroupsViewModel extends ViewModel {
@@ -34,29 +34,30 @@ class ImageGroupsViewModel extends ViewModel {
   }
 
   void onGroupSelect(String action) async {
-    ProjectPartModel? part =
-        await ProjectPartDAO().getDetails(int.parse(action.split('&&')[1]));
+    ImageGroupModel? group = await ImageGroupDAO().getDetails(int.parse(action.split("&&")[1]));
     switch (action.split('&&')[0]) {
       case 'edit':
+        showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) => DlgImageGroup(
+              group: group,
+              onSaveCaller: onEditGroupHandler,
+              partUUID: partUUID,
+            )
+        );
         break;
-      case 'record':
-        context.goNamed('recordScreens', params: {'partId': part!.id.toString()});
-        Navigator.pop(context);
-        break;
-      case 'deleteObject':
-        // await ProjectPartDAO().delete(part!);
-        // await ProjectDAO().removeAPart(prjID, part);
-        // onPartActionCaller(-1);
-        updateProjectData();
-        break;
-      case 'deleteGroup':
-        // await ProjectPartDAO().delete(part!);
-        // await ProjectDAO().removeAPart(prjID, part);
-        // onPartActionCaller(-1);
+      case 'delete':
+        if(group!.allGroups.isNotEmpty||group.allObjects.isNotEmpty){
+          Toast(Strings.deleteGroupError,false).showError(context);
+          return;
+        }
+        await ImageGroupDAO().delete(group);
+        onGroupActionCaller('refresh');
         updateProjectData();
         break;
       case 'goto':
-        onGroupActionCaller(part!.id.toString());
+        onGroupActionCaller(group!.id.toString());
         break;
     }
   }
@@ -90,13 +91,19 @@ class ImageGroupsViewModel extends ViewModel {
     updateProjectData();
   }
 
-  createGroup() {
+  createGroup() async{
+    var part = await ProjectPartDAO().getDetails(partId);
+    if(part!.allGroups.length>8){
+      Toast(Strings.maxGroupNumberError,false).showError(context);
+      return;
+    }
     showDialog(
         context: context,
         barrierDismissible: true,
         builder: (context) => DlgImageGroup(
               onSaveCaller: onCreateGroupHandler,
               partUUID: partUUID,
-            ));
+            )
+    );
   }
 }

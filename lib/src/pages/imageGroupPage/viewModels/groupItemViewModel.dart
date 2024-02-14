@@ -10,8 +10,5 @@ class GroupItemViewModel extends ViewModel {
 
   GroupItemViewModel(this.group, this.onActionCaller);
 
-  @override
-  void init() async {
-  }
 
 }

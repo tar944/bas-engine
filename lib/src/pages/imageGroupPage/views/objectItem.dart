@@ -39,7 +39,7 @@ class _View extends StatelessView<ObjectItemViewModel> {
   @override
   Widget render(context, ObjectItemViewModel vm) {
     return IconButton(
-      onPressed: () => vm.onActionCaller!("clicked&&${vm.object.id}"),
+      onPressed: () => vm.onActionCaller("clicked&&${vm.object.id}"),
       style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(0.0))),
       icon: Container(
         width: double.infinity,
@@ -96,7 +96,7 @@ class _View extends StatelessView<ObjectItemViewModel> {
                       items: vm.allGroups.map((e) =>
                     MultiSelectCard(value: e.id,label: e.name)
                   ).toList(),
-                      onChange: (allSelectedItems, selectedItem) {})
+                      onChange: (allSelectedItems, selectedItem) {print(selectedItem);})
               )
             ],
           ),
