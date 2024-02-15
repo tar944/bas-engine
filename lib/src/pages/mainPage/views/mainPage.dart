@@ -6,6 +6,7 @@ import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/headerPart
 import 'package:bas_dataset_generator_engine/src/pages/projectListPage/views/projectList.dart';
 import 'package:bas_dataset_generator_engine/src/pages/projectPartPage/views/projectParts.dart';
 import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
+import 'package:bas_dataset_generator_engine/src/providers/headerProvider.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 
@@ -14,9 +15,12 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MVVM(
-      view: () => const _View(),
-      viewModel: MainPageViewModel(),
+    return ChangeNotifierProvider(
+      create: (BuildContext context) =>HeaderProvider(),
+      child: MVVM(
+        view: () => const _View(),
+        viewModel: MainPageViewModel(),
+      ),
     );
   }
 }
@@ -42,7 +46,7 @@ class _View extends StatelessView<MainPageViewModel> {
                   key: GlobalKey(),
                   curTab: vm.curTab,
                   onActionCaller: vm.onNavigationChanged,
-                  guideText: vm.guideText),
+                  guideText: Provider.of<HeaderProvider>(context).guideText),
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),

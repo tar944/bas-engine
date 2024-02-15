@@ -7,8 +7,7 @@ import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/projectListPage/views/dlgProjectInfo.dart';
-import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
+import 'package:bas_dataset_generator_engine/src/providers/headerProvider.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -18,18 +17,19 @@ import 'package:window_manager/window_manager.dart';
 class MainPageViewModel extends ViewModel with WindowListener {
 
   bool isLoading=false;
-  String guideText="";
   final PageController controller = PageController();
   HeaderTabs curTab=HeaderTabs.project;
   ProjectModel? curProject;
   ProjectPartModel? curPart;
   ImageGroupModel? curGroup;
+  HeaderProvider? hProvider;
   late void Function() projectController;
   late void Function() partController;
   late void Function() groupController;
 
   @override
   void init() async {
+    hProvider=Provider.of<HeaderProvider>(context);
     // Add this line to override the default close handler
     await windowManager.setPreventClose(true);
     setProjectGuideText();
@@ -53,22 +53,19 @@ class MainPageViewModel extends ViewModel with WindowListener {
 
   setProjectGuideText()async{
     var projects = await ProjectDAO().getAll();
-    guideText=projects.isEmpty?Strings.guideEmptyProject:Strings.guideProjects;
-    notifyListeners();
+    hProvider?.updateGuide(projects.isEmpty?Strings.guideEmptyProject:Strings.guideProjects);
   }
 
   setPartGuideText()async{
     if(curGroup!=null){
-      guideText=Strings.guideImageGroupThree;
+      hProvider?.updateGuide(Strings.guideImageGroupThree);
     }else{
-      guideText=curProject!.allParts.isEmpty?Strings.guideEmptyParts:Strings.guideParts;
+      hProvider?.updateGuide(curProject!.allParts.isEmpty?Strings.guideEmptyParts:Strings.guideParts);
     }
-    notifyListeners();
   }
 
   setGroupGuideText()async{
-    guideText=curPart!.allObjects.isEmpty?Strings.guideImageGroupTwo:Strings.guideImageGroup;
-    notifyListeners();
+    hProvider?.updateGuide(curPart!.allObjects.isEmpty?Strings.guideImageGroupTwo:Strings.guideImageGroup);
   }
 
   Future<void> _windowShow({
