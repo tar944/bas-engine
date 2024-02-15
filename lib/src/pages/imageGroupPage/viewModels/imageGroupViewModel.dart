@@ -63,6 +63,7 @@ class ImageGroupsViewModel extends ViewModel {
         break;
       case 'goto':
         updateProjectData(int.parse(action.split("&&")[1]));
+        onGroupActionCaller("refreshGroup&&${action.split("&&")[1]}");
         break;
     }
   }
@@ -81,7 +82,19 @@ class ImageGroupsViewModel extends ViewModel {
         await ImageGroupDAO().removeObject(int.parse(action.split("&&")[1]), obj);
         updateProjectData(curGroup!.id);
         break;
+      case 'delete':
+        var obj = await ObjectDAO().getObject(int.parse(action.split("&&")[1]));
+        await ObjectDAO().deleteObject(obj!);
+        if(curGroup==null){
+          await ProjectPartDAO().removeObject(partId, obj);
+          updateProjectData(-1);
+        }else{
+          await ImageGroupDAO().removeObject(curGroup!.id, obj);
+          updateProjectData(curGroup!.id);
+        }
+        break;
     }
+    onGroupActionCaller('refreshPart&&');
   }
 
   void onEditGroupHandler(ImageGroupModel curGroup) async {

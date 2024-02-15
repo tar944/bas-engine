@@ -12,6 +12,8 @@ class Strings{
   static const String deleteProject="Are you sure to delete this project?";
   static const String guideObjectLabeling="";
   static const String guideImageGroup="You can sort the similar images into groups 👇 or choose a group or create a new one 👆";
+  static const String guideImageGroupTwo="You can choose a group from group bar and see its contents 👇 or create a new group 👆";
+  static const String guideImageGroupThree="You can choose a group from group bar or going to labeling page with click on an image 👇";
   static const String guideParts="Please choose one of previous parts 👇 or create a new one 👆";
   static const String guideEmptyParts="Your list is empty,you can add a new part with add button 👆";
   static const String guideProjects="You can create a new project 👆 or choose one of your previous projects 👇";

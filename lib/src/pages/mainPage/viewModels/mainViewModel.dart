@@ -58,7 +58,16 @@ class MainPageViewModel extends ViewModel with WindowListener {
   }
 
   setPartGuideText()async{
-    guideText=curProject!.allParts.isEmpty?Strings.guideEmptyParts:Strings.guideParts;
+    if(curGroup!=null){
+      guideText=Strings.guideImageGroupThree;
+    }else{
+      guideText=curProject!.allParts.isEmpty?Strings.guideEmptyParts:Strings.guideParts;
+    }
+    notifyListeners();
+  }
+
+  setGroupGuideText()async{
+    guideText=curPart!.allObjects.isEmpty?Strings.guideImageGroupTwo:Strings.guideImageGroup;
     notifyListeners();
   }
 
@@ -120,12 +129,13 @@ class MainPageViewModel extends ViewModel with WindowListener {
     }
   }
   onGroupActionHandler(String action)async{
-    if(action=="refreshPart"){
+    var act=action.split("&&");
+    if(act[0]=="refreshPart"){
       curPart=await ProjectPartDAO().getDetails(curPart!.id);
       notifyListeners();
-    }else if(action=="refreshGroup"){
-      curGroup = await ImageGroupDAO().getDetails(curProject!.id);
-      await setPartGuideText();
+    }else if(act[0]=="refreshGroup"){
+      curGroup = await ImageGroupDAO().getDetails(int.parse(act[1]));
+      await setGroupGuideText();
     }
   }
 
@@ -137,8 +147,7 @@ class MainPageViewModel extends ViewModel with WindowListener {
       curPart = await ProjectPartDAO().getDetails(partId);
       onNavigationChanged(HeaderTabs.imageGroups);
       curTab = HeaderTabs.imageGroups;
-      guideText=Strings.guideImageGroup;
-      notifyListeners();
+      await setGroupGuideText();
     }
   }
 

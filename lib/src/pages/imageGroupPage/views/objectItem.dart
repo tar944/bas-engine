@@ -55,31 +55,6 @@ class _View extends StatelessView<ObjectItemViewModel> {
         padding: const EdgeInsets.all(5.0),
         child: Stack(
           children: [
-            Positioned(
-              left: 0,
-              top: 0,
-              child: Row(
-                children: [
-                  FlyoutTarget(
-                    key: GlobalKey(),
-                    controller: controller,
-                    child: IconButton(
-                        icon: Icon(
-                          FluentIcons.delete,
-                          color: Colors.red,
-                          size: 12,
-                        ),
-                        onPressed: () => showFlyDelete(
-                            "Are you sure?",
-                            "yeh",
-                            controller,
-                            FlyoutPlacementMode.topCenter,
-                            vm.object.id!,
-                            vm.onActionCaller)),
-                  ),
-                ],
-              ),
-            ),
             Container(
               width: double.infinity,
               height: 155,
@@ -122,7 +97,31 @@ class _View extends StatelessView<ObjectItemViewModel> {
                         MultiSelectCard(value: e.id,label: e.name)
                     ).toList(),
                     onChange: vm.onGroupSelected)
-            )
+            ),
+            Positioned(
+              left: 5,
+              top: 5,
+              child: FlyoutTarget(
+                key: GlobalKey(),
+                controller: controller,
+                child: IconButton(
+                  style: ButtonStyle(
+                    backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
+                  ),
+                    icon: Icon(
+                      FluentIcons.delete,
+                      color: Colors.red,
+                      size: 20,
+                    ),
+                    onPressed: () => showFlyDelete(
+                        "Are you sure?",
+                        "yeh",
+                        controller,
+                        FlyoutPlacementMode.topCenter,
+                        vm.object.id!,
+                        vm.onActionCaller)),
+              ),
+            ),
           ],
         ),
       ),

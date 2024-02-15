@@ -78,11 +78,11 @@ class _View extends StatelessView<ImageGroupsViewModel> {
                                   : null,
                             ),
                             child: vm.curGroup == null
-                                ? const Column(
+                                ? Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      Text("13 ${Strings.images}"),
-                                      Text(Strings.remindImages),
+                                      Text("${vm.curGroup==null?vm.objects.length:0} ${Strings.images}"),
+                                      const Text(Strings.remindImages),
                                     ],
                                   )
                                 : Container(
