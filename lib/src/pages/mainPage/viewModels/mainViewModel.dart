@@ -15,21 +15,20 @@ import 'package:pmvvm/pmvvm.dart';
 import 'package:window_manager/window_manager.dart';
 
 class MainPageViewModel extends ViewModel with WindowListener {
-
-  bool isLoading=false;
+  bool isLoading = false;
+  String guideText = "";
   final PageController controller = PageController();
-  HeaderTabs curTab=HeaderTabs.project;
+  HeaderTabs curTab = HeaderTabs.project;
   ProjectModel? curProject;
   ProjectPartModel? curPart;
   ImageGroupModel? curGroup;
-  HeaderProvider? hProvider;
+  HeaderController headerController = HeaderController();
   late void Function() projectController;
   late void Function() partController;
   late void Function() groupController;
 
   @override
   void init() async {
-    hProvider=Provider.of<HeaderProvider>(context);
     // Add this line to override the default close handler
     await windowManager.setPreventClose(true);
     setProjectGuideText();
@@ -51,21 +50,29 @@ class MainPageViewModel extends ViewModel with WindowListener {
     });
   }
 
-  setProjectGuideText()async{
+  setProjectGuideText() async {
     var projects = await ProjectDAO().getAll();
-    hProvider?.updateGuide(projects.isEmpty?Strings.guideEmptyProject:Strings.guideProjects);
+    headerController.updateGuide(
+        projects.isEmpty ? Strings.guideEmptyProject : Strings.guideProjects);
+    notifyListeners();
   }
 
-  setPartGuideText()async{
-    if(curGroup!=null){
-      hProvider?.updateGuide(Strings.guideImageGroupThree);
-    }else{
-      hProvider?.updateGuide(curProject!.allParts.isEmpty?Strings.guideEmptyParts:Strings.guideParts);
+  setPartGuideText() async {
+    headerController.updateGuide(curProject!.allParts.isEmpty
+        ? Strings.guideEmptyParts
+        : Strings.guideParts);
+    notifyListeners();
+  }
+
+  setGroupGuideText() async {
+    if (curGroup != null) {
+      headerController.updateGuide(Strings.guideImageGroupThree);
+    } else {
+      headerController.updateGuide(curPart!.allObjects.isEmpty
+          ? Strings.guideImageGroupTwo
+          : Strings.guideImageGroup);
     }
-  }
-
-  setGroupGuideText()async{
-    hProvider?.updateGuide(curPart!.allObjects.isEmpty?Strings.guideImageGroupTwo:Strings.guideImageGroup);
+    notifyListeners();
   }
 
   Future<void> _windowShow({
@@ -95,6 +102,7 @@ class MainPageViewModel extends ViewModel with WindowListener {
   void onCloseListener() {
     exit(0);
   }
+
   void onMinimizeListener() {
     windowManager.minimize();
   }
@@ -114,10 +122,10 @@ class MainPageViewModel extends ViewModel with WindowListener {
     groupController = methodOfGroup;
   }
 
-  onProjectActionHandler(int prjId)async{
-    if(prjId==-1){
+  onProjectActionHandler(int prjId) async {
+    if (prjId == -1) {
       await setProjectGuideText();
-    }else{
+    } else {
       curProject = await ProjectDAO().getDetails(prjId);
       onNavigationChanged(HeaderTabs.projectParts);
       curTab = HeaderTabs.projectParts;
@@ -125,22 +133,24 @@ class MainPageViewModel extends ViewModel with WindowListener {
       notifyListeners();
     }
   }
-  onGroupActionHandler(String action)async{
-    var act=action.split("&&");
-    if(act[0]=="refreshPart"){
-      curPart=await ProjectPartDAO().getDetails(curPart!.id);
+
+  onGroupActionHandler(String action) async {
+    var act = action.split("&&");
+    if (act[0] == "refreshPart") {
+      curPart = await ProjectPartDAO().getDetails(curPart!.id);
       notifyListeners();
-    }else if(act[0]=="refreshGroup"){
-      curGroup = await ImageGroupDAO().getDetails(int.parse(act[1]));
+    } else if (act[0] == "refreshGroup") {
+      curGroup = act[1]=="-1"?null:await ImageGroupDAO().getDetails(int.parse(act[1]));
+      notifyListeners();
       await setGroupGuideText();
     }
   }
 
-  onPartActionHandler(int partId)async{
-    if(partId==-1){
+  onPartActionHandler(int partId) async {
+    if (partId == -1) {
       curProject = await ProjectDAO().getDetails(curProject!.id);
       await setPartGuideText();
-    }else{
+    } else {
       curPart = await ProjectPartDAO().getDetails(partId);
       onNavigationChanged(HeaderTabs.imageGroups);
       curTab = HeaderTabs.imageGroups;
@@ -148,26 +158,26 @@ class MainPageViewModel extends ViewModel with WindowListener {
     }
   }
 
-  onNavigationChanged(HeaderTabs selTab){
-    if(selTab==HeaderTabs.addProject){
+  onNavigationChanged(HeaderTabs selTab) {
+    if (selTab == HeaderTabs.addProject) {
       projectController.call();
-    }else if(selTab==HeaderTabs.addPart){
+    } else if (selTab == HeaderTabs.addPart) {
       partController.call();
-    }else if(selTab==HeaderTabs.addGroup){
+    } else if (selTab == HeaderTabs.addGroup) {
       groupController.call();
-    }else{
-      if(selTab!=curTab){
-        if(selTab==HeaderTabs.project){
+    } else {
+      if (selTab != curTab) {
+        if (selTab == HeaderTabs.project) {
           controller.jumpToPage(0);
-          curProject=null;
-          curTab=HeaderTabs.project;
+          curProject = null;
+          curTab = HeaderTabs.project;
           setProjectGuideText();
           notifyListeners();
-        }else if(selTab==HeaderTabs.projectParts){
+        } else if (selTab == HeaderTabs.projectParts) {
           controller.jumpToPage(1);
-        }else if(selTab==HeaderTabs.imageGroups){
+        } else if (selTab == HeaderTabs.imageGroups) {
           controller.jumpToPage(2);
-        }else if(selTab==HeaderTabs.objectLabeling){
+        } else if (selTab == HeaderTabs.objectLabeling) {
           controller.jumpToPage(3);
         }
       }

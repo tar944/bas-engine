@@ -6,7 +6,6 @@ import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/headerPart
 import 'package:bas_dataset_generator_engine/src/pages/projectListPage/views/projectList.dart';
 import 'package:bas_dataset_generator_engine/src/pages/projectPartPage/views/projectParts.dart';
 import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
-import 'package:bas_dataset_generator_engine/src/providers/headerProvider.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 
@@ -15,12 +14,9 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (BuildContext context) =>HeaderProvider(),
-      child: MVVM(
-        view: () => const _View(),
-        viewModel: MainPageViewModel(),
-      ),
+    return MVVM(
+      view: () => const _View(),
+      viewModel: MainPageViewModel(),
     );
   }
 }
@@ -45,8 +41,8 @@ class _View extends StatelessView<MainPageViewModel> {
               child: HeaderPart(
                   key: GlobalKey(),
                   curTab: vm.curTab,
-                  onActionCaller: vm.onNavigationChanged,
-                  guideText: Provider.of<HeaderProvider>(context).guideText),
+                  controller: vm.headerController,
+                  onActionCaller: vm.onNavigationChanged,),
             ),
             Padding(
               padding: const EdgeInsets.all(10.0),
@@ -63,14 +59,12 @@ class _View extends StatelessView<MainPageViewModel> {
                   children: <Widget>[
                     Center(
                       child: ProjectsList(
-                        key: GlobalKey(),
                         onProjectActionCaller: vm.onProjectActionHandler,
                         controller:vm.setProjectController,
                       ),
                     ),
                     Center(
                       child: ProjectParts(
-                        key: GlobalKey(),
                         prjId: vm.curProject==null?-1:vm.curProject!.id,
                         onPartActionCaller: vm.onPartActionHandler,
                         controller:vm.setPartController,
@@ -78,7 +72,6 @@ class _View extends StatelessView<MainPageViewModel> {
                     ),
                     Center(
                       child: ImageGroups(
-                        key: GlobalKey(),
                         onGroupActionCaller: vm.onGroupActionHandler,
                         partId: vm.curPart==null?-1:vm.curPart!.id,
                         controller: vm.setGroupController),

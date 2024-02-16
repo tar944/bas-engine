@@ -3,6 +3,7 @@ import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/viewModels/headerViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/headerBtn.dart';
+import 'package:bas_dataset_generator_engine/src/providers/headerProvider.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
@@ -10,18 +11,20 @@ import 'package:pmvvm/pmvvm.dart';
 class HeaderPart extends StatelessWidget {
   const HeaderPart({
     Key? key,
-    required this.onActionCaller,required this.curTab, required this.guideText,
+    required this.onActionCaller,
+    required this.curTab,
+    required this.controller
   }) : super(key: key);
 
   final ValueSetter<HeaderTabs> onActionCaller;
   final HeaderTabs curTab;
-  final String guideText;
+  final HeaderController controller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: HeaderViewModel(onActionCaller,guideText,curTab),
+      viewModel: HeaderViewModel(onActionCaller,curTab,controller),
     );
   }
 }
@@ -31,7 +34,6 @@ class _View extends StatelessView<HeaderViewModel> {
 
   @override
   Widget render(context, HeaderViewModel vm) {
-    print(vm.curTab);
     return SizedBox(
       width: double.infinity,
       height: Dimens.mainHeaderH,
@@ -119,7 +121,7 @@ class _View extends StatelessView<HeaderViewModel> {
           ),
           Padding(
             padding: const EdgeInsets.all(10.0),
-            child: Text(vm.guideText,style:TextSystem.textM(Colors.white)),
+            child: Text(vm.controller.guideText,style:TextSystem.textM(Colors.white)),
           )
         ],
       ),

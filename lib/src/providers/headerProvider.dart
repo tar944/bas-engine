@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class HeaderProvider extends ChangeNotifier {
-  late String _guideText;
+class HeaderController extends ChangeNotifier {
+  late String _guideText="";
 
   String get guideText => _guideText;
 

@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/src/providers/headerProvider.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
@@ -6,9 +7,11 @@ class HeaderViewModel extends ViewModel {
   HeaderTabs curTab;
 
   final ValueSetter<HeaderTabs> onActionCaller;
-  final String guideText;
+  String guideText="";
 
-  HeaderViewModel(this.onActionCaller, this.guideText,this.curTab);
+  final HeaderController controller;
+
+  HeaderViewModel(this.onActionCaller,this.curTab,this.controller);
 
   onTabChanged(HeaderTabs tab) {
     if (tab != HeaderTabs.addProject && tab != HeaderTabs.addPart&&tab!=HeaderTabs.addGroup) {
@@ -16,6 +19,11 @@ class HeaderViewModel extends ViewModel {
       notifyListeners();
     }
     onActionCaller(tab);
+  }
+
+  setGuideText(String text){
+    guideText = text;
+    notifyListeners();
   }
 
   bool showTab(HeaderTabs tab) {

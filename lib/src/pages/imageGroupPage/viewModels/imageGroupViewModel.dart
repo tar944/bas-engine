@@ -112,6 +112,7 @@ class ImageGroupsViewModel extends ViewModel {
   onBackClickHandler(){
     curGroup=null;
     updateProjectData(-1);
+    onGroupActionCaller("refreshGroup&&-1");
   }
 
   createGroup() async{
