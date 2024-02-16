@@ -1,9 +1,9 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
+import 'package:bas_dataset_generator_engine/src/controllers/headerController.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/viewModels/headerViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/headerBtn.dart';
-import 'package:bas_dataset_generator_engine/src/providers/headerProvider.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';

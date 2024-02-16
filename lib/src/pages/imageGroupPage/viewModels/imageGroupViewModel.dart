@@ -33,6 +33,7 @@ class ImageGroupsViewModel extends ViewModel {
       groups = part.allGroups;
     }else{
       curGroup = await ImageGroupDAO().getDetails(groupId);
+      groups=curGroup!.allGroups;
       objects = curGroup!.allObjects;
     }
     notifyListeners();

@@ -12,8 +12,11 @@ import 'package:pmvvm/pmvvm.dart';
 typedef GroupController = void Function(BuildContext context, void Function() methodOfGroup);
 
 class ImageGroups extends StatelessWidget {
-  ImageGroups(
-      {super.key, required this.partId, required this.onGroupActionCaller, required this.controller});
+  ImageGroups({
+    super.key,
+    required this.partId,
+    required this.onGroupActionCaller,
+    required this.controller});
 
   int partId;
   ValueSetter<String> onGroupActionCaller;
@@ -127,7 +130,7 @@ class _View extends StatelessView<ImageGroupsViewModel> {
                           child: vm.groups.isEmpty ?
                           Padding(
                             padding: const EdgeInsets.only(left: 10.0),
-                            child: Text(Strings.emptyGroup,
+                            child: Text(vm.curGroup==null?Strings.emptyGroup:Strings.emptyLabeledGroup,
                               style: TextSystem.textL(Colors.white.withOpacity(0.7)),),
                           ) : Padding(
                             padding: const EdgeInsets.only(top: 5.0,bottom: 5.0,right: 5.0),

@@ -35,8 +35,9 @@ class Dimens {
   static const double topBarHeight = 40;
   static const double actionRadius = 5;
   static const double actionIcon = 21;
-  static const double btnWidthNormal = 80;
+  static const double btnWidthNormal = 100;
   static const double btnWidthBig = 150;
+  static const double btnHeightBig = 40;
   static const double btnHeightNormal = 24;
   static const double btnHeightSmall = 20;
   static const double pointCircle2X = 60;

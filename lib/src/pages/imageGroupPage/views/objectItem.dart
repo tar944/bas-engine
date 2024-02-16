@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
@@ -41,88 +42,117 @@ class _View extends StatelessView<ObjectItemViewModel> {
   Widget render(context, ObjectItemViewModel vm) {
 
     final controller = FlyoutController();
-    return Container(
-      width: double.infinity,
-      height: double.infinity,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(
-            Radius.circular(Dimens.dialogCornerRadius)),
-        color: Colors.grey[170],
-        border: Border.all(
-            color: Colors.grey, width: 1.3),
+    return IconButton(
+      onPressed: vm.isSubGroup?()=>vm.onActionCaller("goto&&${vm.object.id}"):null,
+      style: ButtonStyle(
+          padding: ButtonState.all(const EdgeInsets.all(0.0)),
       ),
-      child: Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Stack(
-          children: [
-            Container(
-              width: double.infinity,
-              height: 155,
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(
-                    Radius.circular(Dimens.actionRadius)),
-                color: Colors.grey[170],
-                image: DecorationImage(
-                  image:
-                  Image.file(File(vm.object.image.target!.path!)).image,
-                  fit: BoxFit.fill,
-                ),
-              ),
-            ),
-            Positioned(
-                bottom: 5,
-                left: 5,
-                right: 5,
-                child: MultiSelectContainer(
-                    singleSelectedItem: true,
-                    wrapSettings: const WrapSettings(
-                        spacing: 3.0
+      icon: MouseRegion(
+        onEnter: (e)=>vm.onMouseEnter(e),
+        onExit: (e)=>vm.onMouseExit(e),
+        child: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(
+                Radius.circular(Dimens.dialogCornerRadius)),
+            color: Colors.grey[170],
+            border: Border.all(
+                color: Colors.grey, width: 1.3),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(5.0),
+            child: Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(
+                  width: double.infinity,
+                  height: 155,
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(
+                        Radius.circular(Dimens.actionRadius)),
+                    color: Colors.grey[170],
+                    image: DecorationImage(
+                      image:
+                      Image.file(File(vm.object.image.target!.path!)).image,
+                      fit: BoxFit.fill,
                     ),
-                    itemsPadding: const EdgeInsets.fromLTRB(3.0,3.0,3.0,5.0),
-                    textStyles: MultiSelectTextStyles(
-                        textStyle: TextSystem.textT(Colors.white),
-                        selectedTextStyle: TextSystem.textT(Colors.white)
-                    ),
-                    itemsDecoration: MultiSelectDecorations(
-                        decoration:BoxDecoration(
-                          color: vm.isSubGroup?Colors.teal.darkest:Colors.grey[170],
-                          borderRadius: const BorderRadius.all(Radius.circular(15)),
-                        ) ,
-                        selectedDecoration: BoxDecoration(
-                          color: vm.isSubGroup?Colors.grey[170]:Colors.teal.darkest,
-                          borderRadius: const BorderRadius.all(Radius.circular(15)),
-                        )
-                    ),
-                    items: vm.allGroups.map((e) =>
-                        MultiSelectCard(value: e.id,label: e.name)
-                    ).toList(),
-                    onChange: vm.onGroupSelected)
-            ),
-            Positioned(
-              left: 5,
-              top: 5,
-              child: FlyoutTarget(
-                key: GlobalKey(),
-                controller: controller,
-                child: IconButton(
-                  style: ButtonStyle(
-                    backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
                   ),
-                    icon: Icon(
-                      FluentIcons.delete,
-                      color: Colors.red,
-                      size: 20,
-                    ),
-                    onPressed: () => showFlyDelete(
-                        "Are you sure?",
-                        "yeh",
-                        controller,
-                        FlyoutPlacementMode.topCenter,
-                        vm.object.id!,
-                        vm.onActionCaller)),
-              ),
+                ),
+                if(vm.isSubGroup&&vm.showLabel)
+                  Container(
+                  width: Dimens.btnWidthNormal,
+                  height: Dimens.btnHeightBig,
+                  decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(Dimens.btnHeightBig/2)),
+                      color: Colors.white.withOpacity(.7),
+                    border: Border.all(color: Colors.magenta.dark)
+
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(width: 7,),
+                      Icon(FluentIcons.label,size: 20,color: Colors.magenta.darkest,),
+                      Text(Strings.labelIt,style: TextSystem.textL(Colors.magenta.darkest),)
+                    ],
+                  ),
+                ),
+                Positioned(
+                    bottom: 5,
+                    left: 5,
+                    right: 5,
+                    child: MultiSelectContainer(
+                        singleSelectedItem: true,
+                        wrapSettings: const WrapSettings(
+                            spacing: 3.0
+                        ),
+                        itemsPadding: const EdgeInsets.fromLTRB(3.0,3.0,3.0,5.0),
+                        textStyles: MultiSelectTextStyles(
+                            textStyle: TextSystem.textT(Colors.white),
+                            selectedTextStyle: TextSystem.textT(Colors.white)
+                        ),
+                        itemsDecoration: MultiSelectDecorations(
+                            decoration:BoxDecoration(
+                              color: vm.isSubGroup?Colors.teal.darkest:Colors.grey[170],
+                              borderRadius: const BorderRadius.all(Radius.circular(15)),
+                            ) ,
+                            selectedDecoration: BoxDecoration(
+                              color: vm.isSubGroup?Colors.grey[170]:Colors.teal.darkest,
+                              borderRadius: const BorderRadius.all(Radius.circular(15)),
+                            )
+                        ),
+                        items: vm.allGroups.map((e) =>
+                            MultiSelectCard(value: e.id,label: e.name)
+                        ).toList(),
+                        onChange: vm.onGroupSelected)
+                ),
+                Positioned(
+                  left: 5,
+                  top: 5,
+                  child: FlyoutTarget(
+                    key: GlobalKey(),
+                    controller: controller,
+                    child: IconButton(
+                      style: ButtonStyle(
+                        backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
+                      ),
+                        icon: Icon(
+                          FluentIcons.delete,
+                          color: Colors.red,
+                          size: 20,
+                        ),
+                        onPressed: () => showFlyDelete(
+                            "Are you sure?",
+                            "yeh",
+                            controller,
+                            FlyoutPlacementMode.topCenter,
+                            vm.object.id!,
+                            vm.onActionCaller)),
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
