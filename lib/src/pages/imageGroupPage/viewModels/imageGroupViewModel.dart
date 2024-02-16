@@ -75,19 +75,19 @@ class ImageGroupsViewModel extends ViewModel {
   onObjectActionHandler(String action)async{
     switch (action.split('&&')[0]) {
       case 'addToGroup':
-        var obj = await ObjectDAO().getObject(int.parse(action.split("&&")[2]));
+        var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[2]));
         await ProjectPartDAO().removeObject(partId, obj!);
         await ImageGroupDAO().addObject(int.parse(action.split("&&")[1]), obj);
         updateProjectData(-1);
         break;
       case 'removeFromGroup':
-        var obj = await ObjectDAO().getObject(int.parse(action.split("&&")[2]));
+        var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[2]));
         await ProjectPartDAO().addObject(partId, obj!);
         await ImageGroupDAO().removeObject(int.parse(action.split("&&")[1]), obj);
         updateProjectData(curGroup!.id);
         break;
       case 'delete':
-        var obj = await ObjectDAO().getObject(int.parse(action.split("&&")[1]));
+        var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[1]));
         await ObjectDAO().deleteObject(obj!);
         if(curGroup==null){
           await ProjectPartDAO().removeObject(partId, obj);

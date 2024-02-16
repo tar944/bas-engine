@@ -33,15 +33,6 @@ class LabelingDataModel{
     return '';
   }
 
-  String? getStatus(){
-    switch (kind){
-      case 'part':
-        return _part!.status;
-      case 'object':
-        return _object!.status;
-    }
-    return '';
-  }
   List<ObjectModel>? getObjectList(){
     switch (kind){
       case 'part':

@@ -78,7 +78,7 @@ class ScreensPage extends HookWidget with WindowListener {
       print(action);
       var actions = action.split('&&');
       ObjectModel? obj =
-          await ObjectDAO().getObject(int.parse(actions[1]));
+          await ObjectDAO().getDetails(int.parse(actions[1]));
       switch (actions[0]) {
         case 'delete':
           await ObjectDAO().deleteObject(obj!);

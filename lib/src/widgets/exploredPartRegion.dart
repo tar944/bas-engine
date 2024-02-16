@@ -20,7 +20,7 @@ class ExploredPartRegion extends StatelessWidget {
                 0.0,
                 curObject.right - curObject.left,
                 0.0,
-                curObject.bottom - curObject.top,'created')),
+                curObject.bottom - curObject.top)),
           ),
         ],
       ),

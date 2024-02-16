@@ -4,7 +4,7 @@ import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 
 class ObjectDAO {
-  Future<ObjectModel?> getObject(int id) async {
+  Future<ObjectModel?> getDetails(int id) async {
     Box<ObjectModel> box = objectbox.store.box<ObjectModel>();
     ObjectModel? part = box.get(id);
     return part;
@@ -16,7 +16,19 @@ class ObjectDAO {
     return result;
   }
 
-  Future<int> updateObject(ObjectModel object) async {
+  addSubObject(int objId,ObjectModel obj)async{
+    var group = await getDetails(objId);
+    group!.allSubObjects.add(obj);
+    update(group);
+  }
+
+  removeSubObject(int objId,ObjectModel obj)async{
+    var group = await getDetails(objId);
+    group!.allSubObjects.removeWhere((element) => element.id == obj.id);
+    update(group);
+  }
+
+  Future<int> update(ObjectModel object) async {
     Box<ObjectModel> box = objectbox.store.box<ObjectModel>();
     int result = box.put(object);
     return result;

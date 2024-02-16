@@ -94,8 +94,8 @@ class DirectoryManager {
 
 
 
-  Future<String> getPartImageDirectoryPath(String prjUUID, String partUUId) async {
-    return p.join(await getPartDir(prjUUID, partUUId),'images');
+  Future<String> getPartImageDirectoryPath(String prjUUID, String partUUID) async {
+    return p.join(await getPartDir(prjUUID, partUUID),'images');
   }
 
   Future<String> getObjectImagePath(String prjUUID, String partUUId) async {

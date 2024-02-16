@@ -259,11 +259,6 @@ final _entities = <ModelEntity>[
             type: 9,
             flags: 0),
         ModelProperty(
-            id: const IdUid(14, 2043034771619398137),
-            name: 'status',
-            type: 9,
-            flags: 0),
-        ModelProperty(
             id: const IdUid(17, 8462043841317856120),
             name: 'imageId',
             type: 11,
@@ -581,7 +576,8 @@ ModelDefinition getObjectBoxModel() {
         74590857641547405,
         600920114426525750,
         2813440565600476362,
-        4291958494173271157
+        4291958494173271157,
+        2043034771619398137
       ],
       retiredRelationUids: const [
         7096364116743183016,
@@ -827,7 +823,6 @@ ModelDefinition getObjectBoxModel() {
           final labelOffset = fbb.writeString(object.label);
           final typeOffset =
               object.type == null ? null : fbb.writeString(object.type!);
-          final statusOffset = fbb.writeString(object.status);
           final actionTypeOffset = fbb.writeString(object.actionType);
           final typedTextOffset = fbb.writeString(object.typedText);
           fbb.startTable(22);
@@ -841,7 +836,6 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(10, descriptionOffset);
           fbb.addOffset(11, labelOffset);
           fbb.addOffset(12, typeOffset);
-          fbb.addOffset(13, statusOffset);
           fbb.addInt64(16, object.image.targetId);
           fbb.addOffset(17, actionTypeOffset);
           fbb.addOffset(18, typedTextOffset);
@@ -863,10 +857,8 @@ ModelDefinition getObjectBoxModel() {
               const fb.Float64Reader().vTableGet(buffer, rootOffset, 12, 0);
           final bottomParam =
               const fb.Float64Reader().vTableGet(buffer, rootOffset, 14, 0);
-          final statusParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 30, '');
-          final object = ObjectModel(idParam, leftParam, rightParam, topParam,
-              bottomParam, statusParam)
+          final object = ObjectModel(
+              idParam, leftParam, rightParam, topParam, bottomParam)
             ..uuid = const fb.StringReader(asciiOptimization: true)
                 .vTableGet(buffer, rootOffset, 6, '')
             ..color = const fb.StringReader(asciiOptimization: true)
@@ -1176,29 +1168,25 @@ class ObjectModel_ {
   static final type =
       QueryStringProperty<ObjectModel>(_entities[4].properties[9]);
 
-  /// see [ObjectModel.status]
-  static final status =
-      QueryStringProperty<ObjectModel>(_entities[4].properties[10]);
-
   /// see [ObjectModel.image]
   static final image =
-      QueryRelationToOne<ObjectModel, ImageModel>(_entities[4].properties[11]);
+      QueryRelationToOne<ObjectModel, ImageModel>(_entities[4].properties[10]);
 
   /// see [ObjectModel.actionType]
   static final actionType =
-      QueryStringProperty<ObjectModel>(_entities[4].properties[12]);
+      QueryStringProperty<ObjectModel>(_entities[4].properties[11]);
 
   /// see [ObjectModel.typedText]
   static final typedText =
-      QueryStringProperty<ObjectModel>(_entities[4].properties[13]);
+      QueryStringProperty<ObjectModel>(_entities[4].properties[12]);
 
   /// see [ObjectModel.actX]
   static final actX =
-      QueryIntegerProperty<ObjectModel>(_entities[4].properties[14]);
+      QueryIntegerProperty<ObjectModel>(_entities[4].properties[13]);
 
   /// see [ObjectModel.actY]
   static final actY =
-      QueryIntegerProperty<ObjectModel>(_entities[4].properties[15]);
+      QueryIntegerProperty<ObjectModel>(_entities[4].properties[14]);
 
   /// see [ObjectModel.allSubObjects]
   static final allSubObjects =

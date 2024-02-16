@@ -74,7 +74,7 @@ class ScreenLabeling extends HookWidget with WindowListener {
     onImageHandler(String action) async {
       print(action);
       var actions = action.split('&&');
-      var obj = await ObjectDAO().getObject(int.parse(actions[1]));
+      var obj = await ObjectDAO().getDetails(int.parse(actions[1]));
       switch (actions[0]) {
         case 'delete':
           await ObjectDAO().deleteObject(obj!);

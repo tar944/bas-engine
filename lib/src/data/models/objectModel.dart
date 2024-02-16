@@ -14,7 +14,6 @@ class ObjectModel {
   String description="";
   String label="";
   String? type;
-  String status;
   String actionType="";
   String typedText="";
   int actX=-1,actY=-1;
@@ -25,6 +24,5 @@ class ObjectModel {
       this.left,
       this.right,
       this.top,
-      this.bottom,
-      this.status);
+      this.bottom);
 }
