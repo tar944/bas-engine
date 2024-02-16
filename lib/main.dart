@@ -112,10 +112,10 @@ final router = GoRouter(
       builder: (context, state) => const MainPage(),
     ),
     GoRoute(
-      path: '/labeling/:groupId/:softId',
+      path: '/labeling/:groupId',
       name: 'labeling',
       builder: (context, state) =>
-          LabelingPage(int.parse(state.params['groupId']!),int.parse(state.params['softId']!)),
+          LabelingPage(int.parse(state.params['groupId']!)),
     ),
     GoRoute(
       path: '/recordScreens/:partId',

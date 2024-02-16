@@ -43,7 +43,7 @@ class _View extends StatelessView<ObjectItemViewModel> {
 
     final controller = FlyoutController();
     return IconButton(
-      onPressed: vm.isSubGroup?()=>vm.onActionCaller("goto&&${vm.object.id}"):null,
+      onPressed: vm.isSubGroup?()=>vm.onActionCaller("gotoLabeling&&${vm.object.id}"):null,
       style: ButtonStyle(
           padding: ButtonState.all(const EdgeInsets.all(0.0)),
       ),

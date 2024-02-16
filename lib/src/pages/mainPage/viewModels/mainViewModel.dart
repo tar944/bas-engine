@@ -136,13 +136,18 @@ class MainPageViewModel extends ViewModel with WindowListener {
 
   onGroupActionHandler(String action) async {
     var act = action.split("&&");
-    if (act[0] == "refreshPart") {
-      curPart = await ProjectPartDAO().getDetails(curPart!.id);
-      notifyListeners();
-    } else if (act[0] == "refreshGroup") {
-      curGroup = act[1]=="-1"?null:await ImageGroupDAO().getDetails(int.parse(act[1]));
-      notifyListeners();
-      await setGroupGuideText();
+    switch(act[0]){
+      case "refreshPart":
+        curPart = await ProjectPartDAO().getDetails(curPart!.id);
+        notifyListeners();
+        break;
+      case "refreshGroup":
+        curGroup = act[1]=="-1"?null:await ImageGroupDAO().getDetails(int.parse(act[1]));
+        notifyListeners();
+        await setGroupGuideText();
+        break;
+      case "gotoLabeling":
+        break;
     }
   }
 

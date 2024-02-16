@@ -14,9 +14,8 @@ import 'package:window_manager/window_manager.dart';
 
 class LabelingPage extends HookWidget with WindowListener {
   int? groupId;
-  int? softId;
 
-  LabelingPage(this.groupId,this.softId, {super.key});
+  LabelingPage(this.groupId ,{super.key});
 
   void _init() async {
     // Add this line to override the default close handler
@@ -267,7 +266,7 @@ class LabelingPage extends HookWidget with WindowListener {
     }
 
     onBackClicked(){
-      context.goNamed('screensSource',params: {'softwareId':softId.toString()});
+      context.goNamed('mainPage');
     }
 
     return ScaffoldPage(

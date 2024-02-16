@@ -66,6 +66,9 @@ class ImageGroupsViewModel extends ViewModel {
         updateProjectData(int.parse(action.split("&&")[1]));
         onGroupActionCaller("refreshGroup&&${action.split("&&")[1]}");
         break;
+      case 'gotoLabeling':
+        onGroupActionCaller(action);
+        break;
     }
   }
 
