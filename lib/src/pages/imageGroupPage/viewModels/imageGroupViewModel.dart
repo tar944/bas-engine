@@ -26,9 +26,8 @@ class ImageGroupsViewModel extends ViewModel {
   @override
   void init() async {
     final address = await Preference().getMainAddress();
-    if(address==''){
-      updateProjectData(-1);
-    }else{
+    updateProjectData(-1);
+    if(address!=''){
       onGroupSelect("goto&&${address.split("&&")[2]}");
       await Preference().setMainAddress('');
     }

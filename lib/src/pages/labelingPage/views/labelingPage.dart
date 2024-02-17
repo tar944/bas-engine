@@ -56,7 +56,7 @@ class _View extends StatelessView<LabelingViewModel> {
                       width: vm.imgSize.width,
                       height: vm.imgSize.height,
                       decoration: BoxDecoration(
-                        image: DecorationImage(
+                        image: vm.curObject!=null?DecorationImage(
                           image: Image.file(File(vm.curObject!.image.target!.path!)).image,
                           fit: (vm.imgW > MediaQuery.of(context).size.width ||
                               vm.imgH >
@@ -64,7 +64,7 @@ class _View extends StatelessView<LabelingViewModel> {
                                       Dimens.topBarHeight))
                               ? BoxFit.fill
                               : BoxFit.none,
-                        ),
+                        ):null,
                       ),
                       child: PartRegionExplorer(
                         otherObjects: vm.subObjects.where((element) => element.uuid!=vm.curObject!.uuid).toList(),
