@@ -29,7 +29,7 @@ class ImageGroupsViewModel extends ViewModel {
     updateProjectData(-1);
     if(address!=''){
       onGroupSelect("goto&&${address.split("&&")[2]}");
-      await Preference().setMainAddress('');
+      // await Preference().setMainAddress('');
     }
   }
 

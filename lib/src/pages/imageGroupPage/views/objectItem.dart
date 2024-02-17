@@ -91,7 +91,7 @@ class _View extends StatelessView<ObjectItemViewModel> {
                   ),
                   child: Row(
                     children: [
-                      SizedBox(width: 7,),
+                      const SizedBox(width: 7,),
                       Icon(FluentIcons.label,size: 20,color: Colors.magenta.darkest,),
                       Text(Strings.labelIt,style: TextSystem.textL(Colors.magenta.darkest),)
                     ],

@@ -18,6 +18,8 @@ import 'package:path/path.dart' as p;
 
 class LabelingViewModel extends ViewModel {
 
+  final deleteController = FlyoutController();
+  final moreController = FlyoutController();
   ImageGroupModel? group;
   ObjectModel? curObject;
   List<ObjectModel>subObjects=[];
@@ -155,6 +157,11 @@ class LabelingViewModel extends ViewModel {
         //     break;
         //   }
         // }
+        break;
+      case 'next':
+        curObject = group!.allObjects[indexImage];
+        indexImage = 0;
+        notifyListeners();
         break;
       case 'goto':
         curObject = group!.allObjects[indexImage];

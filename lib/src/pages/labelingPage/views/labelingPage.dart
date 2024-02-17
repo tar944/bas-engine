@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelingViewModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/flyImagesList.dart';
 import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
 import 'package:bas_dataset_generator_engine/src/widgets/partRegionExplorer.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -73,42 +75,95 @@ class _View extends StatelessView<LabelingViewModel> {
                       ),
                     ),
                     Positioned(
-                      top: 350,
-                      right: 0,
-                      left: 0,
+                      top: (MediaQuery.sizeOf(context).height/2)-Dimens.actionBtnH/2,
+                      right: 10,
+                      left: 10,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          IconButton(
-                              icon: Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[170].withOpacity(0.5),
-                                    borderRadius: BorderRadius.circular(10),
+                          Container(
+                            width: Dimens.btnWidthNormal,
+                            height: Dimens.actionBtnH,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[170].withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                const SizedBox(width: 5,),
+                                IconButton(
+                                  style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                  icon: const Icon(
+                                    FluentIcons.chevron_left,
+                                    color: Colors.white,
+                                    size: 25,
                                   ),
-                                  child: const Center(
-                                      child: Icon(
-                                        CupertinoIcons.left_chevron,
+                                  onPressed: () => vm.perviousImage()),
+                                const SizedBox(width: 5,),
+                                FlyoutTarget(
+                                  key: GlobalKey(),
+                                  controller: vm.deleteController,
+                                  child: IconButton(
+                                      style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                      icon: Icon(
+                                        FluentIcons.delete,
+                                        color: Colors.red,
+                                        size: 25,
+                                      ),
+                                      onPressed: () => showFlyDelete(
+                                          "Are you sure?",
+                                          "yeh",
+                                          vm.deleteController,
+                                          FlyoutPlacementMode.right,
+                                          vm.curObject!.id!,
+                                          vm.doScreenAction)),
+                                ),
+
+                              ],
+                            ),
+                          ),
+                          Container(
+                            width: Dimens.btnWidthNormal,
+                            height: Dimens.actionBtnH,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[170].withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                const SizedBox(width: 5,),
+                                FlyoutTarget(
+                                  key: GlobalKey(),
+                                  controller: vm.moreController,
+                                  child: IconButton(
+                                      style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                      icon: const Icon(
+                                        FluentIcons.more,
                                         color: Colors.white,
-                                        size: 40,
-                                      ))),
-                              onPressed: () => vm.perviousImage()),
-                          IconButton(
-                              icon: Container(
-                                  width: 50,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                    color: Colors.grey[170].withOpacity(0.5),
-                                    borderRadius: BorderRadius.circular(10),
+                                        size: 25,
+                                      ),
+                                      onPressed: () => showFlyImagesList(
+                                          vm.group!.allObjects,
+                                          vm.curObject!.id!,
+                                          vm.moreController,
+                                          FlyoutPlacementMode.left,
+                                          vm.doScreenAction),
                                   ),
-                                  child: const Center(
-                                      child: Icon(
-                                        CupertinoIcons.right_chevron,
-                                        color: Colors.white,
-                                        size: 40,
-                                      ))),
-                              onPressed: () => vm.nextImage()),
+                                ),
+                                const SizedBox(width: 5,),
+                                IconButton(
+                                  style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                  icon: const Icon(
+                                    FluentIcons.chevron_right,
+                                    color: Colors.white,
+                                    size: 25,
+                                  ),
+                                  onPressed: () => vm.nextImage()),
+
+
+                              ],
+                            ),
+                          ),
                         ],
                       ),
                     )
