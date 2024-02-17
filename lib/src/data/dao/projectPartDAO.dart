@@ -1,7 +1,6 @@
 import 'package:bas_dataset_generator_engine/main.dart';
 import 'package:bas_dataset_generator_engine/objectbox.g.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';

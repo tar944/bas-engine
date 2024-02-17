@@ -22,4 +22,14 @@ class Preference {
     prefs = await SharedPreferences.getInstance();
     return prefs.getString(grpUUID) ?? "";
   }
+
+  setMainAddress(String address) async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString('mainAddress', address);
+  }
+
+  Future<String> getMainAddress()async{
+    prefs = await SharedPreferences.getInstance();
+    return prefs.getString('mainAddress') ?? "";
+  }
 }

@@ -26,7 +26,7 @@ class ImageGroups extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => _View(controller: controller),
-      viewModel: ImageGroupsViewModel(partId, onGroupActionCaller),
+      viewModel: ImageGroupsViewModel(partId,onGroupActionCaller),
     );
   }
 }
@@ -154,55 +154,57 @@ class _View extends StatelessView<ImageGroupsViewModel> {
                 ],
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.only(top: 20, bottom: 20),
-              child: vm.objects.isNotEmpty
-                  ? GridView(
-                controller: ScrollController(keepScrollOffset: false),
-                shrinkWrap: true,
-                scrollDirection: Axis.vertical,
-                gridDelegate:
-                const SliverGridDelegateWithMaxCrossAxisExtent(
-                    maxCrossAxisExtent: 300,
-                    childAspectRatio: 3.2 / 2,
-                    crossAxisSpacing: 20,
-                    mainAxisSpacing: 20),
-                children: vm.objects
-                    .map((item) =>
-                    ObjectItem(
-                      key: GlobalKey(),
-                      allGroups: vm.curGroup==null?vm.groups:[vm.curGroup!],
-                      object: item,
-                      isSubGroup:vm.curGroup!=null,
-                      onActionCaller: vm.onObjectActionHandler,
-                    ))
-                    .toList(),
-              )
-                  : Column(
-                      children: [
-                        const SizedBox(
-                          height: 150,
-                        ),
-                        Container(
-                          height: 350,
-                          width: 350,
-                          decoration: const BoxDecoration(
-                            image: DecorationImage(
-                              image:
-                                  AssetImage('lib/assets/images/emptyBox.png'),
-                              fit: BoxFit.cover,
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.only(top: 20, bottom: 20),
+                child: vm.objects.isNotEmpty
+                    ? GridView(
+                  controller: ScrollController(keepScrollOffset: false),
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  gridDelegate:
+                  const SliverGridDelegateWithMaxCrossAxisExtent(
+                      maxCrossAxisExtent: 300,
+                      childAspectRatio: 3.2 / 2,
+                      crossAxisSpacing: 20,
+                      mainAxisSpacing: 20),
+                  children: vm.objects
+                      .map((item) =>
+                      ObjectItem(
+                        key: GlobalKey(),
+                        allGroups: vm.curGroup==null?vm.groups:[vm.curGroup!],
+                        object: item,
+                        isSubGroup:vm.curGroup!=null,
+                        onActionCaller: vm.onObjectActionHandler,
+                      ))
+                      .toList(),
+                )
+                    : Column(
+                        children: [
+                          const SizedBox(
+                            height: 150,
+                          ),
+                          Container(
+                            height: 350,
+                            width: 350,
+                            decoration: const BoxDecoration(
+                              image: DecorationImage(
+                                image:
+                                    AssetImage('lib/assets/images/emptyBox.png'),
+                                fit: BoxFit.cover,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(
-                          height: 50,
-                        ),
-                        Text(
-                          Strings.emptyUnSortObjects,
-                          style: TextSystem.textL(Colors.white),
-                        ),
-                      ],
-                    ),
+                          const SizedBox(
+                            height: 50,
+                          ),
+                          Text(
+                            Strings.emptyUnSortObjects,
+                            style: TextSystem.textL(Colors.white),
+                          ),
+                        ],
+                      ),
+              ),
             ),
           ],
         ),

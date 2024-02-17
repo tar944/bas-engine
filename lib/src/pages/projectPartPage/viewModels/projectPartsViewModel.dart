@@ -6,6 +6,7 @@ import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/pages/projectPartPage/views/dlgProjectPart.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:file_picker/file_picker.dart';
@@ -25,9 +26,14 @@ class ProjectPartsViewModel extends ViewModel {
 
   @override
   void init() async {
-    var prj = await ProjectDAO().getDetails(prjID);
-    prjUUID = prj!.uuid;
-    updateProjectData();
+    final address = await Preference().getMainAddress();
+    if(address==''){
+      var prj = await ProjectDAO().getDetails(prjID);
+      prjUUID = prj!.uuid;
+      updateProjectData();
+    }else{
+      onPartSelect('goto&&${address.split("&&")[1]}');
+    }
   }
 
   updateProjectData() async {

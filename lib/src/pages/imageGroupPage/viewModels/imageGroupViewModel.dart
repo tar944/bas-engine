@@ -1,12 +1,15 @@
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/imageGroupPage/views/dlgImageGroup.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class ImageGroupsViewModel extends ViewModel {
@@ -15,19 +18,27 @@ class ImageGroupsViewModel extends ViewModel {
   ImageGroupModel? curGroup;
   int partId;
   String partUUID="";
+  String prjUUID="";
   ValueSetter<String> onGroupActionCaller;
 
   ImageGroupsViewModel(this.partId, this.onGroupActionCaller);
 
   @override
   void init() async {
-    updateProjectData(-1);
+    final address = await Preference().getMainAddress();
+    if(address==''){
+      updateProjectData(-1);
+    }else{
+      onGroupSelect("goto&&${address.split("&&")[2]}");
+      await Preference().setMainAddress('');
+    }
   }
 
   updateProjectData(groupId) async {
     if(groupId==-1){
       var part = await ProjectPartDAO().getDetails(partId);
-      partUUID = part!.uuid;
+      prjUUID=part!.prjUUID;
+      partUUID = part.uuid;
       objects = part.allObjects;
       curGroup=null;
       groups = part.allGroups;
@@ -74,6 +85,17 @@ class ImageGroupsViewModel extends ViewModel {
 
   onObjectActionHandler(String action)async{
     switch (action.split('&&')[0]) {
+      case 'gotoLabeling':
+        final curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
+        final curPart = await ProjectPartDAO().getDetails(partId);
+        await Preference().setMainAddress('${curProject!.id}&&${curPart!.id}&&${curGroup!.id}');
+        context.goNamed('labeling',params: {
+          'groupId':curGroup!.id.toString(),
+          'partUUID':partUUID,
+          'prjUUID':prjUUID,
+          'title': '${curProject.title} > ${curPart.name} > ${curGroup!.name}'
+        });
+        break;
       case 'addToGroup':
         var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[2]));
         await ProjectPartDAO().removeObject(partId, obj!);
@@ -97,6 +119,7 @@ class ImageGroupsViewModel extends ViewModel {
           updateProjectData(curGroup!.id);
         }
         break;
+
     }
     onGroupActionCaller('refreshPart&&');
   }

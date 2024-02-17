@@ -12,7 +12,6 @@ class ProjectsList extends StatelessWidget {
       {super.key,
         required this.onProjectActionCaller,
         required this.controller});
-
   ValueSetter<int> onProjectActionCaller;
   final ProjectController controller;
 

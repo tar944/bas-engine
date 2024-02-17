@@ -9,7 +9,12 @@ typedef PartController = void Function(BuildContext context, void Function() met
 
 class ProjectParts extends StatelessWidget {
   ProjectParts(
-      {super.key, required this.prjId, required this.onPartActionCaller,required this.controller});
+      {
+        super.key,
+        required this.prjId,
+        required this.onPartActionCaller,
+        required this.controller,
+      });
 
   int prjId;
   ValueSetter<int> onPartActionCaller;

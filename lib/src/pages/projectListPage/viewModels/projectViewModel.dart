@@ -1,5 +1,6 @@
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/pages/projectListPage/views/dlgProjectInfo.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -12,8 +13,14 @@ class ProjectViewModel extends ViewModel {
   ProjectViewModel(this.onProjectActionCaller);
 
   @override
-  void init() {
-    updateProjectData();
+  void init() async{
+    final address = await Preference().getMainAddress();
+    if(address=="")
+    {
+      updateProjectData();
+    }else{
+      onProjectSelect("goto&&${address.split('&&')[0]}");
+    }
   }
 
   updateProjectData()async{

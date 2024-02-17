@@ -7,7 +7,6 @@ import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
-import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
@@ -83,14 +82,6 @@ class RecordPage extends HookWidget with WindowListener {
 
   void onCloseListener(String action) {}
 
-  // @override
-  // void onWindowClose() async {
-  //   bool isPreventClose = await windowManager.isPreventClose();
-  //   if (isPreventClose) {
-  //     showContentDialog(context, true, onCloseListener);
-  //   }
-  // }
-
   @override
   Widget build(BuildContext context) {
     var imgNumber = useState(0);
@@ -102,7 +93,7 @@ class RecordPage extends HookWidget with WindowListener {
       Future<void>.microtask(() async {
         final part = await ProjectPartDAO().getDetails(partId!);
         dirPath.value=part!.path;
-        imgNumber.value = part.allObjects.length+1;
+        imgNumber.value = part.allObjects.length;
       });
       return null;
     }, const []);
