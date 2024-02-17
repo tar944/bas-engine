@@ -50,6 +50,7 @@ dependencies:
   flutter_meedu_videoplayer: ^4.2.1
   fc_native_video_thumbnail: ^0.4.0
   objectbox: 2.2.1
+  shared_preferences: ^2.1.0
   objectbox_flutter_libs: 2.2.1
   flython: ^0.2.0
   image: ^4.0.17

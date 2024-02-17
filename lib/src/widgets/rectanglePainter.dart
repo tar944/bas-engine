@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 class RectanglePainter extends CustomPainter {
   ObjectModel? object;
-
-  RectanglePainter(this.object);
+  bool isMine;
+  RectanglePainter({required this.object,required this.isMine});
 
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = Colors.blue
+      ..color = isMine?Colors.blue:Colors.purpleAccent
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 

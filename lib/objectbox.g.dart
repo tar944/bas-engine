@@ -165,7 +165,11 @@ final _entities = <ModelEntity>[
         ModelRelation(
             id: const IdUid(12, 2602594879739795062),
             name: 'allParts',
-            targetId: const IdUid(17, 8566624654259097881))
+            targetId: const IdUid(17, 8566624654259097881)),
+        ModelRelation(
+            id: const IdUid(27, 247004475918620838),
+            name: 'allLabels',
+            targetId: const IdUid(11, 1544585194803526305))
       ],
       backlinks: <ModelBacklink>[]),
   ModelEntity(
@@ -205,7 +209,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(15, 8892823931225835339),
       name: 'ObjectModel',
-      lastPropertyId: const IdUid(21, 1546829186045300551),
+      lastPropertyId: const IdUid(23, 701907757606801129),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -244,21 +248,6 @@ final _entities = <ModelEntity>[
             type: 9,
             flags: 0),
         ModelProperty(
-            id: const IdUid(11, 1285654446534784458),
-            name: 'description',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(12, 9165561462202068346),
-            name: 'label',
-            type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(13, 5080785029030309426),
-            name: 'type',
-            type: 9,
-            flags: 0),
-        ModelProperty(
             id: const IdUid(17, 8462043841317856120),
             name: 'imageId',
             type: 11,
@@ -284,14 +273,21 @@ final _entities = <ModelEntity>[
             id: const IdUid(21, 1546829186045300551),
             name: 'actY',
             type: 6,
-            flags: 0)
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(22, 5847613169931022485),
+            name: 'parentUUID',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(23, 701907757606801129),
+            name: 'labelId',
+            type: 11,
+            flags: 520,
+            indexId: const IdUid(20, 1012226703174902082),
+            relationTarget: 'LabelModel')
       ],
-      relations: <ModelRelation>[
-        ModelRelation(
-            id: const IdUid(17, 6568521647494320726),
-            name: 'allSubObjects',
-            targetId: const IdUid(15, 8892823931225835339))
-      ],
+      relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[]),
   ModelEntity(
       id: const IdUid(16, 6891732610780172479),
@@ -350,7 +346,11 @@ final _entities = <ModelEntity>[
         ModelRelation(
             id: const IdUid(25, 7488586066767824454),
             name: 'allGroups',
-            targetId: const IdUid(16, 6891732610780172479))
+            targetId: const IdUid(16, 6891732610780172479)),
+        ModelRelation(
+            id: const IdUid(26, 5332826950601969275),
+            name: 'subObjects',
+            targetId: const IdUid(15, 8892823931225835339))
       ],
       backlinks: <ModelBacklink>[]),
   ModelEntity(
@@ -431,8 +431,8 @@ ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
       lastEntityId: const IdUid(17, 8566624654259097881),
-      lastIndexId: const IdUid(19, 9059001634404699452),
-      lastRelationId: const IdUid(25, 7488586066767824454),
+      lastIndexId: const IdUid(20, 1012226703174902082),
+      lastRelationId: const IdUid(27, 247004475918620838),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [
         5922885288332288138,
@@ -577,7 +577,10 @@ ModelDefinition getObjectBoxModel() {
         600920114426525750,
         2813440565600476362,
         4291958494173271157,
-        2043034771619398137
+        2043034771619398137,
+        1285654446534784458,
+        9165561462202068346,
+        5080785029030309426
       ],
       retiredRelationUids: const [
         7096364116743183016,
@@ -588,7 +591,8 @@ ModelDefinition getObjectBoxModel() {
         3601124264196646975,
         5357330969673175979,
         3750078866380978121,
-        4432505387344085307
+        4432505387344085307,
+        6568521647494320726
       ],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -692,7 +696,8 @@ ModelDefinition getObjectBoxModel() {
         toOneRelations: (ProjectModel object) => [],
         toManyRelations: (ProjectModel object) => {
               RelInfo<ProjectModel>.toMany(11, object.id): object.allVideos,
-              RelInfo<ProjectModel>.toMany(12, object.id): object.allParts
+              RelInfo<ProjectModel>.toMany(12, object.id): object.allParts,
+              RelInfo<ProjectModel>.toMany(27, object.id): object.allLabels
             },
         getId: (ProjectModel object) => object.id,
         setId: (ProjectModel object, int id) {
@@ -763,6 +768,8 @@ ModelDefinition getObjectBoxModel() {
               RelInfo<ProjectModel>.toMany(11, object.id));
           InternalToManyAccess.setRelInfo<ProjectModel>(object.allParts, store,
               RelInfo<ProjectModel>.toMany(12, object.id));
+          InternalToManyAccess.setRelInfo<ProjectModel>(object.allLabels, store,
+              RelInfo<ProjectModel>.toMany(27, object.id));
           return object;
         }),
     ImageModel: EntityDefinition<ImageModel>(
@@ -809,9 +816,8 @@ ModelDefinition getObjectBoxModel() {
         }),
     ObjectModel: EntityDefinition<ObjectModel>(
         model: _entities[4],
-        toOneRelations: (ObjectModel object) => [object.image],
-        toManyRelations: (ObjectModel object) =>
-            {RelInfo<ObjectModel>.toMany(17, object.id!): object.allSubObjects},
+        toOneRelations: (ObjectModel object) => [object.image, object.label],
+        toManyRelations: (ObjectModel object) => {},
         getId: (ObjectModel object) => object.id,
         setId: (ObjectModel object, int id) {
           object.id = id;
@@ -819,13 +825,10 @@ ModelDefinition getObjectBoxModel() {
         objectToFB: (ObjectModel object, fb.Builder fbb) {
           final uuidOffset = fbb.writeString(object.uuid);
           final colorOffset = fbb.writeString(object.color);
-          final descriptionOffset = fbb.writeString(object.description);
-          final labelOffset = fbb.writeString(object.label);
-          final typeOffset =
-              object.type == null ? null : fbb.writeString(object.type!);
           final actionTypeOffset = fbb.writeString(object.actionType);
           final typedTextOffset = fbb.writeString(object.typedText);
-          fbb.startTable(22);
+          final parentUUIDOffset = fbb.writeString(object.parentUUID);
+          fbb.startTable(24);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, uuidOffset);
           fbb.addFloat64(2, object.left);
@@ -833,14 +836,13 @@ ModelDefinition getObjectBoxModel() {
           fbb.addFloat64(4, object.top);
           fbb.addFloat64(5, object.bottom);
           fbb.addOffset(7, colorOffset);
-          fbb.addOffset(10, descriptionOffset);
-          fbb.addOffset(11, labelOffset);
-          fbb.addOffset(12, typeOffset);
           fbb.addInt64(16, object.image.targetId);
           fbb.addOffset(17, actionTypeOffset);
           fbb.addOffset(18, typedTextOffset);
           fbb.addInt64(19, object.actX);
           fbb.addInt64(20, object.actY);
+          fbb.addOffset(21, parentUUIDOffset);
+          fbb.addInt64(22, object.label.targetId);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -857,18 +859,14 @@ ModelDefinition getObjectBoxModel() {
               const fb.Float64Reader().vTableGet(buffer, rootOffset, 12, 0);
           final bottomParam =
               const fb.Float64Reader().vTableGet(buffer, rootOffset, 14, 0);
-          final object = ObjectModel(
-              idParam, leftParam, rightParam, topParam, bottomParam)
+          final parentUUIDParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 46, '');
+          final object = ObjectModel(idParam, leftParam, rightParam, topParam,
+              bottomParam, parentUUIDParam)
             ..uuid = const fb.StringReader(asciiOptimization: true)
                 .vTableGet(buffer, rootOffset, 6, '')
             ..color = const fb.StringReader(asciiOptimization: true)
                 .vTableGet(buffer, rootOffset, 18, '')
-            ..description = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 24, '')
-            ..label = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 26, '')
-            ..type = const fb.StringReader(asciiOptimization: true)
-                .vTableGetNullable(buffer, rootOffset, 28)
             ..actionType = const fb.StringReader(asciiOptimization: true)
                 .vTableGet(buffer, rootOffset, 38, '')
             ..typedText = const fb.StringReader(asciiOptimization: true)
@@ -879,8 +877,9 @@ ModelDefinition getObjectBoxModel() {
           object.image.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 36, 0);
           object.image.attach(store);
-          InternalToManyAccess.setRelInfo<ObjectModel>(object.allSubObjects,
-              store, RelInfo<ObjectModel>.toMany(17, object.id!));
+          object.label.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 48, 0);
+          object.label.attach(store);
           return object;
         }),
     ImageGroupModel: EntityDefinition<ImageGroupModel>(
@@ -888,7 +887,8 @@ ModelDefinition getObjectBoxModel() {
         toOneRelations: (ImageGroupModel object) => [object.label],
         toManyRelations: (ImageGroupModel object) => {
               RelInfo<ImageGroupModel>.toMany(24, object.id): object.allObjects,
-              RelInfo<ImageGroupModel>.toMany(25, object.id): object.allGroups
+              RelInfo<ImageGroupModel>.toMany(25, object.id): object.allGroups,
+              RelInfo<ImageGroupModel>.toMany(26, object.id): object.subObjects
             },
         getId: (ImageGroupModel object) => object.id,
         setId: (ImageGroupModel object, int id) {
@@ -941,6 +941,8 @@ ModelDefinition getObjectBoxModel() {
               store, RelInfo<ImageGroupModel>.toMany(24, object.id));
           InternalToManyAccess.setRelInfo<ImageGroupModel>(object.allGroups,
               store, RelInfo<ImageGroupModel>.toMany(25, object.id));
+          InternalToManyAccess.setRelInfo<ImageGroupModel>(object.subObjects,
+              store, RelInfo<ImageGroupModel>.toMany(26, object.id));
           return object;
         }),
     ProjectPartModel: EntityDefinition<ProjectPartModel>(
@@ -1101,6 +1103,10 @@ class ProjectModel_ {
   /// see [ProjectModel.allParts]
   static final allParts = QueryRelationToMany<ProjectModel, ProjectPartModel>(
       _entities[2].relations[1]);
+
+  /// see [ProjectModel.allLabels]
+  static final allLabels =
+      QueryRelationToMany<ProjectModel, LabelModel>(_entities[2].relations[2]);
 }
 
 /// [ImageModel] entity fields to define ObjectBox queries.
@@ -1156,41 +1162,33 @@ class ObjectModel_ {
   static final color =
       QueryStringProperty<ObjectModel>(_entities[4].properties[6]);
 
-  /// see [ObjectModel.description]
-  static final description =
-      QueryStringProperty<ObjectModel>(_entities[4].properties[7]);
-
-  /// see [ObjectModel.label]
-  static final label =
-      QueryStringProperty<ObjectModel>(_entities[4].properties[8]);
-
-  /// see [ObjectModel.type]
-  static final type =
-      QueryStringProperty<ObjectModel>(_entities[4].properties[9]);
-
   /// see [ObjectModel.image]
   static final image =
-      QueryRelationToOne<ObjectModel, ImageModel>(_entities[4].properties[10]);
+      QueryRelationToOne<ObjectModel, ImageModel>(_entities[4].properties[7]);
 
   /// see [ObjectModel.actionType]
   static final actionType =
-      QueryStringProperty<ObjectModel>(_entities[4].properties[11]);
+      QueryStringProperty<ObjectModel>(_entities[4].properties[8]);
 
   /// see [ObjectModel.typedText]
   static final typedText =
-      QueryStringProperty<ObjectModel>(_entities[4].properties[12]);
+      QueryStringProperty<ObjectModel>(_entities[4].properties[9]);
 
   /// see [ObjectModel.actX]
   static final actX =
-      QueryIntegerProperty<ObjectModel>(_entities[4].properties[13]);
+      QueryIntegerProperty<ObjectModel>(_entities[4].properties[10]);
 
   /// see [ObjectModel.actY]
   static final actY =
-      QueryIntegerProperty<ObjectModel>(_entities[4].properties[14]);
+      QueryIntegerProperty<ObjectModel>(_entities[4].properties[11]);
 
-  /// see [ObjectModel.allSubObjects]
-  static final allSubObjects =
-      QueryRelationToMany<ObjectModel, ObjectModel>(_entities[4].relations[0]);
+  /// see [ObjectModel.parentUUID]
+  static final parentUUID =
+      QueryStringProperty<ObjectModel>(_entities[4].properties[12]);
+
+  /// see [ObjectModel.label]
+  static final label =
+      QueryRelationToOne<ObjectModel, LabelModel>(_entities[4].properties[13]);
 }
 
 /// [ImageGroupModel] entity fields to define ObjectBox queries.
@@ -1235,6 +1233,10 @@ class ImageGroupModel_ {
   static final allGroups =
       QueryRelationToMany<ImageGroupModel, ImageGroupModel>(
           _entities[5].relations[1]);
+
+  /// see [ImageGroupModel.subObjects]
+  static final subObjects = QueryRelationToMany<ImageGroupModel, ObjectModel>(
+      _entities[5].relations[2]);
 }
 
 /// [ProjectPartModel] entity fields to define ObjectBox queries.

@@ -8,10 +8,12 @@ class PartRegionExplorer extends HookWidget {
   const PartRegionExplorer( {
     Key? key,
     required this.onNewObjectHandler,
-    required this.allObjects,
+    required this.otherObjects,
+    required this.itsObjects
   }) : super(key: key);
 
-  final List<ObjectModel> allObjects;
+  final List<ObjectModel> otherObjects;
+  final List<ObjectModel> itsObjects;
   final ValueSetter<ObjectModel> onNewObjectHandler;
 
   @override
@@ -31,12 +33,23 @@ class PartRegionExplorer extends HookWidget {
           onNewListener: onNewRectangleHandler,
         ),
       ),
-      ...allObjects.map((item) {
+      ...otherObjects.map((item) {
         return Positioned(
           top: item.top,
           left: item.left,
           child: ExploredPartRegion(
             curObject: item,
+            isMine: true,
+          ),
+        );
+      }).toList(),
+      ...itsObjects.map((item) {
+        return Positioned(
+          top: item.top,
+          left: item.left,
+          child: ExploredPartRegion(
+            curObject: item,
+            isMine: false,
           ),
         );
       }).toList(),

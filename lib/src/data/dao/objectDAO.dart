@@ -16,18 +16,6 @@ class ObjectDAO {
     return result;
   }
 
-  addSubObject(int objId,ObjectModel obj)async{
-    var group = await getDetails(objId);
-    group!.allSubObjects.add(obj);
-    update(group);
-  }
-
-  removeSubObject(int objId,ObjectModel obj)async{
-    var group = await getDetails(objId);
-    group!.allSubObjects.removeWhere((element) => element.id == obj.id);
-    update(group);
-  }
-
   Future<int> update(ObjectModel object) async {
     Box<ObjectModel> box = objectbox.store.box<ObjectModel>();
     int result = box.put(object);

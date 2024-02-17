@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
 import 'package:objectbox/objectbox.dart';
@@ -15,6 +16,7 @@ class ProjectModel {
   String? companyLogo;
   final  allVideos= ToMany<VideoModel>();
   final  allParts= ToMany<ProjectPartModel>();
+  final  allLabels= ToMany<LabelModel>();
 
   ProjectModel(
       this.id,

@@ -29,6 +29,18 @@ class ImageGroupDAO {
     update(group);
   }
 
+  addSubObject(int groupId,ObjectModel obj)async{
+    var group = await getDetails(groupId);
+    group!.subObjects.add(obj);
+    update(group);
+  }
+
+  removeSubObject(int groupId,ObjectModel obj)async{
+    var group = await getDetails(groupId);
+    group!.subObjects.removeWhere((element) => element.id == obj.id);
+    update(group);
+  }
+
   Future<int> update(ImageGroupModel part) async {
     Box<ImageGroupModel> box = objectbox.store.box<ImageGroupModel>();
     int result = box.put(part);

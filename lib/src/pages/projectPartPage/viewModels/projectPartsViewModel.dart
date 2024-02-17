@@ -67,7 +67,7 @@ class ProjectPartsViewModel extends ViewModel {
                     await DirectoryManager()
                         .getPartImageDirectoryPath(part!.prjUUID, part.uuid),
                     path.basename(p.path!)));
-            ObjectModel obj = ObjectModel(-1, 0, 0, 0, 0);
+            ObjectModel obj = ObjectModel(-1, 0, 0, 0, 0,"");
             obj.actionType = "notSet";
             obj.actX = -1;
             obj.actY = -1;

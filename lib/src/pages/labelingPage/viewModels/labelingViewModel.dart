@@ -5,6 +5,7 @@ import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -19,6 +20,7 @@ class LabelingViewModel extends ViewModel {
 
   ImageGroupModel? group;
   ObjectModel? curObject;
+  List<ObjectModel>subObjects=[];
   final int groupId;
   final String title,partUUID,prjUUID;
   int indexImage = 0, imgH = 0,imgW = 0;
@@ -44,12 +46,21 @@ class LabelingViewModel extends ViewModel {
       await _windowShow();
     });
     group=await ImageGroupDAO().getDetails(groupId);
-
-    for (final object in group!.allObjects) {
-      if (object.allSubObjects.isEmpty) {
-        indexImage= group!.allObjects.indexOf(object);
-        curObject=object;
-        break;
+    subObjects=group!.subObjects;
+    for(var grp in group!.allGroups){
+      if(grp.allObjects.isNotEmpty){
+        subObjects.addAll(grp.allObjects);
+      }
+    }
+    final objUUID = await Preference().getGroupIndex(group!.uuid);
+    curObject=group!.allObjects[0];
+    if(objUUID!=""){
+      for (final object in group!.allObjects) {
+        if (object.uuid==objUUID) {
+          indexImage= group!.allObjects.indexOf(object);
+          curObject=object;
+          break;
+        }
       }
     }
     setImageSize();
@@ -97,16 +108,24 @@ class LabelingViewModel extends ViewModel {
     }
   }
 
-  nextImage() {
+  nextImage() async{
     indexImage = indexImage++;
     if (indexImage == group!.allObjects.length) {
       return indexImage = 0;
     }
+    await Preference().setGroupIndex(group!.uuid, group!.allObjects[indexImage].uuid);
   }
 
-  perviousImage() {
+  perviousImage() async{
     if (indexImage == 0) return;
     indexImage = indexImage--;
+
+  }
+
+  findCurrentSubObjects()async{
+
+    await Preference().setGroupIndex(group!.uuid, group!.allObjects[indexImage].uuid);
+    notifyListeners();
   }
 
   doScreenAction(String action) async {
@@ -179,6 +198,6 @@ class LabelingViewModel extends ViewModel {
     img.id =await ImageDAO().add(img);
     newObject.image.target = img;
     await ObjectDAO().addObject(newObject);
-    await ObjectDAO().addSubObject(curObject!.id!, newObject);
+    await ImageGroupDAO().addSubObject(curObject!.id!, newObject);
   }
 }

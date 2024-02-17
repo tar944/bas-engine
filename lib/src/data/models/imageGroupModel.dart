@@ -1,4 +1,3 @@
-import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:objectbox/objectbox.dart';
@@ -14,6 +13,7 @@ class ImageGroupModel {
   String? type;
   String path;
   final allObjects = ToMany<ObjectModel>();
+  final subObjects = ToMany<ObjectModel>();
   final allGroups = ToMany<ImageGroupModel>();
   final label = ToOne<LabelModel>();
 

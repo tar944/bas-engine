@@ -3,9 +3,11 @@ import 'package:bas_dataset_generator_engine/src/widgets/rectanglePainter.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 class ExploredPartRegion extends StatelessWidget {
-  ExploredPartRegion({Key? key, required this.curObject}) : super(key: key);
+  ExploredPartRegion({Key? key, required this.curObject, required this.isMine})
+      : super(key: key);
 
   ObjectModel curObject;
+  bool isMine;
 
   @override
   Widget build(BuildContext context) {
@@ -15,12 +17,16 @@ class ExploredPartRegion extends StatelessWidget {
       child: Stack(
         children: [
           CustomPaint(
-            painter: RectanglePainter(ObjectModel(
-                0,
-                0.0,
-                curObject.right - curObject.left,
-                0.0,
-                curObject.bottom - curObject.top)),
+            painter: RectanglePainter(
+                object: ObjectModel(
+                    0,
+                    0.0,
+                    curObject.right - curObject.left,
+                    0.0,
+                    curObject.bottom - curObject.top,
+                    ""
+                ),
+                isMine: isMine),
           ),
         ],
       ),
