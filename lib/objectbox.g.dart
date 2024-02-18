@@ -851,6 +851,8 @@ ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
           final idParam =
               const fb.Int64Reader().vTableGetNullable(buffer, rootOffset, 4);
+          final uuidParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
           final leftParam =
               const fb.Float64Reader().vTableGet(buffer, rootOffset, 8, 0);
           final rightParam =
@@ -861,10 +863,8 @@ ModelDefinition getObjectBoxModel() {
               const fb.Float64Reader().vTableGet(buffer, rootOffset, 14, 0);
           final parentUUIDParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 46, '');
-          final object = ObjectModel(idParam, leftParam, rightParam, topParam,
-              bottomParam, parentUUIDParam)
-            ..uuid = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 6, '')
+          final object = ObjectModel(idParam, uuidParam, leftParam, rightParam,
+              topParam, bottomParam, parentUUIDParam)
             ..color = const fb.StringReader(asciiOptimization: true)
                 .vTableGet(buffer, rootOffset, 18, '')
             ..actionType = const fb.StringReader(asciiOptimization: true)

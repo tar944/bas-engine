@@ -131,7 +131,7 @@ class RecordPage extends HookWidget with WindowListener {
               silent: true,
             );
 
-            ObjectModel obj = ObjectModel(-1, 0, 0, 0, 0,"");
+            ObjectModel obj = ObjectModel(-1,const Uuid().v4(), 0, 0, 0, 0,"");
             obj.actionType = mouseEvent.mouseMsg.toString();
             obj.actX=mouseEvent.x;
             obj.actY=mouseEvent.y;

@@ -18,7 +18,8 @@ class PartRegionExplorer extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    print('other object size => ${otherObjects.length}');
+    print('its objects size => ${itsObjects.length}');
     onNewRectangleHandler(ObjectModel newObject) async{
       onNewObjectHandler(newObject);
     }

@@ -6,7 +6,7 @@ import 'package:objectbox/objectbox.dart';
 class ObjectModel {
   @Id()
   int? id;
-  String uuid="";
+  String uuid;
   String parentUUID;
   double left;
   double right;
@@ -20,6 +20,7 @@ class ObjectModel {
   final label = ToOne<LabelModel>();
   ObjectModel(
       this.id,
+      this.uuid,
       this.left,
       this.right,
       this.top,

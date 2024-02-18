@@ -184,7 +184,7 @@ class LabelingViewModel extends ViewModel {
   }
 
   onNewPartCreatedHandler(ObjectModel newObject) async {
-    final path = await DirectoryManager().getPartImageDirectoryPath(prjUUID, partUUID);
+    final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
     final cmd = i.Command()
       ..decodeImageFile(curObject!.image.target!.path!)
       ..copyCrop(
@@ -199,7 +199,11 @@ class LabelingViewModel extends ViewModel {
     var img = ImageModel(-1, const Uuid().v4(), newObject.uuid, p.basename(path), path);
     img.id =await ImageDAO().add(img);
     newObject.image.target = img;
-    await ObjectDAO().addObject(newObject);
-    await ImageGroupDAO().addSubObject(curObject!.id!, newObject);
+    newObject.uuid=const Uuid().v4();
+    newObject.parentUUID=curObject!.uuid;
+    newObject.id=await ObjectDAO().addObject(newObject);
+    await ImageGroupDAO().addSubObject(groupId, newObject);
+    subObjects.add(newObject);
+    notifyListeners();
   }
 }

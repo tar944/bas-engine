@@ -2,6 +2,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/widgets/rectanglePainter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:uuid/uuid.dart';
 
 class NewRectanglePainter extends HookWidget {
   NewRectanglePainter(
@@ -40,6 +41,7 @@ class NewRectanglePainter extends HookWidget {
         isPainting.value = false;
         final part = ObjectModel(
             0,
+            const Uuid().v4(),
             right.value > left.value ? left.value : right.value,
             right.value > left.value ? right.value : left.value,
             top.value > bottom.value ? bottom.value : top.value,
@@ -54,7 +56,7 @@ class NewRectanglePainter extends HookWidget {
       },
       child: CustomPaint(
         painter: RectanglePainter(object:ObjectModel(
-            0, left.value, right.value, top.value, bottom.value,""),isMine: false),
+            0,"", left.value, right.value, top.value, bottom.value,""),isMine: false),
       ),
     );
   }

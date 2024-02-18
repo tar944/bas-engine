@@ -20,6 +20,7 @@ class ExploredPartRegion extends StatelessWidget {
             painter: RectanglePainter(
                 object: ObjectModel(
                     0,
+                    "",
                     0.0,
                     curObject.right - curObject.left,
                     0.0,
