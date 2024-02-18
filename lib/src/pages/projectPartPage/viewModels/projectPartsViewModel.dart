@@ -58,7 +58,6 @@ class ProjectPartsViewModel extends ViewModel {
         break;
       case 'record':
         context.goNamed('recordScreens', params: {'partId': part!.id.toString()});
-        Navigator.pop(context);
         break;
       case 'chooseImages':
         FilePickerResult? result = await FilePicker.platform.pickFiles(
