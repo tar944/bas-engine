@@ -12,13 +12,14 @@ import 'package:pmvvm/pmvvm.dart';
 
 
 class LabelingPage extends StatelessWidget {
-  int groupId;
+  int groupId,objId;
   String partUUID,prjUUID;
   String title;
 
   LabelingPage({
     super.key,
     required this.groupId ,
+    required this.objId,
     required this.partUUID,
     required this.prjUUID,
     required this.title});
@@ -27,7 +28,7 @@ class LabelingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: LabelingViewModel(partUUID,prjUUID,groupId,title),
+      viewModel: LabelingViewModel(objId,partUUID,prjUUID,groupId,title),
     );
   }
 }
@@ -159,8 +160,6 @@ class _View extends StatelessView<LabelingViewModel> {
                                     size: 25,
                                   ),
                                   onPressed: () => vm.nextImage()),
-
-
                               ],
                             ),
                           ),

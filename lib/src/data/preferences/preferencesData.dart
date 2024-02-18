@@ -13,16 +13,6 @@ class Preference {
     return prefs.getString('token') ?? "";
   }
 
-  setGroupIndex(String grpUUID,String objUUID) async {
-    prefs = await SharedPreferences.getInstance();
-    prefs.setString(grpUUID, objUUID);
-  }
-
-  Future<String> getGroupIndex(String grpUUID)async{
-    prefs = await SharedPreferences.getInstance();
-    return prefs.getString(grpUUID) ?? "";
-  }
-
   setMainAddress(String address) async {
     prefs = await SharedPreferences.getInstance();
     prefs.setString('mainAddress', address);

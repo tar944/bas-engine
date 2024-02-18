@@ -5,7 +5,6 @@ import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
-import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -23,12 +22,12 @@ class LabelingViewModel extends ViewModel {
   ImageGroupModel? group;
   ObjectModel? curObject;
   List<ObjectModel>subObjects=[];
-  final int groupId;
+  final int groupId,objId;
   final String title,partUUID,prjUUID;
   int indexImage = 0, imgH = 0,imgW = 0;
   Size imgSize = const Size(0, 0);
 
-  LabelingViewModel(this.partUUID,this.prjUUID,this.groupId,this.title);
+  LabelingViewModel(this.objId,this.partUUID,this.prjUUID,this.groupId,this.title);
 
   @override
   void init() async{
@@ -54,21 +53,19 @@ class LabelingViewModel extends ViewModel {
         subObjects.addAll(grp.allObjects);
       }
     }
-    final objUUID = await Preference().getGroupIndex(group!.uuid);
+
     curObject=group!.allObjects[0];
-    if(objUUID!=""){
-      for (final object in group!.allObjects) {
-        if (object.uuid==objUUID) {
-          indexImage= group!.allObjects.indexOf(object);
-          curObject=object;
-          break;
-        }
+    for (final object in group!.allObjects) {
+      if (object.id==objId) {
+        indexImage= group!.allObjects.indexOf(object);
+        break;
       }
     }
-    setImageSize();
+    updatePageData();
   }
 
-  setImageSize()async{
+  updatePageData()async{
+    curObject=group!.allObjects[indexImage];
     final img = await i.decodeImageFile(curObject!.image.target!.path!);
     imgH = img!.height;
     imgW = img.width;
@@ -82,7 +79,6 @@ class LabelingViewModel extends ViewModel {
     );
     notifyListeners();
   }
-
 
   onBackClicked(){
     context.goNamed('mainPage');
@@ -111,23 +107,17 @@ class LabelingViewModel extends ViewModel {
   }
 
   nextImage() async{
-    indexImage = indexImage++;
+    indexImage = ++indexImage;
     if (indexImage == group!.allObjects.length) {
       return indexImage = 0;
     }
-    await Preference().setGroupIndex(group!.uuid, group!.allObjects[indexImage].uuid);
+    updatePageData();
   }
 
   perviousImage() async{
     if (indexImage == 0) return;
-    indexImage = indexImage--;
-
-  }
-
-  findCurrentSubObjects()async{
-
-    await Preference().setGroupIndex(group!.uuid, group!.allObjects[indexImage].uuid);
-    notifyListeners();
+    indexImage = --indexImage;
+    updatePageData();
   }
 
   doScreenAction(String action) async {
@@ -143,10 +133,16 @@ class LabelingViewModel extends ViewModel {
         // await setScreenAsData();
         break;
       case 'delete':
-        // ScreenShootModel? screen =
-        //     await ScreenDAO().getScreen(int.parse(actions[1]));
-        // await ScreenDAO().deleteScreen(screen!);
-        // await setScreenAsData();
+        var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[1]));
+        await ObjectDAO().deleteObject(obj!);
+        await ImageGroupDAO().removeObject(groupId, obj);
+        group=await ImageGroupDAO().getDetails(groupId);
+        if(group!.allObjects.isNotEmpty){
+          indexImage=indexImage==group!.allObjects.length?--indexImage:indexImage;
+          updatePageData();
+        }else{
+          onBackClicked();
+        }
         break;
       case 'show':
         // ScreenShootModel? screen =
@@ -159,9 +155,8 @@ class LabelingViewModel extends ViewModel {
         // }
         break;
       case 'next':
-        curObject = group!.allObjects[indexImage];
-        indexImage = 0;
-        notifyListeners();
+        indexImage=group!.allObjects.indexWhere((element) => element.id==int.parse(action.split('&&')[1]));
+        updatePageData();
         break;
       case 'goto':
         curObject = group!.allObjects[indexImage];

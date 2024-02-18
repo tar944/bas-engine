@@ -89,6 +89,7 @@ class ImageGroupsViewModel extends ViewModel {
         final curPart = await ProjectPartDAO().getDetails(partId);
         await Preference().setMainAddress('${curProject!.id}&&${curPart!.id}&&${curGroup!.id}');
         context.goNamed('labeling',params: {
+          'objId':action.split('&&')[1],
           'groupId':curGroup!.id.toString(),
           'partUUID':partUUID,
           'prjUUID':prjUUID,

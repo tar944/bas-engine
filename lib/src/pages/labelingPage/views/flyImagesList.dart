@@ -39,7 +39,11 @@ void showFlyImagesList(
                   key: GlobalKey(),
                   isSelected:item.id==curObjId,
                   object: item,
-                  onActionCaller: onActionListener,
+                  onActionCaller: (e)
+                                    {
+                                      onActionListener(e);
+                                      Navigator.pop(context);
+                                    },
                 )).toList(),
           )
         ),
