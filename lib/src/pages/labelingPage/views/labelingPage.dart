@@ -5,7 +5,7 @@ import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelingViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/flyImagesList.dart';
 import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
-import 'package:bas_dataset_generator_engine/src/widgets/partRegionExplorer.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/partRegionExplorer.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pmvvm/pmvvm.dart';

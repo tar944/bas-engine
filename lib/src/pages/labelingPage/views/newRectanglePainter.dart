@@ -1,5 +1,5 @@
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
-import 'package:bas_dataset_generator_engine/src/widgets/rectanglePainter.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/rectanglePainter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:uuid/uuid.dart';
@@ -56,7 +56,7 @@ class NewRectanglePainter extends HookWidget {
       },
       child: CustomPaint(
         painter: RectanglePainter(object:ObjectModel(
-            0,"", left.value, right.value, top.value, bottom.value,""),isMine: false),
+            0,"", left.value, right.value, top.value, bottom.value,""),isMine: false,isActive: false),
       ),
     );
   }
