@@ -36,40 +36,27 @@ class _View extends StatelessView<PartRegionViewModel> {
   Widget render(context, PartRegionViewModel vm) {
 
     return Listener(
-      onPointerDown: (e) {
-        vm.top = e.localPosition.dy;
-        vm.bottom = e.localPosition.dy;
-        vm.left = e.localPosition.dx;
-        vm.right = e.localPosition.dx;
-
-        vm.isPainting = true;
-      },
-      onPointerMove: (e) {
-        if (vm.isPainting) {
-          vm.right = e.localPosition.dx;
-          vm.bottom = e.localPosition.dy;
-        }
-      },
-      onPointerUp: (e) async {
-        vm.isPainting = false;
-        final part = ObjectModel(
-            0,
-            const Uuid().v4(),
-            vm.right > vm.left ? vm.left : vm.right,
-            vm.right > vm.left ? vm.right : vm.left,
-            vm.top > vm.bottom ? vm.bottom : vm.top,
-            vm.top > vm.bottom ? vm.top : vm.bottom,
-            ""
-        );
-        vm.onNewObjectHandler(part);
-        vm.top = 0.0;
-        vm.left = 0.0;
-        vm.right = 0.0;
-        vm.bottom = 0.0;
-      },
       child: Stack(children: [
-        Positioned(child: Listener(
-
+        Positioned(
+            top: 0,
+            bottom: 0,
+            left: 0,
+            right: 0,
+            child: Listener(
+              onPointerDown: (e) =>vm.pointerDownHandler(e),
+              onPointerMove: (e) =>vm.pointerMoveHandler(e),
+              onPointerUp: (e) =>vm.pointerUpHandler(e),
+              child: CustomPaint(
+              painter: RectanglePainter(
+                  object:ObjectModel(
+                      0,
+                      "",
+                      vm.left,
+                      vm.right,
+                      vm.top,
+                      vm.bottom,
+                      ""),isMine: false,isActive: false),
+            ),
         )),
         ...vm.otherObjects.map((item) {
           return Positioned(
@@ -95,17 +82,6 @@ class _View extends StatelessView<PartRegionViewModel> {
             ),
           );
         }).toList(),
-        CustomPaint(
-          painter: RectanglePainter(
-              object:ObjectModel(
-                  0,
-                  "",
-                  vm.left,
-                  vm.right,
-                  vm.top,
-                  vm.bottom,
-                  ""),isMine: false,isActive: false),
-        ),
       ]),
     );
   }

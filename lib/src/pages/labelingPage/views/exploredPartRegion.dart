@@ -36,57 +36,47 @@ class _View extends StatelessView<ExplorerPartViewModel> {
   Widget render(context, ExplorerPartViewModel vm) {
 
     final controller = FlyoutController();
-    return IconButton(
-      style: ButtonStyle(
-          padding: ButtonState.all(EdgeInsets.zero)
-      ),
-      onPressed: ()=>vm.onObjectClickCaller(vm.curObject),
-      icon: MouseRegion(
-        onEnter: (e)=>vm.onMouseEnter(e),
-        onExit: (e)=>vm.onMouseExit(e),
-        child: SizedBox(
-          width: (vm.curObject.right - vm.curObject.left).abs(),
-          height: (vm.curObject.bottom - vm.curObject.top).abs()+40,
-          child: Stack(
-            children: [
-              if(vm.activeState!="deActive")
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 10.0),
-                  child: Container(
-                    width: 92,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(Dimens.actionRadius)),
-                      border: Border.all(color: Colors.grey[150]),
-                      color: Colors.grey[190]
-                    ),
-                    child: Row(children: [
-                      IconButton(icon: const Icon(FluentIcons.edit), onPressed: ()=>{}),
-                      IconButton(icon: const Icon(FluentIcons.label), onPressed: ()=>{}),
-                      IconButton(icon: Icon(FluentIcons.delete,color: Colors.red.dark,), onPressed: ()=>{}),
-                    ],),
-                  ),
+    return SizedBox(
+      width: (vm.curObject.right - vm.curObject.left).abs(),
+      height: (vm.curObject.bottom - vm.curObject.top).abs()+40,
+      child: Stack(
+        children: [
+          if(vm.activeState!="deActive")
+            Padding(
+              padding: const EdgeInsets.only(bottom: 10.0),
+              child: Container(
+                width: 92,
+                decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(Radius.circular(Dimens.actionRadius)),
+                    border: Border.all(color: Colors.grey[150]),
+                    color: Colors.grey[190]
                 ),
-              Positioned(
-                top: 30,
-                child: CustomPaint(
-                  painter: RectanglePainter(
-                      object: ObjectModel(
-                          0,
-                          "",
-                          0.0,
-                          vm.curObject.right - vm.curObject.left,
-                          0.0,
-                          vm.curObject.bottom - vm.curObject.top,
-                          ""
-                      ),
-                      isMine: vm.isMine,
-                      isActive: vm.activeState!="deActive"
-                  ),
-                ),
+                child: Row(children: [
+                  IconButton(icon: const Icon(FluentIcons.edit), onPressed: ()=>{}),
+                  IconButton(icon: const Icon(FluentIcons.label), onPressed: ()=>{}),
+                  IconButton(icon: Icon(FluentIcons.delete,color: Colors.red.dark,), onPressed: ()=>{}),
+                ],),
               ),
-            ],
+            ),
+          Positioned(
+            top: 30,
+            child: CustomPaint(
+              painter: RectanglePainter(
+                  object: ObjectModel(
+                      0,
+                      "",
+                      0.0,
+                      vm.curObject.right - vm.curObject.left,
+                      0.0,
+                      vm.curObject.bottom - vm.curObject.top,
+                      ""
+                  ),
+                  isMine: vm.isMine,
+                  isActive: vm.activeState!="deActive"
+              ),
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
