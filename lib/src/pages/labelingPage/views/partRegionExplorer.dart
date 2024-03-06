@@ -45,7 +45,7 @@ class _View extends StatelessView<PartRegionViewModel> {
             child: Listener(
               onPointerDown: (e) =>vm.pointerDownHandler(e),
               onPointerMove: (e) =>vm.pointerMoveHandler(e),
-              onPointerHover: (e) =>vm.pointerMoveHandler(e),
+              onPointerHover: (e) =>vm.pointerHoverHandler(e),
               onPointerUp: (e)=>vm.pointerUpHandler(e),
               child: CustomPaint(
               painter: RectanglePainter(
@@ -61,12 +61,13 @@ class _View extends StatelessView<PartRegionViewModel> {
         )),
         ...vm.otherObjects.map((item) {
           return Positioned(
-            top: item.top-30,
+            top: item.top-40,
             left: item.left,
             child: ExploredPartRegion(
               curObject: item,
               isMine: false,
               isActive: vm.curObject!=null&&item.id==vm.curObject!.id?true:false,
+              controller: vm.otherController[vm.otherObjects.indexOf(item)],
               onObjectClickCaller: vm.onObjectClickHandler,
             ),
           );
@@ -79,6 +80,7 @@ class _View extends StatelessView<PartRegionViewModel> {
               curObject: item,
               isMine: true,
               isActive:vm.curObject!=null&&item.id==vm.curObject!.id?true:false,
+              controller: vm.itsController[vm.itsObjects.indexOf(item)],
               onObjectClickCaller: vm.onObjectClickHandler,
             ),
           );

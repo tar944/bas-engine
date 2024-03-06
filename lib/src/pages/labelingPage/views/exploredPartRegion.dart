@@ -1,4 +1,5 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/src/controllers/regionRecController.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/ExplorerPartViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/rectanglePainter.dart';
@@ -11,6 +12,7 @@ class ExploredPartRegion extends StatelessWidget {
     required this.curObject,
     required this.isMine,
     required this.isActive,
+    required this.controller,
     required this.onObjectClickCaller
   }) : super(key: key);
 
@@ -18,13 +20,13 @@ class ExploredPartRegion extends StatelessWidget {
   ValueSetter<ObjectModel> onObjectClickCaller;
   bool isMine;
   bool isActive;
-
+  RegionRecController controller;
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
       viewModel:
-      ExplorerPartViewModel(curObject, isMine, isActive, onObjectClickCaller),
+      ExplorerPartViewModel(curObject, isMine, isActive,controller, onObjectClickCaller),
     );
   }
 }
@@ -41,7 +43,7 @@ class _View extends StatelessView<ExplorerPartViewModel> {
       height: (vm.curObject.bottom - vm.curObject.top).abs()+40,
       child: Stack(
         children: [
-          if(vm.activeState!="deActive")
+          if(vm.controller.isHover)
             Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Container(
@@ -72,7 +74,7 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                       ""
                   ),
                   isMine: vm.isMine,
-                  isActive: vm.activeState!="deActive"
+                  isActive: vm.controller.isHover
               ),
             ),
           ),
