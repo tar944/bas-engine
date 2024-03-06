@@ -32,11 +32,16 @@ class PartRegionViewModel extends ViewModel {
     notifyListeners();
   }
   pointerMoveHandler(e){
+
     if (isPainting) {
       right = e.localPosition.dx;
       bottom = e.localPosition.dy;
       notifyListeners();
     }
+  }
+  pointerHoverHandler(e){
+    print(e.localPosition.dx);
+    print(e.localPosition.dy);
   }
   pointerUpHandler(e){
     isPainting = false;

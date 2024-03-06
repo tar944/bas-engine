@@ -45,7 +45,8 @@ class _View extends StatelessView<PartRegionViewModel> {
             child: Listener(
               onPointerDown: (e) =>vm.pointerDownHandler(e),
               onPointerMove: (e) =>vm.pointerMoveHandler(e),
-              onPointerUp: (e) =>vm.pointerUpHandler(e),
+              onPointerHover: (e) =>vm.pointerMoveHandler(e),
+              onPointerUp: (e)=>vm.pointerUpHandler(e),
               child: CustomPaint(
               painter: RectanglePainter(
                   object:ObjectModel(

@@ -52,122 +52,124 @@ class _View extends StatelessView<LabelingViewModel> {
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height - (Dimens.topBarHeight),
                 color: Colors.grey[180],
-                child:Stack(
-                  alignment: Alignment.center,
-                  children: [
-                    Container(
-                      width: vm.imgSize.width,
-                      height: vm.imgSize.height,
-                      decoration: BoxDecoration(
-                        image: vm.curObject!=null?DecorationImage(
-                          image: Image.file(File(vm.curObject!.image.target!.path!)).image,
-                          fit: (vm.imgW > MediaQuery.of(context).size.width ||
-                              vm.imgH >
-                                  (MediaQuery.of(context).size.height -
-                                      Dimens.topBarHeight))
-                              ? BoxFit.fill
-                              : BoxFit.none,
-                        ):null,
+                child:Listener(
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Container(
+                        width: vm.imgSize.width,
+                        height: vm.imgSize.height,
+                        decoration: BoxDecoration(
+                          image: vm.curObject!=null?DecorationImage(
+                            image: Image.file(File(vm.curObject!.image.target!.path!)).image,
+                            fit: (vm.imgW > MediaQuery.of(context).size.width ||
+                                vm.imgH >
+                                    (MediaQuery.of(context).size.height -
+                                        Dimens.topBarHeight))
+                                ? BoxFit.fill
+                                : BoxFit.none,
+                          ):null,
+                        ),
+                        child: PartRegionExplorer(
+                          key: GlobalKey(),
+                          otherObjects: vm.subObjects.where((element) => element.parentUUID!=vm.curObject!.uuid).toList(),
+                          itsObjects: vm.subObjects.where((element) => element.parentUUID==vm.curObject!.uuid).toList(),
+                          onNewObjectHandler: vm.onNewPartCreatedHandler,
+                        ),
                       ),
-                      child: PartRegionExplorer(
-                        key: GlobalKey(),
-                        otherObjects: vm.subObjects.where((element) => element.parentUUID!=vm.curObject!.uuid).toList(),
-                        itsObjects: vm.subObjects.where((element) => element.parentUUID==vm.curObject!.uuid).toList(),
-                        onNewObjectHandler: vm.onNewPartCreatedHandler,
-                      ),
-                    ),
-                    Positioned(
-                      top: (MediaQuery.sizeOf(context).height/2)-Dimens.actionBtnH/2,
-                      right: 10,
-                      left: 10,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            width: Dimens.btnWidthNormal,
-                            height: Dimens.actionBtnH,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[170].withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              children: [
-                                const SizedBox(width: 5,),
-                                IconButton(
-                                  style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                  icon: const Icon(
-                                    FluentIcons.chevron_left,
-                                    color: Colors.white,
-                                    size: 25,
+                      Positioned(
+                        top: (MediaQuery.sizeOf(context).height/2)-Dimens.actionBtnH/2,
+                        right: 10,
+                        left: 10,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              width: Dimens.btnWidthNormal,
+                              height: Dimens.actionBtnH,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[170].withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 5,),
+                                  IconButton(
+                                    style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                    icon: const Icon(
+                                      FluentIcons.chevron_left,
+                                      color: Colors.white,
+                                      size: 25,
+                                    ),
+                                    onPressed: () => vm.perviousImage()),
+                                  const SizedBox(width: 5,),
+                                  FlyoutTarget(
+                                    key: GlobalKey(),
+                                    controller: vm.deleteController,
+                                    child: IconButton(
+                                        style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                        icon: Icon(
+                                          FluentIcons.delete,
+                                          color: Colors.red,
+                                          size: 25,
+                                        ),
+                                        onPressed: () => showFlyDelete(
+                                            "Are you sure?",
+                                            "yeh",
+                                            vm.deleteController,
+                                            FlyoutPlacementMode.right,
+                                            vm.curObject!.id!,
+                                            vm.doScreenAction)),
                                   ),
-                                  onPressed: () => vm.perviousImage()),
-                                const SizedBox(width: 5,),
-                                FlyoutTarget(
-                                  key: GlobalKey(),
-                                  controller: vm.deleteController,
-                                  child: IconButton(
-                                      style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                      icon: Icon(
-                                        FluentIcons.delete,
-                                        color: Colors.red,
-                                        size: 25,
-                                      ),
-                                      onPressed: () => showFlyDelete(
-                                          "Are you sure?",
-                                          "yeh",
-                                          vm.deleteController,
-                                          FlyoutPlacementMode.right,
-                                          vm.curObject!.id!,
-                                          vm.doScreenAction)),
-                                ),
 
-                              ],
+                                ],
+                              ),
                             ),
-                          ),
-                          Container(
-                            width: Dimens.btnWidthNormal,
-                            height: Dimens.actionBtnH,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[170].withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              children: [
-                                const SizedBox(width: 5,),
-                                FlyoutTarget(
-                                  key: GlobalKey(),
-                                  controller: vm.moreController,
-                                  child: IconButton(
-                                      style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                      icon: const Icon(
-                                        FluentIcons.more,
-                                        color: Colors.white,
-                                        size: 25,
-                                      ),
-                                      onPressed: () => showFlyImagesList(
-                                          vm.group!.allObjects,
-                                          vm.curObject!.id!,
-                                          vm.moreController,
-                                          FlyoutPlacementMode.left,
-                                          vm.doScreenAction),
+                            Container(
+                              width: Dimens.btnWidthNormal,
+                              height: Dimens.actionBtnH,
+                              decoration: BoxDecoration(
+                                color: Colors.grey[170].withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              child: Row(
+                                children: [
+                                  const SizedBox(width: 5,),
+                                  FlyoutTarget(
+                                    key: GlobalKey(),
+                                    controller: vm.moreController,
+                                    child: IconButton(
+                                        style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                        icon: const Icon(
+                                          FluentIcons.more,
+                                          color: Colors.white,
+                                          size: 25,
+                                        ),
+                                        onPressed: () => showFlyImagesList(
+                                            vm.group!.allObjects,
+                                            vm.curObject!.id!,
+                                            vm.moreController,
+                                            FlyoutPlacementMode.left,
+                                            vm.doScreenAction),
+                                    ),
                                   ),
-                                ),
-                                const SizedBox(width: 5,),
-                                IconButton(
-                                  style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                  icon: const Icon(
-                                    FluentIcons.chevron_right,
-                                    color: Colors.white,
-                                    size: 25,
-                                  ),
-                                  onPressed: () => vm.nextImage()),
-                              ],
+                                  const SizedBox(width: 5,),
+                                  IconButton(
+                                    style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                    icon: const Icon(
+                                      FluentIcons.chevron_right,
+                                      color: Colors.white,
+                                      size: 25,
+                                    ),
+                                    onPressed: () => vm.nextImage()),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               )
           ]),
