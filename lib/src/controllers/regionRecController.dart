@@ -1,12 +1,13 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
 class RegionRecController extends ChangeNotifier {
-  late bool _isHover=false;
+  late int _activeID=-1;
 
-  bool get isHover => _isHover;
+  int get activeID => _activeID;
 
-  void setHover(bool isHover) {
-    _isHover=isHover;
+  void setActiveID(int activeID) {
+    _activeID=activeID;
+    print("activeId is => $activeID");
     notifyListeners(); // Notify listeners that the data has changed
   }
 }

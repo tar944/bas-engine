@@ -7,24 +7,12 @@ import 'package:uuid/uuid.dart';
 class PartRegionViewModel extends ViewModel {
   final List<ObjectModel> otherObjects;
   final List<ObjectModel> itsObjects;
-  List<RegionRecController> otherController = [];
-  List<RegionRecController> itsController = [];
+  RegionRecController objectController = RegionRecController();
   ObjectModel? curObject;
   final ValueSetter<ObjectModel> onNewObjectHandler;
 
   double left = 0.0, top = 0.0, right = 0.0, bottom = 0.0;
   bool isPainting = false;
-
-  @override
-  void init() {
-    for (var item in otherObjects) {
-      otherController.add(RegionRecController());
-    }
-    for (var item in itsObjects) {
-      itsController.add(RegionRecController());
-    }
-    notifyListeners();
-  }
 
   PartRegionViewModel(
       this.otherObjects, this.itsObjects, this.onNewObjectHandler);
@@ -66,7 +54,8 @@ class PartRegionViewModel extends ViewModel {
           if(y>item.top&&y<item.bottom){
             found =true;
             print("item found");
-            itsController[itsObjects.indexOf(item)].setHover(true);
+            objectController.setActiveID(item.id!);
+            notifyListeners();
             break;
           }
         }
@@ -75,7 +64,8 @@ class PartRegionViewModel extends ViewModel {
         for(var item in otherObjects){
           if(x>item.left&&x<item.right){
             if(y>item.top&&y<item.bottom){
-              otherController[otherObjects.indexOf(item)].setHover(true);
+              objectController.setActiveID(item.id!);
+              notifyListeners();
               break;
             }
           }

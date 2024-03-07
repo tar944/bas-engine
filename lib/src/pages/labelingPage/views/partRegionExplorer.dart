@@ -64,10 +64,11 @@ class _View extends StatelessView<PartRegionViewModel> {
             top: item.top-40,
             left: item.left,
             child: ExploredPartRegion(
+              key: GlobalKey(),
               curObject: item,
               isMine: false,
               isActive: vm.curObject!=null&&item.id==vm.curObject!.id?true:false,
-              controller: vm.otherController[vm.otherObjects.indexOf(item)],
+              controller: vm.objectController,
               onObjectClickCaller: vm.onObjectClickHandler,
             ),
           );
@@ -77,10 +78,11 @@ class _View extends StatelessView<PartRegionViewModel> {
             top: item.top-40,
             left: item.left,
             child: ExploredPartRegion(
+              key: GlobalKey(),
               curObject: item,
               isMine: true,
               isActive:vm.curObject!=null&&item.id==vm.curObject!.id?true:false,
-              controller: vm.itsController[vm.itsObjects.indexOf(item)],
+              controller: vm.objectController,
               onObjectClickCaller: vm.onObjectClickHandler,
             ),
           );

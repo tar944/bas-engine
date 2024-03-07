@@ -43,7 +43,7 @@ class _View extends StatelessView<ExplorerPartViewModel> {
       height: (vm.curObject.bottom - vm.curObject.top).abs()+40,
       child: Stack(
         children: [
-          if(vm.controller.isHover)
+          if(vm.controller.activeID==vm.curObject.id)
             Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Container(
@@ -74,7 +74,7 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                       ""
                   ),
                   isMine: vm.isMine,
-                  isActive: vm.controller.isHover
+                  isActive: vm.controller.activeID==vm.curObject.id
               ),
             ),
           ),
