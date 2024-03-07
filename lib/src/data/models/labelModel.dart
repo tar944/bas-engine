@@ -7,5 +7,6 @@ class LabelModel {
   String uuid="";
   String name;
   String isFor;
-  LabelModel(this.id, this.name, this.isFor);
+  String levelName;
+  LabelModel(this.id, this.name,this.levelName,this.isFor);
 }

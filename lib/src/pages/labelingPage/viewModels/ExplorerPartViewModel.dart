@@ -6,12 +6,12 @@ import 'package:pmvvm/pmvvm.dart';
 class ExplorerPartViewModel extends ViewModel {
 
   ObjectModel curObject;
-  ValueSetter<ObjectModel> onObjectClickCaller;
+  ValueSetter<String> onObjectActionCaller;
   bool isMine;
   bool isActive;
   RegionRecController controller;
 
-  ExplorerPartViewModel(this.curObject,this.isMine, this.isActive,this.controller,this.onObjectClickCaller);
+  ExplorerPartViewModel(this.curObject,this.isMine, this.isActive,this.controller,this.onObjectActionCaller);
 
 
   @override

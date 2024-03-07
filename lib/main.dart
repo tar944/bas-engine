@@ -36,16 +36,8 @@ Future<void> main() async {
   await DirectoryManager().createLocalDir();
   objectbox = await ObjectBox.create();
   if (await LabelDAO().needAddDefaultValue()) {
-    await LabelDAO().addList(PageType.values
-        .map((e) => LabelModel(0, e.name, 'screen'))
-        .toList());
-    await LabelDAO().addList(
-        PartType.values.map((e) => LabelModel(0, e.name, 'part')).toList());
     await LabelDAO().addList(ObjectType.values
-        .map((e) => LabelModel(0, e.name, 'object'))
-        .toList());
-    await LabelDAO().addList(ActionKind.values
-        .map((e) => LabelModel(0, e.name, 'action'))
+        .map((e) => LabelModel(0, e.name,"", 'object'))
         .toList());
   }
   runApp(const MyApp());

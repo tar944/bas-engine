@@ -69,7 +69,7 @@ class _View extends StatelessView<PartRegionViewModel> {
               isMine: false,
               isActive: vm.curObject!=null&&item.id==vm.curObject!.id?true:false,
               controller: vm.objectController,
-              onObjectClickCaller: vm.onObjectClickHandler,
+              onObjectActionCaller: vm.onObjectActionHandler,
             ),
           );
         }).toList(),
@@ -83,7 +83,7 @@ class _View extends StatelessView<PartRegionViewModel> {
               isMine: true,
               isActive:vm.curObject!=null&&item.id==vm.curObject!.id?true:false,
               controller: vm.objectController,
-              onObjectClickCaller: vm.onObjectClickHandler,
+              onObjectActionCaller: vm.onObjectActionHandler,
             ),
           );
         }).toList(),

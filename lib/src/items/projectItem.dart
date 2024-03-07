@@ -80,13 +80,16 @@ class ProjectItem extends HookWidget {
                                         project.id,
                                         onActionCaller))),
                             IconButton(
-                                icon: const Icon(FluentIcons.edit), onPressed: ()=>onActionCaller!("edit&&${project.id}"))
+                                icon: const Icon(FluentIcons.edit),
+                                onPressed: () =>
+                                    onActionCaller!("edit&&${project.id}"))
                           ],
                         )),
                     Expanded(
                         flex: 70,
                         child: IconButton(
-                          onPressed: ()=>onActionCaller!('goto&&${project.id}'),
+                          onPressed: () =>
+                              onActionCaller!('goto&&${project.id}'),
                           icon: Text(
                             Strings.allParts,
                             style: TextSystem.textS(Colors.white),

@@ -1,5 +1,3 @@
-enum PageType { mainPage,page, subPage, dialog, menu, submenu, rightMenu,openDialog,saveDialog }
-
 enum HeaderTabs {
   project,
   projectParts,
@@ -8,19 +6,6 @@ enum HeaderTabs {
   addProject,
   addGroup,
   addPart}
-
-enum PartType {
-  menuBar,
-  statusBar,
-  optionBox,
-  toolsBar,
-  toolsPallet,
-  menu,
-  submenu,
-  rightClick,
-  tabBar,
-  tabBody
-}
 
 enum ObjectType {
   checkRegion,
@@ -33,7 +18,12 @@ enum ObjectType {
   switchBTN,
   selectBox,
   table,
+  tableColumn,
+  tableRow,
+  horizontalScrollbar,
+  verticalScrollbar,
   chart,
+  chartObjects,
   menu,
   menuItem,
   cell,

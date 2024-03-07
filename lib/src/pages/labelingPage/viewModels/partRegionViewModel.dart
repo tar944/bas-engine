@@ -21,9 +21,7 @@ class PartRegionViewModel extends ViewModel {
     onNewObjectHandler(newObject);
   }
 
-  onObjectClickHandler(ObjectModel obj) {
-    curObject = obj;
-    notifyListeners();
+  onObjectActionHandler(String objAction) {
   }
 
   pointerDownHandler(e) {
@@ -32,6 +30,7 @@ class PartRegionViewModel extends ViewModel {
     left = e.localPosition.dx;
     right = e.localPosition.dx;
     isPainting = true;
+    objectController.setActiveID(-1);
     notifyListeners();
   }
 
@@ -44,16 +43,14 @@ class PartRegionViewModel extends ViewModel {
   }
 
   pointerHoverHandler(e) {
-    double x =e.localPosition.dx;
-    double y =e.localPosition.dy;
-    print("x => $x && y => $y");
     if(!isPainting){
+      double x =e.localPosition.dx;
+      double y =e.localPosition.dy;
       bool found=false;
       for(var item in itsObjects){
         if(x>item.left&&x<item.right){
           if(y>item.top&&y<item.bottom){
             found =true;
-            print("item found");
             objectController.setActiveID(item.id!);
             notifyListeners();
             break;
@@ -64,6 +61,7 @@ class PartRegionViewModel extends ViewModel {
         for(var item in otherObjects){
           if(x>item.left&&x<item.right){
             if(y>item.top&&y<item.bottom){
+              found=true;
               objectController.setActiveID(item.id!);
               notifyListeners();
               break;
@@ -71,8 +69,11 @@ class PartRegionViewModel extends ViewModel {
           }
         }
       }
+      if(!found){
+        objectController.setActiveID(-1);
+        notifyListeners();
+      }
     }
-
   }
 
   pointerUpHandler(e) {

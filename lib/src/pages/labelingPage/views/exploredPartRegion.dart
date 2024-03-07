@@ -1,6 +1,8 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/controllers/regionRecController.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/ExplorerPartViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/rectanglePainter.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -13,11 +15,11 @@ class ExploredPartRegion extends StatelessWidget {
     required this.isMine,
     required this.isActive,
     required this.controller,
-    required this.onObjectClickCaller
+    required this.onObjectActionCaller,
   }) : super(key: key);
 
   ObjectModel curObject;
-  ValueSetter<ObjectModel> onObjectClickCaller;
+  ValueSetter<String> onObjectActionCaller;
   bool isMine;
   bool isActive;
   RegionRecController controller;
@@ -26,7 +28,7 @@ class ExploredPartRegion extends StatelessWidget {
     return MVVM(
       view: () => const _View(),
       viewModel:
-      ExplorerPartViewModel(curObject, isMine, isActive,controller, onObjectClickCaller),
+      ExplorerPartViewModel(curObject, isMine, isActive,controller, onObjectActionCaller),
     );
   }
 }
@@ -56,7 +58,21 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                 child: Row(children: [
                   IconButton(icon: const Icon(FluentIcons.edit), onPressed: ()=>{}),
                   IconButton(icon: const Icon(FluentIcons.label), onPressed: ()=>{}),
-                  IconButton(icon: Icon(FluentIcons.delete,color: Colors.red.dark,), onPressed: ()=>{}),
+                  FlyoutTarget(
+                      key: GlobalKey(),
+                      controller: controller,
+                      child: IconButton(
+                          icon: Icon(
+                            FluentIcons.delete,
+                            color: Colors.red,
+                          ),
+                          onPressed: () => showFlyDelete(
+                              Strings.deleteObject,
+                              Strings.yes,
+                              controller,
+                              FlyoutPlacementMode.topCenter,
+                              vm.curObject.id!,
+                              vm.onObjectActionCaller))),
                 ],),
               ),
             ),

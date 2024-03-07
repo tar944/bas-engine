@@ -84,7 +84,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(11, 1544585194803526305),
       name: 'LabelModel',
-      lastPropertyId: const IdUid(4, 3522587596204039150),
+      lastPropertyId: const IdUid(6, 4745844637427822667),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -105,6 +105,11 @@ final _entities = <ModelEntity>[
         ModelProperty(
             id: const IdUid(4, 3522587596204039150),
             name: 'uuid',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(5, 924852609206785212),
+            name: 'levelName',
             type: 9,
             flags: 0)
       ],
@@ -209,7 +214,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(15, 8892823931225835339),
       name: 'ObjectModel',
-      lastPropertyId: const IdUid(23, 701907757606801129),
+      lastPropertyId: const IdUid(24, 6982572751530212081),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -285,7 +290,12 @@ final _entities = <ModelEntity>[
             type: 11,
             flags: 520,
             indexId: const IdUid(20, 1012226703174902082),
-            relationTarget: 'LabelModel')
+            relationTarget: 'LabelModel'),
+        ModelProperty(
+            id: const IdUid(24, 6982572751530212081),
+            name: 'isNavTool',
+            type: 1,
+            flags: 0)
       ],
       relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[]),
@@ -580,7 +590,8 @@ ModelDefinition getObjectBoxModel() {
         2043034771619398137,
         1285654446534784458,
         9165561462202068346,
-        5080785029030309426
+        5080785029030309426,
+        4745844637427822667
       ],
       retiredRelationUids: const [
         7096364116743183016,
@@ -668,11 +679,13 @@ ModelDefinition getObjectBoxModel() {
           final nameOffset = fbb.writeString(object.name);
           final isForOffset = fbb.writeString(object.isFor);
           final uuidOffset = fbb.writeString(object.uuid);
-          fbb.startTable(5);
+          final levelNameOffset = fbb.writeString(object.levelName);
+          fbb.startTable(7);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nameOffset);
           fbb.addOffset(2, isForOffset);
           fbb.addOffset(3, uuidOffset);
+          fbb.addOffset(4, levelNameOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -683,11 +696,14 @@ ModelDefinition getObjectBoxModel() {
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
           final nameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 6, '');
+          final levelNameParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 12, '');
           final isForParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 8, '');
-          final object = LabelModel(idParam, nameParam, isForParam)
-            ..uuid = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 10, '');
+          final object =
+              LabelModel(idParam, nameParam, levelNameParam, isForParam)
+                ..uuid = const fb.StringReader(asciiOptimization: true)
+                    .vTableGet(buffer, rootOffset, 10, '');
 
           return object;
         }),
@@ -828,7 +844,7 @@ ModelDefinition getObjectBoxModel() {
           final actionTypeOffset = fbb.writeString(object.actionType);
           final typedTextOffset = fbb.writeString(object.typedText);
           final parentUUIDOffset = fbb.writeString(object.parentUUID);
-          fbb.startTable(24);
+          fbb.startTable(25);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, uuidOffset);
           fbb.addFloat64(2, object.left);
@@ -843,6 +859,7 @@ ModelDefinition getObjectBoxModel() {
           fbb.addInt64(20, object.actY);
           fbb.addOffset(21, parentUUIDOffset);
           fbb.addInt64(22, object.label.targetId);
+          fbb.addBool(23, object.isNavTool);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -872,8 +889,9 @@ ModelDefinition getObjectBoxModel() {
             ..typedText = const fb.StringReader(asciiOptimization: true)
                 .vTableGet(buffer, rootOffset, 40, '')
             ..actX = const fb.Int64Reader().vTableGet(buffer, rootOffset, 42, 0)
-            ..actY =
-                const fb.Int64Reader().vTableGet(buffer, rootOffset, 44, 0);
+            ..actY = const fb.Int64Reader().vTableGet(buffer, rootOffset, 44, 0)
+            ..isNavTool =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 50, false);
           object.image.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 36, 0);
           object.image.attach(store);
@@ -1060,6 +1078,10 @@ class LabelModel_ {
   /// see [LabelModel.uuid]
   static final uuid =
       QueryStringProperty<LabelModel>(_entities[1].properties[3]);
+
+  /// see [LabelModel.levelName]
+  static final levelName =
+      QueryStringProperty<LabelModel>(_entities[1].properties[4]);
 }
 
 /// [ProjectModel] entity fields to define ObjectBox queries.
@@ -1189,6 +1211,10 @@ class ObjectModel_ {
   /// see [ObjectModel.label]
   static final label =
       QueryRelationToOne<ObjectModel, LabelModel>(_entities[4].properties[13]);
+
+  /// see [ObjectModel.isNavTool]
+  static final isNavTool =
+      QueryBooleanProperty<ObjectModel>(_entities[4].properties[14]);
 }
 
 /// [ImageGroupModel] entity fields to define ObjectBox queries.

@@ -12,18 +12,14 @@ class ObjectModel {
   double right;
   double top;
   double bottom;
-  String color="blue";
-  String actionType="";
-  String typedText="";
-  int actX=-1,actY=-1;
+  String color = "blue";
+  String actionType = "";
+  bool isNavTool = false;
+  String typedText = "";
+  int actX = -1, actY = -1;
   final image = ToOne<ImageModel>();
   final label = ToOne<LabelModel>();
-  ObjectModel(
-      this.id,
-      this.uuid,
-      this.left,
-      this.right,
-      this.top,
-      this.bottom,
+
+  ObjectModel(this.id, this.uuid, this.left, this.right, this.top, this.bottom,
       this.parentUUID);
 }

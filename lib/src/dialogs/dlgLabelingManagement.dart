@@ -50,7 +50,7 @@ class DlgLabelingManagement extends HookWidget {
           await LabelDAO().deleteLabel(int.parse(actions[1]));
           break;
         case 'create':
-          await LabelDAO().addLabel(LabelModel(0, actions[1], isFor));
+          await LabelDAO().addLabel(LabelModel(0, actions[1],"", isFor));
           break;
       }
       labelList.value=await LabelDAO().getLabelList(isFor);
