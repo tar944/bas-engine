@@ -6,10 +6,9 @@ class DlgLabelManagementItem extends StatelessWidget {
   const DlgLabelManagementItem({
     Key? key,
     required this.label,
-    required this.onActionListener, required this.isFor,
+    required this.onActionListener,
   }) : super(key: key);
   final LabelModel label;
-  final String isFor;
   final ValueSetter<String> onActionListener;
 
   @override

@@ -35,11 +35,6 @@ Future<void> main() async {
   });
   await DirectoryManager().createLocalDir();
   objectbox = await ObjectBox.create();
-  if (await LabelDAO().needAddDefaultValue()) {
-    await LabelDAO().addList(ObjectType.values
-        .map((e) => LabelModel(0, e.name,"", 'object'))
-        .toList());
-  }
   runApp(const MyApp());
 }
 

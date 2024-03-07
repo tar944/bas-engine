@@ -1,12 +1,12 @@
 import 'package:bas_dataset_generator_engine/main.dart';
 import 'package:bas_dataset_generator_engine/objectbox.g.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 
 class LabelDAO {
-  Future<List<LabelModel>> getLabelList(String isFor) async {
-    Box<LabelModel> box = objectbox.store.box<LabelModel>();
-    List<LabelModel> labels=box.query(LabelModel_.isFor.equals(isFor)).build().find();
-    return labels;
+  Future<List<LabelModel>> getLabelList(String prjUUID) async {
+    var prj = await ProjectDAO().getDetailsByUUID(prjUUID);
+    return prj!.allLabels;
   }
 
   Future<LabelModel?> getLabel(int id) async {
@@ -32,9 +32,8 @@ class LabelDAO {
     return box.put(object);
   }
 
-  Future<bool> needAddDefaultValue() async{
-    final list =await getLabelList('screen');
-    print(list.isEmpty);
+  Future<bool> needAddDefaultValue(String prjUUID) async{
+    final list =await getLabelList(prjUUID);
     return list.isEmpty;
   }
 

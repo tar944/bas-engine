@@ -1,11 +1,14 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
+import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
@@ -22,6 +25,7 @@ class LabelingViewModel extends ViewModel {
   ImageGroupModel? group;
   ObjectModel? curObject;
   List<ObjectModel>subObjects=[];
+  List<LabelModel>allLabels=[];
   final int groupId,objId;
   final String title,partUUID,prjUUID;
   int indexImage = 0, imgH = 0,imgW = 0;
@@ -60,6 +64,12 @@ class LabelingViewModel extends ViewModel {
         indexImage= group!.allObjects.indexOf(object);
         break;
       }
+    }
+
+    if (await LabelDAO().needAddDefaultValue(prjUUID)) {
+      await LabelDAO().addList(ObjectType.values
+          .map((e) => LabelModel(0, e.name,"objects"))
+          .toList());
     }
     updatePageData();
   }

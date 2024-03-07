@@ -98,11 +98,6 @@ final _entities = <ModelEntity>[
             type: 9,
             flags: 0),
         ModelProperty(
-            id: const IdUid(3, 4178048732557493644),
-            name: 'isFor',
-            type: 9,
-            flags: 0),
-        ModelProperty(
             id: const IdUid(4, 3522587596204039150),
             name: 'uuid',
             type: 9,
@@ -591,7 +586,8 @@ ModelDefinition getObjectBoxModel() {
         1285654446534784458,
         9165561462202068346,
         5080785029030309426,
-        4745844637427822667
+        4745844637427822667,
+        4178048732557493644
       ],
       retiredRelationUids: const [
         7096364116743183016,
@@ -677,13 +673,11 @@ ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (LabelModel object, fb.Builder fbb) {
           final nameOffset = fbb.writeString(object.name);
-          final isForOffset = fbb.writeString(object.isFor);
           final uuidOffset = fbb.writeString(object.uuid);
           final levelNameOffset = fbb.writeString(object.levelName);
           fbb.startTable(7);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, nameOffset);
-          fbb.addOffset(2, isForOffset);
           fbb.addOffset(3, uuidOffset);
           fbb.addOffset(4, levelNameOffset);
           fbb.finish(fbb.endTable());
@@ -698,12 +692,9 @@ ModelDefinition getObjectBoxModel() {
               .vTableGet(buffer, rootOffset, 6, '');
           final levelNameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 12, '');
-          final isForParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 8, '');
-          final object =
-              LabelModel(idParam, nameParam, levelNameParam, isForParam)
-                ..uuid = const fb.StringReader(asciiOptimization: true)
-                    .vTableGet(buffer, rootOffset, 10, '');
+          final object = LabelModel(idParam, nameParam, levelNameParam)
+            ..uuid = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 10, '');
 
           return object;
         }),
@@ -1071,17 +1062,13 @@ class LabelModel_ {
   static final name =
       QueryStringProperty<LabelModel>(_entities[1].properties[1]);
 
-  /// see [LabelModel.isFor]
-  static final isFor =
-      QueryStringProperty<LabelModel>(_entities[1].properties[2]);
-
   /// see [LabelModel.uuid]
   static final uuid =
-      QueryStringProperty<LabelModel>(_entities[1].properties[3]);
+      QueryStringProperty<LabelModel>(_entities[1].properties[2]);
 
   /// see [LabelModel.levelName]
   static final levelName =
-      QueryStringProperty<LabelModel>(_entities[1].properties[4]);
+      QueryStringProperty<LabelModel>(_entities[1].properties[3]);
 }
 
 /// [ProjectModel] entity fields to define ObjectBox queries.
