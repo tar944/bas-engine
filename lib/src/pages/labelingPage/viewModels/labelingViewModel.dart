@@ -7,6 +7,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dar
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLabelingManagement.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
@@ -67,10 +68,11 @@ class LabelingViewModel extends ViewModel {
     }
 
     if (await LabelDAO().needAddDefaultValue(prjUUID)) {
-      await LabelDAO().addList(ObjectType.values
+      await LabelDAO().addList(prjUUID,ObjectType.values
           .map((e) => LabelModel(0, e.name,"objects"))
           .toList());
     }
+    allLabels=await LabelDAO().getLabelList(prjUUID);
     updatePageData();
   }
 
@@ -215,5 +217,20 @@ class LabelingViewModel extends ViewModel {
     await ImageGroupDAO().addSubObject(groupId, newObject);
     subObjects.add(newObject);
     notifyListeners();
+  }
+
+  onObjectActionHandler(String action){
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => DlgLabelManagement(
+          labelList: allLabels,
+          onActionCaller: onLabelActionHandler,
+        )
+    );
+  }
+
+  onLabelActionHandler(String action){
+
   }
 }

@@ -56,8 +56,7 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                     color: Colors.grey[190]
                 ),
                 child: Row(children: [
-                  IconButton(icon: const Icon(FluentIcons.edit), onPressed: ()=>{}),
-                  IconButton(icon: const Icon(FluentIcons.label), onPressed: ()=>{}),
+                  IconButton(icon: const Icon(FluentIcons.label), onPressed: ()=>vm.onObjectActionCaller("labelManag&&${vm.curObject.id}")),
                   FlyoutTarget(
                       key: GlobalKey(),
                       controller: controller,

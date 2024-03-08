@@ -9,7 +9,6 @@ class LabelManagementViewModel extends ViewModel {
   List<String> allLevels=[];
   int curIndex=0;
   final ValueSetter<String> onActionCaller;
-  var ctlTitle = TextEditingController();
 
   LabelManagementViewModel(this.allLabels, this.onActionCaller);
 
@@ -36,7 +35,6 @@ class LabelManagementViewModel extends ViewModel {
         await LabelDAO().getLabel(int.parse(actions[1]));
         label!.name = actions[2];
         await LabelDAO().updateLabel(label);
-        ctlTitle.text='';
         break;
       case 'delete':
         await LabelDAO().deleteLabel(int.parse(actions[1]));

@@ -16,14 +16,14 @@ class LabelDAO {
   }
 
   Future<int> addLabel(LabelModel newObject) async {
-    print(newObject.name);
     Box<LabelModel> box = objectbox.store.box<LabelModel>();
     return box.put(newObject);
   }
 
-  addList(List<LabelModel>list)async{
+  addList(String prjUUID,List<LabelModel>list)async{
     for(var item in list){
       await addLabel(item);
+      await ProjectDAO().addALabel(prjUUID, item);
     }
   }
 

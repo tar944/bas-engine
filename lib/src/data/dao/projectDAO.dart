@@ -1,5 +1,6 @@
 import 'package:bas_dataset_generator_engine/main.dart';
 import 'package:bas_dataset_generator_engine/objectbox.g.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
@@ -53,6 +54,16 @@ class ProjectDAO {
       return false;
     }
     project.allVideos.add(video);
+    update(project);
+    return true;
+  }
+
+  Future<bool> addALabel(String uuid,LabelModel lbl) async{
+    final project = await getDetailsByUUID(uuid);
+    if(project==null){
+      return false;
+    }
+    project.allLabels.add(lbl);
     update(project);
     return true;
   }

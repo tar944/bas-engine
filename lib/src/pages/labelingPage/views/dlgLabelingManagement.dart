@@ -1,7 +1,6 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
-import 'package:bas_dataset_generator_engine/src/items/dlgLabelManagementItem.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelManagementViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgTabView.dart';
 import 'package:bas_dataset_generator_engine/src/parts/dialogTitleBar.dart';
@@ -55,45 +54,6 @@ class _View extends StatelessView<LabelManagementViewModel> {
                     title: Strings.dlgLabeling,
                     onActionListener: vm.onCloseClicked,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(left:15.0,right: 15,bottom: 10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const Text(Strings.createNewLabel),
-                        const SizedBox(height: 5,),
-                        SizedBox(
-                          width: double.infinity,
-                          height: 35,
-                          child: Row(
-                            children: [
-                              Expanded(
-                                flex: 82,
-                                child: TextBox(
-                                  controller: vm.ctlTitle,
-                                  placeholder: Strings.dlgSoftwareTitleHint,
-                                  expands: false,
-                                ),
-                              ),
-                              const SizedBox(width: 5,),
-                              Expanded(
-                                  flex: 7,
-                                  child: IconButton(
-                                      style: ButtonStyle(
-                                          padding: ButtonState.all(const EdgeInsets.all(6))),
-                                      icon: Icon(
-                                        FluentIcons.save,
-                                        size: 20,
-                                        color: Colors.blue.lighter,
-                                      ),
-                                      onPressed: () => vm.onActionHandler('create&&${vm.ctlTitle.text}'))),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                   Expanded(
                     child: TabView(
                       currentIndex: vm.curIndex,
@@ -107,7 +67,8 @@ class _View extends StatelessView<LabelManagementViewModel> {
                           text: Text(e),
                           semanticLabel: e,
                           body: DlgTabView(
-                              allLabels: vm.allLabels.where((element) => vm.allLevels.contains(element.levelName)).toList(),
+                              allLabels: vm.allLabels.where((element) => element.levelName==e).toList(),
+                              levelName: e,
                               onActionCaller: vm.onLabelActionHandler)
                         );
                       }).toList(),

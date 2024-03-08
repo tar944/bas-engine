@@ -3,28 +3,29 @@ import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/p
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/rectanglePainter.dart';
 import 'package:flutter/material.dart';
 import 'package:pmvvm/pmvvm.dart';
-import 'package:uuid/uuid.dart';
 import 'exploredPartRegion.dart';
 
 
 class PartRegionExplorer extends StatelessWidget {
   const PartRegionExplorer( {
     Key? key,
-    required this.onNewObjectHandler,
+    required this.onNewObjectCaller,
     required this.otherObjects,
-    required this.itsObjects
+    required this.itsObjects,
+    required this.onObjectActionCaller
   }) : super(key: key);
 
   final List<ObjectModel> otherObjects;
   final List<ObjectModel> itsObjects;
-  final ValueSetter<ObjectModel> onNewObjectHandler;
+  final ValueSetter<ObjectModel> onNewObjectCaller;
+  final ValueSetter<String> onObjectActionCaller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
       viewModel:
-      PartRegionViewModel(otherObjects, itsObjects, onNewObjectHandler),
+      PartRegionViewModel(otherObjects, itsObjects,onObjectActionCaller, onNewObjectCaller),
     );
   }
 }
@@ -69,7 +70,7 @@ class _View extends StatelessView<PartRegionViewModel> {
               isMine: false,
               isActive: vm.curObject!=null&&item.id==vm.curObject!.id?true:false,
               controller: vm.objectController,
-              onObjectActionCaller: vm.onObjectActionHandler,
+              onObjectActionCaller: vm.onObjectActionCaller,
             ),
           );
         }).toList(),
@@ -83,7 +84,7 @@ class _View extends StatelessView<PartRegionViewModel> {
               isMine: true,
               isActive:vm.curObject!=null&&item.id==vm.curObject!.id?true:false,
               controller: vm.objectController,
-              onObjectActionCaller: vm.onObjectActionHandler,
+              onObjectActionCaller: vm.onObjectActionCaller,
             ),
           );
         }).toList(),
