@@ -1,5 +1,6 @@
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLevel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 
@@ -52,9 +53,18 @@ class LabelManagementViewModel extends ViewModel {
   }
 
   onNewLevelHandler(){
-
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) =>
+          DlgLevel(onActionCaller: saveLevelHandler, title: ""),
+    );
   }
 
+  saveLevelHandler(String name){
+    allLevels.add(name);
+    notifyListeners();
+  }
   onLabelActionHandler(String action){
 
   }

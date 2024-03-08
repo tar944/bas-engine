@@ -55,23 +55,26 @@ class _View extends StatelessView<LabelManagementViewModel> {
                     onActionListener: vm.onCloseClicked,
                   ),
                   Expanded(
-                    child: TabView(
-                      currentIndex: vm.curIndex,
-                      onChanged: (index) => vm.onTabChanged(index),
-                      tabWidthBehavior: TabWidthBehavior.sizeToContent,
-                      closeButtonVisibility: CloseButtonVisibilityMode.never,
-                      showScrollButtons: true,
-                      onNewPressed: ()=>vm.onNewLevelHandler(),
-                      tabs: vm.allLevels.map((e) {
-                        return Tab(
-                          text: Text(e),
-                          semanticLabel: e,
-                          body: DlgTabView(
-                              allLabels: vm.allLabels.where((element) => element.levelName==e).toList(),
-                              levelName: e,
-                              onActionCaller: vm.onLabelActionHandler)
-                        );
-                      }).toList(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: TabView(
+                        currentIndex: vm.curIndex,
+                        onChanged: (index) => vm.onTabChanged(index),
+                        tabWidthBehavior: TabWidthBehavior.sizeToContent,
+                        closeButtonVisibility: CloseButtonVisibilityMode.onHover,
+                        showScrollButtons: true,
+                        onNewPressed: ()=>vm.onNewLevelHandler(),
+                        tabs: vm.allLevels.map((e) {
+                          return Tab(
+                            text: Text(e),
+                            semanticLabel: e,
+                            body: DlgTabView(
+                                allLabels: vm.allLabels.where((element) => element.levelName==e).toList(),
+                                levelName: e,
+                                onActionCaller: vm.onLabelActionHandler)
+                          );
+                        }).toList(),
+                      ),
                     )
                   ),
                 ],

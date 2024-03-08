@@ -87,6 +87,7 @@ class Strings{
   static const String dlgTextTitle = "Type your text";
   static const String dlgVoiceRecorder = "Voice recorder";
   static const String dlgNewSoftware = "New software";
+  static const String dlgLevel = "Level manager";
   static const String dlgNewGroup = "New group";
   static const String dlgLabeling = "Manage labels";
   static const String dlgEditSoftware = "Edit software";

@@ -18,78 +18,85 @@ class DlgTabView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var ctlTitle = TextEditingController();
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.start,
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        const SizedBox(
-          height: 10,
-        ),
-        if (levelName != "objects")
-          Padding(
-            padding: const EdgeInsets.only(left: 15.0, right: 15, bottom: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                const Text(Strings.createNewLabel),
-                const SizedBox(
-                  height: 5,
-                ),
-                SizedBox(
-                  width: double.infinity,
-                  height: 35,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 82,
-                        child: TextBox(
-                          controller: ctlTitle,
-                          placeholder: Strings.dlgSoftwareTitleHint,
-                          expands: false,
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 5,
-                      ),
-                      Expanded(
-                          flex: 7,
-                          child: IconButton(
-                              style: ButtonStyle(
-                                  padding:
-                                      ButtonState.all(const EdgeInsets.all(6))),
-                              icon: Icon(
-                                FluentIcons.save,
-                                size: 20,
-                                color: Colors.blue.lighter,
-                              ),
-                              onPressed: () =>
-                                  onActionCaller('create&&${ctlTitle.text}'))),
-                    ],
+    return Container(
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.grey[170],width: 2.0),
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        color: Colors.grey[180]
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+          if (levelName != "objects")
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0, right: 15, bottom: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Text(Strings.createNewLabel),
+                  const SizedBox(
+                    height: 5,
                   ),
-                ),
-              ],
+                  SizedBox(
+                    width: double.infinity,
+                    height: 35,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 82,
+                          child: TextBox(
+                            controller: ctlTitle,
+                            placeholder: Strings.dlgSoftwareTitleHint,
+                            expands: false,
+                          ),
+                        ),
+                        const SizedBox(
+                          width: 5,
+                        ),
+                        Expanded(
+                            flex: 7,
+                            child: IconButton(
+                                style: ButtonStyle(
+                                    padding:
+                                        ButtonState.all(const EdgeInsets.all(6))),
+                                icon: Icon(
+                                  FluentIcons.save,
+                                  size: 20,
+                                  color: Colors.blue.lighter,
+                                ),
+                                onPressed: () =>
+                                    onActionCaller('create&&${ctlTitle.text}'))),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.only(bottom: 10),
+              child: ListView.builder(
+                  itemCount: allLabels.length,
+                  scrollDirection: Axis.vertical,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: DlgLabelManagementItem(
+                        label: allLabels[index],
+                        onActionCaller: onActionCaller,
+                      ),
+                    );
+                  }),
             ),
           ),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 10),
-            child: ListView.builder(
-                itemCount: allLabels.length,
-                scrollDirection: Axis.vertical,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: DlgLabelManagementItem(
-                      label: allLabels[index],
-                      onActionCaller: onActionCaller,
-                    ),
-                  );
-                }),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

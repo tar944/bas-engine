@@ -45,7 +45,7 @@ class _View extends StatelessView<LabelManageItemViewModel> {
                 expands: false,
               ):
               IconButton(
-                  icon: Text(vm.label.name),
+                  icon: Container(alignment:Alignment.centerLeft,child: Text(vm.label.name)),
                   onPressed:()=> vm.onActionCaller('labelSelected&&${vm.label.id}')
               ),
             ),
@@ -60,7 +60,7 @@ class _View extends StatelessView<LabelManageItemViewModel> {
                       size: 15,
                       color: Colors.green.lighter,
                     ),
-                    onPressed: () => vm.onEditBtnHandler)),
+                    onPressed: () => vm.onEditBtnHandler())),
             Expanded(
                 flex: 7,
                 child: IconButton(
@@ -68,7 +68,7 @@ class _View extends StatelessView<LabelManageItemViewModel> {
                         padding: ButtonState.all(const EdgeInsets.all(6))),
                     icon: Icon(
                       FluentIcons.delete,
-                      size: 20,
+                      size: 18,
                       color: Colors.red,
                     ),
                     onPressed: () => vm.onActionCaller('delete&&${vm.label.name}'))),
