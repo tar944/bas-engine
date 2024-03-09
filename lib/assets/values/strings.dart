@@ -2,6 +2,10 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String emptyNameError="You should type a name for a new label.";
+  static const String lblDuplicateError="You have another label with this name.";
+  static const String lvlError="You can not remove levels that have labels on it.";
+  static const String lblError="You can not remove labels that have objects tagged with it.";
   static const String labelIt="Label it";
   static const String deleteGroupError="There is some content in this group, you can not delete it";
   static const String maxGroupNumberError="Each part only can have 8 groups";

@@ -1,4 +1,5 @@
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/items/dlgLabelManagementItem.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -39,9 +40,9 @@ class DlgTabView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  const Text(Strings.createNewLabel),
+                  Text(Strings.createNewLabel,style: TextSystem.textS(Colors.white),),
                   const SizedBox(
-                    height: 5,
+                    height: 10,
                   ),
                   SizedBox(
                     width: double.infinity,

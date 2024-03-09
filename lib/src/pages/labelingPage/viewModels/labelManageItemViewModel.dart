@@ -22,7 +22,7 @@ class LabelManageItemViewModel extends ViewModel {
 
   onEditBtnHandler(){
     if(isEditMode){
-      onActionCaller('save&&${label.id}&&${ctlTitle!.text.toString()}');
+      onActionCaller('edit&&${label.id}&&${ctlTitle!.text.toString()}');
       isEditMode=false;
     }else{
       isEditMode=true;

@@ -46,7 +46,7 @@ class _View extends StatelessView<LabelManageItemViewModel> {
               ):
               IconButton(
                   icon: Container(alignment:Alignment.centerLeft,child: Text(vm.label.name)),
-                  onPressed:()=> vm.onActionCaller('labelSelected&&${vm.label.id}')
+                  onPressed:()=> vm.onActionCaller('clicked&&${vm.label.id}')
               ),
             ),
             const SizedBox(width: 5,),
@@ -71,7 +71,7 @@ class _View extends StatelessView<LabelManageItemViewModel> {
                       size: 18,
                       color: Colors.red,
                     ),
-                    onPressed: () => vm.onActionCaller('delete&&${vm.label.name}'))),
+                    onPressed: () => vm.onActionCaller('delete&&${vm.label.id}'))),
           ],
         ),
       ),

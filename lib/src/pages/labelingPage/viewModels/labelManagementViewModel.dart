@@ -1,5 +1,8 @@
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLevel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
@@ -52,6 +55,15 @@ class LabelManagementViewModel extends ViewModel {
     notifyListeners();
   }
 
+  onTabClosed(String lvl){
+    if(allLabels.where((element) => element.levelName==lvl).toList().isNotEmpty){
+      Toast(Strings.lvlError, false).showWarning(context);
+    }else{
+      allLevels.remove(lvl);
+      notifyListeners();
+    }
+  }
+
   onNewLevelHandler(){
     showDialog(
       context: context,
@@ -65,7 +77,39 @@ class LabelManagementViewModel extends ViewModel {
     allLevels.add(name);
     notifyListeners();
   }
-  onLabelActionHandler(String action){
-
+  onLabelActionHandler(String action)async{
+    var act=action.split('&&');
+    switch(act[0]){
+      case "create":
+        if(act[1]==""){
+          Toast(Strings.emptyNameError,false).showWarning(context);
+        }else{
+          if(allLabels.firstWhere((element) => element.name==act[1],orElse: ()=>LabelModel(-1,"","")).id!=-1){
+            Toast(Strings.lblDuplicateError,false).showWarning(context);
+          }else{
+            var newLabel = LabelModel(-1, act[1], allLevels[curIndex]);
+            newLabel.id=await LabelDAO().addLabel(newLabel);
+            allLabels.add(newLabel);
+            notifyListeners();
+          }
+        }
+        break;
+      case "delete":
+        var objects =await ObjectDAO().getByLabel(int.parse(act[1]));
+        if(objects!.isNotEmpty){
+          Toast(Strings.lblError,false).showWarning(context);
+        }else{
+          await LabelDAO().deleteLabel(int.parse(act[1]));
+          allLabels.removeWhere((element) => element.id==int.parse(act[1]));
+          notifyListeners();
+        }
+        break;
+      case "edit":
+        int index=allLabels.indexWhere((element) => element.id==int.parse(act[1]));
+        allLabels[index].name=act[2];
+        await LabelDAO().updateLabel(allLabels[index]);
+        notifyListeners();
+        break;
+    }
   }
 }

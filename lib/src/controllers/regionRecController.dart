@@ -7,7 +7,6 @@ class RegionRecController extends ChangeNotifier {
 
   void setActiveID(int activeID) {
     _activeID=activeID;
-    print("activeId is => $activeID");
     notifyListeners(); // Notify listeners that the data has changed
   }
 }
