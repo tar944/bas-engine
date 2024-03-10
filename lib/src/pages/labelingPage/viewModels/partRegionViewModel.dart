@@ -1,5 +1,9 @@
 import 'package:bas_dataset_generator_engine/src/controllers/regionRecController.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLabelingManagement.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 import 'package:uuid/uuid.dart';
@@ -7,19 +11,27 @@ import 'package:uuid/uuid.dart';
 class PartRegionViewModel extends ViewModel {
   final List<ObjectModel> otherObjects;
   final List<ObjectModel> itsObjects;
+  List<LabelModel>allLabels=[];
   RegionRecController objectController = RegionRecController();
   ObjectModel? curObject;
   final ValueSetter<ObjectModel> onNewObjectCaller;
-  final ValueSetter<String> onObjectActionCaller;
+  String prjUUID;
 
   double left = 0.0, top = 0.0, right = 0.0, bottom = 0.0;
   bool isPainting = false;
 
   PartRegionViewModel(
+      this.prjUUID,
       this.otherObjects,
       this.itsObjects,
-      this.onObjectActionCaller,
       this.onNewObjectCaller);
+
+
+  @override
+  void init() async{
+    allLabels=await LabelDAO().getLabelList(prjUUID);
+    notifyListeners();
+  }
 
   pointerDownHandler(e) {
     top = e.localPosition.dy;
@@ -59,6 +71,24 @@ class PartRegionViewModel extends ViewModel {
         notifyListeners();
       }
     }
+  }
+
+
+  onObjectActionHandler(String action)async{
+    curObject = await ObjectDAO().getDetails(int.parse(action.split("&&")[1]));
+    notifyListeners();
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => DlgLabelManagement(
+          labelList: allLabels,
+          onActionCaller: onLabelActionHandler,
+        )
+    );
+  }
+
+  onLabelActionHandler(String action){
+    print(action);
   }
 
   pointerUpHandler(e) {

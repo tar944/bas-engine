@@ -23,12 +23,13 @@ class ExploredPartRegion extends StatelessWidget {
   bool isMine;
   bool isActive;
   RegionRecController controller;
+
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel:
-      ExplorerPartViewModel(curObject, isMine, isActive,controller, onObjectActionCaller),
+      viewModel: ExplorerPartViewModel(
+          curObject, isMine, isActive, controller, onObjectActionCaller),
     );
   }
 }
@@ -38,41 +39,52 @@ class _View extends StatelessView<ExplorerPartViewModel> {
 
   @override
   Widget render(context, ExplorerPartViewModel vm) {
-
     final controller = FlyoutController();
     return SizedBox(
       width: (vm.curObject.right - vm.curObject.left).abs(),
-      height: (vm.curObject.bottom - vm.curObject.top).abs()+40,
+      height: (vm.curObject.bottom - vm.curObject.top).abs() + 40,
       child: Stack(
         children: [
-          if(vm.controller.activeID==vm.curObject.id)
+          if (vm.controller.activeID == vm.curObject.id)
             Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Container(
-                width: 92,
+                width: vm.curObject.label.target==null? 62:130,
                 decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(Dimens.actionRadius)),
+                    borderRadius: const BorderRadius.all(
+                        Radius.circular(Dimens.actionRadius)),
                     border: Border.all(color: Colors.grey[150]),
-                    color: Colors.grey[190]
-                ),
-                child: Row(children: [
-                  IconButton(icon: const Icon(FluentIcons.label), onPressed: ()=>vm.onObjectActionCaller("labelManag&&${vm.curObject.id}")),
-                  FlyoutTarget(
-                      key: GlobalKey(),
-                      controller: controller,
-                      child: IconButton(
-                          icon: Icon(
-                            FluentIcons.delete,
-                            color: Colors.red,
+                    color: Colors.grey[190]),
+                child: Row(
+                  children: [
+                    vm.curObject.label.target==null?
+                      IconButton(
+                        icon: const Icon(FluentIcons.label),
+                        onPressed: () => vm.onObjectActionCaller("labelManag&&${vm.curObject.id}")):
+                        Row(children: [
+                          IconButton(
+                              icon: Icon(FluentIcons.calculator_multiply,color: Colors.red,),
+                              onPressed: ()=>vm.onLabelHandler()
                           ),
-                          onPressed: () => showFlyDelete(
-                              Strings.deleteObject,
-                              Strings.yes,
-                              controller,
-                              FlyoutPlacementMode.topCenter,
-                              vm.curObject.id!,
-                              vm.onObjectActionCaller))),
-                ],),
+                          Text(vm.curObject.label.target!.name)
+                        ],),
+                    FlyoutTarget(
+                        key: GlobalKey(),
+                        controller: controller,
+                        child: IconButton(
+                            icon: Icon(
+                              FluentIcons.delete,
+                              color: Colors.red,
+                            ),
+                            onPressed: () => showFlyDelete(
+                                Strings.deleteObject,
+                                Strings.yes,
+                                controller,
+                                FlyoutPlacementMode.topCenter,
+                                vm.curObject.id!,
+                                vm.onObjectActionCaller))),
+                  ],
+                ),
               ),
             ),
           Positioned(
@@ -86,11 +98,9 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                       vm.curObject.right - vm.curObject.left,
                       0.0,
                       vm.curObject.bottom - vm.curObject.top,
-                      ""
-                  ),
+                      ""),
                   isMine: vm.isMine,
-                  isActive: vm.controller.activeID==vm.curObject.id
-              ),
+                  isActive: vm.controller.activeID == vm.curObject.id),
             ),
           ),
         ],

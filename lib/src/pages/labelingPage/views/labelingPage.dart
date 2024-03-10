@@ -75,7 +75,7 @@ class _View extends StatelessView<LabelingViewModel> {
                           otherObjects: vm.subObjects.where((element) => element.parentUUID!=vm.curObject!.uuid).toList(),
                           itsObjects: vm.subObjects.where((element) => element.parentUUID==vm.curObject!.uuid).toList(),
                           onNewObjectCaller: vm.onNewPartCreatedHandler,
-                          onObjectActionCaller: vm.onObjectActionHandler,
+                          prjUUID: vm.prjUUID,
                         ),
                       ),
                       Positioned(

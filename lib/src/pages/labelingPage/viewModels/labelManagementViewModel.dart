@@ -110,6 +110,10 @@ class LabelManagementViewModel extends ViewModel {
         await LabelDAO().updateLabel(allLabels[index]);
         notifyListeners();
         break;
+      case "clicked":
+        onActionCaller(action);
+        onCloseClicked();
+        break;
     }
   }
 }

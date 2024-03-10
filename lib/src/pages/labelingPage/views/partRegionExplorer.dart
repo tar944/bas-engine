@@ -7,25 +7,25 @@ import 'exploredPartRegion.dart';
 
 
 class PartRegionExplorer extends StatelessWidget {
-  const PartRegionExplorer( {
+  PartRegionExplorer( {
     Key? key,
     required this.onNewObjectCaller,
     required this.otherObjects,
     required this.itsObjects,
-    required this.onObjectActionCaller
+    required this.prjUUID
   }) : super(key: key);
 
   final List<ObjectModel> otherObjects;
   final List<ObjectModel> itsObjects;
   final ValueSetter<ObjectModel> onNewObjectCaller;
-  final ValueSetter<String> onObjectActionCaller;
+  String prjUUID;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
       viewModel:
-      PartRegionViewModel(otherObjects, itsObjects,onObjectActionCaller, onNewObjectCaller),
+      PartRegionViewModel(prjUUID,otherObjects, itsObjects, onNewObjectCaller),
     );
   }
 }
@@ -70,7 +70,7 @@ class _View extends StatelessView<PartRegionViewModel> {
               isMine: false,
               isActive: vm.curObject!=null&&item.id==vm.curObject!.id?true:false,
               controller: vm.objectController,
-              onObjectActionCaller: vm.onObjectActionCaller,
+              onObjectActionCaller: (e)=>vm.onObjectActionHandler(e),
             ),
           );
         }).toList(),
@@ -84,7 +84,7 @@ class _View extends StatelessView<PartRegionViewModel> {
               isMine: true,
               isActive:vm.curObject!=null&&item.id==vm.curObject!.id?true:false,
               controller: vm.objectController,
-              onObjectActionCaller: vm.onObjectActionCaller,
+              onObjectActionCaller: (e)=>vm.onObjectActionHandler(e),
             ),
           );
         }).toList(),
