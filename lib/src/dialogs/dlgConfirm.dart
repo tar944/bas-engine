@@ -1,13 +1,17 @@
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import '../../assets/values/strings.dart';
 
-void showContentDialog(BuildContext context, bool hasChanges,
+void showConfirmDialog(
+    BuildContext context,
+    String message,
+    String title,
     ValueSetter<String>? onActionListener) async {
   await showDialog<String>(
     context: context,
     builder: (context) => ContentDialog(
-      title: const Text(Strings.exitTitle),
-      content: hasChanges ? const Text(Strings.exitWarnString) : null,
+      title: Text(title,style: TextSystem.textLB(Colors.white),),
+      content: Text(message),
       actions: [
         Button(
           child: const Text(Strings.cancel),
@@ -17,7 +21,7 @@ void showContentDialog(BuildContext context, bool hasChanges,
           },
         ),
         FilledButton(
-          child: Text(hasChanges ? Strings.saveAndExit : Strings.confirm),
+          child: const Text(Strings.confirm),
           onPressed: () {
             onActionListener!("confirm");
             Navigator.pop(context);

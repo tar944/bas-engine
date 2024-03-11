@@ -4,6 +4,7 @@ import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelingViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/flyImagesList.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/flyMenu.dart';
 import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/partRegionExplorer.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -105,21 +106,17 @@ class _View extends StatelessView<LabelingViewModel> {
                                   const SizedBox(width: 5,),
                                   FlyoutTarget(
                                     key: GlobalKey(),
-                                    controller: vm.deleteController,
+                                    controller: vm.menuController,
                                     child: IconButton(
                                         style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                        icon: Icon(
-                                          FluentIcons.delete,
-                                          color: Colors.red,
+                                        icon: const Icon(
+                                          FluentIcons.more,
                                           size: 25,
                                         ),
-                                        onPressed: () => showFlyDelete(
-                                            "Are you sure?",
-                                            "yeh",
-                                            vm.deleteController,
-                                            FlyoutPlacementMode.right,
-                                            vm.curObject!.id!,
-                                            vm.doScreenAction)),
+                                        onPressed: () => showFlyMenu(
+                                            vm.menuController,
+                                            vm.isShowAll,
+                                            vm.onObjectActionHandler)),
                                   ),
 
                                 ],
@@ -141,7 +138,7 @@ class _View extends StatelessView<LabelingViewModel> {
                                     child: IconButton(
                                         style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
                                         icon: const Icon(
-                                          FluentIcons.more,
+                                          FluentIcons.password_field,
                                           color: Colors.white,
                                           size: 25,
                                         ),
@@ -150,7 +147,7 @@ class _View extends StatelessView<LabelingViewModel> {
                                             vm.curObject!.id!,
                                             vm.moreController,
                                             FlyoutPlacementMode.left,
-                                            vm.doScreenAction),
+                                            vm.onObjectActionHandler),
                                     ),
                                   ),
                                   const SizedBox(width: 5,),

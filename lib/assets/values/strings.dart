@@ -2,6 +2,9 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String delete="delete";
+  static const String showAll="Show all";
+  static const String hideAll="Hide all";
   static const String emptyNameError="You should type a name for a new label.";
   static const String lblDuplicateError="You have another label with this name.";
   static const String lvlError="You can not remove levels that have labels on it.";

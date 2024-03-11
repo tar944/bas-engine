@@ -1,13 +1,12 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
-import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
-import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/dlgConfirm.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -16,14 +15,14 @@ import 'package:pmvvm/pmvvm.dart';
 import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:image/image.dart' as i;
-import 'package:path/path.dart' as p;
 
 class LabelingViewModel extends ViewModel {
 
-  final deleteController = FlyoutController();
+  final menuController = FlyoutController();
   final moreController = FlyoutController();
   ImageGroupModel? group;
   ObjectModel? curObject;
+  bool isShowAll=true;
   List<ObjectModel>subObjects=[];
   final int groupId,objId;
   final String title,partUUID,prjUUID;
@@ -129,9 +128,14 @@ class LabelingViewModel extends ViewModel {
     updatePageData();
   }
 
-  doScreenAction(String action) async {
+  onObjectActionHandler(String action) async {
     var actions = action.split('&&');
     switch (actions[0]) {
+      case Strings.hideAll:
+      case Strings.showAll:
+        isShowAll=!isShowAll;
+        notifyListeners();
+        break;
       case 'edit':
         // ScreenShootModel? screen =
         //     await ScreenDAO().getScreen(int.parse(actions[1]));
@@ -142,14 +146,23 @@ class LabelingViewModel extends ViewModel {
         // await setScreenAsData();
         break;
       case 'delete':
-        var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[1]));
-        await ObjectDAO().deleteObject(obj!);
-        await ImageGroupDAO().removeObject(groupId, obj);
-        group=await ImageGroupDAO().getDetails(groupId);
-        if(group!.allObjects.isNotEmpty){
-          indexImage=indexImage==group!.allObjects.length?--indexImage:indexImage;
+        showConfirmDialog(
+            context,
+            Strings.deleteObject,
+            Strings.delete,
+            (value) =>onObjectActionHandler(value)
+        );
+        break;
+      case Strings.confirm:
+        await ObjectDAO().deleteObject(curObject!);
+        await ImageGroupDAO().removeObject(groupId, curObject!);
+        group = await ImageGroupDAO().getDetails(groupId);
+        if (group!.allObjects.isNotEmpty) {
+          indexImage = indexImage == group!.allObjects.length
+              ? --indexImage
+              : indexImage;
           updatePageData();
-        }else{
+        } else {
           onBackClicked();
         }
         break;
