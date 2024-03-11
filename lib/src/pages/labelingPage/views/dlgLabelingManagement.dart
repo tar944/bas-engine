@@ -11,18 +11,20 @@ class DlgLabelManagement extends StatelessWidget {
   DlgLabelManagement({
     Key? key,
     required this.labelList,
+    required this.prjUUID,
     required this.onActionCaller,
   }) : super(key: key);
 
   final ValueSetter<String> onActionCaller;
   final List<LabelModel> labelList;
+  final String prjUUID;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
       viewModel:
-      LabelManagementViewModel(labelList, onActionCaller),
+      LabelManagementViewModel(prjUUID,labelList, onActionCaller),
     );
   }
 }

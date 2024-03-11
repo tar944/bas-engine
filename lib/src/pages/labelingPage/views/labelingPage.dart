@@ -10,7 +10,6 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pmvvm/pmvvm.dart';
 
-
 class LabelingPage extends StatelessWidget {
   int groupId,objId;
   String partUUID,prjUUID;

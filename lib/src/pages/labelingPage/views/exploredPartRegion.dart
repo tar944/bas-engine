@@ -57,32 +57,36 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                     color: Colors.grey[190]),
                 child: Row(
                   children: [
-                    vm.curObject.label.target==null?
-                      IconButton(
-                        icon: const Icon(FluentIcons.label),
-                        onPressed: () => vm.onObjectActionCaller("labelManag&&${vm.curObject.id}")):
-                        Row(children: [
-                          IconButton(
-                              icon: Icon(FluentIcons.calculator_multiply,color: Colors.red,),
-                              onPressed: ()=>vm.onLabelHandler()
-                          ),
-                          Text(vm.curObject.label.target!.name)
-                        ],),
-                    FlyoutTarget(
-                        key: GlobalKey(),
-                        controller: controller,
-                        child: IconButton(
-                            icon: Icon(
-                              FluentIcons.delete,
-                              color: Colors.red,
-                            ),
-                            onPressed: () => showFlyDelete(
-                                Strings.deleteObject,
-                                Strings.yes,
-                                controller,
-                                FlyoutPlacementMode.topCenter,
-                                vm.curObject.id!,
-                                vm.onObjectActionCaller))),
+                    if(vm.curObject.label.target==null)
+                      ...[
+                        IconButton(
+                            icon: const Icon(FluentIcons.label),
+                            onPressed: () => vm.onObjectActionCaller("labelManag&&${vm.curObject.id}")),
+                        FlyoutTarget(
+                            key: GlobalKey(),
+                            controller: controller,
+                            child: IconButton(
+                                icon: Icon(
+                                  FluentIcons.delete,
+                                  color: Colors.red,
+                                ),
+                                onPressed: () => showFlyDelete(
+                                    Strings.deleteObject,
+                                    Strings.yes,
+                                    controller,
+                                    FlyoutPlacementMode.topCenter,
+                                    vm.curObject.id!,
+                                    vm.onObjectActionCaller))),
+                      ],
+                    if(vm.curObject.label.target!=null)
+                      ...[
+                        IconButton(
+                            icon: Icon(FluentIcons.calculator_multiply,color: Colors.red,),
+                            onPressed: ()=>vm.onLabelHandler()
+                        ),
+                        const SizedBox(width: 5,),
+                        Text(vm.curObject.label.target!.name)
+                      ]
                   ],
                 ),
               ),

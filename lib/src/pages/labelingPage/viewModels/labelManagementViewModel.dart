@@ -1,6 +1,7 @@
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLevel.dart';
@@ -12,9 +13,10 @@ class LabelManagementViewModel extends ViewModel {
   List<LabelModel> allLabels;
   List<String> allLevels=[];
   int curIndex=0;
+  String prjUUID;
   final ValueSetter<String> onActionCaller;
 
-  LabelManagementViewModel(this.allLabels, this.onActionCaller);
+  LabelManagementViewModel(this.prjUUID,this.allLabels, this.onActionCaller);
 
 
   @override
@@ -89,6 +91,7 @@ class LabelManagementViewModel extends ViewModel {
           }else{
             var newLabel = LabelModel(-1, act[1], allLevels[curIndex]);
             newLabel.id=await LabelDAO().addLabel(newLabel);
+            await ProjectDAO().addALabel(prjUUID, newLabel);
             allLabels.add(newLabel);
             notifyListeners();
           }

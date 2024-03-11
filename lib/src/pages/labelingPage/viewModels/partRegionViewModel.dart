@@ -73,22 +73,30 @@ class PartRegionViewModel extends ViewModel {
     }
   }
 
-
   onObjectActionHandler(String action)async{
-    curObject = await ObjectDAO().getDetails(int.parse(action.split("&&")[1]));
-    notifyListeners();
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) => DlgLabelManagement(
-          labelList: allLabels,
-          onActionCaller: onLabelActionHandler,
-        )
-    );
+    if(action.split("&&")[0]=="labelManag"){
+      curObject = itsObjects.firstWhere((element) => element.id==int.parse(action.split("&&")[1]));
+      notifyListeners();
+      showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) => DlgLabelManagement(
+            prjUUID: prjUUID,
+            labelList: allLabels,
+            onActionCaller: onLabelActionHandler,
+          )
+      );
+    }else{
+
+    }
   }
 
-  onLabelActionHandler(String action){
-    print(action);
+  onLabelActionHandler(String action)async{
+    var lbl = await LabelDAO().getLabel(int.parse(action.split("&&")[1]));
+    curObject!.label.target=lbl;
+    await ObjectDAO().update(curObject!);
+    itsObjects[itsObjects.indexOf(curObject!)]=curObject!;
+    notifyListeners();
   }
 
   pointerUpHandler(e) {
