@@ -74,8 +74,8 @@ class PartRegionViewModel extends ViewModel {
   }
 
   onObjectActionHandler(String action)async{
+    curObject = itsObjects.firstWhere((element) => element.id==int.parse(action.split("&&")[1]));
     if(action.split("&&")[0]=="labelManag"){
-      curObject = itsObjects.firstWhere((element) => element.id==int.parse(action.split("&&")[1]));
       notifyListeners();
       showDialog(
           context: context,
@@ -87,7 +87,9 @@ class PartRegionViewModel extends ViewModel {
           )
       );
     }else{
-
+      itsObjects.remove(curObject);
+      await ObjectDAO().deleteObject(curObject!);
+      curObject=null;
     }
   }
 
@@ -96,6 +98,7 @@ class PartRegionViewModel extends ViewModel {
     curObject!.label.target=lbl;
     await ObjectDAO().update(curObject!);
     itsObjects[itsObjects.indexOf(curObject!)]=curObject!;
+    curObject=null;
     notifyListeners();
   }
 

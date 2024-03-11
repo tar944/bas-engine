@@ -56,7 +56,7 @@ class NewRectanglePainter extends HookWidget {
       },
       child: CustomPaint(
         painter: RectanglePainter(object:ObjectModel(
-            0,"", left.value, right.value, top.value, bottom.value,""),isMine: false,isActive: false),
+            0,"", left.value, right.value, top.value, bottom.value,""),color: Colors.white,isActive: false),
       ),
     );
   }

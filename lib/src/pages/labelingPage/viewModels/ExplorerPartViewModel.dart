@@ -19,4 +19,12 @@ class ExplorerPartViewModel extends ViewModel {
     await ObjectDAO().update(curObject);
     notifyListeners();
   }
+
+  Color getColor(){
+    if(isMine){
+      return curObject.label.target==null?Colors.blue.dark:Colors.teal.dark;
+    }else{
+      return Colors.orange.normal;
+    }
+  }
 }

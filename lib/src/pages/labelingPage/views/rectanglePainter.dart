@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 
 class RectanglePainter extends CustomPainter {
   ObjectModel? object;
-  bool isMine;
+  Color color;
   bool isActive;
-  RectanglePainter({required this.object,required this.isMine,required this.isActive});
+  RectanglePainter({required this.object,required this.color,required this.isActive});
 
   @override
   void paint(Canvas canvas, Size size) {
     Paint paint = Paint()
-      ..color = isMine?Colors.blue:Colors.purpleAccent
+      ..color = color
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.5;
 
@@ -18,7 +18,7 @@ class RectanglePainter extends CustomPainter {
     canvas.drawRect(rect, paint);
     if(isActive){
       paint = Paint()
-        ..color = isMine?Colors.blue.withOpacity(.3):Colors.purpleAccent.withOpacity(.3)
+        ..color = color.withOpacity(0.5)
         ..style =PaintingStyle.fill
         ..strokeWidth = 1.5;
 

@@ -103,7 +103,7 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                       0.0,
                       vm.curObject.bottom - vm.curObject.top,
                       ""),
-                  isMine: vm.isMine,
+                  color: vm.getColor(),
                   isActive: vm.controller.activeID == vm.curObject.id),
             ),
           ),

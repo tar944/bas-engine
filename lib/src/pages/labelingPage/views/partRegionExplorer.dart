@@ -57,7 +57,7 @@ class _View extends StatelessView<PartRegionViewModel> {
                       vm.right,
                       vm.top,
                       vm.bottom,
-                      ""),isMine: false,isActive: false),
+                      ""),color: Colors.white,isActive: false),
             ),
         )),
         ...vm.otherObjects.map((item) {

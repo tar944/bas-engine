@@ -191,23 +191,8 @@ class LabelingViewModel extends ViewModel {
       return x;
     }
   }
-
+  //todo crop image part is here
   onNewPartCreatedHandler(ObjectModel newObject) async {
-    final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
-    final cmd = i.Command()
-      ..decodeImageFile(curObject!.image.target!.path!)
-      ..copyCrop(
-          x: getX(newObject.left.toInt()),
-          y: getY(newObject.top.toInt()),
-          width: (getX(newObject.right.toInt()) - getX(newObject.left.toInt()))
-              .abs()
-              .toInt(),
-          height: (getY(newObject.bottom.toInt()) - getY(newObject.top.toInt())))
-      ..writeToFile(path);
-    await cmd.executeThread();
-    var img = ImageModel(-1, const Uuid().v4(), newObject.uuid, p.basename(path), path);
-    img.id =await ImageDAO().add(img);
-    newObject.image.target = img;
     newObject.uuid=const Uuid().v4();
     newObject.parentUUID=curObject!.uuid;
     newObject.id=await ObjectDAO().addObject(newObject);
