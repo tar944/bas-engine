@@ -72,6 +72,7 @@ class _View extends StatelessView<LabelingViewModel> {
                         ),
                         child: PartRegionExplorer(
                           key: GlobalKey(),
+                          showOthers: vm.isShowAll,
                           otherObjects: vm.subObjects.where((element) => element.parentUUID!=vm.curObject!.uuid).toList(),
                           itsObjects: vm.subObjects.where((element) => element.parentUUID==vm.curObject!.uuid).toList(),
                           onNewObjectCaller: vm.onNewPartCreatedHandler,

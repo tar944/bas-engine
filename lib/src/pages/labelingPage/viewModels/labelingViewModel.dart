@@ -136,15 +136,6 @@ class LabelingViewModel extends ViewModel {
         isShowAll=!isShowAll;
         notifyListeners();
         break;
-      case 'edit':
-        // ScreenShootModel? screen =
-        //     await ScreenDAO().getScreen(int.parse(actions[1]));
-        // screen!.type = actions[2];
-        // screen.description = actions[3];
-        // screen.status = 'finished';
-        // await ScreenDAO().updateScreen(screen);
-        // await setScreenAsData();
-        break;
       case 'delete':
         showConfirmDialog(
             context,

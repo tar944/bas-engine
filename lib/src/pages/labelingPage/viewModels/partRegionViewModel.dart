@@ -16,6 +16,7 @@ class PartRegionViewModel extends ViewModel {
   ObjectModel? curObject;
   final ValueSetter<ObjectModel> onNewObjectCaller;
   String prjUUID;
+  bool showOthers;
 
   double left = 0.0, top = 0.0, right = 0.0, bottom = 0.0;
   bool isPainting = false;
@@ -24,6 +25,7 @@ class PartRegionViewModel extends ViewModel {
       this.prjUUID,
       this.otherObjects,
       this.itsObjects,
+      this.showOthers,
       this.onNewObjectCaller);
 
 
