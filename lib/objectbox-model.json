@@ -277,7 +277,13 @@
           "type": 1
         }
       ],
-      "relations": []
+      "relations": [
+        {
+          "id": "28:792537263070642319",
+          "name": "validObjects",
+          "targetId": "15:8892823931225835339"
+        }
+      ]
     },
     {
       "id": "16:6891732610780172479",
@@ -400,7 +406,7 @@
   ],
   "lastEntityId": "17:8566624654259097881",
   "lastIndexId": "20:1012226703174902082",
-  "lastRelationId": "27:247004475918620838",
+  "lastRelationId": "28:792537263070642319",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,

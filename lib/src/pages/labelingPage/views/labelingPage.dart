@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
-import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelingViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/flyImagesList.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/flyMenu.dart';
@@ -70,14 +69,15 @@ class _View extends StatelessView<LabelingViewModel> {
                                 : BoxFit.none,
                           ):null,
                         ),
-                        child: PartRegionExplorer(
+                        child: vm.curObject!=null?PartRegionExplorer(
                           key: GlobalKey(),
                           showOthers: vm.isShowAll,
+                          mainObject: vm.curObject!,
                           otherObjects: vm.subObjects.where((element) => element.parentUUID!=vm.curObject!.uuid).toList(),
                           itsObjects: vm.subObjects.where((element) => element.parentUUID==vm.curObject!.uuid).toList(),
                           onNewObjectCaller: vm.onNewPartCreatedHandler,
                           prjUUID: vm.prjUUID,
-                        ),
+                        ):Container(),
                       ),
                       Positioned(
                         top: (MediaQuery.sizeOf(context).height/2)-Dimens.actionBtnH/2,

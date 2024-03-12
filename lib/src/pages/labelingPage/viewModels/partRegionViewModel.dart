@@ -14,6 +14,7 @@ class PartRegionViewModel extends ViewModel {
   List<LabelModel>allLabels=[];
   RegionRecController objectController = RegionRecController();
   ObjectModel? curObject;
+  ObjectModel mainObject;
   final ValueSetter<ObjectModel> onNewObjectCaller;
   String prjUUID;
   bool showOthers;
@@ -23,6 +24,7 @@ class PartRegionViewModel extends ViewModel {
 
   PartRegionViewModel(
       this.prjUUID,
+      this.mainObject,
       this.otherObjects,
       this.itsObjects,
       this.showOthers,
@@ -64,6 +66,18 @@ class PartRegionViewModel extends ViewModel {
             found =true;
             objectController.setActiveID(item.id!);
             notifyListeners();
+            break;
+          }
+        }
+      }
+      for(var item in otherObjects){
+        if(x>item.left&&x<item.right){
+          if(y>(item.top-10)&&y<item.bottom-10){
+            if(item.label.target!=null){
+              found =true;
+              objectController.setActiveID(item.id!);
+              notifyListeners();
+            }
             break;
           }
         }

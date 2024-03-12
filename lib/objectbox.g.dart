@@ -292,7 +292,12 @@ final _entities = <ModelEntity>[
             type: 1,
             flags: 0)
       ],
-      relations: <ModelRelation>[],
+      relations: <ModelRelation>[
+        ModelRelation(
+            id: const IdUid(28, 792537263070642319),
+            name: 'validObjects',
+            targetId: const IdUid(15, 8892823931225835339))
+      ],
       backlinks: <ModelBacklink>[]),
   ModelEntity(
       id: const IdUid(16, 6891732610780172479),
@@ -437,7 +442,7 @@ ModelDefinition getObjectBoxModel() {
       entities: _entities,
       lastEntityId: const IdUid(17, 8566624654259097881),
       lastIndexId: const IdUid(20, 1012226703174902082),
-      lastRelationId: const IdUid(27, 247004475918620838),
+      lastRelationId: const IdUid(28, 792537263070642319),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [
         5922885288332288138,
@@ -824,7 +829,8 @@ ModelDefinition getObjectBoxModel() {
     ObjectModel: EntityDefinition<ObjectModel>(
         model: _entities[4],
         toOneRelations: (ObjectModel object) => [object.image, object.label],
-        toManyRelations: (ObjectModel object) => {},
+        toManyRelations: (ObjectModel object) =>
+            {RelInfo<ObjectModel>.toMany(28, object.id!): object.validObjects},
         getId: (ObjectModel object) => object.id,
         setId: (ObjectModel object, int id) {
           object.id = id;
@@ -889,6 +895,8 @@ ModelDefinition getObjectBoxModel() {
           object.label.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 48, 0);
           object.label.attach(store);
+          InternalToManyAccess.setRelInfo<ObjectModel>(object.validObjects,
+              store, RelInfo<ObjectModel>.toMany(28, object.id!));
           return object;
         }),
     ImageGroupModel: EntityDefinition<ImageGroupModel>(
@@ -1202,6 +1210,10 @@ class ObjectModel_ {
   /// see [ObjectModel.isNavTool]
   static final isNavTool =
       QueryBooleanProperty<ObjectModel>(_entities[4].properties[14]);
+
+  /// see [ObjectModel.validObjects]
+  static final validObjects =
+      QueryRelationToMany<ObjectModel, ObjectModel>(_entities[4].relations[0]);
 }
 
 /// [ImageGroupModel] entity fields to define ObjectBox queries.

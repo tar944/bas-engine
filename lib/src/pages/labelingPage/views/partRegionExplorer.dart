@@ -7,16 +7,19 @@ import 'exploredPartRegion.dart';
 
 class PartRegionExplorer extends StatelessWidget {
   PartRegionExplorer(
-      {Key? key,
-      required this.onNewObjectCaller,
-      required this.otherObjects,
-      required this.itsObjects,
-      required this.prjUUID,
-      required this.showOthers})
-      : super(key: key);
+      {
+        Key? key,
+        required this.onNewObjectCaller,
+        required this.otherObjects,
+        required this.itsObjects,
+        required this.mainObject,
+        required this.prjUUID,
+        required this.showOthers
+      }) : super(key: key);
 
   final List<ObjectModel> otherObjects;
   final List<ObjectModel> itsObjects;
+  final ObjectModel mainObject;
   final bool showOthers;
   final ValueSetter<ObjectModel> onNewObjectCaller;
   String prjUUID;
@@ -26,7 +29,13 @@ class PartRegionExplorer extends StatelessWidget {
     return MVVM(
       view: () => const _View(),
       viewModel: PartRegionViewModel(
-          prjUUID, otherObjects, itsObjects, showOthers, onNewObjectCaller),
+          prjUUID,
+          mainObject,
+          otherObjects,
+          itsObjects,
+          showOthers,
+          onNewObjectCaller
+      ),
     );
   }
 }
@@ -62,6 +71,7 @@ class _View extends StatelessView<PartRegionViewModel> {
             left: item.left,
             child: ExploredPartRegion(
               key: GlobalKey(),
+              mainObject:  vm.mainObject,
               curObject: item,
               isMine: false,
               isActive: vm.curObject != null && item.id == vm.curObject!.id
@@ -88,6 +98,7 @@ class _View extends StatelessView<PartRegionViewModel> {
                   left: item.left,
                   child: ExploredPartRegion(
                     key: GlobalKey(),
+                    mainObject: vm.mainObject,
                     curObject: item,
                     isMine: true,
                     isActive:

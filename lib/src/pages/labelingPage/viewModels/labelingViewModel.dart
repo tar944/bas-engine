@@ -199,6 +199,7 @@ class LabelingViewModel extends ViewModel {
   onNewPartCreatedHandler(ObjectModel newObject) async {
     newObject.uuid=const Uuid().v4();
     newObject.parentUUID=curObject!.uuid;
+    newObject.validObjects.add(curObject!);
     newObject.id=await ObjectDAO().addObject(newObject);
     await ImageGroupDAO().addSubObject(groupId, newObject);
     subObjects.add(newObject);

@@ -12,13 +12,14 @@ class ExploredPartRegion extends StatelessWidget {
   ExploredPartRegion({
     Key? key,
     required this.curObject,
+    required this.mainObject,
     required this.isMine,
     required this.isActive,
     required this.controller,
     required this.onObjectActionCaller,
   }) : super(key: key);
 
-  ObjectModel curObject;
+  ObjectModel curObject,mainObject;
   ValueSetter<String> onObjectActionCaller;
   bool isMine;
   bool isActive;
@@ -29,7 +30,7 @@ class ExploredPartRegion extends StatelessWidget {
     return MVVM(
       view: () => const _View(),
       viewModel: ExplorerPartViewModel(
-          curObject, isMine, isActive, controller, onObjectActionCaller),
+          curObject,mainObject, isMine, isActive, controller, onObjectActionCaller),
     );
   }
 }
@@ -49,7 +50,7 @@ class _View extends StatelessView<ExplorerPartViewModel> {
             Padding(
               padding: const EdgeInsets.only(bottom: 10.0),
               child: Container(
-                width: vm.curObject.label.target==null? 62:130,
+                width: vm.curObject.label.target==null? 62:vm.isMine?130:250,
                 decoration: BoxDecoration(
                     borderRadius: const BorderRadius.all(
                         Radius.circular(Dimens.actionRadius)),
@@ -78,15 +79,32 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                                     vm.curObject.id!,
                                     vm.onObjectActionCaller))),
                       ],
-                    if(vm.curObject.label.target!=null)
+                    if(vm.curObject.label.target!=null&&vm.isMine)
                       ...[
                         IconButton(
                             icon: Icon(FluentIcons.calculator_multiply,color: Colors.red,),
-                            onPressed: ()=>vm.onLabelHandler()
+                            onPressed: ()=>vm.onLabelHandler("remove")
                         ),
                         const SizedBox(width: 5,),
                         Text(vm.curObject.label.target!.name)
-                      ]
+                      ],
+                    if(vm.curObject.label.target!=null&&!vm.isMine)
+                      ...[
+                        const SizedBox(width: 5,),
+                        vm.curObject.validObjects.contains(vm.mainObject)?
+                          Text(vm.curObject.label.target!.name):
+                          Text("Is label «${vm.curObject.label.target!.name}» valid here?"),
+                        const Spacer(),
+                        vm.curObject.validObjects.contains(vm.mainObject)?
+                          IconButton(
+                              icon: Icon(FluentIcons.remove_link,color: Colors.red.dark,size: 18,),
+                              onPressed: ()=>vm.onLabelHandler("removeValidObject")
+                          ):
+                          IconButton(
+                              icon: const Icon(FluentIcons.link,size: 18,),
+                              onPressed: ()=>vm.onLabelHandler("addValidObject")
+                          ),
+                      ],
                   ],
                 ),
               ),
