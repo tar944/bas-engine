@@ -26,12 +26,11 @@ class ProjectPartsViewModel extends ViewModel {
 
   @override
   void init() async {
+    var prj = await ProjectDAO().getDetails(prjID);
+    prjUUID = prj!.uuid;
+    updateProjectData();
     final address = await Preference().getMainAddress();
-    if(address==''){
-      var prj = await ProjectDAO().getDetails(prjID);
-      prjUUID = prj!.uuid;
-      updateProjectData();
-    }else{
+    if(address!=''){
       onPartSelect('goto&&${address.split("&&")[1]}');
     }
   }
@@ -102,7 +101,7 @@ class ProjectPartsViewModel extends ViewModel {
     updateProjectData();
   }
 
-  void onCreateProjectHandler(ProjectPartModel curPart) async {
+  void onCreatePartHandler(ProjectPartModel curPart) async {
     curPart.id = await ProjectPartDAO().add(curPart);
     await ProjectDAO().addAPart(prjID, curPart);
     await DirectoryManager().createPartDir(curPart.prjUUID, curPart.uuid);
@@ -115,7 +114,7 @@ class ProjectPartsViewModel extends ViewModel {
         context: context,
         barrierDismissible: true,
         builder: (context) => DlgProjectPart(
-              onSaveCaller: onCreateProjectHandler,
+              onSaveCaller: onCreatePartHandler,
               prjUUID: prjUUID,
             ));
   }

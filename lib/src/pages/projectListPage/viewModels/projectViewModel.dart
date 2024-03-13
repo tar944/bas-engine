@@ -15,10 +15,8 @@ class ProjectViewModel extends ViewModel {
   @override
   void init() async{
     final address = await Preference().getMainAddress();
-    if(address=="")
-    {
-      updateProjectData();
-    }else{
+    updateProjectData();
+    if(address!="") {
       onProjectSelect("goto&&${address.split('&&')[0]}");
     }
   }

@@ -92,16 +92,16 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                       ...[
                         const SizedBox(width: 5,),
                         vm.curObject.validObjects.contains(vm.mainObject)?
-                          Text(vm.curObject.label.target!.name):
+                          Text("valid label is: ${vm.curObject.label.target!.name}"):
                           Text("Is label «${vm.curObject.label.target!.name}» valid here?"),
                         const Spacer(),
                         vm.curObject.validObjects.contains(vm.mainObject)?
                           IconButton(
-                              icon: Icon(FluentIcons.remove_link,color: Colors.red.dark,size: 18,),
+                              icon: Icon(FluentIcons.calculator_multiply,color: Colors.red.dark,size: 18,),
                               onPressed: ()=>vm.onLabelHandler("removeValidObject")
                           ):
                           IconButton(
-                              icon: const Icon(FluentIcons.link,size: 18,),
+                              icon: const Icon(FluentIcons.accept,size: 18,),
                               onPressed: ()=>vm.onLabelHandler("addValidObject")
                           ),
                       ],
