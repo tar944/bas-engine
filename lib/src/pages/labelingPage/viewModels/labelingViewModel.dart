@@ -18,7 +18,7 @@ import 'package:image/image.dart' as i;
 
 class LabelingViewModel extends ViewModel {
 
-  final menuController = FlyoutController();
+  final deleteController = FlyoutController();
   final moreController = FlyoutController();
   ImageGroupModel? group;
   ObjectModel? curObject;
@@ -137,14 +137,6 @@ class LabelingViewModel extends ViewModel {
         notifyListeners();
         break;
       case 'delete':
-        showConfirmDialog(
-            context,
-            Strings.deleteObject,
-            Strings.delete,
-            (value) =>onObjectActionHandler(value)
-        );
-        break;
-      case Strings.confirm:
         await ObjectDAO().deleteObject(curObject!);
         await ImageGroupDAO().removeObject(groupId, curObject!);
         group = await ImageGroupDAO().getDetails(groupId);

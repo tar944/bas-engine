@@ -20,6 +20,7 @@ class Strings{
   static const String chooseImages="Choose images";
   static const String deleteProject="Are you sure to delete this project?";
   static const String deleteObject="Are you sure to delete this object?";
+  static const String deleteScreen="Are you sure to delete this screen?";
   static const String guideObjectLabeling="";
   static const String guideImageGroup="You can sort the similar images into groups 👇 or choose a group or create a new one 👆";
   static const String guideImageGroupTwo="You can choose a group from group bar and see its contents 👇 or create a new group 👆";

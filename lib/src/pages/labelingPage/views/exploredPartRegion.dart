@@ -14,23 +14,21 @@ class ExploredPartRegion extends StatelessWidget {
     required this.curObject,
     required this.mainObject,
     required this.isMine,
-    required this.isActive,
     required this.controller,
     required this.onObjectActionCaller,
   }) : super(key: key);
 
-  ObjectModel curObject,mainObject;
+  ObjectModel curObject, mainObject;
   ValueSetter<String> onObjectActionCaller;
   bool isMine;
-  bool isActive;
   RegionRecController controller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: ExplorerPartViewModel(
-          curObject,mainObject, isMine, isActive, controller, onObjectActionCaller),
+      viewModel: ExplorerPartViewModel(curObject, mainObject, isMine,
+          controller, onObjectActionCaller),
     );
   }
 }
@@ -42,90 +40,59 @@ class _View extends StatelessView<ExplorerPartViewModel> {
   Widget render(context, ExplorerPartViewModel vm) {
     final controller = FlyoutController();
     return SizedBox(
-      width: (vm.curObject.right - vm.curObject.left).abs(),
-      height: (vm.curObject.bottom - vm.curObject.top).abs() + 40,
-      child: Stack(
-        children: [
-          if (vm.controller.activeID == vm.curObject.id)
-            Padding(
-              padding: const EdgeInsets.only(bottom: 10.0),
-              child: Container(
-                width: vm.curObject.label.target==null? 62:vm.isMine?130:250,
-                decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(
-                        Radius.circular(Dimens.actionRadius)),
-                    border: Border.all(color: Colors.grey[150]),
-                    color: Colors.grey[190]),
-                child: Row(
-                  children: [
-                    if(vm.curObject.label.target==null)
-                      ...[
-                        IconButton(
-                            icon: const Icon(FluentIcons.label),
-                            onPressed: () => vm.onObjectActionCaller("labelManag&&${vm.curObject.id}")),
-                        FlyoutTarget(
-                            key: GlobalKey(),
-                            controller: controller,
-                            child: IconButton(
-                                icon: Icon(
-                                  FluentIcons.delete,
-                                  color: Colors.red,
-                                ),
-                                onPressed: () => showFlyDelete(
-                                    Strings.deleteObject,
-                                    Strings.yes,
-                                    controller,
-                                    FlyoutPlacementMode.topCenter,
-                                    vm.curObject.id!,
-                                    vm.onObjectActionCaller))),
-                      ],
-                    if(vm.curObject.label.target!=null&&vm.isMine)
-                      ...[
-                        IconButton(
-                            icon: Icon(FluentIcons.calculator_multiply,color: Colors.red,),
-                            onPressed: ()=>vm.onLabelHandler("remove")
-                        ),
-                        const SizedBox(width: 5,),
-                        Text(vm.curObject.label.target!.name)
-                      ],
-                    if(vm.curObject.label.target!=null&&!vm.isMine)
-                      ...[
-                        const SizedBox(width: 5,),
-                        vm.curObject.validObjects.contains(vm.mainObject)?
-                          Text("valid label is: ${vm.curObject.label.target!.name}"):
-                          Text("Is label «${vm.curObject.label.target!.name}» valid here?"),
-                        const Spacer(),
-                        vm.curObject.validObjects.contains(vm.mainObject)?
-                          IconButton(
-                              icon: Icon(FluentIcons.calculator_multiply,color: Colors.red.dark,size: 18,),
-                              onPressed: ()=>vm.onLabelHandler("removeValidObject")
-                          ):
-                          IconButton(
-                              icon: const Icon(FluentIcons.accept,size: 18,),
-                              onPressed: ()=>vm.onLabelHandler("addValidObject")
-                          ),
-                      ],
-                  ],
-                ),
-              ),
-            ),
-          Positioned(
-            top: 30,
-            child: CustomPaint(
+      width: vm.isMaximize?(vm.curObject.right - vm.curObject.left).abs():40,
+      height: vm.isMaximize?(vm.curObject.bottom - vm.curObject.top).abs():40,
+      child: Opacity(
+        opacity: vm.isMaximize?1.0:0.3,
+        child: Stack(
+          children: [
+            CustomPaint(
               painter: RectanglePainter(
                   object: ObjectModel(
                       0,
                       "",
                       0.0,
-                      vm.curObject.right - vm.curObject.left,
+                      vm.isMaximize?vm.curObject.right - vm.curObject.left:40,
                       0.0,
-                      vm.curObject.bottom - vm.curObject.top,
+                      vm.isMaximize?vm.curObject.bottom - vm.curObject.top:40,
                       ""),
-                  color: vm.getColor(),
+                  color: vm.isMine?Colors.blue.dark:Colors.orange.dark,
                   isActive: vm.controller.activeID == vm.curObject.id),
             ),
-          ),
-        ],
+            Positioned(
+                right: 5,
+                bottom: 5,
+                child: Row(
+                  children: [
+                    vm.isMaximize&&vm.isMine?
+                    FlyoutTarget(
+                      key: GlobalKey(),
+                      controller: controller,
+                      child:
+                      IconButton(
+                          icon: Icon(
+                            FluentIcons.delete,
+                            color: Colors.red,
+                          ),
+                          onPressed: () => showFlyDelete(
+                              Strings.deleteObject,
+                              Strings.yes,
+                              controller,
+                              FlyoutPlacementMode.topCenter,
+                              vm.curObject.id!,
+                              vm.onObjectActionCaller)),
+                    ):
+                    Container(),
+                    IconButton(
+                        icon: Icon(
+                          vm.isMaximize?FluentIcons.arrow_up_right_mirrored8:FluentIcons.arrow_down_right8,
+                          color: Colors.white,
+                        ),
+                        onPressed: () => vm.onShowHandler())
+                  ],
+                ))
+          ],
+        ),
       ),
     );
   }

@@ -1,6 +1,8 @@
 import 'dart:io';
 
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelingViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/flyImagesList.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/flyMenu.dart';
@@ -107,16 +109,20 @@ class _View extends StatelessView<LabelingViewModel> {
                                   const SizedBox(width: 5,),
                                   FlyoutTarget(
                                     key: GlobalKey(),
-                                    controller: vm.menuController,
+                                    controller: vm.deleteController,
                                     child: IconButton(
                                         style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                        icon: const Icon(
-                                          FluentIcons.more,
+                                        icon: Icon(
+                                          FluentIcons.delete,
+                                          color: Colors.red,
                                           size: 25,
                                         ),
-                                        onPressed: () => showFlyMenu(
-                                            vm.menuController,
-                                            vm.isShowAll,
+                                        onPressed: () => showFlyDelete(
+                                            Strings.deleteScreen,
+                                            Strings.yes,
+                                            vm.deleteController,
+                                            FlyoutPlacementMode.right,
+                                            vm.curObject!.id!,
                                             vm.onObjectActionHandler)),
                                   ),
 

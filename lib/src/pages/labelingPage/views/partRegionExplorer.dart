@@ -55,7 +55,6 @@ class _View extends StatelessView<PartRegionViewModel> {
             child: Listener(
               onPointerDown: (e) => vm.pointerDownHandler(e),
               onPointerMove: (e) => vm.pointerMoveHandler(e),
-              onPointerHover: (e) => vm.pointerHoverHandler(e),
               onPointerUp: (e) => vm.pointerUpHandler(e),
               child: CustomPaint(
                 painter: RectanglePainter(
@@ -67,21 +66,17 @@ class _View extends StatelessView<PartRegionViewModel> {
             )),
         ...vm.otherObjects.map((item) {
           return vm.showOthers?Positioned(
-            top: item.top - 40,
+            top: item.top,
             left: item.left,
             child: ExploredPartRegion(
-              key: GlobalKey(),
               mainObject:  vm.mainObject,
               curObject: item,
               isMine: false,
-              isActive: vm.curObject != null && item.id == vm.curObject!.id
-                  ? true
-                  : false,
               controller: vm.objectController,
               onObjectActionCaller: (e) => vm.onObjectActionHandler(e),
             ),
           ) : Positioned(
-            top: item.top - 40,
+            top: item.top,
             left: item.left,
             child: Container(
               width: 15,
@@ -94,17 +89,12 @@ class _View extends StatelessView<PartRegionViewModel> {
         }).toList(),
         ...vm.itsObjects.map((item) {
           return Positioned(
-                  top: item.top - 40,
+                  top: item.top,
                   left: item.left,
                   child: ExploredPartRegion(
-                    key: GlobalKey(),
                     mainObject: vm.mainObject,
                     curObject: item,
                     isMine: true,
-                    isActive:
-                        vm.curObject != null && item.id == vm.curObject!.id
-                            ? true
-                            : false,
                     controller: vm.objectController,
                     onObjectActionCaller: (e) => vm.onObjectActionHandler(e),
                   ),

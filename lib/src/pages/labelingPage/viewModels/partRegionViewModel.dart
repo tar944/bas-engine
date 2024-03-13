@@ -55,40 +55,6 @@ class PartRegionViewModel extends ViewModel {
     }
   }
 
-  pointerHoverHandler(e) {
-    if(!isPainting){
-      double x =e.localPosition.dx;
-      double y =e.localPosition.dy;
-      bool found=false;
-      for(var item in itsObjects){
-        if(x>item.left&&x<item.right){
-          if(y>(item.top-10)&&y<item.bottom-10){
-            found =true;
-            objectController.setActiveID(item.id!);
-            notifyListeners();
-            break;
-          }
-        }
-      }
-      for(var item in otherObjects){
-        if(x>item.left&&x<item.right){
-          if(y>(item.top-10)&&y<item.bottom-10){
-            if(item.label.target!=null){
-              found =true;
-              objectController.setActiveID(item.id!);
-              notifyListeners();
-            }
-            break;
-          }
-        }
-      }
-      if(!found){
-        objectController.setActiveID(-1);
-        notifyListeners();
-      }
-    }
-  }
-
   onObjectActionHandler(String action)async{
     curObject = itsObjects.firstWhere((element) => element.id==int.parse(action.split("&&")[1]));
     if(action.split("&&")[0]=="labelManag"){
