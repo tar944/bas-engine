@@ -3,13 +3,13 @@ import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
-import 'package:bas_dataset_generator_engine/src/pages/imageGroupPage/viewModels/groupItemViewModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/imageItemViewModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pmvvm/pmvvm.dart';
 
-class ImageGroupItem extends StatelessWidget {
-  ImageGroupItem({Key? key, required this.group, this.onActionCaller})
+class ImageItem extends StatelessWidget {
+  ImageItem({Key? key, required this.group, this.onActionCaller})
       : super(key: key);
 
   final ImageGroupModel group;
@@ -19,16 +19,16 @@ class ImageGroupItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: GroupItemViewModel(group,onActionCaller),
+      viewModel: ImageItemViewModel(group,onActionCaller),
     );
   }
 }
 
-class _View extends StatelessView<GroupItemViewModel> {
+class _View extends StatelessView<ImageItemViewModel> {
   const _View({Key? key}) : super(key: key);
 
   @override
-  Widget render(context, GroupItemViewModel vm) {
+  Widget render(context, ImageItemViewModel vm) {
     final controller = FlyoutController();
     return Padding(
       padding: const EdgeInsets.only(left: 8.0),

@@ -7,12 +7,12 @@ import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dar
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
-import 'package:bas_dataset_generator_engine/src/pages/imageGroupPage/views/dlgImageGroup.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgImageGroup.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pmvvm/pmvvm.dart';
 
-class ImageGroupsViewModel extends ViewModel {
+class LabelingViewModel extends ViewModel {
   List<ObjectModel> objects = [];
   List<ImageGroupModel> groups = [];
   ImageGroupModel? curGroup;
@@ -21,7 +21,7 @@ class ImageGroupsViewModel extends ViewModel {
   String prjUUID="";
   ValueSetter<String> onGroupActionCaller;
 
-  ImageGroupsViewModel(this.partId, this.onGroupActionCaller);
+  LabelingViewModel(this.partId, this.onGroupActionCaller);
 
   @override
   void init() async {

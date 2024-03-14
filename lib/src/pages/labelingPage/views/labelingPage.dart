@@ -3,16 +3,16 @@ import 'dart:io';
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
-import 'package:bas_dataset_generator_engine/src/pages/imageGroupPage/viewModels/imageGroupViewModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/imageGroupPage/views/imageGroupItem.dart';
-import 'package:bas_dataset_generator_engine/src/pages/imageGroupPage/views/objectItem.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelingViewModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/imageItem.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/objectItem.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 typedef GroupController = void Function(BuildContext context, void Function() methodOfGroup);
 
-class ImageGroups extends StatelessWidget {
-  ImageGroups({
+class LabelingPage extends StatelessWidget {
+  LabelingPage({
     super.key,
     required this.partId,
     required this.onGroupActionCaller,
@@ -26,18 +26,18 @@ class ImageGroups extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => _View(controller: controller),
-      viewModel: ImageGroupsViewModel(partId,onGroupActionCaller),
+      viewModel: LabelingViewModel(partId,onGroupActionCaller),
     );
   }
 }
 
-class _View extends StatelessView<ImageGroupsViewModel> {
+class _View extends StatelessView<LabelingViewModel> {
   const _View({Key? key, required this.controller}) : super(key: key);
 
   final GroupController controller;
 
   @override
-  Widget render(context, ImageGroupsViewModel vm) {
+  Widget render(context, LabelingViewModel vm) {
     controller.call(context, vm.createGroup);
 
     return SizedBox(
@@ -141,7 +141,7 @@ class _View extends StatelessView<ImageGroupsViewModel> {
                               scrollDirection: Axis.horizontal,
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
-                                return ImageGroupItem(
+                                return ImageItem(
                                   group: vm.groups[index],
                                   onActionCaller: vm.onGroupSelect,
                                 );

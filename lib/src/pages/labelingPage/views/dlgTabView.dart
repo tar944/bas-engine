@@ -1,7 +1,7 @@
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/imageGroupPage/views/dlgLabelManagementItem.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLabelManagementItem.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 class DlgTabView extends StatelessWidget {

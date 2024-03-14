@@ -1,8 +1,8 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/imageGroupPage/viewModels/labelManagementViewModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/imageGroupPage/views/dlgTabView.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelManagementViewModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgTabView.dart';
 import 'package:bas_dataset_generator_engine/src/parts/dialogTitleBar.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';

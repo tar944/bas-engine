@@ -1,6 +1,6 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
-import 'package:bas_dataset_generator_engine/src/pages/imageGroupPage/views/imageGroups.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/labelingPage.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/viewModels/mainViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/headerPart.dart';
 import 'package:bas_dataset_generator_engine/src/pages/projectListPage/views/projectList.dart';
@@ -71,7 +71,7 @@ class _View extends StatelessView<MainPageViewModel> {
                       ),
                     ),
                     Center(
-                      child: ImageGroups(
+                      child: LabelingPage(
                         onGroupActionCaller: vm.onGroupActionHandler,
                         partId: vm.curPart==null?-1:vm.curPart!.id,
                         controller: vm.setGroupController),
