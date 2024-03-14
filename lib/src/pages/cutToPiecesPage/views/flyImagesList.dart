@@ -1,5 +1,5 @@
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/flyObjectItem.dart';
+import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/flyObjectItem.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 void showFlyImagesList(

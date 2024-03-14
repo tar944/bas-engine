@@ -1,11 +1,8 @@
-import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectBox.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/labelingPage.dart';
+import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/cutToPiecesPage.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/mainPage.dart';
 import 'package:bas_dataset_generator_engine/src/pages/recordPage.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
-import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:bas_dataset_generator_engine/src/utility/theme.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -99,10 +96,10 @@ final router = GoRouter(
       builder: (context, state) => const MainPage(),
     ),
     GoRoute(
-      path: '/labeling/:objId/:groupId/:partUUID/:prjUUID/:title',
-      name: 'labeling',
+      path: '/cutToPieces/:objId/:groupId/:partUUID/:prjUUID/:title',
+      name: 'cutToPieces',
       builder: (context, state) =>
-          LabelingPage(
+          CutToPiecesPage(
               objId: int.parse(state.params['objId']!),
               groupId:int.parse(state.params['groupId']!),
               partUUID: state.params['partUUID']!,

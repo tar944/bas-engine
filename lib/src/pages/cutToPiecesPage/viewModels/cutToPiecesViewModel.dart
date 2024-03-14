@@ -6,7 +6,6 @@ import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
-import 'package:bas_dataset_generator_engine/src/dialogs/dlgConfirm.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -16,7 +15,7 @@ import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:image/image.dart' as i;
 
-class LabelingViewModel extends ViewModel {
+class CutToPiecesViewModel extends ViewModel {
 
   final deleteController = FlyoutController();
   final moreController = FlyoutController();
@@ -29,7 +28,7 @@ class LabelingViewModel extends ViewModel {
   int indexImage = 0, imgH = 0,imgW = 0;
   Size imgSize = const Size(0, 0);
 
-  LabelingViewModel(this.objId,this.partUUID,this.prjUUID,this.groupId,this.title);
+  CutToPiecesViewModel(this.objId,this.partUUID,this.prjUUID,this.groupId,this.title);
 
   @override
   void init() async{

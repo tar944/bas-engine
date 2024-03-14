@@ -3,21 +3,20 @@ import 'dart:io';
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
-import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelingViewModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/flyImagesList.dart';
-import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/flyMenu.dart';
+import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/viewModels/cutToPiecesViewModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/flyImagesList.dart';
+import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/partRegionExplorer.dart';
 import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/partRegionExplorer.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pmvvm/pmvvm.dart';
 
-class LabelingPage extends StatelessWidget {
+class CutToPiecesPage extends StatelessWidget {
   int groupId,objId;
   String partUUID,prjUUID;
   String title;
 
-  LabelingPage({
+  CutToPiecesPage({
     super.key,
     required this.groupId ,
     required this.objId,
@@ -29,16 +28,16 @@ class LabelingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: LabelingViewModel(objId,partUUID,prjUUID,groupId,title),
+      viewModel: CutToPiecesViewModel(objId,partUUID,prjUUID,groupId,title),
     );
   }
 }
 
-class _View extends StatelessView<LabelingViewModel> {
+class _View extends StatelessView<CutToPiecesViewModel> {
   const _View({Key? key}) : super(key: key);
 
   @override
-  Widget render(context, LabelingViewModel vm) {
+  Widget render(context, CutToPiecesViewModel vm) {
     return ScaffoldPage(
         padding: const EdgeInsets.only(top: 0, bottom: 0),
         content: SizedBox.expand(

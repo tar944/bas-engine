@@ -4,7 +4,7 @@ import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
-import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLevel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/imageGroupPage/views/dlgLevel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 
