@@ -1,19 +1,30 @@
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/navModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/navigationRowViewModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/navItem.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class NavigationRow extends StatelessWidget {
-  NavigationRow({Key? key,required this.allNavs}) : super(key: key);
+  NavigationRow({
+    Key? key,
+    required this.allNavs,
+    required this.rowNumber,
+    required this.onNavSelectedCaller
+  }) : super(key: key);
 
   List<NavModel> allNavs;
+  int rowNumber;
+  ValueSetter<NavModel> onNavSelectedCaller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: NavigationRowViewModel(allNavs),
+      viewModel: NavigationRowViewModel(allNavs,rowNumber,onNavSelectedCaller),
     );
   }
 }
@@ -24,6 +35,37 @@ class _View extends StatelessView<NavigationRowViewModel> {
   @override
   Widget render(context, NavigationRowViewModel vm) {
 
-    return Container();
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+        color: Colors.grey[180]
+      ),
+      child: Row(
+        children: [
+          IconButton(
+            onPressed: ()=>vm.onItemSelectHandler(vm.showAll),
+            icon: Container(
+              height: Dimens.navH,
+              width: Dimens.navH*1.5,
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+                border: Border.all(color: vm.findSelectedStatus(vm.showAll)=="selected"?Colors.teal:Colors.white)
+              ),
+              child: Text(Strings.showAll,style: TextSystem.textM(vm.findSelectedStatus(vm.showAll)=="selected"?Colors.teal:Colors.white),),
+            ),
+          ),
+          ListView.builder(
+            itemCount: vm.allNavs.length,
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (context, index) {
+              return NavItem(
+                  navItem: vm.allNavs[index],
+                  selectStatus: vm.findSelectedStatus(vm.allNavs[index]),
+                  onItemSelectedCaller: vm.onItemSelectHandler);
+            })],
+      ),
+    );
   }
 }
