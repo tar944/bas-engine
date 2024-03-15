@@ -95,19 +95,6 @@ class _View extends StatelessView<HeaderViewModel> {
                     status: vm.curTab.name == HeaderTabs.imageGroups.name
                         ? "active"
                         : "notActive"),
-              if (vm.curTab == HeaderTabs.imageGroups)
-                Padding(
-                  padding: const EdgeInsets.only(top: 10.0, left: 10.0),
-                  child: Button(
-                      style:ButtonStyle(
-                          padding: ButtonState.all(EdgeInsets.zero)
-                      ),
-                      child: SizedBox(
-                          width: Dimens.tabHeightSmall+10,
-                          height: Dimens.tabHeightSmall+10,
-                          child: Icon(FluentIcons.add,size: 17,color: Colors.teal,)),
-                      onPressed: ()=>vm.onTabChanged(HeaderTabs.addGroup)),
-                ),
               if (vm.showTab(HeaderTabs.objectLabeling))
                 HeaderBtn(
                     isFirst: false,
