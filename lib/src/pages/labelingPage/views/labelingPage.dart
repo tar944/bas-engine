@@ -11,10 +11,12 @@ class LabelingPage extends StatelessWidget {
   LabelingPage(
       {super.key,
       required this.partId,
+      required this.prjUUID,
       required this.onGroupActionCaller,
       required this.controller});
 
   int partId;
+  String prjUUID;
   ValueSetter<String> onGroupActionCaller;
   final GroupController controller;
 
@@ -22,7 +24,7 @@ class LabelingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => _View(controller: controller),
-      viewModel: LabelingViewModel(partId, onGroupActionCaller),
+      viewModel: LabelingViewModel(partId,prjUUID, onGroupActionCaller),
     );
   }
 }
@@ -39,21 +41,24 @@ class _View extends StatelessView<LabelingViewModel> {
     return SizedBox(
       height: double.infinity,
       child: Padding(
-        padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-        child: ListView.builder(
-            itemCount: vm.allNavsRows.length+1,
+        padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+        child: vm.allNavsRows.isNotEmpty?ListView.builder(
+            itemCount: vm.allNavsRows.length,
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
-              if(index!=vm.allNavsRows.length){
+              print(vm.allNavsRows.length);
+              print(index);
+              if(index!=vm.allNavsRows.length-1){
                 return NavigationRow(
                     allNavs: vm.allNavsRows[index],
                     rowNumber: index,
                     onNavSelectedCaller: vm.onNavItemSelectHandler);
               }else{
+                print("body");
                 return LabelingBody(objects: vm.objects,relatedLabels: vm.curGroup.relatedLabels, curGroup: vm.curGroup);
               }
 
-            }),
+            }):Container(),
       ),
     );
   }

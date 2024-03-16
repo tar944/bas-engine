@@ -31,64 +31,71 @@ class _View extends StatelessView<LabelingBodyViewModel> {
 
   @override
   Widget render(context, LabelingBodyViewModel vm) {
-    return SizedBox(
-      height: double.infinity,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
-        child: Column(
-          children: [
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20, bottom: 20),
-                child: vm.objects.isNotEmpty
-                    ? GridView(
-                        controller: ScrollController(keepScrollOffset: false),
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        gridDelegate:
-                            const SliverGridDelegateWithMaxCrossAxisExtent(
-                                maxCrossAxisExtent: 300,
-                                childAspectRatio: 3.2 / 2,
-                                crossAxisSpacing: 20,
-                                mainAxisSpacing: 20),
-                        children: vm.objects
-                            .map((item) => ObjectItem(
-                                  key: GlobalKey(),
-                                  allGroups: [],
-                                  object: item,
-                                  isSubGroup: false,
-                                  onActionCaller: vm.onObjectActionHandler,
-                                ))
-                            .toList(),
-                      )
-                    : Column(
-                        children: [
-                          const SizedBox(
-                            height: 150,
-                          ),
-                          Container(
-                            height: 350,
-                            width: 350,
-                            decoration: const BoxDecoration(
-                              image: DecorationImage(
-                                image: AssetImage(
-                                    'lib/assets/images/emptyBox.png'),
-                                fit: BoxFit.cover,
+    return Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Container(
+        height: MediaQuery.sizeOf(context).height-300,
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+          color: Colors.grey[200]
+        ),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
+          child: Column(
+            children: [
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20, bottom: 20),
+                  child: vm.objects.isNotEmpty
+                      ? GridView(
+                          controller: ScrollController(keepScrollOffset: false),
+                          shrinkWrap: true,
+                          scrollDirection: Axis.vertical,
+                          gridDelegate:
+                              const SliverGridDelegateWithMaxCrossAxisExtent(
+                                  maxCrossAxisExtent: 300,
+                                  childAspectRatio: 3.2 / 2,
+                                  crossAxisSpacing: 20,
+                                  mainAxisSpacing: 20),
+                          children: vm.objects
+                              .map((item) => ObjectItem(
+                                    key: GlobalKey(),
+                                    allGroups: [],
+                                    object: item,
+                                    isSubGroup: false,
+                                    onActionCaller: vm.onObjectActionHandler,
+                                  ))
+                              .toList(),
+                        )
+                      : Column(
+                          children: [
+                            const SizedBox(
+                              height: 150,
+                            ),
+                            Container(
+                              height: 350,
+                              width: 350,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(
+                                      'lib/assets/images/emptyBox.png'),
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
-                          ),
-                          const SizedBox(
-                            height: 50,
-                          ),
-                          Text(
-                            Strings.emptyUnSortObjects,
-                            style: TextSystem.textL(Colors.white),
-                          ),
-                        ],
-                      ),
+                            const SizedBox(
+                              height: 50,
+                            ),
+                            Text(
+                              Strings.emptyUnSortObjects,
+                              style: TextSystem.textL(Colors.white),
+                            ),
+                          ],
+                        ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

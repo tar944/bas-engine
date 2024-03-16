@@ -48,8 +48,7 @@ class _View extends StatelessView<MainPageViewModel> {
               padding: const EdgeInsets.all(10.0),
               child: Container(
                 width: MediaQuery.sizeOf(context).width,
-                height: MediaQuery.sizeOf(context).height -
-                    (Dimens.mainHeaderH + Dimens.topBarHeight + 20),
+                height: MediaQuery.sizeOf(context).height - (Dimens.mainHeaderH + Dimens.topBarHeight + 20),
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10.0),
                     color: Colors.grey[190]),
@@ -74,6 +73,7 @@ class _View extends StatelessView<MainPageViewModel> {
                       child: LabelingPage(
                         onGroupActionCaller: vm.onGroupActionHandler,
                         partId: vm.curPart==null?-1:vm.curPart!.id,
+                        prjUUID: vm.curPart==null?"":vm.curPart!.prjUUID,
                         controller: vm.setGroupController),
                       ),
                   ],

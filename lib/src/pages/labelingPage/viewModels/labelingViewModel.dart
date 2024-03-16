@@ -1,5 +1,6 @@
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/navModel.dart';
@@ -17,28 +18,58 @@ class LabelingViewModel extends ViewModel {
   ImageGroupModel curGroup=ImageGroupModel(-1, "", "", "", "");
   int partId;
   String partUUID="";
-  String prjUUID="";
+  String prjUUID;
   ValueSetter<String> onGroupActionCaller;
 
-  LabelingViewModel(this.partId, this.onGroupActionCaller);
+  LabelingViewModel(this.partId,this.prjUUID, this.onGroupActionCaller);
 
   @override
   void init() async {
+
     final address = await Preference().getMainAddress();
-    updateProjectData(-1);
+    var prj = await ProjectDAO().getDetailsByUUID(prjUUID);
+    List<NavModel> allNavGroups=[];
+    for(var part in prj!.allParts){
+      int imgNumber=part.allObjects.length;
+      for(var grp in part.allGroups) {
+        imgNumber+=grp.allObjects.length;
+      }
+      allNavGroups.add(NavModel(
+          part.id,
+          imgNumber,
+          "part",
+          part.name!,
+          part.allObjects.isNotEmpty?part.allObjects[0].image.target!.path!:""
+      ));
+    }
+    allNavsRows.add(allNavGroups);
+    notifyListeners();
+    updateProjectData(partId);
     if(address!=''){
       onGroupSelect("goto&&${address.split("&&")[2]}");
       await Preference().setMainAddress('');
     }
   }
 
-  updateProjectData(groupId) async {
-    if(groupId==-1){
-      var part = await ProjectPartDAO().getDetails(partId);
-      prjUUID=part!.prjUUID;
-      partUUID = part.uuid;
-      groups = part.allGroups;
+  updateProjectData(int parentId) async {
+    List<ImageGroupModel> allGroups=[];
+    if(allNavsRows.length==1){
+      var parent = await ProjectPartDAO().getDetails(parentId);
+      allGroups=parent!.allGroups;
+    }else{
+      var parent = await ImageGroupDAO().getDetails(parentId);
+      allGroups=parent!.allGroups;
     }
+    List<NavModel> allNavGroups=[];
+    for(var grp in allGroups){
+      allNavGroups.add(NavModel(
+          grp.id,
+          grp.allObjects.length,
+          "group", grp.name!,
+          grp.allObjects.isNotEmpty?grp.allObjects[0].image.target!.path!:""
+      ));
+    }
+    allNavsRows.add(allNavGroups);
     notifyListeners();
   }
 

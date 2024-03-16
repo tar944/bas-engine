@@ -1,8 +1,8 @@
 import 'dart:core';
 
 class Dimens {
-  static const double navH = 70;
-  static const double navItemW = 200;
+  static const double navH = 55;
+  static const double navItemW = 230;
   static const double btmSwitchSmallW = 100;
   static const double btmCellsH = 200;
   static const double btmCellsW = 300;
