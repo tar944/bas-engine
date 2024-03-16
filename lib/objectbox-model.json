@@ -350,6 +350,11 @@
           "id": "26:5332826950601969275",
           "name": "subObjects",
           "targetId": "15:8892823931225835339"
+        },
+        {
+          "id": "29:6554159896701818121",
+          "name": "relatedLabels",
+          "targetId": "11:1544585194803526305"
         }
       ]
     },
@@ -406,7 +411,7 @@
   ],
   "lastEntityId": "17:8566624654259097881",
   "lastIndexId": "20:1012226703174902082",
-  "lastRelationId": "28:792537263070642319",
+  "lastRelationId": "29:6554159896701818121",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,

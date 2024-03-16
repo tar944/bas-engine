@@ -1,21 +1,20 @@
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/navModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgImageGroup.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class LabelingViewModel extends ViewModel {
-  List<ObjectModel> objects = [];
   List<ImageGroupModel> groups = [];
-  ImageGroupModel? curGroup;
+  List<ObjectModel> objects = [];
+  List<List<NavModel>> allNavsRows = [];
+  ImageGroupModel curGroup=ImageGroupModel(-1, "", "", "", "");
   int partId;
   String partUUID="";
   String prjUUID="";
@@ -38,15 +37,13 @@ class LabelingViewModel extends ViewModel {
       var part = await ProjectPartDAO().getDetails(partId);
       prjUUID=part!.prjUUID;
       partUUID = part.uuid;
-      objects = part.allObjects;
-      curGroup=null;
       groups = part.allGroups;
-    }else{
-      curGroup = await ImageGroupDAO().getDetails(groupId);
-      groups=curGroup!.allGroups;
-      objects = curGroup!.allObjects;
     }
     notifyListeners();
+  }
+
+  onNavItemSelectHandler(NavModel curNav){
+
   }
 
   void onGroupSelect(String action) async {
@@ -82,48 +79,6 @@ class LabelingViewModel extends ViewModel {
     }
   }
 
-  onObjectActionHandler(String action)async{
-    switch (action.split('&&')[0]) {
-      case 'gotoLabeling':
-        final curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
-        final curPart = await ProjectPartDAO().getDetails(partId);
-        await Preference().setMainAddress('${curProject!.id}&&${curPart!.id}&&${curGroup!.id}');
-        context.goNamed('cutToPieces',params: {
-          'objId':action.split('&&')[1],
-          'groupId':curGroup!.id.toString(),
-          'partUUID':partUUID,
-          'prjUUID':prjUUID,
-          'title': '${curProject.title} > ${curPart.name} > ${curGroup!.name}'
-        });
-        break;
-      case 'addToGroup':
-        var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[2]));
-        await ProjectPartDAO().removeObject(partId, obj!);
-        await ImageGroupDAO().addObject(int.parse(action.split("&&")[1]), obj);
-        updateProjectData(-1);
-        break;
-      case 'removeFromGroup':
-        var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[2]));
-        await ProjectPartDAO().addObject(partId, obj!);
-        await ImageGroupDAO().removeObject(int.parse(action.split("&&")[1]), obj);
-        updateProjectData(curGroup!.id);
-        break;
-      case 'delete':
-        var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[1]));
-        await ObjectDAO().deleteObject(obj!);
-        if(curGroup==null){
-          await ProjectPartDAO().removeObject(partId, obj);
-          updateProjectData(-1);
-        }else{
-          await ImageGroupDAO().removeObject(curGroup!.id, obj);
-          updateProjectData(curGroup!.id);
-        }
-        break;
-
-    }
-    onGroupActionCaller('refreshPart&&');
-  }
-
   void onEditGroupHandler(ImageGroupModel curGroup) async {
     await ImageGroupDAO().update(curGroup);
     updateProjectData(-1);
@@ -137,7 +92,6 @@ class LabelingViewModel extends ViewModel {
   }
 
   onBackClickHandler(){
-    curGroup=null;
     updateProjectData(-1);
     onGroupActionCaller("refreshGroup&&-1");
   }

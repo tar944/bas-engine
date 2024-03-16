@@ -16,6 +16,7 @@ class ImageGroupModel {
   final subObjects = ToMany<ObjectModel>();
   final allGroups = ToMany<ImageGroupModel>();
   final label = ToOne<LabelModel>();
+  final relatedLabels = ToMany<LabelModel>();
 
   ImageGroupModel(this.id,this.partUUID,this.groupUUID, this.name, this.path);
 }

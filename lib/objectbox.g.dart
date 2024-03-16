@@ -360,7 +360,11 @@ final _entities = <ModelEntity>[
         ModelRelation(
             id: const IdUid(26, 5332826950601969275),
             name: 'subObjects',
-            targetId: const IdUid(15, 8892823931225835339))
+            targetId: const IdUid(15, 8892823931225835339)),
+        ModelRelation(
+            id: const IdUid(29, 6554159896701818121),
+            name: 'relatedLabels',
+            targetId: const IdUid(11, 1544585194803526305))
       ],
       backlinks: <ModelBacklink>[]),
   ModelEntity(
@@ -442,7 +446,7 @@ ModelDefinition getObjectBoxModel() {
       entities: _entities,
       lastEntityId: const IdUid(17, 8566624654259097881),
       lastIndexId: const IdUid(20, 1012226703174902082),
-      lastRelationId: const IdUid(28, 792537263070642319),
+      lastRelationId: const IdUid(29, 6554159896701818121),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [
         5922885288332288138,
@@ -905,7 +909,9 @@ ModelDefinition getObjectBoxModel() {
         toManyRelations: (ImageGroupModel object) => {
               RelInfo<ImageGroupModel>.toMany(24, object.id): object.allObjects,
               RelInfo<ImageGroupModel>.toMany(25, object.id): object.allGroups,
-              RelInfo<ImageGroupModel>.toMany(26, object.id): object.subObjects
+              RelInfo<ImageGroupModel>.toMany(26, object.id): object.subObjects,
+              RelInfo<ImageGroupModel>.toMany(29, object.id):
+                  object.relatedLabels
             },
         getId: (ImageGroupModel object) => object.id,
         setId: (ImageGroupModel object, int id) {
@@ -960,6 +966,8 @@ ModelDefinition getObjectBoxModel() {
               store, RelInfo<ImageGroupModel>.toMany(25, object.id));
           InternalToManyAccess.setRelInfo<ImageGroupModel>(object.subObjects,
               store, RelInfo<ImageGroupModel>.toMany(26, object.id));
+          InternalToManyAccess.setRelInfo<ImageGroupModel>(object.relatedLabels,
+              store, RelInfo<ImageGroupModel>.toMany(29, object.id));
           return object;
         }),
     ProjectPartModel: EntityDefinition<ProjectPartModel>(
@@ -1262,6 +1270,10 @@ class ImageGroupModel_ {
   /// see [ImageGroupModel.subObjects]
   static final subObjects = QueryRelationToMany<ImageGroupModel, ObjectModel>(
       _entities[5].relations[2]);
+
+  /// see [ImageGroupModel.relatedLabels]
+  static final relatedLabels = QueryRelationToMany<ImageGroupModel, LabelModel>(
+      _entities[5].relations[3]);
 }
 
 /// [ProjectPartModel] entity fields to define ObjectBox queries.
