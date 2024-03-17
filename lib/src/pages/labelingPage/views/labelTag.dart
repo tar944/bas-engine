@@ -34,7 +34,7 @@ class LabelTag extends HookWidget {
                 "${curGroup.label.target!.name}.${curGroup.name}",
                 style: TextSystem.textS(Colors.white),
               ),
-              if(curGroup.allObjects.isNotEmpty)
+              if(curGroup.subObjects.isNotEmpty)
                 const SizedBox(width: 5,),
                 Container(
                   width: Dimens.tabHeightSmall,
@@ -44,9 +44,9 @@ class LabelTag extends HookWidget {
                     shape: BoxShape.circle,
                     border: Border.all(color: Colors.grey[180])
                   ),
-                  child: Text(curGroup.allObjects.length.toString(),style: TextSystem.textXs(Colors.teal),),
+                  child: Text(curGroup.subObjects.length.toString(),style: TextSystem.textXs(Colors.teal),),
                 ),
-              if(curGroup.allObjects.isEmpty)
+              if(curGroup.subObjects.isEmpty)
                 IconButton(
                     style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
                     icon: Container(

@@ -44,11 +44,11 @@ class _View extends StatelessView<ImageItemViewModel> {
             const BorderRadius.all(Radius.circular(Dimens.dialogCornerRadius-3)),
             border: Border.all(color: Colors.grey[150], width: 1.0),
             image: DecorationImage(
-              image: vm.group.allObjects.isEmpty
+              image: vm.group.subObjects.isEmpty
                   ? const AssetImage(
                   'lib/assets/testImages/testImg1.png')
                   : Image.file(
-                  File(vm.group.allObjects[0].image.target!.path!)).image,
+                  File(vm.group.subObjects[0].image.target!.path!)).image,
               fit: BoxFit.fill,
             ),
           ),

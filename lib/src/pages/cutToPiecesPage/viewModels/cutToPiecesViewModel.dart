@@ -22,7 +22,7 @@ class CutToPiecesViewModel extends ViewModel {
   ImageGroupModel? group;
   ObjectModel? curObject;
   bool isShowAll=true;
-  List<ObjectModel>subObjects=[];
+  List<ObjectModel>otherStates=[];
   final int groupId,objId;
   final String title,partUUID,prjUUID;
   int indexImage = 0, imgH = 0,imgW = 0;
@@ -48,17 +48,17 @@ class CutToPiecesViewModel extends ViewModel {
       await _windowShow();
     });
     group=await ImageGroupDAO().getDetails(groupId);
-    subObjects=group!.subObjects;
+    otherStates=group!.otherStates;
     for(var grp in group!.allGroups){
-      if(grp.allObjects.isNotEmpty){
-        subObjects.addAll(grp.allObjects);
+      if(grp.subObjects.isNotEmpty){
+        otherStates.addAll(grp.subObjects);
       }
     }
 
-    curObject=group!.allObjects[0];
-    for (final object in group!.allObjects) {
+    curObject=group!.otherStates[0];
+    for (final object in group!.otherStates) {
       if (object.id==objId) {
-        indexImage= group!.allObjects.indexOf(object);
+        indexImage= group!.otherStates.indexOf(object);
         break;
       }
     }
@@ -72,7 +72,7 @@ class CutToPiecesViewModel extends ViewModel {
   }
 
   updatePageData()async{
-    curObject=group!.allObjects[indexImage];
+    curObject=group!.otherStates[indexImage];
     final img = await i.decodeImageFile(curObject!.image.target!.path!);
     imgH = img!.height;
     imgW = img.width;
@@ -115,7 +115,7 @@ class CutToPiecesViewModel extends ViewModel {
 
   nextImage() async{
     indexImage = ++indexImage;
-    if (indexImage == group!.allObjects.length) {
+    if (indexImage == group!.otherStates.length) {
       return indexImage = 0;
     }
     updatePageData();
@@ -139,8 +139,8 @@ class CutToPiecesViewModel extends ViewModel {
         await ObjectDAO().deleteObject(curObject!);
         await ImageGroupDAO().removeObject(groupId, curObject!);
         group = await ImageGroupDAO().getDetails(groupId);
-        if (group!.allObjects.isNotEmpty) {
-          indexImage = indexImage == group!.allObjects.length
+        if (group!.otherStates.isNotEmpty) {
+          indexImage = indexImage == group!.otherStates.length
               ? --indexImage
               : indexImage;
           updatePageData();
@@ -159,11 +159,11 @@ class CutToPiecesViewModel extends ViewModel {
         // }
         break;
       case 'next':
-        indexImage=group!.allObjects.indexWhere((element) => element.id==int.parse(action.split('&&')[1]));
+        indexImage=group!.otherStates.indexWhere((element) => element.id==int.parse(action.split('&&')[1]));
         updatePageData();
         break;
       case 'goto':
-        curObject = group!.allObjects[indexImage];
+        curObject = group!.otherStates[indexImage];
         indexImage = 0;
         notifyListeners();
         break;
@@ -193,7 +193,7 @@ class CutToPiecesViewModel extends ViewModel {
     newObject.validObjects.add(curObject!);
     newObject.id=await ObjectDAO().addObject(newObject);
     await ImageGroupDAO().addSubObject(groupId, newObject);
-    subObjects.add(newObject);
+    otherStates.add(newObject);
     notifyListeners();
   }
 }

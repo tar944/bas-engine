@@ -2,7 +2,6 @@ import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelingBodyViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/labelTag.dart';
@@ -12,11 +11,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class LabelingBody extends StatelessWidget {
-  LabelingBody({Key? key, required this.objects,required this.relatedLabels, required this.curGroup})
+  LabelingBody({Key? key, required this.objects,required this.curGroup})
       : super(key: key);
 
   List<ObjectModel> objects;
-  List<LabelModel> relatedLabels;
   ImageGroupModel curGroup;
 
   @override

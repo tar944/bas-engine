@@ -16,7 +16,7 @@ class PartItemViewModel extends ViewModel {
     allImagesNumber=part.allObjects.isNotEmpty?part.allObjects.length:0;
     int groupsImageNumber=0;
     for(var grp in part.allGroups){
-      groupsImageNumber += grp.allObjects.isNotEmpty?grp.allObjects.length:0;
+      groupsImageNumber += grp.otherStates.isNotEmpty?grp.otherStates.length:0;
     }
     if(allImagesNumber==0&&groupsImageNumber==0||(allImagesNumber!=0&&groupsImageNumber==0)){
       donePercent=0;
@@ -33,7 +33,7 @@ class PartItemViewModel extends ViewModel {
     if(part.allObjects.isNotEmpty){
       return part.allObjects[0].image.target!.path!;
     }else if(part.allGroups.isNotEmpty){
-      return part.allGroups[0].allObjects[0].image.target!.path!;
+      return part.allGroups[0].otherStates[0].image.target!.path!;
     }
     return "";
   }

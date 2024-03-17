@@ -32,7 +32,7 @@ class LabelingViewModel extends ViewModel {
     for(var part in prj!.allParts){
       int imgNumber=part.allObjects.length;
       for(var grp in part.allGroups) {
-        imgNumber+=grp.allObjects.length;
+        imgNumber+=grp.subObjects.length;
       }
       allNavGroups.add(NavModel(
           part.id,
@@ -65,11 +65,11 @@ class LabelingViewModel extends ViewModel {
     for(var grp in allGroups){
       allNavGroups.add(NavModel(
           grp.id,
-          grp.allObjects.length,
+          grp.subObjects.length,
           "group", grp.name!,
-          grp.allObjects.isNotEmpty?grp.allObjects[0].image.target!.path!:""
+          grp.subObjects.isNotEmpty?grp.subObjects[0].image.target!.path!:""
       ));
-      objects.addAll(grp.allObjects);
+      objects.addAll(grp.subObjects);
     }
     allNavsRows.add(allNavGroups);
     notifyListeners();
@@ -94,7 +94,7 @@ class LabelingViewModel extends ViewModel {
         );
         break;
       case 'delete':
-        if(group!.allGroups.isNotEmpty||group.allObjects.isNotEmpty){
+        if(group!.allGroups.isNotEmpty||group.subObjects.isNotEmpty){
           Toast(Strings.deleteGroupError,false).showError(context);
           return;
         }

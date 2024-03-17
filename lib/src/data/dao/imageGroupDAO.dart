@@ -19,13 +19,13 @@ class ImageGroupDAO {
 
   addObject(int groupId,ObjectModel obj)async{
     var group = await getDetails(groupId);
-    group!.allObjects.add(obj);
+    group!.otherStates.add(obj);
     update(group);
   }
 
   removeObject(int groupId,ObjectModel obj)async{
     var group = await getDetails(groupId);
-    group!.allObjects.removeWhere((element) => element.id == obj.id);
+    group!.otherStates.removeWhere((element) => element.id == obj.id);
     update(group);
   }
 

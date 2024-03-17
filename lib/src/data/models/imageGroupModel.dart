@@ -12,11 +12,11 @@ class ImageGroupModel {
   String? name;
   String? type;
   String path;
-  final allObjects = ToMany<ObjectModel>();
+  final mainState = ToOne<ObjectModel>();
+  final otherStates = ToMany<ObjectModel>();
   final subObjects = ToMany<ObjectModel>();
   final allGroups = ToMany<ImageGroupModel>();
   final label = ToOne<LabelModel>();
-  final relatedLabels = ToMany<LabelModel>();
 
   ImageGroupModel(this.id,this.partUUID,this.groupUUID, this.name, this.path);
 }
