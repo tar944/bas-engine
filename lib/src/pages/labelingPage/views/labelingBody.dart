@@ -1,9 +1,11 @@
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelingBodyViewModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/labelTag.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/objectItem.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
@@ -40,12 +42,60 @@ class _View extends StatelessView<LabelingBodyViewModel> {
           color: Colors.grey[200]
         ),
         child: Padding(
-          padding: const EdgeInsets.only(top: 20.0, left: 20.0, right: 20.0),
+          padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
           child: Column(
             children: [
+              SizedBox(
+                width: MediaQuery.sizeOf(context).width-40,
+                height: Dimens.tabHeightSmall+10,
+                child: Row(
+                  children: [
+                    IconButton(
+                        style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
+                        icon: Container(
+                          width: Dimens.tabHeightSmall+10,
+                          height: Dimens.tabHeightSmall+10,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.grey[180])
+                          ),
+                          child: Icon(FluentIcons.add,size: 18,color: Colors.teal,),
+                        ),
+                        onPressed: (){}
+                    ),
+                    const SizedBox(width: 10,),
+                    IconButton(
+                        style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
+                        icon: Container(
+                          width: Dimens.tabHeightSmall*2.8,
+                          height: Dimens.tabHeightSmall+10,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(Radius.circular((Dimens.tabHeightSmall+10/2))),
+                            border: Border.all(color: Colors.grey[180])
+                          ),
+                          child: Text(Strings.showAll,style: TextSystem.textS(Colors.white),),
+                        ),
+                        onPressed: (){}
+                    ),
+                    const SizedBox(width: 10,),
+                    ListView.builder(
+                        itemCount: vm.curGroup.allGroups.length,
+                        scrollDirection: Axis.horizontal,
+                        itemBuilder: (context, index) {
+                          return LabelTag(
+                                  curGroup: vm.curGroup.allGroups[index],
+                                  isSelected: vm.curGroup.allGroups[index].id==vm.curGroup.id,
+                                  onLabelSelectedCaller: vm.onLabelActionHandler,
+                              );
+                        }),
+                  ],
+                ),
+              ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 20, bottom: 20),
+                  padding: const EdgeInsets.only(top: 10, bottom: 10),
                   child: vm.objects.isNotEmpty
                       ? GridView(
                           controller: ScrollController(keepScrollOffset: false),

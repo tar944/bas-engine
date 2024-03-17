@@ -1,13 +1,30 @@
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class LabelingBodyViewModel extends ViewModel {
   List<ObjectModel> objects = [];
   ImageGroupModel curGroup;
+  LabelModel curLabel=LabelModel(-1, "", "");
 
   LabelingBodyViewModel(this.objects,this.curGroup);
+
+  onLabelActionHandler(String action)async{
+    switch(action.split('&&')[0]){
+      case "choose":
+        break;
+      case "added":
+        break;
+      case "remove":
+        break;
+    }
+  }
+
+  int getLabelObjectNumber(LabelModel lbl){
+    return 0;
+  }
 
   onObjectActionHandler(String action)async{
     switch (action.split('&&')[0]) {

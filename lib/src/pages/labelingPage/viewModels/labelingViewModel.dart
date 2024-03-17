@@ -55,7 +55,8 @@ class LabelingViewModel extends ViewModel {
     List<ImageGroupModel> allGroups=[];
     if(allNavsRows.length==1){
       var parent = await ProjectPartDAO().getDetails(parentId);
-      allGroups=parent!.allGroups;
+      objects.addAll(parent!.allObjects);
+      allGroups=parent.allGroups;
     }else{
       var parent = await ImageGroupDAO().getDetails(parentId);
       allGroups=parent!.allGroups;
@@ -68,6 +69,7 @@ class LabelingViewModel extends ViewModel {
           "group", grp.name!,
           grp.allObjects.isNotEmpty?grp.allObjects[0].image.target!.path!:""
       ));
+      objects.addAll(grp.allObjects);
     }
     allNavsRows.add(allNavGroups);
     notifyListeners();

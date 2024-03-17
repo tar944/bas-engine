@@ -42,23 +42,19 @@ class _View extends StatelessView<LabelingViewModel> {
       height: double.infinity,
       child: Padding(
         padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-        child: vm.allNavsRows.isNotEmpty?ListView.builder(
+        child:vm.allNavsRows.isNotEmpty?ListView.builder(
             itemCount: vm.allNavsRows.length,
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
-              print(vm.allNavsRows.length);
-              print(index);
               if(index!=vm.allNavsRows.length-1){
                 return NavigationRow(
                     allNavs: vm.allNavsRows[index],
                     rowNumber: index,
                     onNavSelectedCaller: vm.onNavItemSelectHandler);
               }else{
-                print("body");
                 return LabelingBody(objects: vm.objects,relatedLabels: vm.curGroup.relatedLabels, curGroup: vm.curGroup);
               }
-
-            }):Container(),
+            }):Container()
       ),
     );
   }
