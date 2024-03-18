@@ -1,23 +1,26 @@
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/navModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgImageGroup.dart';
+import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class LabelingViewModel extends ViewModel {
-  List<ImageGroupModel> groups = [];
   List<ObjectModel> objects = [];
   List<List<NavModel>> allNavsRows = [];
-  ImageGroupModel curGroup=ImageGroupModel(-1, "", "", "", "");
+  ImageGroupModel? curGroup;
+  ProjectPartModel? curPart;
   int partId;
-  String partUUID="";
   String prjUUID;
   ValueSetter<String> onGroupActionCaller;
 
@@ -25,7 +28,6 @@ class LabelingViewModel extends ViewModel {
 
   @override
   void init() async {
-
     final address = await Preference().getMainAddress();
     var prj = await ProjectDAO().getDetailsByUUID(prjUUID);
     List<NavModel> allNavGroups=[];
@@ -43,11 +45,16 @@ class LabelingViewModel extends ViewModel {
       ));
     }
     allNavsRows.add(allNavGroups);
-    notifyListeners();
     updateProjectData(partId);
+    notifyListeners();
     if(address!=''){
       onGroupSelect("goto&&${address.split("&&")[2]}");
       await Preference().setMainAddress('');
+    }
+    if (await LabelDAO().needAddDefaultValue(prjUUID)) {
+      await LabelDAO().addList(prjUUID,ObjectType.values
+          .map((e) => LabelModel(0, e.name,"objects"))
+          .toList());
     }
   }
 
@@ -56,6 +63,7 @@ class LabelingViewModel extends ViewModel {
     if(allNavsRows.length==1){
       var parent = await ProjectPartDAO().getDetails(parentId);
       objects.addAll(parent!.allObjects);
+      curPart=parent;
       allGroups=parent.allGroups;
     }else{
       var parent = await ImageGroupDAO().getDetails(parentId);
@@ -89,7 +97,7 @@ class LabelingViewModel extends ViewModel {
             builder: (context) => DlgImageGroup(
               group: group,
               onSaveCaller: onEditGroupHandler,
-              partUUID: partUUID,
+              partUUID: curGroup!.partUUID,
             )
         );
         break;
@@ -124,11 +132,6 @@ class LabelingViewModel extends ViewModel {
     updateProjectData(-1);
   }
 
-  onBackClickHandler(){
-    updateProjectData(-1);
-    onGroupActionCaller("refreshGroup&&-1");
-  }
-
   createGroup() async{
     var part = await ProjectPartDAO().getDetails(partId);
     if(part!.allGroups.length>8){
@@ -140,7 +143,7 @@ class LabelingViewModel extends ViewModel {
         barrierDismissible: true,
         builder: (context) => DlgImageGroup(
               onSaveCaller: onCreateGroupHandler,
-              partUUID: partUUID,
+              partUUID: curGroup!.partUUID,
             )
     );
   }

@@ -52,7 +52,12 @@ class _View extends StatelessView<LabelingViewModel> {
                     rowNumber: index,
                     onNavSelectedCaller: vm.onNavItemSelectHandler);
               }else{
-                return LabelingBody(objects: vm.objects, curGroup: vm.curGroup);
+                return LabelingBody(
+                    objects: vm.objects,
+                    prjUUID: vm.prjUUID,
+                    partUUID: vm.curPart!=null?vm.curPart!.uuid:"",
+                    grpUUID: vm.curGroup!=null?vm.curGroup!.uuid:"",
+                );
               }
             }):Container()
       ),

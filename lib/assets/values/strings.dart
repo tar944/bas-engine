@@ -2,6 +2,8 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String labelFirstStep="First please chose a label from 👆";
+  static const String labelSecondStep="Now type a name for this ";
   static const String delete="delete";
   static const String showAll="Show all";
   static const String hideAll="Hide all";

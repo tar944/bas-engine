@@ -12,6 +12,12 @@ class ProjectPartDAO {
     return part;
   }
 
+  Future<ProjectPartModel?> getDetailsByUUID(String uuid) async {
+    Box<ProjectPartModel> box = objectbox.store.box<ProjectPartModel>();
+    ProjectPartModel? part = box.query(ProjectPartModel_.uuid.equals(uuid)).build().findFirst();
+    return part;
+  }
+
   Future<List<ImageGroupModel>> getAllGroups(int id) async {
     final part = await getDetails(id);
     if (part == null) {

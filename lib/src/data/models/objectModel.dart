@@ -17,9 +17,9 @@ class ObjectModel {
   bool isNavTool = false;
   String typedText = "";
   int actX = -1, actY = -1;
+  final srcImage = ToOne<ImageModel>();
   final image = ToOne<ImageModel>();
   final label = ToOne<LabelModel>();
-  final validObjects= ToMany<ObjectModel>();
 
   ObjectModel(
       this.id,

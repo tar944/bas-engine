@@ -11,6 +11,12 @@ class ImageGroupDAO {
     return part;
   }
 
+  Future<ImageGroupModel?> getDetailsByUUID(String uuid) async {
+    Box<ImageGroupModel> box = objectbox.store.box<ImageGroupModel>();
+    ImageGroupModel? grp = box.query(ImageGroupModel_.uuid.equals(uuid)).build().findFirst();
+    return grp;
+  }
+
   Future<int> add(ImageGroupModel newPart) async {
     Box<ImageGroupModel> box = objectbox.store.box<ImageGroupModel>();
     int result = box.put(newPart);

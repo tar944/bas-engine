@@ -8,6 +8,7 @@ class Dimens {
   static const double btmCellsW = 300;
   static const double tabWidth = 150;
   static const double tabHeightSmall = 35;
+  static const double circleW = 35;
   static const double mainHeaderH = 100;
 
   static const double btmChapterH = 220;

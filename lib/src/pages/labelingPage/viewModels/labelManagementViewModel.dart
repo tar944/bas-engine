@@ -13,11 +13,12 @@ class LabelManagementViewModel extends ViewModel {
   List<LabelModel> allLabels;
   List<String> allLevels=[];
   int curIndex=0;
+  LabelModel? selectedLevel;
   String prjUUID;
+  var ctlName = TextEditingController();
   final ValueSetter<String> onActionCaller;
 
   LabelManagementViewModel(this.prjUUID,this.allLabels, this.onActionCaller);
-
 
   @override
   void init() {
@@ -82,6 +83,10 @@ class LabelManagementViewModel extends ViewModel {
   onLabelActionHandler(String action)async{
     var act=action.split('&&');
     switch(act[0]){
+      case "saveName":
+        onActionCaller("saveName&&${selectedLevel!.id}&&${act[1]}");
+        onCloseClicked();
+        break;
       case "create":
         if(act[1]==""){
           Toast(Strings.emptyNameError,false).showWarning(context);
@@ -114,8 +119,8 @@ class LabelManagementViewModel extends ViewModel {
         notifyListeners();
         break;
       case "clicked":
-        onActionCaller(action);
-        onCloseClicked();
+        selectedLevel=allLabels.firstWhere((element) => element.id==int.parse(act[1]));
+        notifyListeners();
         break;
     }
   }

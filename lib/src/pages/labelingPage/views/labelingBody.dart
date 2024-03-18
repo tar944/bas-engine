@@ -11,17 +11,23 @@ import 'package:flutter/cupertino.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class LabelingBody extends StatelessWidget {
-  LabelingBody({Key? key, required this.objects,required this.curGroup})
-      : super(key: key);
+  LabelingBody({
+    Key? key,
+    required this.objects,
+    required this.prjUUID,
+    required this.partUUID,
+    required this.grpUUID
+  }) : super(key: key);
 
   List<ObjectModel> objects;
-  ImageGroupModel curGroup;
+  String prjUUID,partUUID,grpUUID;
+
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: LabelingBodyViewModel(objects, curGroup),
+      viewModel: LabelingBodyViewModel(objects,grpUUID,partUUID,prjUUID),
     );
   }
 }
@@ -60,7 +66,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                           ),
                           child: Icon(FluentIcons.add,size: 18,color: Colors.teal,),
                         ),
-                        onPressed: (){}
+                        onPressed: ()=>vm.onLabelActionHandler("showDialog&&")
                     ),
                     const SizedBox(width: 10,),
                     IconButton(
@@ -78,16 +84,19 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                         onPressed: (){}
                     ),
                     const SizedBox(width: 10,),
-                    ListView.builder(
-                        itemCount: vm.curGroup.allGroups.length,
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return LabelTag(
-                                  curGroup: vm.curGroup.allGroups[index],
-                                  isSelected: vm.curGroup.allGroups[index].id==vm.curGroup.id,
-                                  onLabelSelectedCaller: vm.onLabelActionHandler,
-                              );
-                        }),
+                    SizedBox(
+                      width: 700,
+                      child: ListView.builder(
+                          itemCount: vm.subGroups.length,
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            return LabelTag(
+                                    curGroup: vm.subGroups[index],
+                                    isSelected: vm.subGroups[index].id==vm.curGroup!.id,
+                                    onLabelSelectedCaller: vm.onLabelActionHandler,
+                                );
+                          }),
+                    ),
                   ],
                 ),
               ),

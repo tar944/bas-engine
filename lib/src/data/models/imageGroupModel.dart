@@ -10,7 +10,7 @@ class ImageGroupModel {
   String partUUID;
   String groupUUID;
   String? name;
-  String? type;
+  String type="";
   String path;
   final mainState = ToOne<ObjectModel>();
   final otherStates = ToMany<ObjectModel>();

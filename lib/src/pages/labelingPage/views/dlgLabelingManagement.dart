@@ -1,5 +1,6 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelManagementViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgTabView.dart';
@@ -39,8 +40,8 @@ class _View extends StatelessView<LabelManagementViewModel> {
       alignment: Alignment.center,
       children: [
         SizedBox(
-            width: Dimens.dialogNormalWidth,
-            height: Dimens.dialogLargeHeight,
+            width: Dimens.dialogBigWidth,
+            height: Dimens.dialogLargeHeight+60,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(
@@ -81,6 +82,78 @@ class _View extends StatelessView<LabelManagementViewModel> {
                       ),
                     )
                   ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0),
+                    child: Row(
+                      children: [
+                        Container(
+                          width: Dimens.circleW,
+                          height: Dimens.circleW,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.grey[170])
+                          ),
+                          child: Text("1",style: TextSystem.textL(Colors.orange.dark),),
+                        ),
+                        const SizedBox(width: 10,),
+                        Text(Strings.labelFirstStep,style: TextSystem.textM(Colors.white),)
+                      ],
+                    ),
+                  ),
+                  Opacity(
+                    opacity: vm.selectedLevel==null?0.3:1.0,
+                    child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: Dimens.circleW,
+                              height: Dimens.circleW,
+                              alignment: Alignment.center,
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  border: Border.all(color: Colors.grey[170])
+                              ),
+                              child: Text("2",style: TextSystem.textL(Colors.orange.dark),),
+                            ),
+                            const SizedBox(width: 10,),
+                            Text("${Strings.labelSecondStep} ${vm.selectedLevel==null?"label":vm.selectedLevel!.name}: "),
+                            SizedBox(
+                              width: 250,
+                              height: 35,
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: TextBox(
+                                      enabled: vm.selectedLevel!=null,
+                                      controller: vm.ctlName,
+                                      placeholder: Strings.dlgSoftwareTitleHint,
+                                      expands: false,
+                                    ),
+                                  ),
+                                  const SizedBox(
+                                    width: 5,
+                                  ),
+                                  IconButton(
+                                      style: ButtonStyle(
+                                          padding:
+                                          ButtonState.all(const EdgeInsets.all(6))),
+                                      icon: Icon(
+                                        FluentIcons.check_mark,
+                                        size: 20,
+                                        color: Colors.green.dark,
+                                      ),
+                                      onPressed: vm.selectedLevel==null?null:() =>
+                                          vm.onLabelActionHandler('saveName&&${vm.ctlName.text}')),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                  ),
+                  const SizedBox(height: 10,),
                 ],
               ),
             )),
