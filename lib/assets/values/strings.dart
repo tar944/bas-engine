@@ -2,6 +2,7 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String open="Open";
   static const String errRemoveGroup="You can not remove group with contents";
   static const String labelFirstStep="First please chose a label from 👆";
   static const String labelSecondStep="Now type a name for this ";

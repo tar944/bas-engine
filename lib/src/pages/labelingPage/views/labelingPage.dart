@@ -50,6 +50,7 @@ class _View extends StatelessView<LabelingViewModel> {
                 return NavigationRow(
                     allNavs: vm.allNavsRows[index],
                     rowNumber: index,
+                    selectedNav: vm.selectedNavs[index],
                     onNavSelectedCaller: vm.onNavItemSelectHandler);
               }else{
                 return LabelingBody(

@@ -1,7 +1,6 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelingBodyViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/labelTag.dart';
@@ -64,7 +63,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                             shape: BoxShape.circle,
                             border: Border.all(color: Colors.grey[160])
                           ),
-                          child: Icon(FluentIcons.add,size: 18,color: Colors.teal,),
+                          child: Icon(FluentIcons.add,size: 18,color: Colors.orange.dark,),
                         ),
                         onPressed: ()=>vm.onLabelActionHandler("showDialog&&")
                     ),
@@ -81,7 +80,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                           ),
                           child: Text(Strings.showAll,style: TextSystem.textS(Colors.white),),
                         ),
-                        onPressed: (){}
+                        onPressed: ()=>vm.onLabelActionHandler("showAll")
                     ),
                     const SizedBox(width: 10,),
                     SizedBox(

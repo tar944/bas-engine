@@ -12,11 +12,13 @@ class NavigationRow extends StatelessWidget {
   NavigationRow({
     Key? key,
     required this.allNavs,
+    required this.selectedNav,
     required this.rowNumber,
     required this.onNavSelectedCaller
   }) : super(key: key);
 
   List<NavModel> allNavs;
+  NavModel selectedNav;
   int rowNumber;
   ValueSetter<NavModel> onNavSelectedCaller;
 
@@ -24,7 +26,7 @@ class NavigationRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: NavigationRowViewModel(allNavs,rowNumber,onNavSelectedCaller),
+      viewModel: NavigationRowViewModel(allNavs,selectedNav,rowNumber,onNavSelectedCaller),
     );
   }
 }
@@ -44,37 +46,41 @@ class _View extends StatelessView<NavigationRowViewModel> {
         ),
         child: Row(
           children: [
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: IconButton(
-                onPressed: ()=>vm.onItemSelectHandler(vm.showAll),
-                style: ButtonStyle(
-                    padding: ButtonState.all(EdgeInsets.zero)
-                ),
-                icon: Container(
-                  height: Dimens.navH,
-                  width: Dimens.navH*1.8,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                    border: Border.all(color: vm.findSelectedStatus(vm.showAll)=="selected"?Colors.teal:Colors.white)
+            if(vm.rowNumber!=0)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: IconButton(
+                  onPressed: ()=>vm.onItemSelectHandler(vm.showAll),
+                  style: ButtonStyle(
+                      padding: ButtonState.all(EdgeInsets.zero)
                   ),
-                  child: Text(Strings.showAll,style: TextSystem.textM(vm.findSelectedStatus(vm.showAll)=="selected"?Colors.teal:Colors.white),),
+                  icon: Container(
+                    height: Dimens.navH,
+                    width: Dimens.navH*1.8,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+                      border: Border.all(color: vm.findSelectedStatus(vm.showAll)=="selected"?Colors.teal:Colors.white)
+                    ),
+                    child: Text(Strings.showAll,style: TextSystem.textM(vm.findSelectedStatus(vm.showAll)=="selected"?Colors.teal:Colors.white),),
+                  ),
                 ),
               ),
-            ),
-            SizedBox(
-              width: MediaQuery.sizeOf(context).width-(65+Dimens.navH*1.8),
-              height: Dimens.navH,
-              child: ListView.builder(
-                itemCount: vm.allNavs.length,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return NavItem(
-                      navItem: vm.allNavs[index],
-                      selectStatus: vm.findSelectedStatus(vm.allNavs[index]),
-                      onItemSelectedCaller: vm.onItemSelectHandler);
-                }),
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                width: MediaQuery.sizeOf(context).width-(65+Dimens.navH*1.8),
+                height: Dimens.navH,
+                child: ListView.builder(
+                  itemCount: vm.allNavs.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return NavItem(
+                        navItem: vm.allNavs[index],
+                        selectStatus: vm.findSelectedStatus(vm.allNavs[index]),
+                        onItemSelectedCaller: vm.onItemSelectHandler);
+                  }),
+              ),
             )],
         ),
       ),

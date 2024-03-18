@@ -18,6 +18,7 @@ import 'package:pmvvm/pmvvm.dart';
 class LabelingViewModel extends ViewModel {
   List<ObjectModel> objects = [];
   List<List<NavModel>> allNavsRows = [];
+  List<NavModel> selectedNavs=[];
   ImageGroupModel? curGroup;
   ProjectPartModel? curPart;
   int partId;
@@ -30,13 +31,13 @@ class LabelingViewModel extends ViewModel {
   void init() async {
     final address = await Preference().getMainAddress();
     var prj = await ProjectDAO().getDetailsByUUID(prjUUID);
-    List<NavModel> allNavGroups=[];
+    List<NavModel> allNavs=[];
     for(var part in prj!.allParts){
       int imgNumber=part.allObjects.length;
       for(var grp in part.allGroups) {
         imgNumber+=grp.subObjects.length;
       }
-      allNavGroups.add(NavModel(
+      allNavs.add(NavModel(
           part.id,
           imgNumber,
           "part",
@@ -44,7 +45,8 @@ class LabelingViewModel extends ViewModel {
           part.allObjects.isNotEmpty?part.allObjects[0].image.target!.path!:""
       ));
     }
-    allNavsRows.add(allNavGroups);
+    allNavsRows.add(allNavs);
+    selectedNavs.add(allNavs[0]);
     updateProjectData(partId);
     notifyListeners();
     if(address!=''){
@@ -84,7 +86,10 @@ class LabelingViewModel extends ViewModel {
   }
 
   onNavItemSelectHandler(NavModel curNav){
-
+    if(selectedNavs.indexWhere((element) => element.kind==curNav.kind&&element.id==curNav.id)==-1){
+      selectedNavs.add(curNav);
+      notifyListeners();
+    }
   }
 
   void onGroupSelect(String action) async {

@@ -1,5 +1,6 @@
 
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -30,7 +31,9 @@ class LabelTag extends HookWidget {
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(
                     Radius.circular((Dimens.tabHeightSmall + 10 / 2))),
-                border: Border.all(color: Colors.grey[160])),
+                border: Border.all(color: isSelected?Colors.teal.dark:Colors.grey[160]),
+              color: isSelected?Colors.teal.light:Colors.transparent
+            ),
             child: Row(
               children: [
                 const SizedBox(width: 10,),
@@ -41,7 +44,7 @@ class LabelTag extends HookWidget {
                 const SizedBox(
                   width: 8,
                 ),
-                if (curGroup.otherStates.isNotEmpty)
+                if (curGroup.otherStates.isNotEmpty&&!isSelected)
                   Container(
                     width: Dimens.tabHeightSmall,
                     height: Dimens.tabHeightSmall,
@@ -51,7 +54,22 @@ class LabelTag extends HookWidget {
                         border: Border.all(color: Colors.grey[180])),
                     child: Text(
                       curGroup.otherStates.length.toString(),
-                      style: TextSystem.textM(Colors.teal),
+                      style: TextSystem.textM(Colors.orange.dark),
+                    ),
+                  ),
+                if(curGroup.otherStates.isNotEmpty&&isSelected)
+                  Container(
+                    width: Dimens.tabHeightSmall*2,
+                    height: Dimens.tabHeightSmall,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(Radius.circular(Dimens.tabHeightSmall/2)),
+                        border: Border.all(color: Colors.teal),
+                        color:Colors.teal.dark
+                    ),
+                    child: Text(
+                      Strings.open,
+                      style: TextSystem.textM(Colors.white),
                     ),
                   ),
                 if(curGroup.otherStates.isEmpty)
@@ -75,7 +93,7 @@ class LabelTag extends HookWidget {
               ],
             ),
           ),
-          onPressed: ()=>onLabelSelectedCaller("choose&&${curGroup.id}")),
+          onPressed: curGroup.otherStates.isEmpty?null:()=>onLabelSelectedCaller("choose&&${curGroup.id}")),
     );
   }
 }

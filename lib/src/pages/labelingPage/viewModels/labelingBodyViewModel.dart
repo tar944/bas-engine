@@ -37,6 +37,17 @@ class LabelingBodyViewModel extends ViewModel {
   onLabelActionHandler(String action)async{
     var act = action.split("&&");
     switch(act[0]){
+      case "showAll":
+        curGroup= null;
+        if(partUUID!=""){
+          var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
+          objects=part!.allObjects;
+        }else{
+          var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+          objects=grp!.otherStates;
+        }
+        notifyListeners();
+        break;
       case "choose":
         curGroup= await ImageGroupDAO().getDetails(int.parse(act[1]));
         objects=curGroup!.otherStates;
@@ -117,7 +128,8 @@ class LabelingBodyViewModel extends ViewModel {
           await ImageGroupDAO().removeObject(grp!.id, obj!);
           await ImageGroupDAO().addObject(int.parse(act[1]), obj);
         }
-        subGroups[subGroups.indexWhere((element) => element.id==int.parse(act[1]))].subObjects.add(obj);
+        subGroups[subGroups.indexWhere((element) => element.id==int.parse(act[1]))].otherStates.add(obj);
+        objects.removeWhere((element) => element.id==obj.id);
         notifyListeners();
         break;
       case 'removeFromGroup':
@@ -131,7 +143,7 @@ class LabelingBodyViewModel extends ViewModel {
           await ProjectPartDAO().addObject(part!.id, obj!);
           await ImageGroupDAO().removeObject(int.parse(act[1]), obj);
         }
-        subGroups[subGroups.indexWhere((element) => element.id==int.parse(act[1]))].subObjects.removeWhere((element) => element.id==obj.id);
+        subGroups[subGroups.indexWhere((element) => element.id==int.parse(act[1]))].otherStates.removeWhere((element) => element.id==obj.id);
         objects.removeWhere((element) => element.id==obj.id);
         notifyListeners();
         break;
