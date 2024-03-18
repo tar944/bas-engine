@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
@@ -6,6 +7,7 @@ import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLabelingManagement.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
@@ -22,13 +24,14 @@ class LabelingBodyViewModel extends ViewModel {
 
   @override
   void init() async{
-    if(partUUID==""){
+    if(partUUID!=""){
       var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
       subGroups=part!.allGroups;
     }else{
       var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
       subGroups=grp!.allGroups;
     }
+    notifyListeners();
   }
 
   onLabelActionHandler(String action)async{
@@ -52,7 +55,8 @@ class LabelingBodyViewModel extends ViewModel {
         newGroup.uuid=const Uuid().v4();
         var lbl=await LabelDAO().getLabel(int.parse(act[1]));
         newGroup.label.target=lbl;
-        newGroup.id=await ImageGroupDAO().add(newGroup);
+        await ImageGroupDAO().add(newGroup);
+        newGroup = (await ImageGroupDAO().getDetailsByUUID(newGroup.uuid))!;
         if(partUUID!=""){
           var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
           part!.allGroups.add(newGroup);
@@ -66,6 +70,14 @@ class LabelingBodyViewModel extends ViewModel {
         notifyListeners();
         break;
       case "remove":
+        var grp = await ImageGroupDAO().getDetails(int.parse(act[1]));
+        if(grp!.allGroups.isEmpty&&grp.subObjects.isEmpty){
+          await ImageGroupDAO().delete(grp);
+          subGroups.removeWhere((element) => element.id==grp.id);
+          notifyListeners();
+        }else{
+          Toast(Strings.errRemoveGroup, false).showWarning(context);
+        }
         break;
     }
   }
@@ -75,7 +87,8 @@ class LabelingBodyViewModel extends ViewModel {
   }
 
   onObjectActionHandler(String action)async{
-    switch (action.split('&&')[0]) {
+    var act = action.split("&&");
+    switch (act[0]) {
       case 'gotoCutToPieces':
         // final curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
         // final curPart = await ProjectPartDAO().getDetails(partId);
@@ -89,15 +102,24 @@ class LabelingBodyViewModel extends ViewModel {
         // });
         break;
       case 'addToGroup':
-        var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[2]));
-        // await ProjectPartDAO().removeObject(partId, obj!);
-        // await ImageGroupDAO().addObject(int.parse(action.split("&&")[1]), obj);
-        // updateProjectData(-1);
+        var obj = await ObjectDAO().getDetails(int.parse(act[2]));
+        if(grpUUID==""){
+          var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
+          await ProjectPartDAO().removeObject(part!.id, obj!);
+          await ImageGroupDAO().addObject(int.parse(act[1]), obj);
+        }else{
+          var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+          await ImageGroupDAO().removeObject(grp!.id, obj!);
+          await ImageGroupDAO().addObject(int.parse(act[1]), obj);
+        }
+        subGroups[subGroups.indexWhere((element) => element.id==int.parse(act[1]))].subObjects.add(obj);
+        notifyListeners();
         break;
       case 'removeFromGroup':
         var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[2]));
         // await ProjectPartDAO().addObject(partId, obj!);
         // await ImageGroupDAO().removeObject(int.parse(action.split("&&")[1]), obj);
+        subGroups[subGroups.indexWhere((element) => element.id==int.parse(act[1]))].subObjects.removeWhere((element) => element.id==obj!.id);
         // updateProjectData(curGroup.id);
         break;
       case 'delete':
@@ -108,7 +130,6 @@ class LabelingBodyViewModel extends ViewModel {
         break;
 
     }
-    // onGroupActionCaller('refreshPart&&');
   }
 
 }

@@ -115,14 +115,20 @@ class _View extends StatelessView<ObjectItemViewModel> {
                             decoration:BoxDecoration(
                               color: vm.isSubGroup?Colors.teal.darkest:Colors.grey[170],
                               borderRadius: const BorderRadius.all(Radius.circular(15)),
+                              border: Border.all(color: Colors.grey[150])
                             ) ,
                             selectedDecoration: BoxDecoration(
                               color: vm.isSubGroup?Colors.grey[170]:Colors.teal.darkest,
                               borderRadius: const BorderRadius.all(Radius.circular(15)),
+                              border: Border.all(color: Colors.grey[150]),
                             )
                         ),
                         items: vm.allGroups.map((e) =>
-                            MultiSelectCard(value: e.id,label: e.name)
+                            MultiSelectCard(
+                                value: e.id,
+                                label: e.name,
+                                textStyles: MultiSelectItemTextStyles(textStyle: TextSystem.textS(Colors.white))
+                            )
                         ).toList(),
                         onChange: vm.onGroupSelected)
                 ),

@@ -62,7 +62,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
-                            border: Border.all(color: Colors.grey[180])
+                            border: Border.all(color: Colors.grey[160])
                           ),
                           child: Icon(FluentIcons.add,size: 18,color: Colors.teal,),
                         ),
@@ -77,7 +77,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             borderRadius: const BorderRadius.all(Radius.circular((Dimens.tabHeightSmall+10/2))),
-                            border: Border.all(color: Colors.grey[180])
+                            border: Border.all(color: Colors.grey[160])
                           ),
                           child: Text(Strings.showAll,style: TextSystem.textS(Colors.white),),
                         ),
@@ -87,12 +87,13 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                     SizedBox(
                       width: 700,
                       child: ListView.builder(
+                          key: GlobalKey(),
                           itemCount: vm.subGroups.length,
                           scrollDirection: Axis.horizontal,
                           itemBuilder: (context, index) {
                             return LabelTag(
                                     curGroup: vm.subGroups[index],
-                                    isSelected: vm.subGroups[index].id==vm.curGroup!.id,
+                                    isSelected: vm.curGroup==null || vm.subGroups[index].id!=vm.curGroup!.id?false:true,
                                     onLabelSelectedCaller: vm.onLabelActionHandler,
                                 );
                           }),
@@ -117,7 +118,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                           children: vm.objects
                               .map((item) => ObjectItem(
                                     key: GlobalKey(),
-                                    allGroups: [],
+                                    allGroups: vm.subGroups,
                                     object: item,
                                     isSubGroup: false,
                                     onActionCaller: vm.onObjectActionHandler,

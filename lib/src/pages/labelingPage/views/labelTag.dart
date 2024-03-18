@@ -19,51 +19,62 @@ class LabelTag extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-        style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
-        icon: Container(
-          height: Dimens.tabHeightSmall + 10,
-          alignment: Alignment.center,
-          decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(
-                  Radius.circular((Dimens.tabHeightSmall + 10 / 2))),
-              border: Border.all(color: Colors.grey[180])),
-          child: Row(
-            children: [
-              Text(
-                "${curGroup.label.target!.name}.${curGroup.name}",
-                style: TextSystem.textS(Colors.white),
-              ),
-              if(curGroup.subObjects.isNotEmpty)
-                const SizedBox(width: 5,),
-                Container(
-                  width: Dimens.tabHeightSmall,
-                  height: Dimens.tabHeightSmall,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.grey[180])
-                  ),
-                  child: Text(curGroup.subObjects.length.toString(),style: TextSystem.textXs(Colors.teal),),
+    return Padding(
+      padding: const EdgeInsets.only(left: 3.0,right: 3.0),
+      child: IconButton(
+          style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
+          icon: Container(
+            height: Dimens.tabHeightSmall + 10,
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(
+                    Radius.circular((Dimens.tabHeightSmall + 10 / 2))),
+                border: Border.all(color: Colors.grey[160])),
+            child: Row(
+              children: [
+                const SizedBox(width: 10,),
+                Text(
+                  "${curGroup.label.target!.name}.${curGroup.name}",
+                  style: TextSystem.textS(Colors.white),
                 ),
-              if(curGroup.subObjects.isEmpty)
-                IconButton(
-                    style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
-                    icon: Container(
-                      width: Dimens.tabHeightSmall,
-                      height: Dimens.tabHeightSmall,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border: Border.all(color: Colors.grey[180])
-                      ),
-                      child: Icon(FluentIcons.calculator_multiply,size: 16,color: Colors.red,),
+                const SizedBox(
+                  width: 8,
+                ),
+                if (curGroup.subObjects.isNotEmpty)
+                  Container(
+                    width: Dimens.tabHeightSmall,
+                    height: Dimens.tabHeightSmall,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Colors.grey[180])),
+                    child: Text(
+                      curGroup.subObjects.length.toString(),
+                      style: TextSystem.textM(Colors.teal),
                     ),
-                    onPressed: ()=>onLabelSelectedCaller("remove&&${curGroup.label.target!.id}")
+                  ),
+                if(curGroup.subObjects.isEmpty)
+                  IconButton(
+                      style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
+                      icon: Container(
+                        width: Dimens.tabHeightSmall,
+                        height: Dimens.tabHeightSmall,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.grey[160])
+                        ),
+                        child: Icon(FluentIcons.calculator_multiply,size: 16,color: Colors.red,),
+                      ),
+                      onPressed: ()=>onLabelSelectedCaller("remove&&${curGroup.id}")
+                  ),
+                const SizedBox(
+                  width: 5,
                 ),
-            ],
+              ],
+            ),
           ),
-        ),
-        onPressed: ()=>onLabelSelectedCaller("choose&&${curGroup.label.target!.id}"));
+          onPressed: ()=>onLabelSelectedCaller("choose&&${curGroup.id}")),
+    );
   }
 }
