@@ -37,6 +37,11 @@ class LabelingBodyViewModel extends ViewModel {
   onLabelActionHandler(String action)async{
     var act = action.split("&&");
     switch(act[0]){
+      case "choose":
+        curGroup= await ImageGroupDAO().getDetails(int.parse(act[1]));
+        objects=curGroup!.otherStates;
+        notifyListeners();
+        break;
       case "showDialog":
         var prj = await ProjectDAO().getDetailsByUUID(prjUUID);
         showDialog(
@@ -117,10 +122,18 @@ class LabelingBodyViewModel extends ViewModel {
         break;
       case 'removeFromGroup':
         var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[2]));
-        // await ProjectPartDAO().addObject(partId, obj!);
-        // await ImageGroupDAO().removeObject(int.parse(action.split("&&")[1]), obj);
-        subGroups[subGroups.indexWhere((element) => element.id==int.parse(act[1]))].subObjects.removeWhere((element) => element.id==obj!.id);
-        // updateProjectData(curGroup.id);
+        if(partUUID==""){
+          var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+          await ImageGroupDAO().addObject(grp!.id, obj!);
+          await ImageGroupDAO().removeObject(int.parse(act[1]), obj);
+        }else{
+          var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
+          await ProjectPartDAO().addObject(part!.id, obj!);
+          await ImageGroupDAO().removeObject(int.parse(act[1]), obj);
+        }
+        subGroups[subGroups.indexWhere((element) => element.id==int.parse(act[1]))].subObjects.removeWhere((element) => element.id==obj.id);
+        objects.removeWhere((element) => element.id==obj.id);
+        notifyListeners();
         break;
       case 'delete':
         var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[1]));

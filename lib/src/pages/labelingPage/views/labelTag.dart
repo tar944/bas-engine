@@ -19,6 +19,7 @@ class LabelTag extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Padding(
       padding: const EdgeInsets.only(left: 3.0,right: 3.0),
       child: IconButton(
@@ -40,7 +41,7 @@ class LabelTag extends HookWidget {
                 const SizedBox(
                   width: 8,
                 ),
-                if (curGroup.subObjects.isNotEmpty)
+                if (curGroup.otherStates.isNotEmpty)
                   Container(
                     width: Dimens.tabHeightSmall,
                     height: Dimens.tabHeightSmall,
@@ -49,11 +50,11 @@ class LabelTag extends HookWidget {
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.grey[180])),
                     child: Text(
-                      curGroup.subObjects.length.toString(),
+                      curGroup.otherStates.length.toString(),
                       style: TextSystem.textM(Colors.teal),
                     ),
                   ),
-                if(curGroup.subObjects.isEmpty)
+                if(curGroup.otherStates.isEmpty)
                   IconButton(
                       style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
                       icon: Container(

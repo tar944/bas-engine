@@ -14,15 +14,13 @@ import 'package:pmvvm/pmvvm.dart';
 class ObjectItem extends StatelessWidget {
   ObjectItem(
       {Key? key,
-      required this.isSubGroup,
-      required this.allGroups,
-      required this.object,
-      required this.onActionCaller})
+        required this.allGroups,
+        required this.object,
+        required this.onActionCaller})
       : super(key: key);
 
   final ObjectModel object;
   final List<ImageGroupModel> allGroups;
-  final bool isSubGroup;
   final ValueSetter<String> onActionCaller;
 
   @override
@@ -30,7 +28,7 @@ class ObjectItem extends StatelessWidget {
     return MVVM(
       view: () => const _View(),
       viewModel:
-          ObjectItemViewModel(isSubGroup, allGroups, object, onActionCaller),
+          ObjectItemViewModel( allGroups, object, onActionCaller),
     );
   }
 }
@@ -43,7 +41,7 @@ class _View extends StatelessView<ObjectItemViewModel> {
 
     final controller = FlyoutController();
     return IconButton(
-      onPressed: vm.isSubGroup?()=>vm.onActionCaller("gotoLabeling&&${vm.object.id}"):null,
+      onPressed: vm.parentGroupId!=-1?()=>vm.onActionCaller("gotoLabeling&&${vm.object.id}"):null,
       style: ButtonStyle(
           padding: ButtonState.all(const EdgeInsets.all(0.0)),
       ),
@@ -79,7 +77,7 @@ class _View extends StatelessView<ObjectItemViewModel> {
                     ),
                   ),
                 ),
-                if(vm.isSubGroup&&vm.showLabel)
+                if(vm.parentGroupId!=-1&&vm.showLabel)
                   Container(
                   width: Dimens.btnWidthNormal,
                   height: Dimens.btnHeightBig,
@@ -104,31 +102,30 @@ class _View extends StatelessView<ObjectItemViewModel> {
                     child: MultiSelectContainer(
                         singleSelectedItem: true,
                         wrapSettings: const WrapSettings(
-                            spacing: 3.0
+                            spacing: 5.0
                         ),
-                        itemsPadding: const EdgeInsets.fromLTRB(3.0,3.0,3.0,5.0),
+                        itemsPadding: const EdgeInsets.all(5.0),
                         textStyles: MultiSelectTextStyles(
-                            textStyle: TextSystem.textT(Colors.white),
-                            selectedTextStyle: TextSystem.textT(Colors.white)
+                            textStyle: TextSystem.textS(Colors.white),
+                            selectedTextStyle: TextSystem.textS(Colors.white)
                         ),
                         itemsDecoration: MultiSelectDecorations(
                             decoration:BoxDecoration(
-                              color: vm.isSubGroup?Colors.teal.darkest:Colors.grey[170],
+                              color: Colors.grey[170],
                               borderRadius: const BorderRadius.all(Radius.circular(15)),
                               border: Border.all(color: Colors.grey[150])
                             ) ,
                             selectedDecoration: BoxDecoration(
-                              color: vm.isSubGroup?Colors.grey[170]:Colors.teal.darkest,
+                              color: Colors.teal.dark,
                               borderRadius: const BorderRadius.all(Radius.circular(15)),
-                              border: Border.all(color: Colors.grey[150]),
+                              border: Border.all(color: Colors.teal),
                             )
                         ),
-                        items: vm.allGroups.map((e) =>
-                            MultiSelectCard(
-                                value: e.id,
-                                label: e.name,
-                                textStyles: MultiSelectItemTextStyles(textStyle: TextSystem.textS(Colors.white))
-                            )
+                        items: vm.allGroups.map((e)=>MultiSelectCard(
+                              selected: e.id == vm.parentGroupId,
+                              value: e.id,
+                              label: e.name,
+                          )
                         ).toList(),
                         onChange: vm.onGroupSelected)
                 ),

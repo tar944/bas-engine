@@ -7,12 +7,24 @@ import 'package:pmvvm/pmvvm.dart';
 class ObjectItemViewModel extends ViewModel {
 
   final ObjectModel object;
-  final bool isSubGroup;
+  int parentGroupId =-1;
   bool showLabel=false;
   final List<ImageGroupModel> allGroups;
   final ValueSetter<String> onActionCaller;
 
-  ObjectItemViewModel(this.isSubGroup,this.allGroups,this.object, this.onActionCaller);
+  ObjectItemViewModel(this.allGroups,this.object, this.onActionCaller);
+
+
+  @override
+  void init() {
+    for(var grp in allGroups){
+      if(grp.otherStates.firstWhere((element) => element.id==object.id,orElse: ()=>ObjectModel(-1, "", 0.0, 0.0, 0.0, 0.0, "")).id!!=-1) {
+        parentGroupId=grp.id;
+        notifyListeners();
+        break;
+      }
+    }
+  }
 
   onMouseEnter(PointerEnterEvent e){
     showLabel=true;
@@ -23,11 +35,11 @@ class ObjectItemViewModel extends ViewModel {
     notifyListeners();
   }
 
-  onGroupSelected(List<int> allSelected,int curSelectedItem){
-    if(isSubGroup){
-      onActionCaller("removeFromGroup&&$curSelectedItem&&${object.id}");
+  onGroupSelected(List<int> allSelected,int curGroupItem){
+    if(parentGroupId!=-1){
+      onActionCaller("removeFromGroup&&$curGroupItem&&${object.id}");
     }else{
-      onActionCaller("addToGroup&&$curSelectedItem&&${object.id}");
+      onActionCaller("addToGroup&&$curGroupItem&&${object.id}");
     }
   }
 }

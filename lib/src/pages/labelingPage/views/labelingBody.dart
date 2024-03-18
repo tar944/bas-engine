@@ -120,7 +120,6 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                                     key: GlobalKey(),
                                     allGroups: vm.subGroups,
                                     object: item,
-                                    isSubGroup: false,
                                     onActionCaller: vm.onObjectActionHandler,
                                   ))
                               .toList(),
