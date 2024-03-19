@@ -12,41 +12,36 @@ class LabelingPage extends StatelessWidget {
       {super.key,
       required this.partId,
       required this.prjUUID,
-      required this.onGroupActionCaller,
-      required this.controller});
+      required this.onGroupActionCaller});
 
   int partId;
   String prjUUID;
   ValueSetter<String> onGroupActionCaller;
-  final GroupController controller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
-      view: () => _View(controller: controller),
+      view: () => const _View(),
       viewModel: LabelingViewModel(partId,prjUUID, onGroupActionCaller),
     );
   }
 }
 
 class _View extends StatelessView<LabelingViewModel> {
-  const _View({Key? key, required this.controller}) : super(key: key);
-
-  final GroupController controller;
+  const _View({Key? key}) : super(key: key);
 
   @override
   Widget render(context, LabelingViewModel vm) {
-    controller.call(context, vm.createGroup);
 
     return SizedBox(
       height: double.infinity,
       child: Padding(
         padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
         child:vm.allNavsRows.isNotEmpty?ListView.builder(
-            itemCount: vm.allNavsRows.length,
+            itemCount: vm.allNavsRows.length+1,
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
-              if(index!=vm.allNavsRows.length-1){
+              if(index!=vm.allNavsRows.length){
                 return NavigationRow(
                     allNavs: vm.allNavsRows[index],
                     rowNumber: index,
@@ -58,6 +53,7 @@ class _View extends StatelessView<LabelingViewModel> {
                     prjUUID: vm.prjUUID,
                     partUUID: vm.curPart!=null?vm.curPart!.uuid:"",
                     grpUUID: vm.curGroup!=null?vm.curGroup!.uuid:"",
+                    onGroupActionCaller: vm.onGroupSelect,
                 );
               }
             }):Container()

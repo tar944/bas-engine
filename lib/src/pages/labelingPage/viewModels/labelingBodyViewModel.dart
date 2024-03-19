@@ -19,8 +19,15 @@ class LabelingBodyViewModel extends ViewModel {
   ImageGroupModel? curGroup;
   String prjUUID,grpUUID,partUUID;
   LabelModel curLabel=LabelModel(-1, "", "");
+  ValueSetter<String> onGroupActionCaller;
 
-  LabelingBodyViewModel(this.objects,this.grpUUID,this.partUUID,this.prjUUID);
+  LabelingBodyViewModel(
+      this.objects,
+      this.grpUUID,
+      this.partUUID,
+      this.prjUUID,
+      this.onGroupActionCaller);
+
 
   @override
   void init() async{
@@ -37,6 +44,9 @@ class LabelingBodyViewModel extends ViewModel {
   onLabelActionHandler(String action)async{
     var act = action.split("&&");
     switch(act[0]){
+      case "open":
+        onGroupActionCaller("$action&&${grpUUID==""?-1:curGroup!.id}");
+        break;
       case "showAll":
         curGroup= null;
         if(partUUID!=""){

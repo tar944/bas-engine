@@ -18,105 +18,118 @@ import 'package:pmvvm/pmvvm.dart';
 class LabelingViewModel extends ViewModel {
   List<ObjectModel> objects = [];
   List<List<NavModel>> allNavsRows = [];
-  List<NavModel> selectedNavs=[];
+  List<NavModel> selectedNavs = [];
   ImageGroupModel? curGroup;
   ProjectPartModel? curPart;
   int partId;
-  String prjUUID;
-  ValueSetter<String> onGroupActionCaller;
+  final String prjUUID;
+  final ValueSetter<String> onGroupActionCaller;
 
-  LabelingViewModel(this.partId,this.prjUUID, this.onGroupActionCaller);
+  LabelingViewModel(this.partId, this.prjUUID, this.onGroupActionCaller);
 
   @override
   void init() async {
     final address = await Preference().getMainAddress();
     var prj = await ProjectDAO().getDetailsByUUID(prjUUID);
-    List<NavModel> allNavs=[];
-    for(var part in prj!.allParts){
-      int imgNumber=part.allObjects.length;
-      for(var grp in part.allGroups) {
-        imgNumber+=grp.subObjects.length;
+    List<NavModel> allNavs = [];
+    for (var part in prj!.allParts) {
+      int imgNumber = part.allObjects.length;
+      for (var grp in part.allGroups) {
+        imgNumber += grp.subObjects.length;
       }
       allNavs.add(NavModel(
           part.id,
           imgNumber,
           "part",
           part.name!,
-          part.allObjects.isNotEmpty?part.allObjects[0].image.target!.path!:""
-      ));
+          part.allObjects.isNotEmpty
+              ? part.allObjects[0].image.target!.path!
+              : ""));
+    }
+    curPart = prj.allParts[0];
+    objects.addAll(curPart!.allObjects);
+    for (var grp in curPart!.allGroups) {
+      objects.addAll(grp.otherStates);
     }
     allNavsRows.add(allNavs);
     selectedNavs.add(allNavs[0]);
-    updateProjectData(partId);
     notifyListeners();
-    if(address!=''){
+    if (address != '') {
       onGroupSelect("goto&&${address.split("&&")[2]}");
       await Preference().setMainAddress('');
     }
     if (await LabelDAO().needAddDefaultValue(prjUUID)) {
-      await LabelDAO().addList(prjUUID,ObjectType.values
-          .map((e) => LabelModel(0, e.name,"objects"))
-          .toList());
+      await LabelDAO().addList(
+          prjUUID,
+          ObjectType.values
+              .map((e) => LabelModel(0, e.name, "objects"))
+              .toList());
     }
   }
 
-  updateProjectData(int parentId) async {
-    List<ImageGroupModel> allGroups=[];
-    if(allNavsRows.length==1){
-      var parent = await ProjectPartDAO().getDetails(parentId);
-      objects.addAll(parent!.allObjects);
-      curPart=parent;
-      allGroups=parent.allGroups;
-    }else{
-      var parent = await ImageGroupDAO().getDetails(parentId);
-      allGroups=parent!.allGroups;
-    }
-    List<NavModel> allNavGroups=[];
-    for(var grp in allGroups){
-      allNavGroups.add(NavModel(
+  updateProjectData(int parentGrpId,int selectedGrp) async {
+    List<ImageGroupModel> allGroups = [];
+    allGroups = parentGrpId==-1?curPart!.allGroups:curGroup!.allGroups;
+    List<NavModel> allNavs = [];
+    for (var grp in allGroups) {
+      allNavs.add(NavModel(
           grp.id,
-          grp.subObjects.length,
-          "group", grp.name!,
-          grp.subObjects.isNotEmpty?grp.subObjects[0].image.target!.path!:""
-      ));
-      objects.addAll(grp.subObjects);
+          grp.otherStates.length,
+          "group",
+          grp.name!,
+          grp.mainState.target!=null
+              ? grp.mainState.target!.image.target!.path!
+              : ""));
     }
-    allNavsRows.add(allNavGroups);
+    allNavsRows.add(allNavs);
+    selectedNavs.add(allNavs[0]);
+
+    curPart = null;
+    curGroup =allGroups[0];
+    objects=[];
+    objects.addAll(curGroup!.otherStates);
+
     notifyListeners();
   }
 
-  onNavItemSelectHandler(NavModel curNav){
-    if(selectedNavs.indexWhere((element) => element.kind==curNav.kind&&element.id==curNav.id)==-1){
+  onNavItemSelectHandler(NavModel curNav) {
+    if (selectedNavs.indexWhere((element) =>
+            element.kind == curNav.kind && element.id == curNav.id) ==
+        -1) {
       selectedNavs.add(curNav);
       notifyListeners();
     }
   }
 
   void onGroupSelect(String action) async {
-    ImageGroupModel? group = await ImageGroupDAO().getDetails(int.parse(action.split("&&")[1]));
-    switch (action.split('&&')[0]) {
+    ImageGroupModel? group =
+        await ImageGroupDAO().getDetails(int.parse(action.split("&&")[1]));
+    var act = action.split("&&");
+    switch (act[0]) {
+      case 'open':
+        updateProjectData(int.parse(act[2]),int.parse(action.split('&&')[1]));
+        break;
       case 'edit':
         showDialog(
             context: context,
             barrierDismissible: true,
             builder: (context) => DlgImageGroup(
-              group: group,
-              onSaveCaller: onEditGroupHandler,
-              partUUID: curGroup!.partUUID,
-            )
-        );
+                  group: group,
+                  onSaveCaller: onEditGroupHandler,
+                  partUUID: curGroup!.partUUID,
+                ));
         break;
       case 'delete':
-        if(group!.allGroups.isNotEmpty||group.subObjects.isNotEmpty){
-          Toast(Strings.deleteGroupError,false).showError(context);
+        if (group!.allGroups.isNotEmpty || group.subObjects.isNotEmpty) {
+          Toast(Strings.deleteGroupError, false).showError(context);
           return;
         }
         await ImageGroupDAO().delete(group);
         onGroupActionCaller('refresh');
-        updateProjectData(-1);
+        updateProjectData(-1,-1);
         break;
       case 'goto':
-        updateProjectData(int.parse(action.split("&&")[1]));
+        updateProjectData(int.parse(action.split("&&")[1]),-1);
         onGroupActionCaller("refreshGroup&&${action.split("&&")[1]}");
         break;
       case 'gotoLabeling':
@@ -127,29 +140,6 @@ class LabelingViewModel extends ViewModel {
 
   void onEditGroupHandler(ImageGroupModel curGroup) async {
     await ImageGroupDAO().update(curGroup);
-    updateProjectData(-1);
-  }
-
-  void onCreateGroupHandler(ImageGroupModel group) async {
-    group.id = await ImageGroupDAO().add(group);
-    await ProjectPartDAO().addGroup(partId, group);
-    onGroupActionCaller('refresh');
-    updateProjectData(-1);
-  }
-
-  createGroup() async{
-    var part = await ProjectPartDAO().getDetails(partId);
-    if(part!.allGroups.length>8){
-      Toast(Strings.maxGroupNumberError,false).showError(context);
-      return;
-    }
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) => DlgImageGroup(
-              onSaveCaller: onCreateGroupHandler,
-              partUUID: curGroup!.partUUID,
-            )
-    );
+    updateProjectData(-1,-1);
   }
 }

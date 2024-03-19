@@ -15,18 +15,20 @@ class LabelingBody extends StatelessWidget {
     required this.objects,
     required this.prjUUID,
     required this.partUUID,
-    required this.grpUUID
+    required this.grpUUID,
+    required this.onGroupActionCaller
   }) : super(key: key);
 
   List<ObjectModel> objects;
   String prjUUID,partUUID,grpUUID;
+  ValueSetter<String> onGroupActionCaller;
 
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: LabelingBodyViewModel(objects,grpUUID,partUUID,prjUUID),
+      viewModel: LabelingBodyViewModel(objects,grpUUID,partUUID,prjUUID,onGroupActionCaller),
     );
   }
 }

@@ -93,7 +93,7 @@ class LabelTag extends HookWidget {
               ],
             ),
           ),
-          onPressed: curGroup.otherStates.isEmpty?null:()=>onLabelSelectedCaller("choose&&${curGroup.id}")),
+          onPressed: curGroup.otherStates.isEmpty?null:()=>onLabelSelectedCaller(isSelected?"open&&${curGroup.id}":"choose&&${curGroup.id}")),
     );
   }
 }

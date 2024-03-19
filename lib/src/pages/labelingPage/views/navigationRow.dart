@@ -44,44 +44,21 @@ class _View extends StatelessView<NavigationRowViewModel> {
           borderRadius: const BorderRadius.all(Radius.circular(8.0)),
           color: Colors.grey[180]
         ),
-        child: Row(
-          children: [
-            if(vm.rowNumber!=0)
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: IconButton(
-                  onPressed: ()=>vm.onItemSelectHandler(vm.showAll),
-                  style: ButtonStyle(
-                      padding: ButtonState.all(EdgeInsets.zero)
-                  ),
-                  icon: Container(
-                    height: Dimens.navH,
-                    width: Dimens.navH*1.8,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                      border: Border.all(color: vm.findSelectedStatus(vm.showAll)=="selected"?Colors.teal:Colors.white)
-                    ),
-                    child: Text(Strings.showAll,style: TextSystem.textM(vm.findSelectedStatus(vm.showAll)=="selected"?Colors.teal:Colors.white),),
-                  ),
-                ),
-              ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: SizedBox(
-                width: MediaQuery.sizeOf(context).width-(65+Dimens.navH*1.8),
-                height: Dimens.navH,
-                child: ListView.builder(
-                  itemCount: vm.allNavs.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    return NavItem(
-                        navItem: vm.allNavs[index],
-                        selectStatus: vm.findSelectedStatus(vm.allNavs[index]),
-                        onItemSelectedCaller: vm.onItemSelectHandler);
-                  }),
-              ),
-            )],
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SizedBox(
+            width: MediaQuery.sizeOf(context).width-(65+Dimens.navH*1.8),
+            height: Dimens.navH,
+            child: ListView.builder(
+              itemCount: vm.allNavs.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                return NavItem(
+                    navItem: vm.allNavs[index],
+                    selectStatus: vm.findSelectedStatus(vm.allNavs[index]),
+                    onItemSelectedCaller: vm.onItemSelectHandler);
+              }),
+          ),
         ),
       ),
     );

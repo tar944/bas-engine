@@ -73,8 +73,7 @@ class _View extends StatelessView<MainPageViewModel> {
                       child: LabelingPage(
                         onGroupActionCaller: vm.onGroupActionHandler,
                         partId: vm.curPart==null?-1:vm.curPart!.id,
-                        prjUUID: vm.curPart==null?"":vm.curPart!.prjUUID,
-                        controller: vm.setGroupController),
+                        prjUUID: vm.curPart==null?"":vm.curPart!.prjUUID),
                       ),
                   ],
                 ),
