@@ -95,6 +95,8 @@ class LabelingViewModel extends ViewModel {
     notifyListeners();
   }
 
+
+
   onNavItemSelectHandler(NavModel curNav) async{
     for(int i = curNav.rowNumber;i<(allNavsRows.length-1);i++){
       allNavsRows.removeAt(allNavsRows.length-1);
@@ -107,6 +109,8 @@ class LabelingViewModel extends ViewModel {
       updateByGroupData(curNav);
     }
   }
+
+
 
   void onGroupSelect(String action) async {
     var act = action.split("&&");
