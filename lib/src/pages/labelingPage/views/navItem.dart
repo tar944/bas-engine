@@ -22,48 +22,51 @@ class NavItem extends HookWidget {
   @override
   Widget build(BuildContext context) {
 
-    return Opacity(
-      opacity: selectStatus=="notSelected"?0.5:1.0,
-      child: IconButton(
-        onPressed: ()=>{},
-        style: ButtonStyle(
-          padding: ButtonState.all(EdgeInsets.zero)
-        ),
-        icon: Container(
-          width: Dimens.navItemW,
-          height: Dimens.navH,
-          decoration: BoxDecoration(
-            border: Border.all(color: selectStatus=="selected"?Colors.teal:Colors.white),
-            borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+    return Padding(
+      padding: const EdgeInsets.only(right: 8.0),
+      child: Opacity(
+        opacity: selectStatus=="notSelected"?0.5:1.0,
+        child: IconButton(
+          onPressed: ()=>onItemSelectedCaller(navItem),
+          style: ButtonStyle(
+            padding: ButtonState.all(EdgeInsets.zero)
           ),
-          child: Row(
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(3.0),
-                child: Container(
-                  width: Dimens.navH*1.5,
-                  height: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(Radius.circular(3.0)),
-                    image: DecorationImage(
-                      image: Image.file(File(navItem.imgPath)).image,
-                      fit: BoxFit.fill,
+          icon: Container(
+            width: Dimens.navItemW,
+            height: Dimens.navH,
+            decoration: BoxDecoration(
+              border: Border.all(color: selectStatus=="selected"?Colors.teal:Colors.white),
+              borderRadius: const BorderRadius.all(Radius.circular(5.0)),
+            ),
+            child: Row(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Container(
+                    width: Dimens.navH*1.5,
+                    height: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(Radius.circular(3.0)),
+                      image: DecorationImage(
+                        image: Image.file(File(navItem.imgPath)).image,
+                        fit: BoxFit.fill,
+                      ),
                     ),
+                  )
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(3.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(navItem.title,style: TextSystem.textM(selectStatus=="selected"?Colors.teal:Colors.white),),
+                      const SizedBox(height: 2,),
+                      Text("${navItem.imgNumber} ${navItem.imgNumber==1?"image":"images"}",style: TextSystem.textS(selectStatus=="selected"?Colors.teal:Colors.white),),
+                    ],
                   ),
                 )
-              ),
-              Padding(
-                padding: const EdgeInsets.all(3.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(navItem.title,style: TextSystem.textM(selectStatus=="selected"?Colors.teal:Colors.white),),
-                    const SizedBox(height: 2,),
-                    Text("${navItem.imgNumber} ${navItem.imgNumber==1?"image":"images"}",style: TextSystem.textS(selectStatus=="selected"?Colors.teal:Colors.white),),
-                  ],
-                ),
-              )
-            ],
+              ],
+            ),
           ),
         ),
       ),
