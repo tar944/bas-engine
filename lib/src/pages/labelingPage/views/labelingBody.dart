@@ -3,6 +3,7 @@ import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelingBodyViewModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/labelBodyTagLine.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/labelTag.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/objectItem.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -50,58 +51,31 @@ class _View extends StatelessView<LabelingBodyViewModel> {
           padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
           child: Column(
             children: [
-              SizedBox(
-                width: MediaQuery.sizeOf(context).width-40,
-                height: Dimens.tabHeightSmall+10,
-                child: Row(
+              if(vm.tagLineState=="show")
+                LabelBodyTagLine(
+                    subGroups: vm.subGroups,
+                    curGroup: vm.curGroup,
+                    onLabelActionHandler: vm.onLabelActionHandler),
+              if(vm.tagLineState=="firstStep")
+                Row(
                   children: [
-                    IconButton(
-                        style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
-                        icon: Container(
-                          width: Dimens.tabHeightSmall+10,
-                          height: Dimens.tabHeightSmall+10,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.grey[160])
-                          ),
-                          child: Icon(FluentIcons.add,size: 18,color: Colors.orange.dark,),
-                        ),
-                        onPressed: ()=>vm.onLabelActionHandler("showDialog&&")
+                    Container(
+                      width: Dimens.circleW,
+                      height: Dimens.circleW,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.grey[170])
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.only(left:3.0),
+                        child: Icon(FluentIcons.double_chevron_right,size: 15,color: Colors.orange.dark,),
+                      ),
                     ),
                     const SizedBox(width: 10,),
-                    IconButton(
-                        style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
-                        icon: Container(
-                          width: Dimens.tabHeightSmall*2.8,
-                          height: Dimens.tabHeightSmall+10,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(Radius.circular((Dimens.tabHeightSmall+10/2))),
-                            border: Border.all(color: Colors.grey[160])
-                          ),
-                          child: Text(Strings.showAll,style: TextSystem.textS(Colors.white),),
-                        ),
-                        onPressed: ()=>vm.onLabelActionHandler("showAll")
-                    ),
-                    const SizedBox(width: 10,),
-                    SizedBox(
-                      width: 700,
-                      child: ListView.builder(
-                          key: GlobalKey(),
-                          itemCount: vm.subGroups.length,
-                          scrollDirection: Axis.horizontal,
-                          itemBuilder: (context, index) {
-                            return LabelTag(
-                                    curGroup: vm.subGroups[index],
-                                    isSelected: vm.curGroup==null || vm.subGroups[index].id!=vm.curGroup!.id?false:true,
-                                    onLabelSelectedCaller: vm.onLabelActionHandler,
-                                );
-                          }),
-                    ),
+                    const Text(Strings.groupFirstStep),
                   ],
                 ),
-              ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 10, bottom: 10),

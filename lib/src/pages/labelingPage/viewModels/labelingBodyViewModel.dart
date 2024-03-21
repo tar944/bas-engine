@@ -17,6 +17,7 @@ class LabelingBodyViewModel extends ViewModel {
   List<ObjectModel> objects;
   List<ImageGroupModel> subGroups=[];
   ImageGroupModel? curGroup;
+  String tagLineState="show";
   String prjUUID,grpUUID,partUUID;
   LabelModel curLabel=LabelModel(-1, "", "");
   ValueSetter<String> onGroupActionCaller;
@@ -37,6 +38,7 @@ class LabelingBodyViewModel extends ViewModel {
     }else{
       var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
       subGroups=grp!.allGroups;
+      tagLineState =grp.mainState.target==null?"firstStep":"show";
     }
     notifyListeners();
   }
