@@ -61,17 +61,17 @@ class LabelingViewModel extends ViewModel {
                 : ""));
       }
       allNavsRows.add(allNavs);
+      selectedNavs.add(allNavsRows[0][0]);
       curNav.id = prj.allParts[0].id;
     }
 
     curPart = await ProjectPartDAO().getDetails(curNav.id);
+    objects=[];
     objects.addAll(curPart!.allObjects);
     for (var grp in curPart!.allGroups) {
       objects.addAll(grp.otherStates);
     }
-    selectedNavs.add(curNav.id == -1
-        ? allNavsRows[0][0]
-        : allNavsRows[0].firstWhere((element) => element.id == curNav.id));
+
     notifyListeners();
   }
 
@@ -95,7 +95,7 @@ class LabelingViewModel extends ViewModel {
     }else{
       curGroup = await ImageGroupDAO().getDetails(curNav.id);
     }
-
+    curPart=null;
     objects = [];
     objects.addAll(curGroup!.otherStates);
     for (var grp in curGroup!.allGroups) {
@@ -105,7 +105,8 @@ class LabelingViewModel extends ViewModel {
   }
 
   onNavItemSelectHandler(NavModel curNav) async {
-    for (int i = curNav.rowNumber; i < (allNavsRows.length - 1); i++) {
+    int rowNumber = allNavsRows.length;
+    for (int i = curNav.rowNumber; i < rowNumber ; i++) {
       allNavsRows.removeAt(allNavsRows.length - 1);
       selectedNavs.removeAt(selectedNavs.length - 1);
     }

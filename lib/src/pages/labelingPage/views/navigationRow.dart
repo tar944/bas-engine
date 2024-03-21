@@ -1,6 +1,4 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
-import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
-import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/navModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/navigationRowViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/navItem.dart';

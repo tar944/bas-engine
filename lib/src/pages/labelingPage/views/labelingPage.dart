@@ -44,7 +44,7 @@ class _View extends StatelessView<LabelingViewModel> {
               if(index!=vm.allNavsRows.length){
                 return NavigationRow(
                     allNavs: vm.allNavsRows[index],
-                    rowNumber: index,
+                    rowNumber: index+1,
                     selectedNav: vm.selectedNavs[index],
                     onNavSelectedCaller: vm.onNavItemSelectHandler);
               }else{

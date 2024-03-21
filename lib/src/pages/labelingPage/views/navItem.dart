@@ -48,7 +48,8 @@ class NavItem extends HookWidget {
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(3.0)),
                       image: DecorationImage(
-                        image: Image.file(File(navItem.imgPath)).image,
+                        image: navItem.imgPath!=""?Image.file(File(navItem.imgPath)).image:const AssetImage(
+                            'lib/assets/testImages/testImg1.png'),
                         fit: BoxFit.fill,
                       ),
                     ),
