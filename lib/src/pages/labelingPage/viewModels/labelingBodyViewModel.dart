@@ -45,7 +45,7 @@ class LabelingBodyViewModel extends ViewModel {
     var act = action.split("&&");
     switch(act[0]){
       case "open":
-        onGroupActionCaller("$action&&${grpUUID==""?-1:curGroup!.id}");
+        onGroupActionCaller(action);
         break;
       case "showAll":
         curGroup= null;

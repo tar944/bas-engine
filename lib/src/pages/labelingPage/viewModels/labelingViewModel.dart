@@ -41,9 +41,9 @@ class LabelingViewModel extends ViewModel {
     }
   }
 
-  updateByPartData(NavModel curNav)async{
-    curGroup=null;
-    if(allNavsRows.isEmpty){
+  updateByPartData(NavModel curNav) async {
+    curGroup = null;
+    if (allNavsRows.isEmpty) {
       var prj = await ProjectDAO().getDetailsByUUID(prjUUID);
       List<NavModel> allNavs = [];
       for (var part in prj!.allParts) {
@@ -56,67 +56,72 @@ class LabelingViewModel extends ViewModel {
             imgNumber,
             "part",
             part.name!,
-            part.allObjects.isNotEmpty ? part.allObjects[0].image.target!.path! : ""));
+            part.allObjects.isNotEmpty
+                ? part.allObjects[0].image.target!.path!
+                : ""));
       }
       allNavsRows.add(allNavs);
-      curNav.id=prj.allParts[0].id;
+      curNav.id = prj.allParts[0].id;
     }
 
-    curPart= await ProjectPartDAO().getDetails(curNav.id);
+    curPart = await ProjectPartDAO().getDetails(curNav.id);
     objects.addAll(curPart!.allObjects);
     for (var grp in curPart!.allGroups) {
       objects.addAll(grp.otherStates);
     }
-    selectedNavs.add(curNav.id ==-1?allNavsRows[0][0]:allNavsRows[0].firstWhere((element) => element.id==curNav.id));
+    selectedNavs.add(curNav.id == -1
+        ? allNavsRows[0][0]
+        : allNavsRows[0].firstWhere((element) => element.id == curNav.id));
     notifyListeners();
   }
 
-  updateByGroupData(NavModel curNav) async{
-    curPart=null;
-    curGroup=await ImageGroupDAO().getDetails(curNav.id);
-    List<ImageGroupModel> allGroups =curGroup!.allGroups;
-    List<NavModel> allNavs = [];
-    for (var grp in allGroups) {
-      allNavs.add(NavModel(
-          grp.id,
-          grp.otherStates.length,
-          "group",
-          grp.name!,
-          grp.mainState.target!=null
-              ? grp.mainState.target!.image.target!.path!
-              : ""));
-    }
-    allNavsRows.add(allNavs);
-    selectedNavs.add(allNavs.firstWhere((element) => element.id==curNav.id));
-
-    objects=[];
-    objects.addAll(curGroup!.otherStates);
-
-    notifyListeners();
-  }
-
-
-
-  onNavItemSelectHandler(NavModel curNav) async{
-    for(int i = curNav.rowNumber;i<(allNavsRows.length-1);i++){
-      allNavsRows.removeAt(allNavsRows.length-1);
-      selectedNavs.removeAt(selectedNavs.length-1);
-    }
-
-    if(curNav.kind=="part"){
-      updateByPartData(curNav);
+  updateByGroupData(NavModel curNav) async {
+    if(curNav.imgPath=="newRow582990"){
+      List<ImageGroupModel> allGroups = curPart==null?curGroup!.allGroups:curPart!.allGroups;
+      List<NavModel> allNavs = [];
+      for (var grp in allGroups) {
+        allNavs.add(NavModel(
+            grp.id,
+            grp.otherStates.length,
+            "group",
+            grp.name!,
+            grp.mainState.target != null
+                ? grp.mainState.target!.image.target!.path!
+                : ""));
+      }
+      allNavsRows.add(allNavs);
+      selectedNavs.add(allNavs.firstWhere((element) => element.id == curNav.id));
+      curGroup=allGroups.firstWhere((element) => element.id==curNav.id);
     }else{
+      curGroup = await ImageGroupDAO().getDetails(curNav.id);
+    }
+
+    objects = [];
+    objects.addAll(curGroup!.otherStates);
+    for (var grp in curGroup!.allGroups) {
+      objects.addAll(grp.otherStates);
+    }
+    notifyListeners();
+  }
+
+  onNavItemSelectHandler(NavModel curNav) async {
+    for (int i = curNav.rowNumber; i < (allNavsRows.length - 1); i++) {
+      allNavsRows.removeAt(allNavsRows.length - 1);
+      selectedNavs.removeAt(selectedNavs.length - 1);
+    }
+
+    if (curNav.kind == "part") {
+      updateByPartData(curNav);
+    } else {
       updateByGroupData(curNav);
     }
   }
-
-
 
   void onGroupSelect(String action) async {
     var act = action.split("&&");
     switch (act[0]) {
       case 'open':
-        updateByGroupData(NavModel(int.parse(act[2]), 0, 'group', "", ""));
+        updateByGroupData(NavModel(int.parse(act[1]), 0, 'group',"", "newRow582990"));
         break;
       case 'gotoLabeling':
         onGroupActionCaller(action);

@@ -49,6 +49,7 @@ class _View extends StatelessView<LabelingViewModel> {
                     onNavSelectedCaller: vm.onNavItemSelectHandler);
               }else{
                 return LabelingBody(
+                    key: GlobalKey(),
                     objects: vm.objects,
                     prjUUID: vm.prjUUID,
                     partUUID: vm.curPart!=null?vm.curPart!.uuid:"",
