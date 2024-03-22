@@ -94,6 +94,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                               .map((item) => ObjectItem(
                                     key: GlobalKey(),
                                     allGroups: vm.subGroups,
+                                    stepStatus: vm.tagLineState=="firstStep"?"firstStep":"hide",
                                     object: item,
                                     onActionCaller: vm.onObjectActionHandler,
                                   ))

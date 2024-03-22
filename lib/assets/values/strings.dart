@@ -2,6 +2,10 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String firstGuideTitle="Chose Main state";
+  static const String firstGuide="At this stage, you should specify the range of this Main state with drawing a rectangle by using your mouse. ";
+  static const String ok="Ok";
+  static const String GotIt="Got it";
   static const String groupFirstStep="At first you should chose one of below states as main state of this group.";
   static const String open="Open";
   static const String errRemoveGroup="You can not remove group with contents";
@@ -15,6 +19,7 @@ class Strings{
   static const String lvlError="You can not remove levels that have labels on it.";
   static const String lblError="You can not remove labels that have objects tagged with it.";
   static const String labelIt="Label it";
+  static const String mainState="Chose as main state";
   static const String deleteGroupError="There is some content in this group, you can not delete it";
   static const String maxGroupNumberError="Each part only can have 8 groups";
   static const String emptyLabeledGroup="💔 Your Labeled images group list is empty.";

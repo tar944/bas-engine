@@ -16,10 +16,12 @@ class ObjectItem extends StatelessWidget {
       {Key? key,
         required this.allGroups,
         required this.object,
+        required this.stepStatus,
         required this.onActionCaller})
       : super(key: key);
 
   final ObjectModel object;
+  final String stepStatus;
   final List<ImageGroupModel> allGroups;
   final ValueSetter<String> onActionCaller;
 
@@ -28,7 +30,7 @@ class ObjectItem extends StatelessWidget {
     return MVVM(
       view: () => const _View(),
       viewModel:
-          ObjectItemViewModel( allGroups, object, onActionCaller),
+          ObjectItemViewModel( allGroups,stepStatus, object, onActionCaller),
     );
   }
 }
@@ -41,7 +43,7 @@ class _View extends StatelessView<ObjectItemViewModel> {
 
     final controller = FlyoutController();
     return IconButton(
-      onPressed: vm.parentGroupId!=-1?()=>vm.onActionCaller("gotoLabeling&&${vm.object.id}"):null,
+      onPressed: vm.stepStatus=="hide"?null:()=>vm.onActionCaller(vm.stepStatus=="firstStep"?"setMainState&&${vm.object.id}":"gotoLabeling&&${vm.object.id}"),
       style: ButtonStyle(
           padding: ButtonState.all(const EdgeInsets.all(0.0)),
       ),
@@ -77,24 +79,32 @@ class _View extends StatelessView<ObjectItemViewModel> {
                     ),
                   ),
                 ),
-                if(vm.parentGroupId!=-1&&vm.showLabel)
+                if(vm.stepStatus!="hide"&&vm.showLabel)
                   Container(
-                  width: Dimens.btnWidthNormal,
-                  height: Dimens.btnHeightBig,
-                  decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(Radius.circular(Dimens.btnHeightBig/2)),
-                      color: Colors.white.withOpacity(.7),
-                    border: Border.all(color: Colors.magenta.dark)
-
+                    width: Dimens.btnWidthNormal+(vm.stepStatus=="firstStep"?100:0),
+                    height: Dimens.btnHeightBig,
+                    decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(
+                            Radius.circular(Dimens.btnHeightBig / 2)),
+                        color: Colors.white.withOpacity(.7),
+                        border: Border.all(color: Colors.orange,width: 1)),
+                    child: Row(
+                      children: [
+                        const SizedBox(
+                          width: 7,
+                        ),
+                        Icon(
+                          FluentIcons.label,
+                          size: 20,
+                          color: Colors.orange.dark,
+                        ),
+                        Text(
+                          vm.stepStatus=="firstStep"?Strings.mainState:Strings.labelIt,
+                          style: TextSystem.textL(Colors.orange.dark),
+                        )
+                      ],
+                    ),
                   ),
-                  child: Row(
-                    children: [
-                      const SizedBox(width: 7,),
-                      Icon(FluentIcons.label,size: 20,color: Colors.magenta.darkest,),
-                      Text(Strings.labelIt,style: TextSystem.textL(Colors.magenta.darkest),)
-                    ],
-                  ),
-                ),
                 Positioned(
                     bottom: 5,
                     left: 5,

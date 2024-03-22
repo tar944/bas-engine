@@ -9,10 +9,11 @@ class ObjectItemViewModel extends ViewModel {
   final ObjectModel object;
   int parentGroupId =-1;
   bool showLabel=false;
+  String stepStatus;
   final List<ImageGroupModel> allGroups;
   final ValueSetter<String> onActionCaller;
 
-  ObjectItemViewModel(this.allGroups,this.object, this.onActionCaller);
+  ObjectItemViewModel(this.allGroups,this.stepStatus,this.object, this.onActionCaller);
 
 
   @override
@@ -20,10 +21,13 @@ class ObjectItemViewModel extends ViewModel {
     for(var grp in allGroups){
       if(grp.otherStates.firstWhere((element) => element.id==object.id,orElse: ()=>ObjectModel(-1, "", 0.0, 0.0, 0.0, 0.0, "")).id!!=-1) {
         parentGroupId=grp.id;
+        stepStatus ="labelIt";
         notifyListeners();
         break;
       }
     }
+
+    print(parentGroupId.toString()+stepStatus);
   }
 
   onMouseEnter(PointerEnterEvent e){

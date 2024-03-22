@@ -22,4 +22,14 @@ class Preference {
     prefs = await SharedPreferences.getInstance();
     return prefs.getString('mainAddress') ?? "";
   }
+
+  setShowGuide(String name,bool showState) async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setBool(name, showState);
+  }
+
+  Future<bool> getShowGuide(String name)async{
+    prefs = await SharedPreferences.getInstance();
+    return prefs.getBool(name) ?? true;
+  }
 }

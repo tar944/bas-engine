@@ -129,6 +129,9 @@ class LabelingBodyViewModel extends ViewModel {
         //   'title': '${curProject.title} > ${curPart.name} > ${curGroup!.name}'
         // });
         break;
+      case 'setMainState':
+        onGroupActionCaller(action);
+        break;
       case 'addToGroup':
         var obj = await ObjectDAO().getDetails(int.parse(act[2]));
         if(grpUUID==""){

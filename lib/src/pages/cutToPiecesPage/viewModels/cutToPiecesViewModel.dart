@@ -6,6 +6,8 @@ import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/dlgGuide.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -69,6 +71,9 @@ class CutToPiecesViewModel extends ViewModel {
           .toList());
     }
     updatePageData();
+    if(await Preference().getShowGuide("firstGuide")){
+      showGuideDialog(context, Strings.firstGuide, Strings.firstGuideTitle, 'firstGuide');
+    }
   }
 
   updatePageData()async{

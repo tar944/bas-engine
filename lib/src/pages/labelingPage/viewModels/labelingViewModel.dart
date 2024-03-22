@@ -10,6 +10,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.da
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class LabelingViewModel extends ViewModel {
@@ -71,7 +72,7 @@ class LabelingViewModel extends ViewModel {
     for (var grp in curPart!.allGroups) {
       objects.addAll(grp.otherStates);
     }
-
+    partId=curPart!.id;
     notifyListeners();
   }
 
@@ -124,8 +125,20 @@ class LabelingViewModel extends ViewModel {
       case 'open':
         updateByGroupData(NavModel(int.parse(act[1]), 0, 'group',"", "newRow582990"));
         break;
-      case 'gotoLabeling':
-        onGroupActionCaller(action);
+      case 'changePart':
+        partId=int.parse(action.split("&&")[1]);
+        break;
+      case 'setMainState':
+        final curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
+        final curPart = await ProjectPartDAO().getDetails(partId);
+        await Preference().setMainAddress('${curProject!.id}&&${curPart!.id}&&${curGroup!.id}');
+        context.goNamed('cutToPieces',params: {
+          'objId':action.split('&&')[1],
+          'groupId':curGroup!.id.toString(),
+          'partUUID':curPart.uuid,
+          'prjUUID':prjUUID,
+          'title': '${curProject.title} > ${curPart.name} > ${curGroup!.name}'
+        });
         break;
     }
   }
