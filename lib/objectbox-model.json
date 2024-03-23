@@ -289,7 +289,7 @@
     },
     {
       "id": "16:6891732610780172479",
-      "lastPropertyId": "10:2927507162817163242",
+      "lastPropertyId": "11:7543727303735509034",
       "name": "ImageGroupModel",
       "properties": [
         {
@@ -343,6 +343,11 @@
           "flags": 520,
           "indexId": "21:8897593451848072544",
           "relationTarget": "ObjectModel"
+        },
+        {
+          "id": "11:7543727303735509034",
+          "name": "state",
+          "type": 9
         }
       ],
       "relations": [

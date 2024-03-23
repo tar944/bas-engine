@@ -2,6 +2,7 @@ import 'package:bas_dataset_generator_engine/main.dart';
 import 'package:bas_dataset_generator_engine/objectbox.g.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 
 class ImageGroupDAO {
   Future<ImageGroupModel?> getDetails(int id) async {
@@ -45,6 +46,7 @@ class ImageGroupDAO {
     group!.mainState.target=obj;
     group.allStates.removeWhere((element) => element.id!=obj.srcObject.target!.id);
     group.allStates.add(obj);
+    group.state=GroupState.editOtherStates.name;
     update(group);
   }
 

@@ -59,7 +59,7 @@ class PartRegionViewModel extends ViewModel {
       itsObjects=[];
       notifyListeners();
     }else if(action=="confirmRegion"){
-
+      onNewObjectCaller(itsObjects[0]);
     } else{
       curObject = itsObjects.firstWhere((element) => element.id==int.parse(action.split("&&")[1]));
       itsObjects.remove(curObject);

@@ -86,7 +86,7 @@ class LabelingViewModel extends ViewModel {
             grp.allStates.length,
             "group",
             grp.name!,
-            grp.mainState.target != null
+            grp.state != GroupState.findMainState.name
                 ? grp.mainState.target!.image.target!.path!
                 : ""));
       }

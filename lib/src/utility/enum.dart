@@ -7,6 +7,12 @@ enum HeaderTabs {
   addGroup,
   addPart}
 
+enum GroupState {
+  findMainState,
+  editOtherStates,
+  findSubObjects
+}
+
 enum ObjectType {
   checkRegion,
   label,

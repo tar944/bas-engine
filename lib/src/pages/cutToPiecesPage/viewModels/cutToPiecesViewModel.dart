@@ -58,7 +58,7 @@ class CutToPiecesViewModel extends ViewModel {
       }
     }
 
-    if(group!.mainState.target==null){
+    if(group!.state==GroupState.findMainState.name){
       pageDuty="drawMainRectangle";
     }
     curObject=group!.allStates[0];
@@ -207,7 +207,7 @@ class CutToPiecesViewModel extends ViewModel {
       notifyListeners();
     }else if(pageDuty=="drawMainRectangle"){
       await ImageGroupDAO().addMainState(groupId, newObject);
+      onBackClicked();
     }
-
   }
 }

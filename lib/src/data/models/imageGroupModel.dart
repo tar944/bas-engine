@@ -1,5 +1,6 @@
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -11,6 +12,7 @@ class ImageGroupModel {
   String groupUUID;
   String? name;
   String type="";
+  String state=GroupState.findMainState.name;
   String path;
   final mainState = ToOne<ObjectModel>();
   final allStates = ToMany<ObjectModel>();

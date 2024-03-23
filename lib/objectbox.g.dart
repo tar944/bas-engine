@@ -304,7 +304,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(16, 6891732610780172479),
       name: 'ImageGroupModel',
-      lastPropertyId: const IdUid(10, 2927507162817163242),
+      lastPropertyId: const IdUid(11, 7543727303735509034),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -355,7 +355,12 @@ final _entities = <ModelEntity>[
             type: 11,
             flags: 520,
             indexId: const IdUid(21, 8897593451848072544),
-            relationTarget: 'ObjectModel')
+            relationTarget: 'ObjectModel'),
+        ModelProperty(
+            id: const IdUid(11, 7543727303735509034),
+            name: 'state',
+            type: 9,
+            flags: 0)
       ],
       relations: <ModelRelation>[
         ModelRelation(
@@ -937,7 +942,8 @@ ModelDefinition getObjectBoxModel() {
           final typeOffset = fbb.writeString(object.type);
           final pathOffset = fbb.writeString(object.path);
           final groupUUIDOffset = fbb.writeString(object.groupUUID);
-          fbb.startTable(11);
+          final stateOffset = fbb.writeString(object.state);
+          fbb.startTable(12);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, uuidOffset);
           fbb.addOffset(2, partUUIDOffset);
@@ -947,6 +953,7 @@ ModelDefinition getObjectBoxModel() {
           fbb.addInt64(7, object.label.targetId);
           fbb.addOffset(8, groupUUIDOffset);
           fbb.addInt64(9, object.mainState.targetId);
+          fbb.addOffset(10, stateOffset);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -968,7 +975,9 @@ ModelDefinition getObjectBoxModel() {
             ..uuid = const fb.StringReader(asciiOptimization: true)
                 .vTableGet(buffer, rootOffset, 6, '')
             ..type = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 12, '');
+                .vTableGet(buffer, rootOffset, 12, '')
+            ..state = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 24, '');
           object.label.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0);
           object.label.attach(store);
@@ -1274,6 +1283,10 @@ class ImageGroupModel_ {
   /// see [ImageGroupModel.mainState]
   static final mainState = QueryRelationToOne<ImageGroupModel, ObjectModel>(
       _entities[5].properties[8]);
+
+  /// see [ImageGroupModel.state]
+  static final state =
+      QueryStringProperty<ImageGroupModel>(_entities[5].properties[9]);
 
   /// see [ImageGroupModel.allGroups]
   static final allGroups =

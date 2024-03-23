@@ -9,6 +9,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLabelingManagement.dart';
+import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 import 'package:uuid/uuid.dart';
@@ -38,7 +39,7 @@ class LabelingBodyViewModel extends ViewModel {
     }else{
       var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
       subGroups=grp!.allGroups;
-      tagLineState =grp.mainState.target==null?"firstStep":"show";
+      tagLineState =grp.state==GroupState.findMainState.name?"firstStep":"show";
     }
     notifyListeners();
   }

@@ -1,5 +1,6 @@
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/gestures.dart';
 import 'package:pmvvm/pmvvm.dart';
@@ -21,7 +22,7 @@ class ObjectItemViewModel extends ViewModel {
     for(var grp in allGroups){
       if(grp.allStates.firstWhere((element) => element.id==object.id,orElse: ()=>ObjectModel(-1, "", 0.0, 0.0, 0.0, 0.0, "")).id!!=-1) {
         parentGroupId=grp.id;
-        stepStatus =grp.mainState.target==null?"firstStep":"labelIt";
+        stepStatus =grp.state==GroupState.findMainState.name?"firstStep":"labelIt";
         notifyListeners();
         break;
       }
