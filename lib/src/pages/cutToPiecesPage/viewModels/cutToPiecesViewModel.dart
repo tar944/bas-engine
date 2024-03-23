@@ -51,7 +51,7 @@ class CutToPiecesViewModel extends ViewModel {
       await _windowShow();
     });
     group=await ImageGroupDAO().getDetails(groupId);
-    otherStates=group!.otherStates;
+    otherStates=group!.allStates;
     for(var grp in group!.allGroups){
       if(grp.subObjects.isNotEmpty){
         otherStates.addAll(grp.subObjects);
@@ -61,10 +61,10 @@ class CutToPiecesViewModel extends ViewModel {
     if(group!.mainState.target==null){
       pageDuty="drawMainRectangle";
     }
-    curObject=group!.otherStates[0];
-    for (final object in group!.otherStates) {
+    curObject=group!.allStates[0];
+    for (final object in group!.allStates) {
       if (object.id==objId) {
-        indexImage= group!.otherStates.indexOf(object);
+        indexImage= group!.allStates.indexOf(object);
         break;
       }
     }
@@ -81,7 +81,7 @@ class CutToPiecesViewModel extends ViewModel {
   }
 
   updatePageData()async{
-    curObject=group!.otherStates[indexImage];
+    curObject=group!.allStates[indexImage];
     final img = await i.decodeImageFile(curObject!.image.target!.path!);
     imgH = img!.height;
     imgW = img.width;
@@ -124,7 +124,7 @@ class CutToPiecesViewModel extends ViewModel {
 
   nextImage() async{
     indexImage = ++indexImage;
-    if (indexImage == group!.otherStates.length) {
+    if (indexImage == group!.allStates.length) {
       return indexImage = 0;
     }
     updatePageData();
@@ -148,8 +148,8 @@ class CutToPiecesViewModel extends ViewModel {
         await ObjectDAO().deleteObject(curObject!);
         await ImageGroupDAO().removeObject(groupId, curObject!);
         group = await ImageGroupDAO().getDetails(groupId);
-        if (group!.otherStates.isNotEmpty) {
-          indexImage = indexImage == group!.otherStates.length
+        if (group!.allStates.isNotEmpty) {
+          indexImage = indexImage == group!.allStates.length
               ? --indexImage
               : indexImage;
           updatePageData();
@@ -168,11 +168,11 @@ class CutToPiecesViewModel extends ViewModel {
         // }
         break;
       case 'next':
-        indexImage=group!.otherStates.indexWhere((element) => element.id==int.parse(action.split('&&')[1]));
+        indexImage=group!.allStates.indexWhere((element) => element.id==int.parse(action.split('&&')[1]));
         updatePageData();
         break;
       case 'goto':
-        curObject = group!.otherStates[indexImage];
+        curObject = group!.allStates[indexImage];
         indexImage = 0;
         notifyListeners();
         break;
@@ -199,12 +199,15 @@ class CutToPiecesViewModel extends ViewModel {
   onNewPartCreatedHandler(ObjectModel newObject) async {
     newObject.uuid=const Uuid().v4();
     newObject.parentUUID=curObject!.uuid;
+    newObject.srcObject.target=curObject!;
     newObject.id=await ObjectDAO().addObject(newObject);
-    await ImageGroupDAO().addSubObject(groupId, newObject);
-    otherStates.add(newObject);
-    notifyListeners();
-  }
-  onRegionActionHandler(String action){
+    if(pageDuty=="cutting"){
+      await ImageGroupDAO().addSubObject(groupId, newObject);
+      otherStates.add(newObject);
+      notifyListeners();
+    }else if(pageDuty=="drawMainRectangle"){
+      await ImageGroupDAO().addMainState(groupId, newObject);
+    }
 
   }
 }

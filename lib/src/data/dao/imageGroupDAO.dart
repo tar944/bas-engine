@@ -1,7 +1,6 @@
 import 'package:bas_dataset_generator_engine/main.dart';
 import 'package:bas_dataset_generator_engine/objectbox.g.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 
 class ImageGroupDAO {
@@ -25,19 +24,27 @@ class ImageGroupDAO {
 
   addObject(int groupId,ObjectModel obj)async{
     var group = await getDetails(groupId);
-    group!.otherStates.add(obj);
+    group!.allStates.add(obj);
     update(group);
   }
 
   removeObject(int groupId,ObjectModel obj)async{
     var group = await getDetails(groupId);
-    group!.otherStates.removeWhere((element) => element.id == obj.id);
+    group!.allStates.removeWhere((element) => element.id == obj.id);
     update(group);
   }
 
   addSubObject(int groupId,ObjectModel obj)async{
     var group = await getDetails(groupId);
     group!.subObjects.add(obj);
+    update(group);
+  }
+
+  addMainState(int groupId,ObjectModel obj)async{
+    var group = await getDetails(groupId);
+    group!.mainState.target=obj;
+    group.allStates.removeWhere((element) => element.id!=obj.srcObject.target!.id);
+    group.allStates.add(obj);
     update(group);
   }
 

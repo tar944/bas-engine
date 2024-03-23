@@ -1,7 +1,6 @@
 import 'package:bas_dataset_generator_engine/src/dialogs/flyObjectAction.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/flyScreenDescription.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 
 import '../../assets/values/textStyle.dart';
 

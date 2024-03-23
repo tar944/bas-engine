@@ -50,7 +50,7 @@ class LabelingViewModel extends ViewModel {
       for (var part in prj!.allParts) {
         int imgNumber = part.allObjects.length;
         for (var grp in part.allGroups) {
-          imgNumber += grp.otherStates.length;
+          imgNumber += grp.allStates.length;
         }
         allNavs.add(NavModel(
             part.id,
@@ -70,7 +70,7 @@ class LabelingViewModel extends ViewModel {
     objects=[];
     objects.addAll(curPart!.allObjects);
     for (var grp in curPart!.allGroups) {
-      objects.addAll(grp.otherStates);
+      objects.addAll(grp.allStates);
     }
     partId=curPart!.id;
     notifyListeners();
@@ -83,7 +83,7 @@ class LabelingViewModel extends ViewModel {
       for (var grp in allGroups) {
         allNavs.add(NavModel(
             grp.id,
-            grp.otherStates.length,
+            grp.allStates.length,
             "group",
             grp.name!,
             grp.mainState.target != null
@@ -98,9 +98,9 @@ class LabelingViewModel extends ViewModel {
     }
     curPart=null;
     objects = [];
-    objects.addAll(curGroup!.otherStates);
+    objects.addAll(curGroup!.allStates);
     for (var grp in curGroup!.allGroups) {
-      objects.addAll(grp.otherStates);
+      objects.addAll(grp.allStates);
     }
     notifyListeners();
   }

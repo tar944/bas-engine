@@ -9,13 +9,12 @@ import 'package:uuid/uuid.dart';
 
 class PartRegionViewModel extends ViewModel {
   final List<ObjectModel> otherObjects;
-  final List<ObjectModel> itsObjects;
+  List<ObjectModel> itsObjects;
   List<LabelModel>allLabels=[];
   RegionRecController objectController = RegionRecController();
   ObjectModel? curObject;
   ObjectModel mainObject;
   final ValueSetter<ObjectModel> onNewObjectCaller;
-  final ValueSetter<String> onRectangleActionCaller;
   String prjUUID;
   bool allowDrawing=true;
   final bool isSimpleAction;
@@ -28,8 +27,7 @@ class PartRegionViewModel extends ViewModel {
       this.otherObjects,
       this.itsObjects,
       this.isSimpleAction,
-      this.onNewObjectCaller,
-      this.onRectangleActionCaller);
+      this.onNewObjectCaller);
 
 
   @override
@@ -57,11 +55,19 @@ class PartRegionViewModel extends ViewModel {
   }
 
   onObjectActionHandler(String action)async{
-    curObject = itsObjects.firstWhere((element) => element.id==int.parse(action.split("&&")[1]));
-    itsObjects.remove(curObject);
-    await ObjectDAO().deleteObject(curObject!);
-    curObject=null;
-    notifyListeners();
+    if(action=="removeRegion"){
+      itsObjects=[];
+      notifyListeners();
+    }else if(action=="confirmRegion"){
+
+    } else{
+      curObject = itsObjects.firstWhere((element) => element.id==int.parse(action.split("&&")[1]));
+      itsObjects.remove(curObject);
+      await ObjectDAO().deleteObject(curObject!);
+      curObject=null;
+      notifyListeners();
+    }
+
   }
 
   onLabelActionHandler(String action)async{

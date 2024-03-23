@@ -19,7 +19,7 @@ class ObjectItemViewModel extends ViewModel {
   @override
   void init() {
     for(var grp in allGroups){
-      if(grp.otherStates.firstWhere((element) => element.id==object.id,orElse: ()=>ObjectModel(-1, "", 0.0, 0.0, 0.0, 0.0, "")).id!!=-1) {
+      if(grp.allStates.firstWhere((element) => element.id==object.id,orElse: ()=>ObjectModel(-1, "", 0.0, 0.0, 0.0, 0.0, "")).id!!=-1) {
         parentGroupId=grp.id;
         stepStatus =grp.mainState.target==null?"firstStep":"labelIt";
         notifyListeners();

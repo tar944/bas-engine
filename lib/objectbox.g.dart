@@ -209,7 +209,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(15, 8892823931225835339),
       name: 'ObjectModel',
-      lastPropertyId: const IdUid(25, 6934286019042658826),
+      lastPropertyId: const IdUid(26, 447693223963496384),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -292,12 +292,12 @@ final _entities = <ModelEntity>[
             type: 1,
             flags: 0),
         ModelProperty(
-            id: const IdUid(25, 6934286019042658826),
-            name: 'srcImageId',
+            id: const IdUid(26, 447693223963496384),
+            name: 'srcObjectId',
             type: 11,
             flags: 520,
-            indexId: const IdUid(22, 4723096151288393785),
-            relationTarget: 'ImageModel')
+            indexId: const IdUid(23, 5855966450476248403),
+            relationTarget: 'ObjectModel')
       ],
       relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[]),
@@ -367,8 +367,8 @@ final _entities = <ModelEntity>[
             name: 'subObjects',
             targetId: const IdUid(15, 8892823931225835339)),
         ModelRelation(
-            id: const IdUid(30, 650003946365731690),
-            name: 'otherStates',
+            id: const IdUid(31, 2492633852371909747),
+            name: 'allStates',
             targetId: const IdUid(15, 8892823931225835339))
       ],
       backlinks: <ModelBacklink>[]),
@@ -450,8 +450,8 @@ ModelDefinition getObjectBoxModel() {
   final model = ModelInfo(
       entities: _entities,
       lastEntityId: const IdUid(17, 8566624654259097881),
-      lastIndexId: const IdUid(22, 4723096151288393785),
-      lastRelationId: const IdUid(30, 650003946365731690),
+      lastIndexId: const IdUid(23, 5855966450476248403),
+      lastRelationId: const IdUid(31, 2492633852371909747),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [
         5922885288332288138,
@@ -473,7 +473,8 @@ ModelDefinition getObjectBoxModel() {
         8485429454284523408,
         4390184275348585787,
         2867568999367445977,
-        5503554711709891192
+        5503554711709891192,
+        4723096151288393785
       ],
       retiredPropertyUids: const [
         4568898860801454124,
@@ -601,7 +602,8 @@ ModelDefinition getObjectBoxModel() {
         9165561462202068346,
         5080785029030309426,
         4745844637427822667,
-        4178048732557493644
+        4178048732557493644,
+        6934286019042658826
       ],
       retiredRelationUids: const [
         7096364116743183016,
@@ -616,7 +618,8 @@ ModelDefinition getObjectBoxModel() {
         6568521647494320726,
         1774651405903369676,
         6554159896701818121,
-        792537263070642319
+        792537263070642319,
+        650003946365731690
       ],
       modelVersion: 5,
       modelVersionParserMinimum: 5,
@@ -841,7 +844,7 @@ ModelDefinition getObjectBoxModel() {
     ObjectModel: EntityDefinition<ObjectModel>(
         model: _entities[4],
         toOneRelations: (ObjectModel object) =>
-            [object.image, object.label, object.srcImage],
+            [object.image, object.label, object.srcObject],
         toManyRelations: (ObjectModel object) => {},
         getId: (ObjectModel object) => object.id,
         setId: (ObjectModel object, int id) {
@@ -853,7 +856,7 @@ ModelDefinition getObjectBoxModel() {
           final actionTypeOffset = fbb.writeString(object.actionType);
           final typedTextOffset = fbb.writeString(object.typedText);
           final parentUUIDOffset = fbb.writeString(object.parentUUID);
-          fbb.startTable(26);
+          fbb.startTable(27);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, uuidOffset);
           fbb.addFloat64(2, object.left);
@@ -869,7 +872,7 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(21, parentUUIDOffset);
           fbb.addInt64(22, object.label.targetId);
           fbb.addBool(23, object.isNavTool);
-          fbb.addInt64(24, object.srcImage.targetId);
+          fbb.addInt64(25, object.srcObject.targetId);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -908,9 +911,9 @@ ModelDefinition getObjectBoxModel() {
           object.label.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 48, 0);
           object.label.attach(store);
-          object.srcImage.targetId =
-              const fb.Int64Reader().vTableGet(buffer, rootOffset, 52, 0);
-          object.srcImage.attach(store);
+          object.srcObject.targetId =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 54, 0);
+          object.srcObject.attach(store);
           return object;
         }),
     ImageGroupModel: EntityDefinition<ImageGroupModel>(
@@ -920,7 +923,7 @@ ModelDefinition getObjectBoxModel() {
         toManyRelations: (ImageGroupModel object) => {
               RelInfo<ImageGroupModel>.toMany(25, object.id): object.allGroups,
               RelInfo<ImageGroupModel>.toMany(26, object.id): object.subObjects,
-              RelInfo<ImageGroupModel>.toMany(30, object.id): object.otherStates
+              RelInfo<ImageGroupModel>.toMany(31, object.id): object.allStates
             },
         getId: (ImageGroupModel object) => object.id,
         setId: (ImageGroupModel object, int id) {
@@ -976,8 +979,8 @@ ModelDefinition getObjectBoxModel() {
               store, RelInfo<ImageGroupModel>.toMany(25, object.id));
           InternalToManyAccess.setRelInfo<ImageGroupModel>(object.subObjects,
               store, RelInfo<ImageGroupModel>.toMany(26, object.id));
-          InternalToManyAccess.setRelInfo<ImageGroupModel>(object.otherStates,
-              store, RelInfo<ImageGroupModel>.toMany(30, object.id));
+          InternalToManyAccess.setRelInfo<ImageGroupModel>(object.allStates,
+              store, RelInfo<ImageGroupModel>.toMany(31, object.id));
           return object;
         }),
     ProjectPartModel: EntityDefinition<ProjectPartModel>(
@@ -1229,9 +1232,9 @@ class ObjectModel_ {
   static final isNavTool =
       QueryBooleanProperty<ObjectModel>(_entities[4].properties[14]);
 
-  /// see [ObjectModel.srcImage]
-  static final srcImage =
-      QueryRelationToOne<ObjectModel, ImageModel>(_entities[4].properties[15]);
+  /// see [ObjectModel.srcObject]
+  static final srcObject =
+      QueryRelationToOne<ObjectModel, ObjectModel>(_entities[4].properties[15]);
 }
 
 /// [ImageGroupModel] entity fields to define ObjectBox queries.
@@ -1281,8 +1284,8 @@ class ImageGroupModel_ {
   static final subObjects = QueryRelationToMany<ImageGroupModel, ObjectModel>(
       _entities[5].relations[1]);
 
-  /// see [ImageGroupModel.otherStates]
-  static final otherStates = QueryRelationToMany<ImageGroupModel, ObjectModel>(
+  /// see [ImageGroupModel.allStates]
+  static final allStates = QueryRelationToMany<ImageGroupModel, ObjectModel>(
       _entities[5].relations[2]);
 }
 

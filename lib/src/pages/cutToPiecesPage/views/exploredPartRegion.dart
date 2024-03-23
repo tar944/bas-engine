@@ -102,7 +102,7 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text(Strings.selectAsMainRectangle,style: TextSystem.textM(Colors.white),),
+                      SizedBox(width:350,child: Text(Strings.selectAsMainRectangle,style: TextSystem.textM(Colors.white),)),
                       const SizedBox(height: 10,),
                       Row(
                         children: [
@@ -115,7 +115,7 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                                 height: Dimens.btnHeightBig,
                                 alignment: Alignment.center,
                                 child: Text(Strings.cancel)),
-                            onPressed: ()=> {}),
+                            onPressed: ()=> vm.onObjectActionCaller("removeRegion")),
                         const SizedBox(width: 10,),
                         Button(
                             style:ButtonStyle(
@@ -126,8 +126,8 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                                 height: Dimens.btnHeightBig,
                                 color: Colors.teal.dark,
                                 alignment: Alignment.center,
-                                child: Text(Strings.confirm)),
-                            onPressed: ()=>{}),
+                                child: Text(Strings.yes)),
+                            onPressed: ()=>vm.onObjectActionCaller("confirmRegion")),
                       ],)
                     ],
                   ))

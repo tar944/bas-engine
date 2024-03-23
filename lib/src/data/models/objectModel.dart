@@ -17,7 +17,7 @@ class ObjectModel {
   bool isNavTool = false;
   String typedText = "";
   int actX = -1, actY = -1;
-  final srcImage = ToOne<ImageModel>();
+  final srcObject = ToOne<ObjectModel>();
   final image = ToOne<ImageModel>();
   final label = ToOne<LabelModel>();
 

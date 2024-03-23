@@ -44,7 +44,7 @@ class LabelTag extends HookWidget {
                 const SizedBox(
                   width: 8,
                 ),
-                if (curGroup.otherStates.isNotEmpty&&!isSelected)
+                if (curGroup.allStates.isNotEmpty&&!isSelected)
                   Container(
                     width: Dimens.tabHeightSmall,
                     height: Dimens.tabHeightSmall,
@@ -53,11 +53,11 @@ class LabelTag extends HookWidget {
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.grey[180])),
                     child: Text(
-                      curGroup.otherStates.length.toString(),
+                      curGroup.allStates.length.toString(),
                       style: TextSystem.textM(Colors.orange.dark),
                     ),
                   ),
-                if(curGroup.otherStates.isNotEmpty&&isSelected)
+                if(curGroup.allStates.isNotEmpty&&isSelected)
                   Container(
                     width: Dimens.tabHeightSmall*2,
                     height: Dimens.tabHeightSmall,
@@ -72,7 +72,7 @@ class LabelTag extends HookWidget {
                       style: TextSystem.textM(Colors.white),
                     ),
                   ),
-                if(curGroup.otherStates.isEmpty)
+                if(curGroup.allStates.isEmpty)
                   IconButton(
                       style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
                       icon: Container(
@@ -93,7 +93,7 @@ class LabelTag extends HookWidget {
               ],
             ),
           ),
-          onPressed: curGroup.otherStates.isEmpty?null:()=>onLabelSelectedCaller(isSelected?"open&&${curGroup.id}":"choose&&${curGroup.id}")),
+          onPressed: curGroup.allStates.isEmpty?null:()=>onLabelSelectedCaller(isSelected?"open&&${curGroup.id}":"choose&&${curGroup.id}")),
     );
   }
 }

@@ -10,7 +10,6 @@ class PartRegionExplorer extends StatelessWidget {
       {
         Key? key,
         required this.onNewObjectCaller,
-        required this.onRegionActionCaller,
         required this.otherObjects,
         required this.itsObjects,
         required this.mainObject,
@@ -23,7 +22,6 @@ class PartRegionExplorer extends StatelessWidget {
   final ObjectModel mainObject;
   final bool isSimpleAction;
   final ValueSetter<ObjectModel> onNewObjectCaller;
-  final ValueSetter<String> onRegionActionCaller;
   String prjUUID;
 
   @override
@@ -36,8 +34,7 @@ class PartRegionExplorer extends StatelessWidget {
           otherObjects,
           itsObjects,
           isSimpleAction,
-          onNewObjectCaller,
-          onRegionActionCaller
+          onNewObjectCaller
       ),
     );
   }

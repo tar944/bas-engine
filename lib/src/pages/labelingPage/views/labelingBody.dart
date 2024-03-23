@@ -4,7 +4,6 @@ import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelingBodyViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/labelBodyTagLine.dart';
-import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/labelTag.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/objectItem.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';

@@ -76,7 +76,6 @@ class _View extends StatelessView<CutToPiecesViewModel> {
                           otherObjects: vm.otherStates.where((element) => element.parentUUID!=vm.curObject!.uuid).toList(),
                           itsObjects: vm.otherStates.where((element) => element.parentUUID==vm.curObject!.uuid).toList(),
                           onNewObjectCaller: vm.onNewPartCreatedHandler,
-                          onRegionActionCaller: vm.onRegionActionHandler,
                           prjUUID: vm.prjUUID,
                           isSimpleAction: vm.pageDuty!="drawMainRectangle",
                         ):Container(),
@@ -150,7 +149,7 @@ class _View extends StatelessView<CutToPiecesViewModel> {
                                           size: 25,
                                         ),
                                         onPressed: () => showFlyImagesList(
-                                            vm.group!.otherStates,
+                                            vm.group!.allStates,
                                             vm.curObject!.id!,
                                             vm.moreController,
                                             FlyoutPlacementMode.left,

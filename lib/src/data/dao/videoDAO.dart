@@ -3,7 +3,6 @@ import 'package:bas_dataset_generator_engine/objectbox.g.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
-import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 
 class VideoDAO{
 
