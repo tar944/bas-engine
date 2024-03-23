@@ -10,18 +10,20 @@ class PartRegionExplorer extends StatelessWidget {
       {
         Key? key,
         required this.onNewObjectCaller,
+        required this.onRegionActionCaller,
         required this.otherObjects,
         required this.itsObjects,
         required this.mainObject,
         required this.prjUUID,
-        required this.showOthers
+        required this.isSimpleAction
       }) : super(key: key);
 
   final List<ObjectModel> otherObjects;
   final List<ObjectModel> itsObjects;
   final ObjectModel mainObject;
-  final bool showOthers;
+  final bool isSimpleAction;
   final ValueSetter<ObjectModel> onNewObjectCaller;
+  final ValueSetter<String> onRegionActionCaller;
   String prjUUID;
 
   @override
@@ -33,8 +35,9 @@ class PartRegionExplorer extends StatelessWidget {
           mainObject,
           otherObjects,
           itsObjects,
-          showOthers,
-          onNewObjectCaller
+          isSimpleAction,
+          onNewObjectCaller,
+          onRegionActionCaller
       ),
     );
   }
@@ -53,9 +56,9 @@ class _View extends StatelessView<PartRegionViewModel> {
             left: 0,
             right: 0,
             child: Listener(
-              onPointerDown: (e) => vm.pointerDownHandler(e),
-              onPointerMove: (e) => vm.pointerMoveHandler(e),
-              onPointerUp: (e) => vm.pointerUpHandler(e),
+              onPointerDown: vm.allowDrawing?(e) => vm.pointerDownHandler(e):null,
+              onPointerMove: vm.allowDrawing?(e) => vm.pointerMoveHandler(e):null,
+              onPointerUp: vm.allowDrawing?(e) => vm.pointerUpHandler(e):null,
               child: CustomPaint(
                 painter: RectanglePainter(
                     object: ObjectModel(
@@ -65,25 +68,16 @@ class _View extends StatelessView<PartRegionViewModel> {
               ),
             )),
         ...vm.otherObjects.map((item) {
-          return vm.showOthers?Positioned(
+          return Positioned(
             top: item.top,
             left: item.left,
             child: ExploredPartRegion(
               mainObject:  vm.mainObject,
               curObject: item,
               isMine: false,
+              isSimpleAction: vm.isSimpleAction,
               controller: vm.objectController,
               onObjectActionCaller: (e) => vm.onObjectActionHandler(e),
-            ),
-          ) : Positioned(
-            top: item.top,
-            left: item.left,
-            child: Container(
-              width: 15,
-              height: 15,
-              decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(15)),
-                  color: Colors.magenta.withOpacity(.3)),
             ),
           );
         }).toList(),
@@ -94,6 +88,7 @@ class _View extends StatelessView<PartRegionViewModel> {
                   child: ExploredPartRegion(
                     mainObject: vm.mainObject,
                     curObject: item,
+                    isSimpleAction: vm.isSimpleAction,
                     isMine: true,
                     controller: vm.objectController,
                     onObjectActionCaller: (e) => vm.onObjectActionHandler(e),

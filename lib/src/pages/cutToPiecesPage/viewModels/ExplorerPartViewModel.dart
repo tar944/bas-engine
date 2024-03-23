@@ -8,10 +8,11 @@ class ExplorerPartViewModel extends ViewModel {
   ObjectModel curObject,mainObject;
   ValueSetter<String> onObjectActionCaller;
   bool isMine;
+  bool isSimpleAction;
   bool isMaximize=true;
   RegionRecController controller;
 
-  ExplorerPartViewModel(this.curObject,this.mainObject,this.isMine, this.controller,this.onObjectActionCaller);
+  ExplorerPartViewModel(this.curObject,this.mainObject,this.isMine,this.isSimpleAction, this.controller,this.onObjectActionCaller);
 
   onShowHandler()async{
     isMaximize= !isMaximize;

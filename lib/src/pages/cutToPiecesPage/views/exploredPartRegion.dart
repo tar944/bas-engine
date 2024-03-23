@@ -1,4 +1,6 @@
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/controllers/regionRecController.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
@@ -13,20 +15,21 @@ class ExploredPartRegion extends StatelessWidget {
     required this.curObject,
     required this.mainObject,
     required this.isMine,
+    required this.isSimpleAction,
     required this.controller,
     required this.onObjectActionCaller,
   }) : super(key: key);
 
-  ObjectModel curObject, mainObject;
-  ValueSetter<String> onObjectActionCaller;
-  bool isMine;
-  RegionRecController controller;
+  final ObjectModel curObject, mainObject;
+  final ValueSetter<String> onObjectActionCaller;
+  final bool isMine,isSimpleAction;
+  final RegionRecController controller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: ExplorerPartViewModel(curObject, mainObject, isMine,
+      viewModel: ExplorerPartViewModel(curObject, mainObject, isMine,isSimpleAction,
           controller, onObjectActionCaller),
     );
   }
@@ -58,38 +61,76 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                   color: vm.isMine?Colors.blue.dark:Colors.orange.dark,
                   isActive: vm.controller.activeID == vm.curObject.id),
             ),
-            Positioned(
-                right: 5,
-                bottom: 5,
-                child: Row(
-                  children: [
-                    vm.isMaximize&&vm.isMine?
-                    FlyoutTarget(
-                      key: GlobalKey(),
-                      controller: controller,
-                      child:
+            if(vm.isSimpleAction)
+              Positioned(
+                  right: 5,
+                  bottom: 5,
+                  child: Row(
+                    children: [
+                      vm.isMaximize&&vm.isMine?
+                      FlyoutTarget(
+                        key: GlobalKey(),
+                        controller: controller,
+                        child:
+                        IconButton(
+                            icon: Icon(
+                              FluentIcons.delete,
+                              color: Colors.red,
+                            ),
+                            onPressed: () => showFlyDelete(
+                                Strings.deleteObject,
+                                Strings.yes,
+                                controller,
+                                FlyoutPlacementMode.topCenter,
+                                vm.curObject.id!,
+                                vm.onObjectActionCaller)),
+                      ):
+                      Container(),
                       IconButton(
                           icon: Icon(
-                            FluentIcons.delete,
-                            color: Colors.red,
+                            vm.isMaximize?FluentIcons.arrow_up_right_mirrored8:FluentIcons.arrow_down_right8,
+                            color: Colors.white,
                           ),
-                          onPressed: () => showFlyDelete(
-                              Strings.deleteObject,
-                              Strings.yes,
-                              controller,
-                              FlyoutPlacementMode.topCenter,
-                              vm.curObject.id!,
-                              vm.onObjectActionCaller)),
-                    ):
-                    Container(),
-                    IconButton(
-                        icon: Icon(
-                          vm.isMaximize?FluentIcons.arrow_up_right_mirrored8:FluentIcons.arrow_down_right8,
-                          color: Colors.white,
-                        ),
-                        onPressed: () => vm.onShowHandler())
-                  ],
-                ))
+                          onPressed: () => vm.onShowHandler())
+                    ],
+                  )),
+            if(!vm.isSimpleAction)
+              Positioned(
+                  left: 5,
+                  top: 5,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(Strings.selectAsMainRectangle,style: TextSystem.textM(Colors.white),),
+                      const SizedBox(height: 10,),
+                      Row(
+                        children: [
+                        Button(
+                            style:ButtonStyle(
+                                padding: ButtonState.all(EdgeInsets.zero)
+                            ),
+                            child: Container(
+                                width: Dimens.btnWidthNormal,
+                                height: Dimens.btnHeightBig,
+                                alignment: Alignment.center,
+                                child: Text(Strings.cancel)),
+                            onPressed: ()=> {}),
+                        const SizedBox(width: 10,),
+                        Button(
+                            style:ButtonStyle(
+                                padding: ButtonState.all(EdgeInsets.zero)
+                            ),
+                            child: Container(
+                                width: Dimens.btnWidthNormal,
+                                height: Dimens.btnHeightBig,
+                                color: Colors.teal.dark,
+                                alignment: Alignment.center,
+                                child: Text(Strings.confirm)),
+                            onPressed: ()=>{}),
+                      ],)
+                    ],
+                  ))
           ],
         ),
       ),

@@ -24,6 +24,7 @@ class CutToPiecesViewModel extends ViewModel {
   ImageGroupModel? group;
   ObjectModel? curObject;
   bool isShowAll=true;
+  String pageDuty="cutting";
   List<ObjectModel>otherStates=[];
   final int groupId,objId;
   final String title,partUUID,prjUUID;
@@ -57,6 +58,9 @@ class CutToPiecesViewModel extends ViewModel {
       }
     }
 
+    if(group!.mainState.target==null){
+      pageDuty="drawMainRectangle";
+    }
     curObject=group!.otherStates[0];
     for (final object in group!.otherStates) {
       if (object.id==objId) {
@@ -199,5 +203,8 @@ class CutToPiecesViewModel extends ViewModel {
     await ImageGroupDAO().addSubObject(groupId, newObject);
     otherStates.add(newObject);
     notifyListeners();
+  }
+  onRegionActionHandler(String action){
+
   }
 }

@@ -15,9 +15,10 @@ class PartRegionViewModel extends ViewModel {
   ObjectModel? curObject;
   ObjectModel mainObject;
   final ValueSetter<ObjectModel> onNewObjectCaller;
+  final ValueSetter<String> onRectangleActionCaller;
   String prjUUID;
-  bool showOthers;
-
+  bool allowDrawing=true;
+  final bool isSimpleAction;
   double left = 0.0, top = 0.0, right = 0.0, bottom = 0.0;
   bool isPainting = false;
 
@@ -26,8 +27,9 @@ class PartRegionViewModel extends ViewModel {
       this.mainObject,
       this.otherObjects,
       this.itsObjects,
-      this.showOthers,
-      this.onNewObjectCaller);
+      this.isSimpleAction,
+      this.onNewObjectCaller,
+      this.onRectangleActionCaller);
 
 
   @override
@@ -81,7 +83,12 @@ class PartRegionViewModel extends ViewModel {
         top > bottom ? bottom : top,
         top > bottom ? top : bottom,
         "");
-    onNewObjectCaller(part);
+    if(!isSimpleAction){
+      allowDrawing=false;
+      itsObjects.add(part);
+    }else{
+      onNewObjectCaller(part);
+    }
     top = 0.0;
     left = 0.0;
     right = 0.0;

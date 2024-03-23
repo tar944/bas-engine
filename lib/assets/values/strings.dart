@@ -2,6 +2,7 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String selectAsMainRectangle="Are you sure that you want to select this rectangle for main state?";
   static const String firstGuideTitle="Chose Main state";
   static const String firstGuide="At this stage, you should specify the range of this Main state with drawing a rectangle by using your mouse. ";
   static const String ok="Ok";
