@@ -53,6 +53,7 @@ class _View extends StatelessView<CheckOtherStateViewModel> {
                     title: Strings.dlgOtherStateTitle,
                     onActionListener: vm.onCloseClicked,
                   ),
+                  vm.allImages.isNotEmpty?
                   Stack(children: [
                     Padding(
                       padding: const EdgeInsets.only(left: 20.0),
@@ -95,9 +96,9 @@ class _View extends StatelessView<CheckOtherStateViewModel> {
                                         icon: Stack(
                                           children: [
                                             Container(
-                                            decoration: BoxDecoration(
+                                              decoration: BoxDecoration(
                                               image: DecorationImage(
-                                                image: Image.file(File(e.image.target!.path!)).image,
+                                                image: Image.memory(vm.allImages[vm.curImage]).image,
                                                 fit: BoxFit.fitWidth,
                                               ),
                                             ),
@@ -124,7 +125,20 @@ class _View extends StatelessView<CheckOtherStateViewModel> {
                           effect: ScrollingDotsEffect(dotWidth: 10,dotHeight: 10,spacing:5,activeDotColor: Colors.teal.dark)
                         )
                     )
-                  ]),
+                  ]):
+                  const SizedBox(
+                    width: Dimens.dialogXLargeWidth - 40,
+                    height: Dimens.dialogXLargeHeight - 160,
+                    child: Expanded(
+                      child: Column(
+                        children: [
+                          ProgressRing(),
+                          SizedBox(height: 20,),
+                          Text(Strings.waitingForImageProgressing)
+                        ],
+                      ),
+                    ),
+                  ),
                   Expanded(
                       child: Container(
                         decoration: BoxDecoration(

@@ -162,18 +162,10 @@ class MainPageViewModel extends ViewModel with WindowListener {
 
   onNavigationChanged(HeaderTabs selTab) {
     if(selTab==HeaderTabs.export){
-      if(curPart==null){
-        showDialog(
-            context: context,
-            barrierDismissible: true,
-            builder: (context) => const DlgExport(prjName: "photoshop ui",));
-      }else{
-        showDialog(
-            context: context,
-            barrierDismissible: true,
-            builder: (context) => DlgCheckOtherState(curObject:curPart!.allObjects[0],allObjects:curPart!.allObjects,));
-      }
-
+      showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) => const DlgExport(prjName: "photoshop ui",));
     }else if (selTab == HeaderTabs.addProject) {
       projectController.call();
     } else if (selTab == HeaderTabs.addPart) {

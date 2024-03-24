@@ -8,6 +8,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dar
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgCheckOtherState.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLabelingManagement.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -42,6 +43,20 @@ class LabelingBodyViewModel extends ViewModel {
       tagLineState =grp.state==GroupState.findMainState.name?"firstStep":"show";
     }
     notifyListeners();
+  }
+
+
+  @override
+  void onMount() async{
+    if(grpUUID!=""){
+      var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+      if(grp!.state==GroupState.editOtherStates.name){
+        showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) => DlgCheckOtherState(curObject:grp.mainState.target!,allObjects:grp.allStates,));
+      }
+    }
   }
 
   onLabelActionHandler(String action)async{
@@ -145,7 +160,6 @@ class LabelingBodyViewModel extends ViewModel {
           await ImageGroupDAO().addObject(int.parse(act[1]), obj);
         }
         subGroups[subGroups.indexWhere((element) => element.id==int.parse(act[1]))].allStates.add(obj);
-        // objects.removeWhere((element) => element.id==obj.id);
         notifyListeners();
         break;
       case 'removeFromGroup':
@@ -160,7 +174,6 @@ class LabelingBodyViewModel extends ViewModel {
           await ImageGroupDAO().removeObject(int.parse(act[1]), obj);
         }
         subGroups[subGroups.indexWhere((element) => element.id==int.parse(act[1]))].allStates.removeWhere((element) => element.id==obj.id);
-        // objects.removeWhere((element) => element.id==obj.id);
         notifyListeners();
         break;
       case 'delete':

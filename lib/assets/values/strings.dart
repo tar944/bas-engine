@@ -2,6 +2,7 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String waitingForImageProgressing="Please wait for image processing...";
   static const String no="No";
   static const String srcState="Source state";
   static const String curState="Current state";
