@@ -44,7 +44,7 @@ class ImageGroupDAO {
   addMainState(int groupId,ObjectModel obj)async{
     var group = await getDetails(groupId);
     group!.mainState.target=obj;
-    group.allStates.removeWhere((element) => element.id!=obj.srcObject.target!.id);
+    group.allStates.removeWhere((element) => element.id==obj.srcObject.target!.id);
     group.allStates.add(obj);
     group.state=GroupState.editOtherStates.name;
     update(group);

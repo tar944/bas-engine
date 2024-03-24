@@ -57,6 +57,7 @@ class PartRegionViewModel extends ViewModel {
   onObjectActionHandler(String action)async{
     if(action=="removeRegion"){
       itsObjects=[];
+      allowDrawing=true;
       notifyListeners();
     }else if(action=="confirmRegion"){
       onNewObjectCaller(itsObjects[0]);

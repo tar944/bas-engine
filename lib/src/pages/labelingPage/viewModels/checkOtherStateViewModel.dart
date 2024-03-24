@@ -21,7 +21,7 @@ class CheckOtherStateViewModel extends ViewModel {
   nextImage(){
     if(curImage<allObjects.length-1) {
       curImage+=1;
-      controller.jumpToPage(curImage);
+      controller.nextPage(duration: const Duration(milliseconds: 300), curve:Curves.bounceIn );
       notifyListeners();
     }
   }
@@ -30,6 +30,7 @@ class CheckOtherStateViewModel extends ViewModel {
     if(curImage>0) {
       curImage-=1;
       controller.jumpToPage(curImage);
+      controller.previousPage(duration: const Duration(milliseconds: 300), curve:Curves.bounceIn );
       notifyListeners();
     }
   }

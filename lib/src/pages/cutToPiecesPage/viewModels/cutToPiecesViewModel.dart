@@ -1,13 +1,16 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/dlgGuide.dart';
+import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -16,6 +19,7 @@ import 'package:pmvvm/pmvvm.dart';
 import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:image/image.dart' as i;
+import 'package:path/path.dart' as p;
 
 class CutToPiecesViewModel extends ViewModel {
 
@@ -200,12 +204,28 @@ class CutToPiecesViewModel extends ViewModel {
     newObject.uuid=const Uuid().v4();
     newObject.parentUUID=curObject!.uuid;
     newObject.srcObject.target=curObject!;
-    newObject.id=await ObjectDAO().addObject(newObject);
     if(pageDuty=="cutting"){
+      newObject.id=await ObjectDAO().addObject(newObject);
       await ImageGroupDAO().addSubObject(groupId, newObject);
       otherStates.add(newObject);
       notifyListeners();
     }else if(pageDuty=="drawMainRectangle"){
+      final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
+      final cmd = i.Command()
+        ..decodeImageFile(curObject!.image.target!.path!)
+        ..copyCrop(
+            x: getX(newObject.left.toInt()),
+            y: getY(newObject.top.toInt()),
+            width: (getX(newObject.right.toInt()) - getX(newObject.left.toInt()))
+                .abs()
+                .toInt(),
+            height: (getY(newObject.bottom.toInt()) - getY(newObject.top.toInt())))
+        ..writeToFile(path);
+      await cmd.executeThread();
+      var img = ImageModel(-1, const Uuid().v4(), newObject.uuid, p.basename(path), path);
+      img.id =await ImageDAO().add(img);
+      newObject.image.target=img;
+      newObject.id=await ObjectDAO().addObject(newObject);
       await ImageGroupDAO().addMainState(groupId, newObject);
       onBackClicked();
     }

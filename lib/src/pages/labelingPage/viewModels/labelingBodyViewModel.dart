@@ -145,7 +145,7 @@ class LabelingBodyViewModel extends ViewModel {
           await ImageGroupDAO().addObject(int.parse(act[1]), obj);
         }
         subGroups[subGroups.indexWhere((element) => element.id==int.parse(act[1]))].allStates.add(obj);
-        objects.removeWhere((element) => element.id==obj.id);
+        // objects.removeWhere((element) => element.id==obj.id);
         notifyListeners();
         break;
       case 'removeFromGroup':
@@ -160,13 +160,13 @@ class LabelingBodyViewModel extends ViewModel {
           await ImageGroupDAO().removeObject(int.parse(act[1]), obj);
         }
         subGroups[subGroups.indexWhere((element) => element.id==int.parse(act[1]))].allStates.removeWhere((element) => element.id==obj.id);
-        objects.removeWhere((element) => element.id==obj.id);
+        // objects.removeWhere((element) => element.id==obj.id);
         notifyListeners();
         break;
       case 'delete':
         var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[1]));
         await ObjectDAO().deleteObject(obj!);
-        objects.remove(obj);
+        objects.removeWhere((element) => element.id==obj.id);
         notifyListeners();
         break;
 

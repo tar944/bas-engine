@@ -50,10 +50,7 @@ class _View extends StatelessView<ExplorerPartViewModel> {
           children: [
             CustomPaint(
               painter: RectanglePainter(
-                  object: ObjectModel(
-                      0,
-                      "",
-                      0.0,
+                  object: ObjectModel(0, "", 0.0,
                       vm.isMaximize?vm.curObject.right - vm.curObject.left:40,
                       0.0,
                       vm.isMaximize?vm.curObject.bottom - vm.curObject.top:40,
@@ -98,38 +95,50 @@ class _View extends StatelessView<ExplorerPartViewModel> {
               Positioned(
                   left: 5,
                   top: 5,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(width:350,child: Text(Strings.selectAsMainRectangle,style: TextSystem.textM(Colors.white),)),
-                      const SizedBox(height: 10,),
-                      Row(
+                  child: Container(
+                    width: 300,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey[170]),
+                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      color: Colors.grey[190]
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
-                        Button(
-                            style:ButtonStyle(
-                                padding: ButtonState.all(EdgeInsets.zero)
-                            ),
-                            child: Container(
-                                width: Dimens.btnWidthNormal,
-                                height: Dimens.btnHeightBig,
-                                alignment: Alignment.center,
-                                child: Text(Strings.cancel)),
-                            onPressed: ()=> vm.onObjectActionCaller("removeRegion")),
-                        const SizedBox(width: 10,),
-                        Button(
-                            style:ButtonStyle(
-                                padding: ButtonState.all(EdgeInsets.zero)
-                            ),
-                            child: Container(
-                                width: Dimens.btnWidthNormal,
-                                height: Dimens.btnHeightBig,
-                                color: Colors.teal.dark,
-                                alignment: Alignment.center,
-                                child: Text(Strings.yes)),
-                            onPressed: ()=>vm.onObjectActionCaller("confirmRegion")),
-                      ],)
-                    ],
+                          SizedBox(width:350,child: Text(Strings.selectAsMainRectangle,style: TextSystem.textM(Colors.white),)),
+                          const SizedBox(height: 10,),
+                          Row(
+                            children: [
+                            Button(
+                                style:ButtonStyle(
+                                    padding: ButtonState.all(EdgeInsets.zero)
+                                ),
+                                child: Container(
+                                    width: Dimens.btnWidthNormal,
+                                    height: Dimens.btnHeightBig,
+                                    alignment: Alignment.center,
+                                    child: const Text(Strings.cancel)),
+                                onPressed: ()=> vm.onObjectActionCaller("removeRegion")),
+                            const SizedBox(width: 10,),
+                            Button(
+                                style:ButtonStyle(
+                                    padding: ButtonState.all(EdgeInsets.zero)
+                                ),
+                                child: Container(
+                                    width: Dimens.btnWidthNormal,
+                                    height: Dimens.btnHeightBig,
+                                    color: Colors.teal.dark,
+                                    alignment: Alignment.center,
+                                    child: Text(Strings.yes)),
+                                onPressed: ()=>vm.onObjectActionCaller("confirmRegion")),
+                          ],)
+                        ],
+                      ),
+                    ),
                   ))
           ],
         ),
