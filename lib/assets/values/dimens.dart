@@ -54,6 +54,7 @@ class Dimens {
   static const double dialogNormalWidth = 500;
   static const double dialogBigWidth = 600;
   static const double dialogLargeWidth = 800;
+  static const double dialogXLargeWidth = 1000;
   static const double dialogSmallHeight = 220;
   static const double dialogNormalHeight = 350;
   static const double dialogLargeHeight = 410;

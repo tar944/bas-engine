@@ -8,6 +8,7 @@ import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgCheckOtherState.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/dlgExport.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
@@ -18,7 +19,7 @@ import 'package:window_manager/window_manager.dart';
 class MainPageViewModel extends ViewModel with WindowListener {
   bool isLoading = false;
   String guideText = "";
-  final PageController controller = PageController();
+  final controller = PageController();
   HeaderTabs curTab = HeaderTabs.project;
   ProjectModel? curProject;
   ProjectPartModel? curPart;
@@ -161,10 +162,18 @@ class MainPageViewModel extends ViewModel with WindowListener {
 
   onNavigationChanged(HeaderTabs selTab) {
     if(selTab==HeaderTabs.export){
-      showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) => const DlgExport(prjName: "photoshop ui",));
+      if(curPart==null){
+        showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) => const DlgExport(prjName: "photoshop ui",));
+      }else{
+        showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) => DlgCheckOtherState(curObject:curPart!.allObjects[0],allObjects:curPart!.allObjects,));
+      }
+
     }else if (selTab == HeaderTabs.addProject) {
       projectController.call();
     } else if (selTab == HeaderTabs.addPart) {
