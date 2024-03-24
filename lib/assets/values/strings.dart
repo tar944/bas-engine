@@ -2,6 +2,19 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String exportFormat="Export format:";
+  static const String projectName="Project name";
+  static const String uploadWarning="Your data will upload in ZIP format with using the post method.";
+  static const String uploadDomain="Upload link:";
+  static const String activeAuth="Active auth:";
+  static const String domainHint="Enter your server link here";
+  static const String authTokenHint="Enter your auth token here";
+  static const String dirPathHint="Type export directory path here";
+  static const String dirPath="Directory path:";
+  static const String inPc="In this PC";
+  static const String inAServer="In a server";
+  static const String export="Export project";
+  static const String dlgExportTitle="Export data set";
   static const String selectAsMainRectangle="Are you sure that you want to select this rectangle for main state?";
   static const String firstGuideTitle="Chose Main state";
   static const String firstGuide="At this stage, you should specify the range of this Main state with drawing a rectangle by using your mouse. ";

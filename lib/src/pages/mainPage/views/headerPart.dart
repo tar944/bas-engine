@@ -104,6 +104,27 @@ class _View extends StatelessView<HeaderViewModel> {
                     status: vm.curTab.name == HeaderTabs.objectLabeling.name
                         ? "active"
                         : "notActive"),
+              const Spacer(),
+              if(vm.curTab!=HeaderTabs.project)
+                Padding(
+                  padding: const EdgeInsets.only(top: 10.0,right: 10.0),
+                  child: Button(
+                    onPressed: ()=>vm.onActionCaller(HeaderTabs.export),
+                    style: ButtonStyle(
+                      backgroundColor: ButtonState.all(Colors.orange),
+                    ),
+                    child: Container(
+                      height: Dimens.tabHeightSmall,
+                      width: Dimens.tabWidth,
+                      alignment: Alignment.center,
+                      child: Text(
+                        Strings.export,
+                        style: TextSystem.textM(Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              const SizedBox(width: 15,)
             ],
           ),
           Padding(

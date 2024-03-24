@@ -5,7 +5,9 @@ enum HeaderTabs {
   objectLabeling,
   addProject,
   addGroup,
-  addPart}
+  addPart,
+  export
+}
 
 enum GroupState {
   findMainState,

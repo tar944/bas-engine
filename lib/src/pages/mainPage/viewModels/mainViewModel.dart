@@ -8,6 +8,7 @@ import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/dlgExport.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -159,7 +160,12 @@ class MainPageViewModel extends ViewModel with WindowListener {
   }
 
   onNavigationChanged(HeaderTabs selTab) {
-    if (selTab == HeaderTabs.addProject) {
+    if(selTab==HeaderTabs.export){
+      showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) => const DlgExport(prjName: "photoshop ui",));
+    }else if (selTab == HeaderTabs.addProject) {
       projectController.call();
     } else if (selTab == HeaderTabs.addPart) {
       partController.call();
