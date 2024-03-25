@@ -17,11 +17,13 @@ class ObjectItem extends StatelessWidget {
         required this.allGroups,
         required this.object,
         required this.stepStatus,
+        required this.isMainObject,
         required this.onActionCaller})
       : super(key: key);
 
   final ObjectModel object;
   final String stepStatus;
+  final bool isMainObject;
   final List<ImageGroupModel> allGroups;
   final ValueSetter<String> onActionCaller;
 
@@ -30,7 +32,7 @@ class ObjectItem extends StatelessWidget {
     return MVVM(
       view: () => const _View(),
       viewModel:
-          ObjectItemViewModel( allGroups,stepStatus, object, onActionCaller),
+          ObjectItemViewModel( allGroups,stepStatus, object,isMainObject, onActionCaller),
     );
   }
 }
@@ -142,7 +144,16 @@ class _View extends StatelessView<ObjectItemViewModel> {
                 Positioned(
                   left: 5,
                   top: 5,
-                  child: FlyoutTarget(
+                  child: vm.isMainObject?
+                  Container(
+                    width: 40,
+                    height: 40,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[180].withOpacity(0.7),
+                      borderRadius: BorderRadius.all(Radius.circular(5.0))
+                    ),
+                      child: Icon(FluentIcons.crown_solid,size: 22,color: Colors.orange.lightest,)):
+                  FlyoutTarget(
                     key: GlobalKey(),
                     controller: controller,
                     child: IconButton(

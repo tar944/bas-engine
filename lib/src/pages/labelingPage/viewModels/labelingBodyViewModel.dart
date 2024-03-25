@@ -40,7 +40,7 @@ class LabelingBodyViewModel extends ViewModel {
     }else{
       var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
       subGroups=grp!.allGroups;
-      tagLineState =grp.state==GroupState.findMainState.name?"firstStep":"show";
+      tagLineState =grp.state==GroupState.findMainState.name?"firstStep": grp.state==GroupState.findSubObjects.name?"secondStep":"show";
     }
     notifyListeners();
   }
@@ -191,6 +191,19 @@ class LabelingBodyViewModel extends ViewModel {
         break;
 
     }
+  }
+
+  bool isMainObject(ObjectModel obj){
+    if(curGroup!=null&&curGroup!.mainState.target!=null){
+      return curGroup!.mainState.target!.id==obj.id;
+    }else{
+      for(var grp in subGroups){
+        if(grp.mainState.target!=null&&grp.mainState.target!.id==obj.id){
+          return true;
+        }
+      }
+    }
+    return false;
   }
 
 }

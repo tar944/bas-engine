@@ -2,6 +2,7 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String warnRemoveMainObject="You can not remove main object from its group.";
   static const String objectSorted="This image has been sorted";
   static const String waitingForImageProgressing="Please wait for image processing...";
   static const String no="No";
@@ -27,6 +28,7 @@ class Strings{
   static const String ok="Ok";
   static const String GotIt="Got it";
   static const String groupFirstStep="At first you should chose one of below states as main state of this group.";
+  static const String groupSecondStep="Now you should start to cut this object to sub objects.";
   static const String open="Open";
   static const String errRemoveGroup="You can not remove group with contents";
   static const String labelFirstStep="First please chose a label from 👆";

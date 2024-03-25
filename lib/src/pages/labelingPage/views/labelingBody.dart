@@ -5,6 +5,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelingBodyViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/labelBodyTagLine.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/objectItem.dart';
+import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pmvvm/pmvvm.dart';
@@ -55,7 +56,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                     subGroups: vm.subGroups,
                     curGroup: vm.curGroup,
                     onLabelActionHandler: vm.onLabelActionHandler),
-              if(vm.tagLineState=="firstStep")
+              if(vm.tagLineState!="show")
                 Row(
                   children: [
                     Container(
@@ -72,7 +73,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                       ),
                     ),
                     const SizedBox(width: 10,),
-                    const Text(Strings.groupFirstStep),
+                    Text(vm.tagLineState=="firstStep"?Strings.groupFirstStep:Strings.groupSecondStep),
                   ],
                 ),
               Expanded(
@@ -93,7 +94,8 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                               .map((item) => ObjectItem(
                                     key: GlobalKey(),
                                     allGroups: vm.subGroups,
-                                    stepStatus: vm.tagLineState=="firstStep"?"firstStep":"hide",
+                                    stepStatus: vm.tagLineState=="secondStep"?"labelIt":vm.tagLineState=="firstStep"?"firstStep":"hide",
+                                    isMainObject: vm.isMainObject(item),
                                     object: item,
                                     onActionCaller: vm.onObjectActionHandler,
                                   ))
