@@ -7,7 +7,9 @@ import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
+import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pmvvm/pmvvm.dart';
 import 'package:image/image.dart' as i;
 import 'package:path/path.dart' as p;
@@ -21,6 +23,7 @@ class CheckOtherStateViewModel extends ViewModel {
   final int groupId;
   String prjUUID,partUUID;
   List<Uint8List> allImages=[];
+  List<int> finishedObjectsId =[];
   final List<ObjectModel> allObjects;
   final ObjectModel curObject;
 
@@ -74,8 +77,13 @@ class CheckOtherStateViewModel extends ViewModel {
         await ImageGroupDAO().addSubObject(grp!.id, allObjects[curImage]);
       }
     }
-    allImages.removeAt(curImage);
-    curImage--;
+    finishedObjectsId.add(allObjects[curImage].id!);
+    if(finishedObjectsId.length==allImages.length){
+      var grp = await ImageGroupDAO().getDetails(groupId);
+      grp!.state= GroupState.findSubObjects.name;
+      await ImageGroupDAO().update(grp);
+      onCloseClicked();
+    }
     nextImage();
   }
 
@@ -91,7 +99,15 @@ class CheckOtherStateViewModel extends ViewModel {
     await cmd.executeThread();
     return cmd.outputBytes;
   }
-  
+
+  bool isObjectDone(){
+    if(finishedObjectsId.isNotEmpty
+        &&finishedObjectsId.contains(allObjects[curImage].id)){
+      return true;
+    }
+    return false;
+  }
+
   previousImage(){
     if(curImage>0) {
       curImage-=1;

@@ -147,6 +147,7 @@ class _View extends StatelessView<CheckOtherStateViewModel> {
                       ),
                     ),
                   ),
+                  vm.allImages.isNotEmpty?
                   Expanded(
                       child: Container(
                         decoration: BoxDecoration(
@@ -163,51 +164,62 @@ class _View extends StatelessView<CheckOtherStateViewModel> {
                                 ),
                                 icon: const Icon(FluentIcons.chevron_left,size: 20,),
                                 onPressed: ()=>vm.previousImage()),
-                            Padding(
-                              padding: const EdgeInsets.only(left:10.0,right: 10.0),
-                              child: Button(
-                                onPressed: () {},
-                                style: ButtonStyle(
-                                  backgroundColor: ButtonState.all(Colors.grey[160]),
-                                ),
-                                child: Container(
-                                  height: Dimens.tabHeightSmall,
-                                  width: Dimens.btnWidthNormal,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    Strings.no,
-                                    style: TextSystem.textM(Colors.white),
+                            if(!vm.isObjectDone())
+                              ...[
+                                Padding(
+                                  padding: const EdgeInsets.only(left:10.0,right: 10.0),
+                                  child: Button(
+                                    onPressed: () =>vm.actionBtnHandler("no"),
+                                    style: ButtonStyle(
+                                      backgroundColor: ButtonState.all(Colors.grey[160]),
+                                    ),
+                                    child: Container(
+                                      height: Dimens.tabHeightSmall,
+                                      width: Dimens.btnWidthNormal,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        Strings.no,
+                                        style: TextSystem.textM(Colors.white),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.only(left: 10.0,right: 10.0),
-                              child: Button(
-                                onPressed: () {},
-                                style: ButtonStyle(
-                                  backgroundColor: ButtonState.all(Colors.orange),
-                                ),
-                                child: Container(
-                                  height: Dimens.tabHeightSmall,
-                                  width: Dimens.btnWidthNormal,
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    Strings.yes,
-                                    style: TextSystem.textM(Colors.white),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 10.0,right: 10.0),
+                                  child: Button(
+                                    onPressed: ()=>vm.actionBtnHandler("yes"),
+                                    style: ButtonStyle(
+                                      backgroundColor: ButtonState.all(Colors.orange),
+                                    ),
+                                    child: Container(
+                                      height: Dimens.tabHeightSmall,
+                                      width: Dimens.btnWidthNormal,
+                                      alignment: Alignment.center,
+                                      child: Text(
+                                        Strings.yes,
+                                        style: TextSystem.textM(Colors.white),
+                                      ),
+                                    ),
                                   ),
                                 ),
+                              ],
+                            if(vm.isObjectDone())
+                              Padding(
+                                padding: const EdgeInsets.only(left: 30,right: 30),
+                                child: Text(Strings.objectSorted,style: TextSystem.textM(Colors.white),),
                               ),
-                            ),
                             IconButton(
-                              style: ButtonStyle(
+                                style: ButtonStyle(
                                 padding: ButtonState.all(const EdgeInsets.all(15))
                               ),
-                                icon: const Icon(FluentIcons.chevron_right,size: 20,), onPressed: ()=>vm.nextImage()),
+                                icon: const Icon(FluentIcons.chevron_right,size: 20,),
+                                onPressed: ()=>vm.nextImage()
+                            ),
                           ],
                         ),
                       )
-                  )
+                  ):
+                  Container()
                 ],
               ),
             )),

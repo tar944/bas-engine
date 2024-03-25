@@ -86,9 +86,7 @@ class LabelingViewModel extends ViewModel {
             grp.allStates.length,
             "group",
             grp.name!,
-            grp.state != GroupState.findMainState.name
-                ? grp.mainState.target!.image.target!.path!
-                : ""));
+            grp.state != GroupState.findMainState.name ? grp.mainState.target!.image.target!.path! : ""));
       }
       allNavsRows.add(allNavs);
       selectedNavs.add(allNavs.firstWhere((element) => element.id == curNav.id));

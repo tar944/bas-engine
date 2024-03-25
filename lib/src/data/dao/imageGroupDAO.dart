@@ -26,6 +26,9 @@ class ImageGroupDAO {
   addObject(int groupId,ObjectModel obj)async{
     var group = await getDetails(groupId);
     group!.allStates.add(obj);
+    if(group.state==GroupState.findSubObjects.name){
+      group.state=GroupState.editOtherStates.name;
+    }
     update(group);
   }
 

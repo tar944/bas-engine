@@ -57,7 +57,7 @@ class LabelingBodyViewModel extends ViewModel {
             builder: (context) =>
                 DlgCheckOtherState(
                   curObject:grp.mainState.target!,
-                  allObjects:grp.allStates,
+                  allObjects:grp.allStates.where((element) => element.srcObject.target==null).toList(),
                   grpID: grp.id,
                   prjUUID: prjUUID,
                   partUUID: partUUID,
