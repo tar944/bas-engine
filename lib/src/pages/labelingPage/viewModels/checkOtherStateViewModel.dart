@@ -1,21 +1,31 @@
 import 'dart:typed_data';
 
+import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 import 'package:image/image.dart' as i;
+import 'package:path/path.dart' as p;
+import 'package:uuid/uuid.dart';
 
 class CheckOtherStateViewModel extends ViewModel {
 
   String bigImage="both";//src,curState
   final controller = PageController();
   int curImage=0;
+  final int groupId;
+  String prjUUID,partUUID;
   List<Uint8List> allImages=[];
   final List<ObjectModel> allObjects;
   final ObjectModel curObject;
 
 
-  CheckOtherStateViewModel(this.allObjects,this.curObject);
+  CheckOtherStateViewModel(this.allObjects,this.curObject,this.prjUUID,this.partUUID,this.groupId);
 
   @override
   void onMount() async{
@@ -31,12 +41,42 @@ class CheckOtherStateViewModel extends ViewModel {
     notifyListeners();
   }
 
-  nextImage()async{
+  nextImage(){
     if(curImage<allObjects.length-1) {
       curImage+=1;
       controller.nextPage(duration: const Duration(milliseconds: 200), curve:Curves.decelerate );
       notifyListeners();
     }
+  }
+
+  actionBtnHandler(String action)async{
+    if(action =="yes"){
+      var obj = ObjectModel(-1, const Uuid().v4(), curObject.left, curObject.right, curObject.top, curObject.bottom);
+      obj.srcObject.target=allObjects[curImage];
+      final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
+      i.Command()
+        ..decodeJpg(allImages[curImage])
+        ..writeToFile(path)
+        ..executeThread();
+      var img = ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(path), path);
+      img.id =await ImageDAO().add(img);
+      obj.image.target=img;
+      obj.id=await ObjectDAO().addObject(obj);
+      await ImageGroupDAO().replaceObject(groupId, obj);
+    }else if(action =="no"){
+      var curGroup = await ImageGroupDAO().getDetails(groupId);
+      await ImageGroupDAO().removeObject(groupId, allObjects[curImage]);
+      if(curGroup!.partUUID!=""){
+        var part = await ProjectPartDAO().getDetailsByUUID(curGroup.partUUID);
+        await ProjectPartDAO().addObject(part!.id, allObjects[curImage]);
+      }else if(curGroup.groupUUID!=""){
+        var grp = await ProjectPartDAO().getDetailsByUUID(curGroup.groupUUID);
+        await ImageGroupDAO().addSubObject(grp!.id, allObjects[curImage]);
+      }
+    }
+    allImages.removeAt(curImage);
+    curImage--;
+    nextImage();
   }
 
   Future<Uint8List?> getCroppedImage(ObjectModel obj)async{
@@ -52,7 +92,7 @@ class CheckOtherStateViewModel extends ViewModel {
     return cmd.outputBytes;
   }
   
-  previousImage()async{
+  previousImage(){
     if(curImage>0) {
       curImage-=1;
       controller.previousPage(duration: const Duration(milliseconds: 200), curve:Curves.decelerate );

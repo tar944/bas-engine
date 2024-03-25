@@ -12,17 +12,25 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class DlgCheckOtherState extends StatelessWidget {
   const DlgCheckOtherState(
-      {Key? key, required this.allObjects, required this.curObject})
+      {Key? key,
+        required this.allObjects,
+        required this.curObject,
+        required this.grpID,
+        required this.prjUUID,
+        required this.partUUID
+      })
       : super(key: key);
 
   final List<ObjectModel> allObjects;
   final ObjectModel curObject;
+  final int grpID;
+  final String prjUUID,partUUID;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: CheckOtherStateViewModel(allObjects, curObject),
+      viewModel: CheckOtherStateViewModel(allObjects, curObject,prjUUID,partUUID,grpID),
     );
   }
 }

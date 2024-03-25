@@ -59,7 +59,7 @@ class _View extends StatelessView<PartRegionViewModel> {
               child: CustomPaint(
                 painter: RectanglePainter(
                     object: ObjectModel(
-                        0, "", vm.left, vm.right, vm.top, vm.bottom, ""),
+                        0, "", vm.left, vm.right, vm.top, vm.bottom),
                     color: Colors.white,
                     isActive: false),
               ),

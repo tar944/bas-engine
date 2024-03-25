@@ -7,7 +7,6 @@ class ObjectModel {
   @Id()
   int? id;
   String uuid;
-  String parentUUID;
   double left;
   double right;
   double top;
@@ -27,6 +26,5 @@ class ObjectModel {
       this.left,
       this.right,
       this.top,
-      this.bottom,
-      this.parentUUID);
+      this.bottom);
 }

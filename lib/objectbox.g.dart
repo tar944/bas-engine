@@ -275,11 +275,6 @@ final _entities = <ModelEntity>[
             type: 6,
             flags: 0),
         ModelProperty(
-            id: const IdUid(22, 5847613169931022485),
-            name: 'parentUUID',
-            type: 9,
-            flags: 0),
-        ModelProperty(
             id: const IdUid(23, 701907757606801129),
             name: 'labelId',
             type: 11,
@@ -608,7 +603,8 @@ ModelDefinition getObjectBoxModel() {
         5080785029030309426,
         4745844637427822667,
         4178048732557493644,
-        6934286019042658826
+        6934286019042658826,
+        5847613169931022485
       ],
       retiredRelationUids: const [
         7096364116743183016,
@@ -860,7 +856,6 @@ ModelDefinition getObjectBoxModel() {
           final colorOffset = fbb.writeString(object.color);
           final actionTypeOffset = fbb.writeString(object.actionType);
           final typedTextOffset = fbb.writeString(object.typedText);
-          final parentUUIDOffset = fbb.writeString(object.parentUUID);
           fbb.startTable(27);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, uuidOffset);
@@ -874,7 +869,6 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(18, typedTextOffset);
           fbb.addInt64(19, object.actX);
           fbb.addInt64(20, object.actY);
-          fbb.addOffset(21, parentUUIDOffset);
           fbb.addInt64(22, object.label.targetId);
           fbb.addBool(23, object.isNavTool);
           fbb.addInt64(25, object.srcObject.targetId);
@@ -896,10 +890,8 @@ ModelDefinition getObjectBoxModel() {
               const fb.Float64Reader().vTableGet(buffer, rootOffset, 12, 0);
           final bottomParam =
               const fb.Float64Reader().vTableGet(buffer, rootOffset, 14, 0);
-          final parentUUIDParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 46, '');
-          final object = ObjectModel(idParam, uuidParam, leftParam, rightParam,
-              topParam, bottomParam, parentUUIDParam)
+          final object = ObjectModel(
+              idParam, uuidParam, leftParam, rightParam, topParam, bottomParam)
             ..color = const fb.StringReader(asciiOptimization: true)
                 .vTableGet(buffer, rootOffset, 18, '')
             ..actionType = const fb.StringReader(asciiOptimization: true)
@@ -1229,21 +1221,17 @@ class ObjectModel_ {
   static final actY =
       QueryIntegerProperty<ObjectModel>(_entities[4].properties[11]);
 
-  /// see [ObjectModel.parentUUID]
-  static final parentUUID =
-      QueryStringProperty<ObjectModel>(_entities[4].properties[12]);
-
   /// see [ObjectModel.label]
   static final label =
-      QueryRelationToOne<ObjectModel, LabelModel>(_entities[4].properties[13]);
+      QueryRelationToOne<ObjectModel, LabelModel>(_entities[4].properties[12]);
 
   /// see [ObjectModel.isNavTool]
   static final isNavTool =
-      QueryBooleanProperty<ObjectModel>(_entities[4].properties[14]);
+      QueryBooleanProperty<ObjectModel>(_entities[4].properties[13]);
 
   /// see [ObjectModel.srcObject]
   static final srcObject =
-      QueryRelationToOne<ObjectModel, ObjectModel>(_entities[4].properties[15]);
+      QueryRelationToOne<ObjectModel, ObjectModel>(_entities[4].properties[14]);
 }
 
 /// [ImageGroupModel] entity fields to define ObjectBox queries.

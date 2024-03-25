@@ -50,6 +50,13 @@ class ImageGroupDAO {
     update(group);
   }
 
+  replaceObject(int groupId,ObjectModel obj)async{
+    var group = await getDetails(groupId);
+    group!.allStates.removeWhere((element) => element.id==obj.srcObject.target!.id);
+    group.allStates.add(obj);
+    update(group);
+  }
+
   removeSubObject(int groupId,ObjectModel obj)async{
     var group = await getDetails(groupId);
     group!.subObjects.removeWhere((element) => element.id == obj.id);

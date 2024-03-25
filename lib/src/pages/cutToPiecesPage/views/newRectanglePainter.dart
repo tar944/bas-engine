@@ -45,9 +45,7 @@ class NewRectanglePainter extends HookWidget {
             right.value > left.value ? left.value : right.value,
             right.value > left.value ? right.value : left.value,
             top.value > bottom.value ? bottom.value : top.value,
-            top.value > bottom.value ? top.value : bottom.value,
-          ""
-        );
+            top.value > bottom.value ? top.value : bottom.value);
         onNewListener(part);
         top.value = 0.0;
         left.value = 0.0;
@@ -56,7 +54,7 @@ class NewRectanglePainter extends HookWidget {
       },
       child: CustomPaint(
         painter: RectanglePainter(object:ObjectModel(
-            0,"", left.value, right.value, top.value, bottom.value,""),color: Colors.white,isActive: false),
+            0,"", left.value, right.value, top.value, bottom.value),color: Colors.white,isActive: false),
       ),
     );
   }

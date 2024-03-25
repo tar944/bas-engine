@@ -54,7 +54,14 @@ class LabelingBodyViewModel extends ViewModel {
         showDialog(
             context: context,
             barrierDismissible: true,
-            builder: (context) => DlgCheckOtherState(curObject:grp.mainState.target!,allObjects:grp.allStates,));
+            builder: (context) =>
+                DlgCheckOtherState(
+                  curObject:grp.mainState.target!,
+                  allObjects:grp.allStates,
+                  grpID: grp.id,
+                  prjUUID: prjUUID,
+                  partUUID: partUUID,
+                ));
       }
     }
   }

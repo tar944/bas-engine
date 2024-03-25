@@ -202,18 +202,17 @@ class CutToPiecesViewModel extends ViewModel {
   //todo crop image part is here
   onNewPartCreatedHandler(ObjectModel newObject) async {
     newObject.uuid=const Uuid().v4();
-    newObject.parentUUID=curObject!.uuid;
     newObject.srcObject.target=curObject!;
+    newObject.left=getX(newObject.left.toInt()).toDouble();
+    newObject.right=getX(newObject.right.toInt()).toDouble();
+    newObject.top=getY(newObject.top.toInt()).toDouble();
+    newObject.bottom=getY(newObject.bottom.toInt()).toDouble();
     if(pageDuty=="cutting"){
       newObject.id=await ObjectDAO().addObject(newObject);
       await ImageGroupDAO().addSubObject(groupId, newObject);
       otherStates.add(newObject);
       notifyListeners();
     }else if(pageDuty=="drawMainRectangle"){
-      newObject.left=getX(newObject.left.toInt()).toDouble();
-      newObject.right=getX(newObject.right.toInt()).toDouble();
-      newObject.top=getY(newObject.top.toInt()).toDouble();
-      newObject.bottom=getY(newObject.bottom.toInt()).toDouble();
       final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
       final cmd = i.Command()
         ..decodeImageFile(curObject!.image.target!.path!)
@@ -227,10 +226,6 @@ class CutToPiecesViewModel extends ViewModel {
       var img = ImageModel(-1, const Uuid().v4(), newObject.uuid, p.basename(path), path);
       img.id =await ImageDAO().add(img);
       newObject.image.target=img;
-
-
-
-
       newObject.id=await ObjectDAO().addObject(newObject);
       await ImageGroupDAO().addMainState(groupId, newObject);
       onBackClicked();
