@@ -79,8 +79,10 @@ class CutToPiecesViewModel extends ViewModel {
           .toList());
     }
     updatePageData();
-    if(await Preference().getShowGuide("firstGuide")){
+    if(pageDuty=="drawMainRectangle"&&await Preference().getShowGuide("firstGuide")){
       showGuideDialog(context, Strings.firstGuide, Strings.firstGuideTitle, 'firstGuide');
+    }else if(pageDuty=="cutting"&&await Preference().getShowGuide("labelingGuide")){
+      showGuideDialog(context, Strings.labelingGuide, Strings.labelingGuideTitle, 'labelingGuide');
     }
   }
 
@@ -160,16 +162,6 @@ class CutToPiecesViewModel extends ViewModel {
         } else {
           onBackClicked();
         }
-        break;
-      case 'show':
-        // ScreenShootModel? screen =
-        //     await ScreenDAO().getScreen(int.parse(actions[1]));
-        // for (final item in listData.value) {
-        //   if (item.getId() == screen!.id) {
-        //     indexImage.value = listData.value.indexOf(item);
-        //     break;
-        //   }
-        // }
         break;
       case 'next':
         indexImage=group!.allStates.indexWhere((element) => element.id==int.parse(action.split('&&')[1]));

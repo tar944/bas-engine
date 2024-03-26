@@ -24,7 +24,9 @@ class Strings{
   static const String dlgOtherStateTitle="Check other states";
   static const String selectAsMainRectangle="Are you sure that you want to select this rectangle for main state?";
   static const String firstGuideTitle="Chose Main state";
-  static const String firstGuide="At this stage, you should specify the range of this Main state with drawing a rectangle by using your mouse. ";
+  static const String labelingGuideTitle="Cut to pieces";
+  static const String firstGuide="At this stage, Use your mouse to draw a rectangle that will represent the boundaries of the \"Main\" state.";
+  static const String labelingGuide="Now, select specific objects within the image by clicking and dragging your mouse to create a rectangle around them.";
   static const String ok="Ok";
   static const String GotIt="Got it";
   static const String groupFirstStep="At first you should chose one of below states as main state of this group.";

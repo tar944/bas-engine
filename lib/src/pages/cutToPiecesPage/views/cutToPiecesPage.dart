@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
-import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgConfirm.dart';
 import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/viewModels/cutToPiecesViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/flyImagesList.dart';
 import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/partRegionExplorer.dart';
@@ -112,16 +112,16 @@ class _View extends StatelessView<CutToPiecesViewModel> {
                                     child: IconButton(
                                         style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
                                         icon: Icon(
-                                          FluentIcons.delete,
-                                          color: Colors.red,
+                                          FluentIcons.check_mark,
+                                          color: Colors.green.dark,
                                           size: 25,
                                         ),
-                                        onPressed: () => showFlyDelete(
+                                        onPressed: () => showFlyConfirm(
                                             Strings.deleteScreen,
                                             Strings.yes,
                                             vm.deleteController,
                                             FlyoutPlacementMode.right,
-                                            vm.curObject!.id!,
+                                            "delete&&${vm.curObject!.id!}",
                                             vm.onObjectActionHandler)),
                                   ),
 

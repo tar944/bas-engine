@@ -2,12 +2,12 @@ import 'package:fluent_ui/fluent_ui.dart';
 
 import '../../assets/values/textStyle.dart';
 
-void showFlyDelete(
+void showFlyConfirm(
     String message,
     String btnText,
     FlyoutController controller,
     FlyoutPlacementMode placementMode,
-    int id,
+    String action,
     ValueSetter<String>? onActionListener) {
   controller.showFlyout(
     autoModeConfiguration: FlyoutAutoConfiguration(
@@ -32,7 +32,7 @@ void showFlyDelete(
             Button(
               child: Text(btnText),
               onPressed: () {
-                onActionListener!("delete&&$id");
+                onActionListener!(action);
                 Navigator.pop(context);
               },
             ),

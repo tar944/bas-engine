@@ -4,7 +4,7 @@ import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
-import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgConfirm.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/objectItemViewModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
@@ -43,7 +43,7 @@ class _View extends StatelessView<ObjectItemViewModel> {
 
     final controller = FlyoutController();
     return IconButton(
-      onPressed: vm.stepStatus=="hide"?null:()=>vm.onActionCaller(vm.stepStatus=="firstStep"?"setMainState&&${vm.object.id}":"gotoLabeling&&${vm.object.id}"),
+      onPressed: vm.stepStatus=="hide"?null:()=>vm.onActionCaller(vm.stepStatus=="firstStep"?"setMainState&&${vm.object.id}":"goToCuttingPage&&${vm.object.id}"),
       style: ButtonStyle(
           padding: ButtonState.all(const EdgeInsets.all(0.0)),
       ),
@@ -163,12 +163,12 @@ class _View extends StatelessView<ObjectItemViewModel> {
                           color: Colors.red,
                           size: 20,
                         ),
-                        onPressed: () => showFlyDelete(
+                        onPressed: () => showFlyConfirm(
                             "Are you sure?",
                             "yeh",
                             controller,
                             FlyoutPlacementMode.topCenter,
-                            vm.object.id!,
+                            "delete&&${vm.object.id!}",
                             vm.onActionCaller)),
                   ),
                 ),

@@ -127,6 +127,7 @@ class LabelingViewModel extends ViewModel {
         partId=int.parse(action.split("&&")[1]);
         break;
       case 'setMainState':
+      case 'goToCuttingPage':
         final curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
         final curPart = await ProjectPartDAO().getDetails(partId);
         await Preference().setMainAddress('${curProject!.id}&&${curPart!.id}&&${curGroup!.id}');

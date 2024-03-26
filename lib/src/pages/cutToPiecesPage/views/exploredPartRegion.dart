@@ -3,7 +3,7 @@ import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/controllers/regionRecController.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
-import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgConfirm.dart';
 import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/viewModels/ExplorerPartViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/rectanglePainter.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -73,12 +73,12 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                               FluentIcons.delete,
                               color: Colors.red,
                             ),
-                            onPressed: () => showFlyDelete(
+                            onPressed: () => showFlyConfirm(
                                 Strings.deleteObject,
                                 Strings.yes,
                                 controller,
                                 FlyoutPlacementMode.topCenter,
-                                vm.curObject.id!,
+                                "delete&&${vm.curObject.id!}",
                                 vm.onObjectActionCaller)),
                       ):
                       Container(),

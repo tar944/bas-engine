@@ -140,18 +140,7 @@ class LabelingBodyViewModel extends ViewModel {
   onObjectActionHandler(String action)async{
     var act = action.split("&&");
     switch (act[0]) {
-      case 'gotoCutToPieces':
-        // final curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
-        // final curPart = await ProjectPartDAO().getDetails(partId);
-        // await Preference().setMainAddress('${curProject!.id}&&${curPart!.id}&&${curGroup!.id}');
-        // context.goNamed('cutToPieces',params: {
-        //   'objId':action.split('&&')[1],
-        //   'groupId':curGroup!.id.toString(),
-        //   'partUUID':partUUID,
-        //   'prjUUID':prjUUID,
-        //   'title': '${curProject.title} > ${curPart.name} > ${curGroup!.name}'
-        // });
-        break;
+      case 'goToCuttingPage':
       case 'setMainState':
         onGroupActionCaller(action);
         break;

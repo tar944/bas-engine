@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
-import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgConfirm.dart';
 import 'package:bas_dataset_generator_engine/src/pages/projectPartPage/viewModels/partItemViewModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
@@ -76,12 +76,12 @@ class _View extends StatelessView<PartItemViewModel> {
                             color: Colors.red,
                             size: 20,
                           ),
-                          onPressed: () => showFlyDelete(
+                          onPressed: () => showFlyConfirm(
                               "Are you sure?",
                               "yeh",
                               controller,
                               FlyoutPlacementMode.topCenter,
-                              vm.part.id,
+                              "delete&&${vm.part.id}",
                               vm.onActionCaller)),
                     ),
                     IconButton(

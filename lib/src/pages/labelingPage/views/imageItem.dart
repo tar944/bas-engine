@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
-import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgConfirm.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/imageItemViewModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
@@ -88,12 +88,12 @@ class _View extends StatelessView<ImageItemViewModel> {
                             color: Colors.red,
                             size: 12,
                           ),
-                          onPressed: () => showFlyDelete(
+                          onPressed: () => showFlyConfirm(
                               "Are you sure?",
                               "yeh",
                               controller,
                               FlyoutPlacementMode.topCenter,
-                              vm.group.id,
+                              "delete&&${vm.group.id}",
                               vm.onActionCaller)),
                     ),
                     IconButton(

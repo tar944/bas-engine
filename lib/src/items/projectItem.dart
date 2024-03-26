@@ -2,7 +2,7 @@ import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectModel.dart';
-import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgDelete.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgConfirm.dart';
 import 'package:bas_dataset_generator_engine/src/utility/measureSize.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
@@ -72,12 +72,12 @@ class ProjectItem extends HookWidget {
                                       FluentIcons.delete,
                                       color: Colors.red,
                                     ),
-                                    onPressed: () => showFlyDelete(
+                                    onPressed: () => showFlyConfirm(
                                         Strings.deleteProject,
                                         Strings.yes,
                                         controller,
                                         FlyoutPlacementMode.topCenter,
-                                        project.id,
+                                        "delete&&${project.id}",
                                         onActionCaller))),
                             IconButton(
                                 icon: const Icon(FluentIcons.edit),
