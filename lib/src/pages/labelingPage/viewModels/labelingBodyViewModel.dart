@@ -56,12 +56,15 @@ class LabelingBodyViewModel extends ViewModel {
             barrierDismissible: true,
             builder: (context) =>
                 DlgCheckOtherState(
-                  curObject:grp.mainState.target!,
+                  srcObjects:[grp.mainState.target!],
                   allObjects:grp.allStates.where((element) => element.srcObject.target==null).toList(),
                   grpID: grp.id,
                   prjUUID: prjUUID,
                   partUUID: partUUID,
+                  grpState: GroupState.editOtherStates,
                 ));
+      }else if(grp.state==GroupState.finishCutting.name){
+
       }
     }
   }

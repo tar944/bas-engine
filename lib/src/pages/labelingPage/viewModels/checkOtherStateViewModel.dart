@@ -9,7 +9,6 @@ import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:go_router/go_router.dart';
 import 'package:pmvvm/pmvvm.dart';
 import 'package:image/image.dart' as i;
 import 'package:path/path.dart' as p;
@@ -18,20 +17,23 @@ import 'package:uuid/uuid.dart';
 class CheckOtherStateViewModel extends ViewModel {
 
   String bigImage="both";//src,curState
+  GroupState grpState=GroupState.editOtherStates;
   final controller = PageController();
-  int curImage=0;
+  int curImage=0,curSrc=0;
   final int groupId;
   String prjUUID,partUUID;
   List<Uint8List> allImages=[];
   List<int> finishedObjectsId =[];
   final List<ObjectModel> allObjects;
-  final ObjectModel curObject;
+  final List<ObjectModel> srcObjects;
 
 
-  CheckOtherStateViewModel(this.allObjects,this.curObject,this.prjUUID,this.partUUID,this.groupId);
+  CheckOtherStateViewModel(this.allObjects,this.srcObjects,this.prjUUID,this.partUUID,this.groupId);
 
   @override
   void onMount() async{
+    var grp = await ImageGroupDAO().getDetails(groupId);
+    grpState=GroupState.values.firstWhere((element) => element.name==grp!.state);
     for(var obj in allObjects){
       var img = await getCroppedImage(obj);
       allImages.add(img!);
@@ -39,7 +41,6 @@ class CheckOtherStateViewModel extends ViewModel {
     if(allImages.isNotEmpty){
       notifyListeners();
     }else{
-      var grp = await ImageGroupDAO().getDetails(groupId);
       grp!.state= GroupState.findSubObjects.name;
       await ImageGroupDAO().update(grp);
       onCloseClicked();
@@ -61,7 +62,7 @@ class CheckOtherStateViewModel extends ViewModel {
 
   actionBtnHandler(String action)async{
     if(action =="yes"){
-      var obj = ObjectModel(-1, const Uuid().v4(), curObject.left, curObject.right, curObject.top, curObject.bottom);
+      var obj = ObjectModel(-1, const Uuid().v4(), srcObjects[curSrc].left, srcObjects[curSrc].right, srcObjects[curSrc].top, srcObjects[curSrc].bottom);
       obj.srcObject.target=allObjects[curImage];
       final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
       i.Command()
@@ -98,10 +99,10 @@ class CheckOtherStateViewModel extends ViewModel {
     final cmd = i.Command()
       ..decodeImageFile(obj.image.target!.path!)
       ..copyCrop(
-          x: curObject.left.toInt(),
-          y: curObject.top.toInt(),
-          width: (curObject.right.toInt() - curObject.left.toInt()).abs().toInt(),
-          height: (curObject.bottom.toInt() - curObject.top.toInt()))
+          x: srcObjects[curSrc].left.toInt(),
+          y: srcObjects[curSrc].top.toInt(),
+          width: (srcObjects[curSrc].right.toInt() - srcObjects[curSrc].left.toInt()).abs().toInt(),
+          height: (srcObjects[curSrc].bottom.toInt() - srcObjects[curSrc].top.toInt()))
       ..encodeJpg();
     await cmd.executeThread();
     return cmd.outputBytes;

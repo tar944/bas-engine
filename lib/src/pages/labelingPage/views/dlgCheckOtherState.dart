@@ -6,6 +6,7 @@ import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/checkOtherStateViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/parts/dialogTitleBar.dart';
+import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
@@ -14,7 +15,7 @@ class DlgCheckOtherState extends StatelessWidget {
   const DlgCheckOtherState(
       {Key? key,
         required this.allObjects,
-        required this.curObject,
+        required this.srcObjects,
         required this.grpID,
         required this.prjUUID,
         required this.partUUID
@@ -22,7 +23,7 @@ class DlgCheckOtherState extends StatelessWidget {
       : super(key: key);
 
   final List<ObjectModel> allObjects;
-  final ObjectModel curObject;
+  final List<ObjectModel> srcObjects;
   final int grpID;
   final String prjUUID,partUUID;
 
@@ -30,7 +31,7 @@ class DlgCheckOtherState extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: CheckOtherStateViewModel(allObjects, curObject,prjUUID,partUUID,grpID),
+      viewModel: CheckOtherStateViewModel(allObjects, srcObjects,prjUUID,partUUID,grpID),
     );
   }
 }
@@ -88,7 +89,7 @@ class _View extends StatelessView<CheckOtherStateViewModel> {
                                             Container(
                                             decoration: BoxDecoration(
                                               image: DecorationImage(
-                                                image: Image.file(File(vm.curObject.image.target!.path!)).image,
+                                                image: Image.file(File(vm.srcObjects[vm.curSrc].image.target!.path!)).image,
                                                 fit: BoxFit.fitWidth,
                                               ),),),
                                             const Positioned(
