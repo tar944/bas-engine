@@ -192,18 +192,4 @@ class LabelingBodyViewModel extends ViewModel {
 
     }
   }
-
-  bool isMainObject(ObjectModel obj){
-    if(curGroup!=null&&curGroup!.mainState.target!=null){
-      return curGroup!.mainState.target!.id==obj.id;
-    }else{
-      for(var grp in subGroups){
-        if(grp.mainState.target!=null&&grp.mainState.target!.id==obj.id){
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-
 }

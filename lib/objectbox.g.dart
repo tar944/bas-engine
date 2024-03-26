@@ -209,7 +209,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(15, 8892823931225835339),
       name: 'ObjectModel',
-      lastPropertyId: const IdUid(26, 447693223963496384),
+      lastPropertyId: const IdUid(27, 397024808833094930),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -292,7 +292,12 @@ final _entities = <ModelEntity>[
             type: 11,
             flags: 520,
             indexId: const IdUid(23, 5855966450476248403),
-            relationTarget: 'ObjectModel')
+            relationTarget: 'ObjectModel'),
+        ModelProperty(
+            id: const IdUid(27, 397024808833094930),
+            name: 'isMainObject',
+            type: 1,
+            flags: 0)
       ],
       relations: <ModelRelation>[],
       backlinks: <ModelBacklink>[]),
@@ -856,7 +861,7 @@ ModelDefinition getObjectBoxModel() {
           final colorOffset = fbb.writeString(object.color);
           final actionTypeOffset = fbb.writeString(object.actionType);
           final typedTextOffset = fbb.writeString(object.typedText);
-          fbb.startTable(27);
+          fbb.startTable(28);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, uuidOffset);
           fbb.addFloat64(2, object.left);
@@ -872,6 +877,7 @@ ModelDefinition getObjectBoxModel() {
           fbb.addInt64(22, object.label.targetId);
           fbb.addBool(23, object.isNavTool);
           fbb.addInt64(25, object.srcObject.targetId);
+          fbb.addBool(26, object.isMainObject);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -901,7 +907,9 @@ ModelDefinition getObjectBoxModel() {
             ..actX = const fb.Int64Reader().vTableGet(buffer, rootOffset, 42, 0)
             ..actY = const fb.Int64Reader().vTableGet(buffer, rootOffset, 44, 0)
             ..isNavTool =
-                const fb.BoolReader().vTableGet(buffer, rootOffset, 50, false);
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 50, false)
+            ..isMainObject =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 56, false);
           object.image.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 36, 0);
           object.image.attach(store);
@@ -1232,6 +1240,10 @@ class ObjectModel_ {
   /// see [ObjectModel.srcObject]
   static final srcObject =
       QueryRelationToOne<ObjectModel, ObjectModel>(_entities[4].properties[14]);
+
+  /// see [ObjectModel.isMainObject]
+  static final isMainObject =
+      QueryBooleanProperty<ObjectModel>(_entities[4].properties[15]);
 }
 
 /// [ImageGroupModel] entity fields to define ObjectBox queries.

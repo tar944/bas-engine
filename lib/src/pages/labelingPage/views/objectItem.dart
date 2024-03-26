@@ -17,13 +17,11 @@ class ObjectItem extends StatelessWidget {
         required this.allGroups,
         required this.object,
         required this.stepStatus,
-        required this.isMainObject,
         required this.onActionCaller})
       : super(key: key);
 
   final ObjectModel object;
   final String stepStatus;
-  final bool isMainObject;
   final List<ImageGroupModel> allGroups;
   final ValueSetter<String> onActionCaller;
 
@@ -32,7 +30,7 @@ class ObjectItem extends StatelessWidget {
     return MVVM(
       view: () => const _View(),
       viewModel:
-          ObjectItemViewModel( allGroups,stepStatus, object,isMainObject, onActionCaller),
+          ObjectItemViewModel( allGroups,stepStatus, object, onActionCaller),
     );
   }
 }
@@ -77,7 +75,7 @@ class _View extends StatelessView<ObjectItemViewModel> {
                     image: DecorationImage(
                       image:
                       Image.file(File(vm.object.image.target!.path!)).image,
-                      fit: BoxFit.fill,
+                      fit: BoxFit.fitWidth,
                     ),
                   ),
                 ),
@@ -144,7 +142,7 @@ class _View extends StatelessView<ObjectItemViewModel> {
                 Positioned(
                   left: 5,
                   top: 5,
-                  child: vm.isMainObject?
+                  child: vm.object.isMainObject?
                   Container(
                     width: 40,
                     height: 40,

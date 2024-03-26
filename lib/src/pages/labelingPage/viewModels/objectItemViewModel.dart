@@ -11,13 +11,11 @@ class ObjectItemViewModel extends ViewModel {
   final ObjectModel object;
   int parentGroupId = -1;
   bool showLabel = false;
-  final bool isMainObject;
   String stepStatus;
   final List<ImageGroupModel> allGroups;
   final ValueSetter<String> onActionCaller;
 
-  ObjectItemViewModel(this.allGroups, this.stepStatus, this.object,
-      this.isMainObject, this.onActionCaller);
+  ObjectItemViewModel(this.allGroups, this.stepStatus, this.object, this.onActionCaller);
 
   @override
   void init() {
@@ -50,7 +48,7 @@ class ObjectItemViewModel extends ViewModel {
   }
 
   onGroupSelected(List<int> allSelected, int curGroupItem) {
-    if(isMainObject){
+    if(object.isMainObject){
       Toast(Strings.warnRemoveMainObject, false).showWarning(context);
       return;
     }

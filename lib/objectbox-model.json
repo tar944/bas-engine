@@ -191,7 +191,7 @@
     },
     {
       "id": "15:8892823931225835339",
-      "lastPropertyId": "26:447693223963496384",
+      "lastPropertyId": "27:397024808833094930",
       "name": "ObjectModel",
       "properties": [
         {
@@ -278,6 +278,11 @@
           "flags": 520,
           "indexId": "23:5855966450476248403",
           "relationTarget": "ObjectModel"
+        },
+        {
+          "id": "27:397024808833094930",
+          "name": "isMainObject",
+          "type": 1
         }
       ],
       "relations": []

@@ -226,6 +226,7 @@ class CutToPiecesViewModel extends ViewModel {
       var img = ImageModel(-1, const Uuid().v4(), newObject.uuid, p.basename(path), path);
       img.id =await ImageDAO().add(img);
       newObject.image.target=img;
+      newObject.isMainObject=true;
       newObject.id=await ObjectDAO().addObject(newObject);
       await ImageGroupDAO().addMainState(groupId, newObject);
       onBackClicked();
