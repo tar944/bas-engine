@@ -23,19 +23,19 @@ import 'package:path/path.dart' as p;
 
 class CutToPiecesViewModel extends ViewModel {
 
-  final deleteController = FlyoutController();
+  final confirmController = FlyoutController();
   final moreController = FlyoutController();
   ImageGroupModel? group;
   ObjectModel? curObject;
   bool isShowAll=true;
   String pageDuty="cutting";
-  List<ObjectModel>otherStates=[];
-  final int groupId,objId;
+  List<ObjectModel>subObject=[];
+  final int groupId;
   final String title,partUUID,prjUUID;
   int indexImage = 0, imgH = 0,imgW = 0;
   Size imgSize = const Size(0, 0);
 
-  CutToPiecesViewModel(this.objId,this.partUUID,this.prjUUID,this.groupId,this.title);
+  CutToPiecesViewModel(this.partUUID,this.prjUUID,this.groupId,this.title);
 
   @override
   void init() async{
@@ -55,23 +55,18 @@ class CutToPiecesViewModel extends ViewModel {
       await _windowShow();
     });
     group=await ImageGroupDAO().getDetails(groupId);
-    otherStates=group!.allStates;
-    for(var grp in group!.allGroups){
-      if(grp.subObjects.isNotEmpty){
-        otherStates.addAll(grp.subObjects);
-      }
-    }
+    subObject=group!.subObjects;
+
+    // for(var grp in group!.allGroups){
+    //   if(grp.subObjects.isNotEmpty){
+    //     subObject.addAll(grp.subObjects);
+    //   }
+    // }
 
     if(group!.state==GroupState.findMainState.name){
       pageDuty="drawMainRectangle";
     }
     curObject=group!.allStates[0];
-    for (final object in group!.allStates) {
-      if (object.id==objId) {
-        indexImage= group!.allStates.indexOf(object);
-        break;
-      }
-    }
 
     if (await LabelDAO().needAddDefaultValue(prjUUID)) {
       await LabelDAO().addList(prjUUID,ObjectType.values
@@ -150,18 +145,11 @@ class CutToPiecesViewModel extends ViewModel {
         isShowAll=!isShowAll;
         notifyListeners();
         break;
-      case 'delete':
-        await ObjectDAO().deleteObject(curObject!);
-        await ImageGroupDAO().removeObject(groupId, curObject!);
-        group = await ImageGroupDAO().getDetails(groupId);
-        if (group!.allStates.isNotEmpty) {
-          indexImage = indexImage == group!.allStates.length
-              ? --indexImage
-              : indexImage;
-          updatePageData();
-        } else {
-          onBackClicked();
-        }
+      case "confirm":
+        var grp = await ImageGroupDAO().getDetails(groupId);
+        grp!.state=GroupState.finishCutting.name;
+        await ImageGroupDAO().update(grp);
+        onBackClicked();
         break;
       case 'next':
         indexImage=group!.allStates.indexWhere((element) => element.id==int.parse(action.split('&&')[1]));
@@ -202,7 +190,7 @@ class CutToPiecesViewModel extends ViewModel {
     if(pageDuty=="cutting"){
       newObject.id=await ObjectDAO().addObject(newObject);
       await ImageGroupDAO().addSubObject(groupId, newObject);
-      otherStates.add(newObject);
+      subObject.add(newObject);
       notifyListeners();
     }else if(pageDuty=="drawMainRectangle"){
       final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);

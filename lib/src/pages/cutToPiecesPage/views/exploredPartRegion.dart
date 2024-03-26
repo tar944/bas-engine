@@ -69,6 +69,9 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                         controller: controller,
                         child:
                         IconButton(
+                          style: ButtonStyle(
+                            backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
+                          ),
                             icon: Icon(
                               FluentIcons.delete,
                               color: Colors.red,
@@ -82,7 +85,11 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                                 vm.onObjectActionCaller)),
                       ):
                       Container(),
+                      const SizedBox(width: 5,),
                       IconButton(
+                          style: ButtonStyle(
+                              backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
+                          ),
                           icon: Icon(
                             vm.isMaximize?FluentIcons.arrow_up_right_mirrored8:FluentIcons.arrow_down_right8,
                             color: Colors.white,

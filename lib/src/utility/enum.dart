@@ -12,7 +12,9 @@ enum HeaderTabs {
 enum GroupState {
   findMainState,
   editOtherStates,
-  findSubObjects
+  findSubObjects,
+  finishCutting,
+  finished
 }
 
 enum ObjectType {

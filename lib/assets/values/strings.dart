@@ -2,8 +2,9 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
-  static const String warnRemoveMainObject="You can not remove main object from its group.";
-  static const String objectSorted="This image has been sorted";
+  static const String finishLabeling="Have we finished labeling this group?";
+  static const String warnRemoveMainObject="Removing the main object from its group is not possible.";
+  static const String objectSorted="This image has been sorted.";
   static const String waitingForImageProgressing="Please wait for image processing...";
   static const String no="No";
   static const String srcState="Source state";

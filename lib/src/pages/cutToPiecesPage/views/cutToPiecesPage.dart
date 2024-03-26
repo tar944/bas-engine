@@ -12,14 +12,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class CutToPiecesPage extends StatelessWidget {
-  int groupId,objId;
+  int groupId;
   String partUUID,prjUUID;
   String title;
 
   CutToPiecesPage({
     super.key,
     required this.groupId ,
-    required this.objId,
     required this.partUUID,
     required this.prjUUID,
     required this.title});
@@ -28,7 +27,7 @@ class CutToPiecesPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: CutToPiecesViewModel(objId,partUUID,prjUUID,groupId,title),
+      viewModel: CutToPiecesViewModel(partUUID,prjUUID,groupId,title),
     );
   }
 }
@@ -63,22 +62,20 @@ class _View extends StatelessView<CutToPiecesViewModel> {
                           image: vm.curObject!=null?DecorationImage(
                             image: Image.file(File(vm.curObject!.image.target!.path!)).image,
                             fit: (vm.imgW > MediaQuery.of(context).size.width ||
-                                vm.imgH >
-                                    (MediaQuery.of(context).size.height -
-                                        Dimens.topBarHeight))
-                                ? BoxFit.fill
-                                : BoxFit.none,
+                                vm.imgH > (MediaQuery.of(context).size.height - Dimens.topBarHeight))
+                                ? BoxFit.fill : BoxFit.none,
                           ):null,
                         ),
-                        child: vm.curObject!=null?PartRegionExplorer(
+                        child: vm.curObject!=null? PartRegionExplorer(
                           key: GlobalKey(),
                           mainObject: vm.curObject!,
-                          otherObjects: vm.otherStates.where((element) => element.srcObject.target!=null&&element.srcObject.target!.uuid==vm.curObject!.uuid).toList(),
-                          itsObjects: vm.otherStates.where((element) => element.srcObject.target!=null&&element.srcObject.target!.uuid==vm.curObject!.uuid).toList(),
+                          otherObjects: vm.subObject.where((element) => element.srcObject.target!=null&&element.srcObject.target!.uuid!=vm.curObject!.uuid).toList(),
+                          itsObjects: vm.subObject.where((element) => element.srcObject.target!=null&&element.srcObject.target!.uuid==vm.curObject!.uuid).toList(),
                           onNewObjectCaller: vm.onNewPartCreatedHandler,
                           prjUUID: vm.prjUUID,
                           isSimpleAction: vm.pageDuty!="drawMainRectangle",
-                        ):Container(),
+                        ):
+                        Container(),
                       ),
                       Positioned(
                         top: (MediaQuery.sizeOf(context).height/2)-Dimens.actionBtnH/2,
@@ -108,20 +105,20 @@ class _View extends StatelessView<CutToPiecesViewModel> {
                                   const SizedBox(width: 5,),
                                   FlyoutTarget(
                                     key: GlobalKey(),
-                                    controller: vm.deleteController,
+                                    controller: vm.confirmController,
                                     child: IconButton(
                                         style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
                                         icon: Icon(
-                                          FluentIcons.check_mark,
+                                          FluentIcons.accept_medium,
                                           color: Colors.green.dark,
                                           size: 25,
                                         ),
                                         onPressed: () => showFlyConfirm(
-                                            Strings.deleteScreen,
+                                            Strings.finishLabeling,
                                             Strings.yes,
-                                            vm.deleteController,
+                                            vm.confirmController,
                                             FlyoutPlacementMode.right,
-                                            "delete&&${vm.curObject!.id!}",
+                                            "confirm&&${vm.curObject!.id!}",
                                             vm.onObjectActionHandler)),
                                   ),
 

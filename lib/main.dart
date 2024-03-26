@@ -96,11 +96,10 @@ final router = GoRouter(
       builder: (context, state) => const MainPage(),
     ),
     GoRoute(
-      path: '/cutToPieces/:objId/:groupId/:partUUID/:prjUUID/:title',
+      path: '/cutToPieces/:groupId/:partUUID/:prjUUID/:title',
       name: 'cutToPieces',
       builder: (context, state) =>
           CutToPiecesPage(
-              objId: int.parse(state.params['objId']!),
               groupId:int.parse(state.params['groupId']!),
               partUUID: state.params['partUUID']!,
               prjUUID: state.params['prjUUID']!,
