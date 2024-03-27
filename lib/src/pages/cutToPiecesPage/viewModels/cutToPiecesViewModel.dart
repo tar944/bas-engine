@@ -187,25 +187,27 @@ class CutToPiecesViewModel extends ViewModel {
     newObject.right=getX(newObject.right.toInt()).toDouble();
     newObject.top=getY(newObject.top.toInt()).toDouble();
     newObject.bottom=getY(newObject.bottom.toInt()).toDouble();
+
+    final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
+    final cmd = i.Command()
+      ..decodeImageFile(curObject!.image.target!.path!)
+      ..copyCrop(
+          x: newObject.left.toInt(),
+          y: newObject.top.toInt(),
+          width: (newObject.right.toInt() - newObject.left.toInt()).abs().toInt(),
+          height: (newObject.bottom.toInt() - newObject.top.toInt()))
+      ..writeToFile(path);
+    await cmd.executeThread();
+    var img = ImageModel(-1, const Uuid().v4(), newObject.uuid, p.basename(path), path);
+    img.id =await ImageDAO().add(img);
+    newObject.image.target=img;
+
     if(pageDuty=="cutting"){
       newObject.id=await ObjectDAO().addObject(newObject);
       await ImageGroupDAO().addSubObject(groupId, newObject);
       subObject.add(newObject);
       notifyListeners();
     }else if(pageDuty=="drawMainRectangle"){
-      final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
-      final cmd = i.Command()
-        ..decodeImageFile(curObject!.image.target!.path!)
-        ..copyCrop(
-            x: newObject.left.toInt(),
-            y: newObject.top.toInt(),
-            width: (newObject.right.toInt() - newObject.left.toInt()).abs().toInt(),
-            height: (newObject.bottom.toInt() - newObject.top.toInt()))
-        ..writeToFile(path);
-      await cmd.executeThread();
-      var img = ImageModel(-1, const Uuid().v4(), newObject.uuid, p.basename(path), path);
-      img.id =await ImageDAO().add(img);
-      newObject.image.target=img;
       newObject.isMainObject=true;
       newObject.id=await ObjectDAO().addObject(newObject);
       await ImageGroupDAO().addMainState(groupId, newObject);

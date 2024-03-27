@@ -5,6 +5,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelingBodyViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/labelBodyTagLine.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/objectItem.dart';
+import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pmvvm/pmvvm.dart';
@@ -15,12 +16,14 @@ class LabelingBody extends StatelessWidget {
     required this.objects,
     required this.prjUUID,
     required this.partUUID,
+    required this.partId,
     required this.grpUUID,
     required this.onGroupActionCaller
   }) : super(key: key);
 
   List<ObjectModel> objects;
   String prjUUID,partUUID,grpUUID;
+  final int partId;
   ValueSetter<String> onGroupActionCaller;
 
 
@@ -28,7 +31,7 @@ class LabelingBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: LabelingBodyViewModel(objects,grpUUID,partUUID,prjUUID,onGroupActionCaller),
+      viewModel: LabelingBodyViewModel(objects,grpUUID,partId,partUUID,prjUUID,onGroupActionCaller),
     );
   }
 }
@@ -50,12 +53,12 @@ class _View extends StatelessView<LabelingBodyViewModel> {
           padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
           child: Column(
             children: [
-              if(vm.tagLineState=="show")
+              if(vm.tagLineState==GroupState.none)
                 LabelBodyTagLine(
                     subGroups: vm.subGroups,
                     curGroup: vm.curGroup,
                     onLabelActionHandler: vm.onLabelActionHandler),
-              if(vm.tagLineState!="show")
+              if(vm.tagLineState!=GroupState.none)
                 Row(
                   children: [
                     Container(
@@ -72,7 +75,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                       ),
                     ),
                     const SizedBox(width: 10,),
-                    Text(vm.tagLineState=="firstStep"?Strings.groupFirstStep:Strings.groupSecondStep),
+                    Text(vm.tagLineState==GroupState.findMainState?Strings.groupFirstStep:Strings.groupSecondStep),
                   ],
                 ),
               Expanded(
@@ -93,7 +96,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                               .map((item) => ObjectItem(
                                     key: GlobalKey(),
                                     allGroups: vm.subGroups,
-                                    stepStatus: vm.tagLineState=="secondStep"?"labelIt":vm.tagLineState=="firstStep"?"firstStep":"hide",
+                                    stepStatus: vm.tagLineState==GroupState.findSubObjects?"labelIt":vm.tagLineState==GroupState.findMainState?"firstStep":"hide",
                                     object: item,
                                     onActionCaller: vm.onObjectActionHandler,
                                   ))

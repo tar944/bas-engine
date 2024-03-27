@@ -10,10 +10,12 @@ enum HeaderTabs {
 }
 
 enum GroupState {
+  none,
   findMainState,
   editOtherStates,
   findSubObjects,
   finishCutting,
+  categorizeSubs,
   finished
 }
 

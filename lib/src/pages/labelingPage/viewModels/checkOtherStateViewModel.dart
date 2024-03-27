@@ -25,10 +25,10 @@ class CheckOtherStateViewModel extends ViewModel {
   List<Uint8List> allImages=[];
   List<int> finishedObjectsId =[];
   final List<ObjectModel> allObjects;
-  final List<ObjectModel> srcObjects;
+  final ObjectModel srcObject;
 
 
-  CheckOtherStateViewModel(this.allObjects,this.srcObjects,this.prjUUID,this.partUUID,this.groupId);
+  CheckOtherStateViewModel(this.allObjects,this.srcObject,this.prjUUID,this.partUUID,this.groupId);
 
   @override
   void onMount() async{
@@ -62,7 +62,7 @@ class CheckOtherStateViewModel extends ViewModel {
 
   actionBtnHandler(String action)async{
     if(action =="yes"){
-      var obj = ObjectModel(-1, const Uuid().v4(), srcObjects[curSrc].left, srcObjects[curSrc].right, srcObjects[curSrc].top, srcObjects[curSrc].bottom);
+      var obj = ObjectModel(-1, const Uuid().v4(), srcObject.left, srcObject.right, srcObject.top, srcObject.bottom);
       obj.srcObject.target=allObjects[curImage];
       final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
       i.Command()
@@ -99,10 +99,10 @@ class CheckOtherStateViewModel extends ViewModel {
     final cmd = i.Command()
       ..decodeImageFile(obj.image.target!.path!)
       ..copyCrop(
-          x: srcObjects[curSrc].left.toInt(),
-          y: srcObjects[curSrc].top.toInt(),
-          width: (srcObjects[curSrc].right.toInt() - srcObjects[curSrc].left.toInt()).abs().toInt(),
-          height: (srcObjects[curSrc].bottom.toInt() - srcObjects[curSrc].top.toInt()))
+          x: srcObject.left.toInt(),
+          y: srcObject.top.toInt(),
+          width: (srcObject.right.toInt() - srcObject.left.toInt()).abs().toInt(),
+          height: (srcObject.bottom.toInt() - srcObject.top.toInt()))
       ..encodeJpg();
     await cmd.executeThread();
     return cmd.outputBytes;

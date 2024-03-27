@@ -51,6 +51,7 @@ class _View extends StatelessView<LabelingViewModel> {
                 return LabelingBody(
                     key: GlobalKey(),
                     objects: vm.objects,
+                    partId: vm.partId,
                     prjUUID: vm.prjUUID,
                     partUUID: vm.curPart!=null?vm.curPart!.uuid:"",
                     grpUUID: vm.curGroup!=null?vm.curGroup!.uuid:"",

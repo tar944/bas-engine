@@ -1,32 +1,43 @@
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgCheckOtherState.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLabelingManagement.dart';
+import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 import 'package:uuid/uuid.dart';
+import 'package:image/image.dart' as i;
+import 'package:path/path.dart' as p;
+import 'package:diff_image2/diff_image2.dart';
 
 class LabelingBodyViewModel extends ViewModel {
   List<ObjectModel> objects;
   List<ImageGroupModel> subGroups=[];
   ImageGroupModel? curGroup;
-  String tagLineState="show";
+  GroupState tagLineState=GroupState.none;
   String prjUUID,grpUUID,partUUID;
+  final int partId;
   LabelModel curLabel=LabelModel(-1, "", "");
   ValueSetter<String> onGroupActionCaller;
 
   LabelingBodyViewModel(
       this.objects,
       this.grpUUID,
+      this.partId,
       this.partUUID,
       this.prjUUID,
       this.onGroupActionCaller);
@@ -40,7 +51,7 @@ class LabelingBodyViewModel extends ViewModel {
     }else{
       var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
       subGroups=grp!.allGroups;
-      tagLineState =grp.state==GroupState.findMainState.name?"firstStep": grp.state==GroupState.findSubObjects.name?"secondStep":"show";
+      tagLineState=GroupState.values.firstWhere((element) => element.name==grp.state);
     }
     notifyListeners();
   }
@@ -51,22 +62,58 @@ class LabelingBodyViewModel extends ViewModel {
     if(grpUUID!=""){
       var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
       if(grp!.state==GroupState.editOtherStates.name){
+        var part = await ProjectPartDAO().getDetails(partId);
         showDialog(
             context: context,
             barrierDismissible: true,
             builder: (context) =>
                 DlgCheckOtherState(
-                  srcObjects:[grp.mainState.target!],
+                  srcObject:grp.mainState.target!,
                   allObjects:grp.allStates.where((element) => element.srcObject.target==null).toList(),
                   grpID: grp.id,
                   prjUUID: prjUUID,
-                  partUUID: partUUID,
-                  grpState: GroupState.editOtherStates,
+                  partUUID: part!.uuid,
                 ));
       }else if(grp.state==GroupState.finishCutting.name){
-
+        for(var curSub in grp.subObjects){
+          var srcImg = i.decodeImage(File(curSub.image.target!.path!,).readAsBytesSync(),);
+          for(var curState in grp.allStates){
+            var curImg = await getCroppedImage(curSub, curState);
+            var imgDiff = DiffImage.compareFromMemory(srcImg!, curImg!,).diffValue;
+            if(imgDiff!=0){
+              var obj = ObjectModel(-1, const Uuid().v4(), curSub.left, curSub.right, curSub.top, curSub.bottom);
+              obj.srcObject.target=curState;
+              final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
+              final cmd = i.Command()
+                ..decodeImage(curImg.getBytes())
+                ..writeToFile(path);
+              await cmd.executeThread();
+              var img = ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(path), path);
+              img.id =await ImageDAO().add(img);
+              obj.image.target=img;
+              obj.id=await ObjectDAO().addObject(obj);
+              await ImageGroupDAO().addSubObject(grp.id, obj);
+            }
+          }
+        }
+        print("finished");
+        // grp.state=GroupState.categorizeSubs.name;
+        // await ImageGroupDAO().update(grp);
       }
     }
+  }
+
+  Future<i.Image?> getCroppedImage(ObjectModel srcObject,ObjectModel obj)async{
+    final cmd = i.Command()
+      ..decodeImageFile(obj.image.target!.path!)
+      ..copyCrop(
+          x: srcObject.left.toInt(),
+          y: srcObject.top.toInt(),
+          width: (srcObject.right.toInt() - srcObject.left.toInt()).abs().toInt(),
+          height: (srcObject.bottom.toInt() - srcObject.top.toInt()))
+      ..encodeJpg();
+    await cmd.executeThread();
+    return cmd.outputImage;
   }
 
   onLabelActionHandler(String action)async{
