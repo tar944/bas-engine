@@ -22,11 +22,10 @@ class LabelTag extends HookWidget {
   Widget build(BuildContext context) {
 
     return Padding(
-      padding: const EdgeInsets.only(left: 3.0,right: 3.0),
+      padding: const EdgeInsets.only(top:4.0,bottom:4.0,left: 3.0,right: 3.0),
       child: IconButton(
           style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
           icon: Container(
-            height: Dimens.tabHeightSmall + 10,
             alignment: Alignment.center,
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(
