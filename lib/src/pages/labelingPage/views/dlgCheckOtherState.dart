@@ -140,6 +140,7 @@ class _View extends StatelessView<CheckOtherStateViewModel> {
                     child: Expanded(
                       child: Column(
                         children: [
+                          SizedBox(height: 100,),
                           ProgressRing(),
                           SizedBox(height: 20,),
                           Text(Strings.waitingForImageProgressing)

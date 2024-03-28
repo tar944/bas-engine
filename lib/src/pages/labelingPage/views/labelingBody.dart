@@ -81,27 +81,42 @@ class _View extends StatelessView<LabelingBodyViewModel> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: vm.objects.isNotEmpty
-                      ? GridView(
-                          controller: ScrollController(keepScrollOffset: false),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          gridDelegate:
-                              const SliverGridDelegateWithMaxCrossAxisExtent(
-                                  maxCrossAxisExtent: 300,
-                                  childAspectRatio: 3.2 / 2,
-                                  crossAxisSpacing: 20,
-                                  mainAxisSpacing: 20),
-                          children: vm.objects
-                              .map((item) => ObjectItem(
-                                    key: GlobalKey(),
-                                    allGroups: vm.subGroups,
-                                    stepStatus: vm.tagLineState==GroupState.findSubObjects?"labelIt":vm.tagLineState==GroupState.findMainState?"firstStep":"hide",
-                                    object: item,
-                                    onActionCaller: vm.onObjectActionHandler,
-                                  ))
-                              .toList(),
-                        )
+                  child: vm.objects.isNotEmpty ?
+                      vm.isLoading?
+                          const Expanded(
+                              child: Column(
+                                children: [
+                                  SizedBox(
+                                    height: 200,
+                                  ),
+                                  ProgressRing(),
+                                  SizedBox(
+                                    height: 20,
+                                  ),
+                                  Text(Strings.waitingForImageProgressing)
+                                ],
+                              ),
+                            )
+                          :GridView(
+                                  controller: ScrollController(keepScrollOffset: false),
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  gridDelegate:
+                                      const SliverGridDelegateWithMaxCrossAxisExtent(
+                                          maxCrossAxisExtent: 300,
+                                          childAspectRatio: 3.2 / 2,
+                                          crossAxisSpacing: 20,
+                                          mainAxisSpacing: 20),
+                                  children: vm.objects
+                                      .map((item) => ObjectItem(
+                                            key: GlobalKey(),
+                                            allGroups: vm.subGroups,
+                                            stepStatus: vm.tagLineState==GroupState.findSubObjects?"labelIt":vm.tagLineState==GroupState.findMainState?"firstStep":"hide",
+                                            object: item,
+                                            onActionCaller: vm.onObjectActionHandler,
+                                          ))
+                                      .toList(),
+                                )
                       : Column(
                           children: [
                             const SizedBox(

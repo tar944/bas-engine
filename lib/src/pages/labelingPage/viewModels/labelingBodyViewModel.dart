@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
@@ -31,6 +30,7 @@ class LabelingBodyViewModel extends ViewModel {
   GroupState tagLineState=GroupState.none;
   String prjUUID,grpUUID,partUUID;
   final int partId;
+  bool isLoading=false;
   LabelModel curLabel=LabelModel(-1, "", "");
   ValueSetter<String> onGroupActionCaller;
 
@@ -61,8 +61,8 @@ class LabelingBodyViewModel extends ViewModel {
   void onMount() async{
     if(grpUUID!=""){
       var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+      var part = await ProjectPartDAO().getDetails(partId);
       if(grp!.state==GroupState.editOtherStates.name){
-        var part = await ProjectPartDAO().getDetails(partId);
         showDialog(
             context: context,
             barrierDismissible: true,
@@ -75,30 +75,48 @@ class LabelingBodyViewModel extends ViewModel {
                   partUUID: part!.uuid,
                 ));
       }else if(grp.state==GroupState.finishCutting.name){
+        isLoading=true;
+        notifyListeners();
+        ImageGroupModel? newGrp;
         for(var curSub in grp.subObjects){
+          newGrp=null;
           var srcImg = i.decodeImage(File(curSub.image.target!.path!,).readAsBytesSync(),);
           for(var curState in grp.allStates){
             var curImg = await getCroppedImage(curSub, curState);
-            var imgDiff = DiffImage.compareFromMemory(srcImg!, curImg!,).diffValue;
-            if(imgDiff!=0){
+            var imgDiff = DiffImage.compareFromMemory(srcImg!, curImg!).diffValue;
+            if(imgDiff>0.1){
               var obj = ObjectModel(-1, const Uuid().v4(), curSub.left, curSub.right, curSub.top, curSub.bottom);
               obj.srcObject.target=curState;
-              final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
+              final path = await DirectoryManager().getObjectImagePath(prjUUID, part!.uuid);
               final cmd = i.Command()
-                ..decodeImage(curImg.getBytes())
+                ..decodeImageFile(curState.image.target!.path!)
+                ..copyCrop(
+                    x: curSub.left.toInt(),
+                    y: curSub.top.toInt(),
+                    width: (curSub.right.toInt() - curSub.left.toInt()).abs().toInt(),
+                    height: (curSub.bottom.toInt() - curSub.top.toInt()))
                 ..writeToFile(path);
               await cmd.executeThread();
               var img = ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(path), path);
               img.id =await ImageDAO().add(img);
               obj.image.target=img;
               obj.id=await ObjectDAO().addObject(obj);
-              await ImageGroupDAO().addSubObject(grp.id, obj);
+              if(newGrp==null){
+                newGrp= ImageGroupModel(-1, "", grp.uuid,Strings.emptyStr, "");
+                newGrp.uuid= const Uuid().v4();
+                newGrp.state= GroupState.generated.name;
+                newGrp.id= await ImageGroupDAO().add(newGrp);
+                grp.allGroups.add(newGrp);
+                await ImageGroupDAO().update(grp);
+              }
+              await ImageGroupDAO().addSubObject(newGrp.id, obj);
             }
           }
         }
-        print("finished");
-        // grp.state=GroupState.categorizeSubs.name;
-        // await ImageGroupDAO().update(grp);
+        grp.state=GroupState.readyToWork.name;
+        await ImageGroupDAO().update(grp);
+        isLoading=false;
+        notifyListeners();
       }
     }
   }

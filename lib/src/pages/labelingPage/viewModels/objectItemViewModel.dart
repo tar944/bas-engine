@@ -19,7 +19,6 @@ class ObjectItemViewModel extends ViewModel {
 
   @override
   void init() {
-    print(object.image.target!.path);
     if (stepStatus == "hide") {
       for (var grp in allGroups) {
         if (grp.allStates
