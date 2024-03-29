@@ -16,12 +16,14 @@ class ObjectItem extends StatelessWidget {
       {Key? key,
         required this.allGroups,
         required this.object,
+        required this.isState,
         required this.stepStatus,
         required this.onActionCaller})
       : super(key: key);
 
   final ObjectModel object;
   final String stepStatus;
+  final bool isState;
   final List<ImageGroupModel> allGroups;
   final ValueSetter<String> onActionCaller;
 
@@ -30,7 +32,7 @@ class ObjectItem extends StatelessWidget {
     return MVVM(
       view: () => const _View(),
       viewModel:
-          ObjectItemViewModel( allGroups,stepStatus, object, onActionCaller),
+          ObjectItemViewModel( allGroups,isState,stepStatus, object, onActionCaller),
     );
   }
 }
@@ -105,7 +107,8 @@ class _View extends StatelessView<ObjectItemViewModel> {
                       ],
                     ),
                   ),
-                Positioned(
+                if(vm.isState==false)
+                  Positioned(
                     bottom: 5,
                     left: 5,
                     right: 5,

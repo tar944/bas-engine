@@ -2,6 +2,7 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String notSet="notSet";
   static const String showStates="All states";
   static const String showAllUnits="All units";
   static const String emptyStr="KKvSrPVdpM";

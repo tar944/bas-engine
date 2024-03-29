@@ -12,10 +12,11 @@ class ObjectItemViewModel extends ViewModel {
   int parentGroupId = -1;
   bool showLabel = false;
   String stepStatus;
+  final bool isState;
   final List<ImageGroupModel> allGroups;
   final ValueSetter<String> onActionCaller;
 
-  ObjectItemViewModel(this.allGroups, this.stepStatus, this.object, this.onActionCaller);
+  ObjectItemViewModel(this.allGroups,this.isState, this.stepStatus, this.object, this.onActionCaller);
 
   @override
   void init() {

@@ -90,7 +90,7 @@ class LabelBodyTagLine extends HookWidget {
                       onPressed: () => onLabelActionHandler("showDialog&&")),
                   const SizedBox(width: 10,),
                 SizedBox(
-                  width: MediaQuery.sizeOf(context).width-(isParentGroup?240:131),
+                  width: MediaQuery.sizeOf(context).width-(isParentGroup?345:131),
                   child: ListView.builder(
                       key: GlobalKey(),
                       itemCount: subGroups.length,

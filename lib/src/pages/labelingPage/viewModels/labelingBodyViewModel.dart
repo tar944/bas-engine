@@ -30,7 +30,7 @@ class LabelingBodyViewModel extends ViewModel {
   GroupState tagLineState=GroupState.none;
   String prjUUID,grpUUID,partUUID;
   final int partId;
-  bool isLoading=false;
+  bool isLoading=false,isState=false;
   LabelModel curLabel=LabelModel(-1, "", "");
   ValueSetter<String> onGroupActionCaller;
 
@@ -55,7 +55,6 @@ class LabelingBodyViewModel extends ViewModel {
     }
     notifyListeners();
   }
-
 
   @override
   void onMount() async{
@@ -137,6 +136,10 @@ class LabelingBodyViewModel extends ViewModel {
   onLabelActionHandler(String action)async{
     var act = action.split("&&");
     switch(act[0]){
+      case "showStates":
+        break;
+      case "showSubs":
+        break;
       case "open":
         onGroupActionCaller(action);
         break;

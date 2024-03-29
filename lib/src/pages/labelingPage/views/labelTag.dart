@@ -36,10 +36,11 @@ class LabelTag extends HookWidget {
             child: Row(
               children: [
                 const SizedBox(width: 10,),
-                Text(
-                  "${curGroup.label.target!.name}.${curGroup.name}",
+                curGroup.name!=Strings.emptyStr?
+                Text("${curGroup.label.target!.name}.${curGroup.name}",
                   style: TextSystem.textS(Colors.white),
-                ),
+                ):
+                Text(Strings.notSet,style: TextSystem.textS(Colors.white),),
                 const SizedBox(
                   width: 8,
                 ),
