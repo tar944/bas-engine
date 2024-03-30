@@ -209,7 +209,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(15, 8892823931225835339),
       name: 'ObjectModel',
-      lastPropertyId: const IdUid(27, 397024808833094930),
+      lastPropertyId: const IdUid(28, 610347001844851126),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -296,6 +296,11 @@ final _entities = <ModelEntity>[
         ModelProperty(
             id: const IdUid(27, 397024808833094930),
             name: 'isMainObject',
+            type: 1,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(28, 610347001844851126),
+            name: 'needToCompare',
             type: 1,
             flags: 0)
       ],
@@ -861,7 +866,7 @@ ModelDefinition getObjectBoxModel() {
           final colorOffset = fbb.writeString(object.color);
           final actionTypeOffset = fbb.writeString(object.actionType);
           final typedTextOffset = fbb.writeString(object.typedText);
-          fbb.startTable(28);
+          fbb.startTable(29);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, uuidOffset);
           fbb.addFloat64(2, object.left);
@@ -878,6 +883,7 @@ ModelDefinition getObjectBoxModel() {
           fbb.addBool(23, object.isNavTool);
           fbb.addInt64(25, object.srcObject.targetId);
           fbb.addBool(26, object.isMainObject);
+          fbb.addBool(27, object.needToCompare);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -909,7 +915,9 @@ ModelDefinition getObjectBoxModel() {
             ..isNavTool =
                 const fb.BoolReader().vTableGet(buffer, rootOffset, 50, false)
             ..isMainObject =
-                const fb.BoolReader().vTableGet(buffer, rootOffset, 56, false);
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 56, false)
+            ..needToCompare =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 58, false);
           object.image.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 36, 0);
           object.image.attach(store);
@@ -1244,6 +1252,10 @@ class ObjectModel_ {
   /// see [ObjectModel.isMainObject]
   static final isMainObject =
       QueryBooleanProperty<ObjectModel>(_entities[4].properties[15]);
+
+  /// see [ObjectModel.needToCompare]
+  static final needToCompare =
+      QueryBooleanProperty<ObjectModel>(_entities[4].properties[16]);
 }
 
 /// [ImageGroupModel] entity fields to define ObjectBox queries.

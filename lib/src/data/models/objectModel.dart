@@ -15,6 +15,7 @@ class ObjectModel {
   String actionType = "";
   bool isNavTool = false;
   bool isMainObject = false;
+  bool needToCompare=false;
   String typedText = "";
   int actX = -1, actY = -1;
   final srcObject = ToOne<ObjectModel>();

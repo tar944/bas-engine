@@ -21,30 +21,32 @@ enum GroupState {
 }
 
 enum ObjectType {
-  checkRegion,
   label,
+  linkLabel,
   button,
   closeBTN,
   confirmBTN,
   confirmAndCloseBTN,
+  iconBTN,
+  textBox,
+  switchBTN,
+  checkBox,
   radioRegion,
   icon,
-  iconBTN,
+  colorView,
+  richEditBox,
+  menu,
+  menuItem,
   tab,
-  switchBTN,
   selectBox,
   table,
   tableColumn,
   tableRow,
+  cell,
   horizontalScrollbar,
   verticalScrollbar,
   chart,
   chartObjects,
-  menu,
-  menuItem,
-  cell,
-  textBox,
-  richEditBox
 }
 
 enum ImageStatus { finished, created }

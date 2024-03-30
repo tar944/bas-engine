@@ -191,7 +191,7 @@
     },
     {
       "id": "15:8892823931225835339",
-      "lastPropertyId": "27:397024808833094930",
+      "lastPropertyId": "28:610347001844851126",
       "name": "ObjectModel",
       "properties": [
         {
@@ -282,6 +282,11 @@
         {
           "id": "27:397024808833094930",
           "name": "isMainObject",
+          "type": 1
+        },
+        {
+          "id": "28:610347001844851126",
+          "name": "needToCompare",
           "type": 1
         }
       ],

@@ -2,6 +2,8 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String sureToSetItMain="Are you sure to want set it as a main state?";
+  static const String setItMain="Set it main";
   static const String notSet="notSet";
   static const String showStates="All states";
   static const String showAllUnits="All units";
@@ -48,7 +50,7 @@ class Strings{
   static const String lvlError="You can not remove levels that have labels on it.";
   static const String lblError="You can not remove labels that have objects tagged with it.";
   static const String labelIt="Label it";
-  static const String mainState="Chose as main state";
+  static const String mainState="Cut for main state";
   static const String deleteGroupError="There is some content in this group, you can not delete it";
   static const String maxGroupNumberError="Each part only can have 8 groups";
   static const String emptyLabeledGroup="💔 Your Labeled images group list is empty.";

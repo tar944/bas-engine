@@ -154,25 +154,49 @@ class _View extends StatelessView<ObjectItemViewModel> {
                       borderRadius: BorderRadius.all(Radius.circular(5.0))
                     ),
                       child: Icon(FluentIcons.crown_solid,size: 22,color: Colors.orange.lightest,)):
-                  FlyoutTarget(
-                    key: GlobalKey(),
-                    controller: controller,
-                    child: IconButton(
-                      style: ButtonStyle(
-                        backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
+                  Row(
+                    children: [
+                      FlyoutTarget(
+                        key: GlobalKey(),
+                        controller: controller,
+                        child: IconButton(
+                          style: ButtonStyle(
+                            backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
+                          ),
+                            icon: Icon(
+                              FluentIcons.delete,
+                              color: Colors.red,
+                              size: 20,
+                            ),
+                            onPressed: () => showFlyConfirm(
+                                "Are you sure?",
+                                Strings.yes,
+                                controller,
+                                FlyoutPlacementMode.topCenter,
+                                "delete&&${vm.object.id!}",
+                                vm.onActionCaller)),
                       ),
-                        icon: Icon(
-                          FluentIcons.delete,
-                          color: Colors.red,
-                          size: 20,
-                        ),
-                        onPressed: () => showFlyConfirm(
-                            "Are you sure?",
-                            "yeh",
-                            controller,
-                            FlyoutPlacementMode.topCenter,
-                            "delete&&${vm.object.id!}",
-                            vm.onActionCaller)),
+                      if(vm.stepStatus=="firstStep")
+                        ...[
+                          const SizedBox(width: 5,),
+                          FlyoutTarget(
+                            key: GlobalKey(),
+                            controller: controller,
+                            child: IconButton(
+                                style: ButtonStyle(
+                                    backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
+                                ),
+                                icon: const Text(Strings.setItMain),
+                                onPressed: () => showFlyConfirm(
+                                    Strings.sureToSetItMain,
+                                    Strings.yes,
+                                    controller,
+                                    FlyoutPlacementMode.topCenter,
+                                    "setItMain&&${vm.object.id!}",
+                                    vm.onActionCaller)),
+                          ),
+                        ]
+                    ],
                   ),
                 ),
               ],

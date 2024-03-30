@@ -49,6 +49,7 @@ class LabelingBodyViewModel extends ViewModel {
     if(partUUID!=""){
       var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
       subGroups=part!.allGroups;
+      isState=false;
     }else{
       var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
       subGroups=grp!.allGroups;
@@ -69,7 +70,7 @@ class LabelingBodyViewModel extends ViewModel {
             builder: (context) =>
                 DlgCheckOtherState(
                   srcObject:grp.mainState.target!,
-                  allObjects:grp.allStates.where((element) => element.srcObject.target==null).toList(),
+                  allObjects:grp.allStates.where((element) => element.needToCompare==true).toList(),
                   grpID: grp.id,
                   prjUUID: prjUUID,
                   partUUID: part!.uuid,
@@ -118,6 +119,8 @@ class LabelingBodyViewModel extends ViewModel {
           }
           if (newGrp.allStates.length == 1) {
             newGrp.mainState.target = newGrp.allStates[0];
+            newGrp.allStates[0].isMainObject=true;
+            await ObjectDAO().update(newGrp.allStates[0]);
             await ImageGroupDAO().update(newGrp);
           }
         }
@@ -273,7 +276,14 @@ class LabelingBodyViewModel extends ViewModel {
         objects.removeWhere((element) => element.id==obj.id);
         notifyListeners();
         break;
-
+      case "setItMain":
+        var obj = await ObjectDAO().getDetails(int.parse(act[1]));
+        obj!.isMainObject=true;
+        await ObjectDAO().update(obj);
+        var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+        await ImageGroupDAO().addMainState(grp!.id, obj);
+        onMount();
+        break;
     }
   }
 }
