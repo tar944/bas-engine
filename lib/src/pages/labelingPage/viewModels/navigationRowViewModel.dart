@@ -7,7 +7,7 @@ class NavigationRowViewModel extends ViewModel {
   List<NavModel> allNavs;
   int rowNumber;
   NavModel selectedNav;
-  NavModel showAll=NavModel(-2, -1, "", "", "");
+  NavModel showAll=NavModel(-2, -1, "", "", "","","");
   ValueSetter<NavModel> onNavSelectedCaller;
   NavigationRowViewModel(this.allNavs,this.selectedNav,this.rowNumber,this.onNavSelectedCaller);
 

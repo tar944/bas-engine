@@ -77,15 +77,26 @@ class LabelingBodyViewModel extends ViewModel {
         isLoading=true;
         notifyListeners();
         ImageGroupModel? newGrp;
-        for(var curSub in grp.subObjects){
-          newGrp=null;
+        while (grp.subObjects.isNotEmpty) {
+          var curSub = grp.subObjects[0];
+          newGrp = ImageGroupModel(-1, "", grp.uuid, Strings.emptyStr, "");
+          newGrp.uuid = const Uuid().v4();
+          newGrp.state = GroupState.generated.name;
+          await ImageGroupDAO().add(newGrp);
+          newGrp = await ImageGroupDAO().getDetailsByUUID(newGrp.uuid);
+          newGrp!.allStates.add(curSub);
+          await ImageGroupDAO().update(newGrp);
+          grp.subObjects.removeWhere((element) => element.id == curSub.id);
+          grp.allGroups.add(newGrp);
+          await ImageGroupDAO().update(grp);
+          //ready to compare images
           var srcImg = i.decodeImage(File(curSub.image.target!.path!,).readAsBytesSync(),);
-          for(var curState in grp.allStates){
+          for (var curState in grp.allStates) {
             var curImg = await getCroppedImage(curSub, curState);
             var imgDiff = DiffImage.compareFromMemory(srcImg!, curImg!).diffValue;
-            if(imgDiff>0.1){
+            if (imgDiff > 0.1) {
               var obj = ObjectModel(-1, const Uuid().v4(), curSub.left, curSub.right, curSub.top, curSub.bottom);
-              obj.srcObject.target=curState;
+              obj.srcObject.target = curState;
               final path = await DirectoryManager().getObjectImagePath(prjUUID, part!.uuid);
               final cmd = i.Command()
                 ..decodeImageFile(curState.image.target!.path!)
@@ -97,19 +108,16 @@ class LabelingBodyViewModel extends ViewModel {
                 ..writeToFile(path);
               await cmd.executeThread();
               var img = ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(path), path);
-              img.id =await ImageDAO().add(img);
-              obj.image.target=img;
-              obj.id=await ObjectDAO().addObject(obj);
-              if(newGrp==null){
-                newGrp= ImageGroupModel(-1, "", grp.uuid,Strings.emptyStr, "");
-                newGrp.uuid= const Uuid().v4();
-                newGrp.state= GroupState.generated.name;
-                newGrp.id= await ImageGroupDAO().add(newGrp);
-                grp.allGroups.add(newGrp);
-                await ImageGroupDAO().update(grp);
-              }
-              await ImageGroupDAO().addSubObject(newGrp.id, obj);
+              img.id = await ImageDAO().add(img);
+              obj.image.target = img;
+              obj.id = await ObjectDAO().addObject(obj);
+              newGrp.allStates.add(obj);
+              await ImageGroupDAO().update(newGrp);
             }
+          }
+          if (newGrp.allStates.length == 1) {
+            newGrp.mainState.target = newGrp.allStates[0];
+            await ImageGroupDAO().update(newGrp);
           }
         }
         grp.state=GroupState.readyToWork.name;
@@ -137,26 +145,18 @@ class LabelingBodyViewModel extends ViewModel {
     var act = action.split("&&");
     switch(act[0]){
       case "showStates":
-        break;
-      case "showSubs":
+        isState=true;
+        var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+        objects=grp!.allStates;
+        notifyListeners();
         break;
       case "open":
         onGroupActionCaller(action);
         break;
-      case "showAll":
-        curGroup= null;
-        if(partUUID!=""){
-          var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
-          objects=part!.allObjects;
-        }else{
-          var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
-          objects=grp!.allStates;
-        }
-        notifyListeners();
-        break;
       case "choose":
         curGroup= await ImageGroupDAO().getDetails(int.parse(act[1]));
         objects=curGroup!.allStates;
+        isState=false;
         notifyListeners();
         break;
       case "showDialog":

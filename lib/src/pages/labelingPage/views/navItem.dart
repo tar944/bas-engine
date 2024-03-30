@@ -62,7 +62,7 @@ class NavItem extends HookWidget {
                     children: [
                       Text(navItem.title,style: TextSystem.textM(selectStatus=="selected"?Colors.teal:Colors.white),),
                       const SizedBox(height: 2,),
-                      Text("${navItem.imgNumber} ${navItem.imgNumber==1?"image":"images"}",style: TextSystem.textS(selectStatus=="selected"?Colors.teal:Colors.white),),
+                      Text(navItem.kind=="part"?"${navItem.description.substring(0,20)} ...":navItem.lblName,style: TextSystem.textXs(selectStatus=="selected"?Colors.teal:Colors.white),),
                     ],
                   ),
                 )

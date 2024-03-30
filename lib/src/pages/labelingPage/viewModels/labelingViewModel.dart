@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
@@ -28,7 +29,7 @@ class LabelingViewModel extends ViewModel {
   @override
   void init() async {
     final address = await Preference().getMainAddress();
-    updateByPartData(NavModel(-1, 0, "part", "", ""));
+    updateByPartData(NavModel(-1, 0, "part", "", "","",""));
     if (address != '') {
       onGroupSelect("goto&&${address.split("&&")[2]}");
       await Preference().setMainAddress('');
@@ -59,7 +60,11 @@ class LabelingViewModel extends ViewModel {
             part.name!,
             part.allObjects.isNotEmpty
                 ? part.allObjects[0].image.target!.path!
-                : ""));
+                : "",
+          part.description!,
+          ""
+          )
+        );
       }
       allNavsRows.add(allNavs);
       selectedNavs.add(allNavsRows[0][0]);
@@ -86,7 +91,10 @@ class LabelingViewModel extends ViewModel {
             grp.allStates.length,
             "group",
             grp.name!,
-            grp.state != GroupState.findMainState.name ? grp.mainState.target!.image.target!.path! : ""));
+            grp.state != GroupState.findMainState.name ? grp.mainState.target!.image.target!.path! : "",
+            "",
+            grp.label.target==null?Strings.notSet:grp.label.target!.name
+        ));
       }
       allNavsRows.add(allNavs);
       selectedNavs.add(allNavs.firstWhere((element) => element.id == curNav.id));
@@ -121,7 +129,7 @@ class LabelingViewModel extends ViewModel {
     var act = action.split("&&");
     switch (act[0]) {
       case 'open':
-        updateByGroupData(NavModel(int.parse(act[1]), 0, 'group',"", "newRow582990"));
+        updateByGroupData(NavModel(int.parse(act[1]), 0, 'group',"", "newRow582990","",""));
         break;
       case 'changePart':
         partId=int.parse(action.split("&&")[1]);

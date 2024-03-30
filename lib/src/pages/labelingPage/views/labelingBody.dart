@@ -58,6 +58,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                     subGroups: vm.subGroups,
                     curGroup: vm.curGroup,
                     isParentGroup: vm.grpUUID!="",
+                    isStatesShowing: vm.isState,
                     onLabelActionHandler: vm.onLabelActionHandler),
               if(vm.tagLineState!=GroupState.none&&vm.tagLineState!=GroupState.readyToWork)
                 Row(

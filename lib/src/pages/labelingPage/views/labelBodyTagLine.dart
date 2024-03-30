@@ -12,18 +12,18 @@ class LabelBodyTagLine extends HookWidget {
       {Key? key,
       required this.subGroups,
       required this.curGroup,
-        required this.isParentGroup,
+      required this.isParentGroup,
+      required this.isStatesShowing,
       required this.onLabelActionHandler})
       : super(key: key);
 
-  List<ImageGroupModel> subGroups;
-  ImageGroupModel? curGroup;
-  bool isParentGroup;
+  final List<ImageGroupModel> subGroups;
+  final ImageGroupModel? curGroup;
+  final bool isParentGroup,isStatesShowing;
   ValueSetter<String> onLabelActionHandler;
 
   @override
   Widget build(BuildContext context) {
-
     return SizedBox(
       height: Dimens.tabHeightSmall+20,
       child: Row(
@@ -38,26 +38,11 @@ class LabelBodyTagLine extends HookWidget {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                         borderRadius: const BorderRadius.all(Radius.circular((Dimens.tabHeightSmall+10/2))),
-                        border: Border.all(color: Colors.grey[160])
+                        border: Border.all(color: isStatesShowing?Colors.teal.dark:Colors.grey[160],width: isStatesShowing?2.0:1.0)
                     ),
                     child: Text(Strings.showStates,style: TextSystem.textS(Colors.white),),
                   ),
-                  onPressed: ()=>onLabelActionHandler("allStates")
-              ),
-              const SizedBox(width: 6.0,),
-              IconButton(
-                  style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
-                  icon: Container(
-                    width: Dimens.tabHeightSmall*2.8,
-                    height: Dimens.tabHeightSmall+10,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(Radius.circular((Dimens.tabHeightSmall+10/2))),
-                        border: Border.all(color: Colors.grey[160])
-                    ),
-                    child: Text(Strings.showStates,style: TextSystem.textS(Colors.white),),
-                  ),
-                  onPressed: ()=>onLabelActionHandler("allStates")
+                  onPressed:()=>onLabelActionHandler("showStates&&")
               ),
               const SizedBox(width: 10,),
             ],
