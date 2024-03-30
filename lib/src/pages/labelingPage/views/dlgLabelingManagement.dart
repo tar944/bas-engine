@@ -13,19 +13,20 @@ class DlgLabelManagement extends StatelessWidget {
     Key? key,
     required this.labelList,
     required this.prjUUID,
+    required this.returnAction,
     required this.onActionCaller,
   }) : super(key: key);
 
   final ValueSetter<String> onActionCaller;
   final List<LabelModel> labelList;
-  final String prjUUID;
+  final String prjUUID,returnAction;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
       viewModel:
-      LabelManagementViewModel(prjUUID,labelList, onActionCaller),
+      LabelManagementViewModel(prjUUID,labelList,returnAction, onActionCaller),
     );
   }
 }
@@ -137,12 +138,8 @@ class _View extends StatelessView<LabelManagementViewModel> {
                                   ),
                                   IconButton(
                                       style: ButtonStyle(
-                                          padding:
-                                          ButtonState.all(const EdgeInsets.all(6))),
-                                      icon: Icon(
-                                        FluentIcons.check_mark,
-                                        size: 20,
-                                        color: Colors.green.dark,
+                                          padding: ButtonState.all(const EdgeInsets.all(6))),
+                                      icon: Icon(FluentIcons.check_mark, size: 20, color: Colors.green.dark,
                                       ),
                                       onPressed: vm.selectedLevel==null?null:() =>
                                           vm.onLabelActionHandler('saveName&&${vm.ctlName.text}')),

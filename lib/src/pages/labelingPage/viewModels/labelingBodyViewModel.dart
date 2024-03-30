@@ -30,7 +30,8 @@ class LabelingBodyViewModel extends ViewModel {
   GroupState tagLineState=GroupState.none;
   String prjUUID,grpUUID,partUUID;
   final int partId;
-  bool isLoading=false,isState=false;
+  int labelGroupId=-1;
+  bool isLoading=false,isState=true;
   LabelModel curLabel=LabelModel(-1, "", "");
   ValueSetter<String> onGroupActionCaller;
 
@@ -150,6 +151,7 @@ class LabelingBodyViewModel extends ViewModel {
         objects=grp!.allStates;
         notifyListeners();
         break;
+        break;
       case "open":
         onGroupActionCaller(action);
         break;
@@ -159,18 +161,12 @@ class LabelingBodyViewModel extends ViewModel {
         isState=false;
         notifyListeners();
         break;
+      case "labelIt":
+        labelGroupId=int.parse(act[1]);
+        gotoLabelingDialog(act[0]);
+        break;
       case "showDialog":
-        var prj = await ProjectDAO().getDetailsByUUID(prjUUID);
-        showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) =>
-              DlgLabelManagement(
-                labelList: prj!.allLabels,
-                prjUUID: prjUUID,
-                onActionCaller: onLabelActionHandler,
-              ),
-        );
+        gotoLabelingDialog(act[0]);
         break;
       case "saveName":
         var newGroup = ImageGroupModel(-1,partUUID,grpUUID , act[2], "");
@@ -191,6 +187,18 @@ class LabelingBodyViewModel extends ViewModel {
         subGroups.add(newGroup);
         notifyListeners();
         break;
+      case "changeName":
+        var grp = await ImageGroupDAO().getDetails(labelGroupId);
+        labelGroupId=-1;
+        var lbl=await LabelDAO().getLabel(int.parse(act[1]));
+        grp!.name=act[2];
+        grp.label.target=lbl;
+        grp.state=grp.mainState.target==null?GroupState.findMainState.name:GroupState.findSubObjects.name;
+        await ImageGroupDAO().update(grp);
+        grp=await ImageGroupDAO().getDetailsByUUID(grpUUID);
+        subGroups=grp!.allGroups;
+        notifyListeners();
+        break;
       case "remove":
         var grp = await ImageGroupDAO().getDetails(int.parse(act[1]));
         if(grp!.allGroups.isEmpty&&grp.subObjects.isEmpty){
@@ -203,6 +211,22 @@ class LabelingBodyViewModel extends ViewModel {
         break;
     }
   }
+
+  gotoLabelingDialog(String act)async{
+    var prj = await ProjectDAO().getDetailsByUUID(prjUUID);
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) =>
+          DlgLabelManagement(
+            labelList: prj!.allLabels,
+            prjUUID: prjUUID,
+            returnAction: act=="showDialog"?'saveName':'changeName',
+            onActionCaller: onLabelActionHandler,
+          ),
+    );
+  }
+
 
   int getLabelObjectNumber(LabelModel lbl){
     return 0;

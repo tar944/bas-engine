@@ -60,7 +60,7 @@ class _View extends StatelessView<FlyObjectViewModel> {
               image: DecorationImage(
                 image:
                 Image.file(File(vm.object.image.target!.path!)).image,
-                fit: BoxFit.fill,
+                fit: BoxFit.fitWidth,
               ),
             ),
           ),

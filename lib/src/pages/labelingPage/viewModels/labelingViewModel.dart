@@ -105,9 +105,6 @@ class LabelingViewModel extends ViewModel {
     curPart=null;
     objects = [];
     objects.addAll(curGroup!.allStates);
-    for (var grp in curGroup!.allGroups) {
-      objects.addAll(grp.allStates);
-    }
     notifyListeners();
   }
 

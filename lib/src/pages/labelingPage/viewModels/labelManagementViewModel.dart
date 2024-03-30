@@ -14,11 +14,11 @@ class LabelManagementViewModel extends ViewModel {
   List<String> allLevels=[];
   int curIndex=0;
   LabelModel? selectedLevel;
-  String prjUUID;
+  String prjUUID,returnAction;
   var ctlName = TextEditingController();
   final ValueSetter<String> onActionCaller;
 
-  LabelManagementViewModel(this.prjUUID,this.allLabels, this.onActionCaller);
+  LabelManagementViewModel(this.prjUUID,this.allLabels,this.returnAction, this.onActionCaller);
 
   @override
   void init() {
@@ -84,7 +84,7 @@ class LabelManagementViewModel extends ViewModel {
     var act=action.split('&&');
     switch(act[0]){
       case "saveName":
-        onActionCaller("saveName&&${selectedLevel!.id}&&${act[1]}");
+        onActionCaller("$returnAction&&${selectedLevel!.id}&&${act[1]}");
         onCloseClicked();
         break;
       case "create":

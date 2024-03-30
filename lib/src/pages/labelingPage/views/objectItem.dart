@@ -137,7 +137,7 @@ class _View extends StatelessView<ObjectItemViewModel> {
                         items: vm.allGroups.map((e)=>MultiSelectCard(
                               selected: e.id == vm.parentGroupId,
                               value: e.id,
-                              label: e.name,
+                              label: e.name==Strings.emptyStr?Strings.notSet:e.name==""?e.label.target!.name:e.name,
                           )
                         ).toList(),
                         onChange: vm.onGroupSelected)

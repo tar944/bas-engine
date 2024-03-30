@@ -50,7 +50,7 @@ class NavItem extends HookWidget {
                       image: DecorationImage(
                         image: navItem.imgPath!=""?Image.file(File(navItem.imgPath)).image:const AssetImage(
                             'lib/assets/testImages/testImg1.png'),
-                        fit: BoxFit.fill,
+                        fit: BoxFit.fitWidth,
                       ),
                     ),
                   )
