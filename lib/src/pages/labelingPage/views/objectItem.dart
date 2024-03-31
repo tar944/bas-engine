@@ -150,7 +150,7 @@ class _View extends StatelessView<ObjectItemViewModel> {
                     height: 40,
                     decoration: BoxDecoration(
                       color: Colors.grey[180].withOpacity(0.7),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0))
+                      borderRadius: const BorderRadius.all(Radius.circular(5.0))
                     ),
                       child: Icon(FluentIcons.crown_solid,size: 22,color: Colors.orange.lightest,)):
                   Row(
@@ -198,6 +198,19 @@ class _View extends StatelessView<ObjectItemViewModel> {
                     ],
                   ),
                 ),
+                Positioned(
+                    right: 5,
+                    top: 5,
+                    child: IconButton(
+                        style: ButtonStyle(
+                            backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
+                        ),
+                        icon: Icon(
+                          FluentIcons.picture_stretch,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                        onPressed: () => vm.onActionCaller("showImg&&${vm.object.id}")),)
               ],
             ),
           ),

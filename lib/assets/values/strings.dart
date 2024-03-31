@@ -29,6 +29,7 @@ class Strings{
   static const String export="Export project";
   static const String dlgExportTitle="Export data set";
   static const String dlgOtherStateTitle="Check other states";
+  static const String dlgViewStates="View screen shoot";
   static const String selectAsMainRectangle="Are you sure that you want to select this rectangle for main state?";
   static const String firstGuideTitle="Chose Main state";
   static const String labelingGuideTitle="Cut to pieces";
@@ -54,7 +55,7 @@ class Strings{
   static const String deleteGroupError="There is some content in this group, you can not delete it";
   static const String maxGroupNumberError="Each part only can have 8 groups";
   static const String emptyLabeledGroup="💔 Your Labeled images group list is empty.";
-  static const String emptyGroup="💔 Your image group list is empty, please create one of them ⬆️";
+  static const String emptyGroup="💔 Your image group list is empty, please create one of them with plus button";
   static const String images="images";
   static const String remindImages="remind to sort";
   static const String back="back";
@@ -63,7 +64,7 @@ class Strings{
   static const String deleteObject="Are you sure to delete this object?";
   static const String deleteScreen="Are you sure to delete this screen?";
   static const String guideObjectLabeling="";
-  static const String guideImageGroup="You can sort the similar images into groups 👇 or choose a group or create a new one 👆";
+  static const String guideImageGroup="You can sort the similar images into groups 👇";
   static const String guideImageGroupTwo="You can choose a group from group bar and see its contents 👇 or create a new group 👆";
   static const String guideImageGroupThree="You can choose a group from group bar or going to labeling page with click on an image 👇";
   static const String guideParts="Please choose one of previous parts 👇 or create a new one 👆";

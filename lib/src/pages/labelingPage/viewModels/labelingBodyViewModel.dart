@@ -14,6 +14,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgCheckOtherState.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLabelingManagement.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgViewObjects.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -98,7 +99,7 @@ class LabelingBodyViewModel extends ViewModel {
               var curImg = await getCroppedImage(curSub, curState);
               var imgDiff = DiffImage.compareFromMemory(srcImg!, curImg!,asPercentage: true).diffValue;
               print("${curSub.image.target!.name} compare to=> ${curState.image.target!.name!} => $imgDiff");
-              if (imgDiff > 1.0) {
+              if (imgDiff > 0.8) {
                 var obj = ObjectModel(-1, const Uuid().v4(), curSub.left, curSub.right, curSub.top, curSub.bottom);
                 obj.srcObject.target = curState;
                 final path = await DirectoryManager().getObjectImagePath(prjUUID, part!.uuid);
@@ -290,6 +291,18 @@ class LabelingBodyViewModel extends ViewModel {
         var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
         await ImageGroupDAO().addMainState(grp!.id, newObject);
         onMount();
+        break;
+      case "showImg":
+        showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) =>
+              DlgViewObjects(
+                allObjects: objects,
+                showObjectId: int.parse(act[1]),
+                onActionCaller: onObjectActionHandler,
+              ),
+        );
         break;
     }
   }

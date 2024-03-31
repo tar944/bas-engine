@@ -76,7 +76,7 @@ class LabelBodyTagLine extends HookWidget {
                   const SizedBox(width: 10,),
                 SizedBox(
                   width: MediaQuery.sizeOf(context).width-(isParentGroup?345:131),
-                  child: ListView.builder(
+                  child: subGroups.isNotEmpty?ListView.builder(
                       key: GlobalKey(),
                       itemCount: subGroups.length,
                       scrollDirection: Axis.horizontal,
@@ -86,7 +86,8 @@ class LabelBodyTagLine extends HookWidget {
                           isSelected: curGroup==null || subGroups[index].id!=curGroup!.id?false:true,
                           onLabelSelectedCaller: onLabelActionHandler,
                         );
-                      }),
+                      }):
+                  Text(Strings.emptyGroup,style: TextSystem.textL(Colors.white),),
                 ),
               ],
             ),
