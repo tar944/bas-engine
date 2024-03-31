@@ -85,7 +85,6 @@ class LabelManagementViewModel extends ViewModel {
     switch(act[0]){
       case "saveName":
         onActionCaller("$returnAction&&${selectedLevel!.id}&&${act[1]}");
-        onCloseClicked();
         break;
       case "create":
         if(act[1]==""){

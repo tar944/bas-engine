@@ -22,15 +22,11 @@ class ObjectItemViewModel extends ViewModel {
   void init() {
     if (stepStatus == "hide") {
       for (var grp in allGroups) {
-        if (grp.allStates
-                .firstWhere((element) => element.id == object.id,
-                    orElse: () => ObjectModel(-1, "", 0.0, 0.0, 0.0, 0.0))
-                .id! !=
-            -1) {
+        if (grp.allStates.firstWhere((element) => element.id == object.id, orElse: () => ObjectModel(-1, "", 0.0, 0.0, 0.0, 0.0)).id! != -1) {
           parentGroupId = grp.id;
-          stepStatus = grp.state == GroupState.findMainState.name
-              ? "firstStep"
-              : "labelIt";
+          // stepStatus = grp.state == GroupState.findMainState.name
+          //     ? "firstStep"
+          //     : "labelIt";
           notifyListeners();
           break;
         }

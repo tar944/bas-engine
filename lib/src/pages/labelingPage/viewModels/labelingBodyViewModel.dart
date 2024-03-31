@@ -94,27 +94,30 @@ class LabelingBodyViewModel extends ViewModel {
           //ready to compare images
           var srcImg = i.decodeImage(File(curSub.image.target!.path!,).readAsBytesSync(),);
           for (var curState in grp.allStates) {
-            var curImg = await getCroppedImage(curSub, curState);
-            var imgDiff = DiffImage.compareFromMemory(srcImg!, curImg!).diffValue;
-            if (imgDiff > 0.1) {
-              var obj = ObjectModel(-1, const Uuid().v4(), curSub.left, curSub.right, curSub.top, curSub.bottom);
-              obj.srcObject.target = curState;
-              final path = await DirectoryManager().getObjectImagePath(prjUUID, part!.uuid);
-              final cmd = i.Command()
-                ..decodeImageFile(curState.image.target!.path!)
-                ..copyCrop(
-                    x: curSub.left.toInt(),
-                    y: curSub.top.toInt(),
-                    width: (curSub.right.toInt() - curSub.left.toInt()).abs().toInt(),
-                    height: (curSub.bottom.toInt() - curSub.top.toInt()))
-                ..writeToFile(path);
-              await cmd.executeThread();
-              var img = ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(path), path);
-              img.id = await ImageDAO().add(img);
-              obj.image.target = img;
-              obj.id = await ObjectDAO().addObject(obj);
-              newGrp.allStates.add(obj);
-              await ImageGroupDAO().update(newGrp);
+            if(curSub.srcObject.targetId!=curState.id){
+              var curImg = await getCroppedImage(curSub, curState);
+              var imgDiff = DiffImage.compareFromMemory(srcImg!, curImg!,asPercentage: true).diffValue;
+              print("${curSub.image.target!.name} compare to=> ${curState.image.target!.name!} => $imgDiff");
+              if (imgDiff > 1.0) {
+                var obj = ObjectModel(-1, const Uuid().v4(), curSub.left, curSub.right, curSub.top, curSub.bottom);
+                obj.srcObject.target = curState;
+                final path = await DirectoryManager().getObjectImagePath(prjUUID, part!.uuid);
+                final cmd = i.Command()
+                  ..decodeImageFile(curState.image.target!.path!)
+                  ..copyCrop(
+                      x: curSub.left.toInt(),
+                      y: curSub.top.toInt(),
+                      width: (curSub.right.toInt() - curSub.left.toInt()).abs().toInt(),
+                      height: (curSub.bottom.toInt() - curSub.top.toInt()))
+                  ..writeToFile(path);
+                await cmd.executeThread();
+                var img = ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(path), path);
+                img.id = await ImageDAO().add(img);
+                obj.image.target = img;
+                obj.id = await ObjectDAO().addObject(obj);
+                newGrp.allStates.add(obj);
+                await ImageGroupDAO().update(newGrp);
+              }
             }
           }
           if (newGrp.allStates.length == 1) {
@@ -278,10 +281,14 @@ class LabelingBodyViewModel extends ViewModel {
         break;
       case "setItMain":
         var obj = await ObjectDAO().getDetails(int.parse(act[1]));
-        obj!.isMainObject=true;
-        await ObjectDAO().update(obj);
+        final img = await i.decodeImageFile(obj!.image.target!.path!);
+        var newObject = ObjectModel(-1, const Uuid().v4(), 0.0, img!.width.toDouble(), 0.0, img.height.toDouble());
+        newObject.srcObject.target=obj;
+        newObject.image.target=obj.image.target;
+        newObject.isMainObject=true;
+        newObject.id=await ObjectDAO().addObject(newObject);
         var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
-        await ImageGroupDAO().addMainState(grp!.id, obj);
+        await ImageGroupDAO().addMainState(grp!.id, newObject);
         onMount();
         break;
     }

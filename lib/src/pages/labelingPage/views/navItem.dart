@@ -60,9 +60,9 @@ class NavItem extends HookWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(navItem.title,style: TextSystem.textM(selectStatus=="selected"?Colors.teal:Colors.white),),
+                      Text(navItem.title.length>16?"${navItem.title.substring(0,15)}...":navItem.title,style: TextSystem.textM(selectStatus=="selected"?Colors.teal:Colors.white),),
                       const SizedBox(height: 2,),
-                      Text(navItem.kind=="part"?"${navItem.description.substring(0,20)} ...":navItem.lblName,style: TextSystem.textXs(selectStatus=="selected"?Colors.teal:Colors.white),),
+                      Text(navItem.kind=="part"?"${navItem.description.length>20?navItem.description.substring(0,20):navItem.description}...":navItem.lblName,style: TextSystem.textXs(selectStatus=="selected"?Colors.teal:Colors.white),),
                     ],
                   ),
                 )

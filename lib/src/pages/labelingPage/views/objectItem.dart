@@ -42,7 +42,6 @@ class _View extends StatelessView<ObjectItemViewModel> {
 
   @override
   Widget render(context, ObjectItemViewModel vm) {
-
     final controller = FlyoutController();
     return IconButton(
       onPressed: vm.stepStatus=="hide"?null:()=>vm.onActionCaller(vm.stepStatus=="firstStep"?"setMainState&&${vm.object.id}":"goToCuttingPage&&${vm.object.id}"),
