@@ -41,13 +41,14 @@ class LabelManagementViewModel extends ViewModel {
         LabelModel? label =
         await LabelDAO().getLabel(int.parse(actions[1]));
         label!.name = actions[2];
+        label.action=actions.length==3?actions[2]:label.action;
         await LabelDAO().updateLabel(label);
         break;
       case 'delete':
         await LabelDAO().deleteLabel(int.parse(actions[1]));
         break;
       case 'create':
-        await LabelDAO().addLabel(LabelModel(0, actions[1],""));
+        await LabelDAO().addLabel(LabelModel(0, actions[1],"",action.length==3?actions[2]:""));
         break;
     }
     allLabels=await LabelDAO().getLabelList("");
@@ -85,15 +86,16 @@ class LabelManagementViewModel extends ViewModel {
     switch(act[0]){
       case "saveName":
         onActionCaller("$returnAction&&${selectedLevel!.id}&&${act[1]}");
+        onCloseClicked();
         break;
       case "create":
         if(act[1]==""){
           Toast(Strings.emptyNameError,false).showWarning(context);
         }else{
-          if(allLabels.firstWhere((element) => element.name==act[1],orElse: ()=>LabelModel(-1,"","")).id!=-1){
+          if(allLabels.firstWhere((element) => element.name==act[1],orElse: ()=>LabelModel(-1,"","","")).id!=-1){
             Toast(Strings.lblDuplicateError,false).showWarning(context);
           }else{
-            var newLabel = LabelModel(-1, act[1], allLevels[curIndex]);
+            var newLabel = LabelModel(-1, act[1], allLevels[curIndex],act.length==3?act[2]:"");
             newLabel.id=await LabelDAO().addLabel(newLabel);
             await ProjectDAO().addALabel(prjUUID, newLabel);
             allLabels.add(newLabel);

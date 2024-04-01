@@ -57,22 +57,10 @@ class CutToPiecesViewModel extends ViewModel {
     group=await ImageGroupDAO().getDetails(groupId);
     subObject=group!.subObjects;
 
-    // for(var grp in group!.allGroups){
-    //   if(grp.subObjects.isNotEmpty){
-    //     subObject.addAll(grp.subObjects);
-    //   }
-    // }
-
     if(group!.state==GroupState.findMainState.name){
       pageDuty="drawMainRectangle";
     }
     curObject=group!.allStates[0];
-
-    if (await LabelDAO().needAddDefaultValue(prjUUID)) {
-      await LabelDAO().addList(prjUUID,ObjectType.values
-          .map((e) => LabelModel(0, e.name,"objects"))
-          .toList());
-    }
     updatePageData();
     if(pageDuty=="drawMainRectangle"&&await Preference().getShowGuide("firstGuide")){
       showGuideDialog(context, Strings.firstGuide, Strings.firstGuideTitle, 'firstGuide');

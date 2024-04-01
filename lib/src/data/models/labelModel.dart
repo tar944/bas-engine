@@ -6,6 +6,7 @@ class LabelModel {
   int id;
   String uuid="";
   String name;
+  String action="";
   String levelName;
-  LabelModel(this.id, this.name,this.levelName);
+  LabelModel(this.id, this.name,this.levelName,this.action);
 }

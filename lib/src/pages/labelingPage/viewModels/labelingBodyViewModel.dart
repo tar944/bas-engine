@@ -33,7 +33,7 @@ class LabelingBodyViewModel extends ViewModel {
   final int partId;
   int labelGroupId=-1;
   bool isLoading=false,isState=true;
-  LabelModel curLabel=LabelModel(-1, "", "");
+  LabelModel curLabel=LabelModel(-1, "", "","");
   ValueSetter<String> onGroupActionCaller;
 
   LabelingBodyViewModel(
@@ -43,7 +43,6 @@ class LabelingBodyViewModel extends ViewModel {
       this.partUUID,
       this.prjUUID,
       this.onGroupActionCaller);
-
 
   @override
   void init() async{

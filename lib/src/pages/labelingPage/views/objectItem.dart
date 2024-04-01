@@ -155,26 +155,16 @@ class _View extends StatelessView<ObjectItemViewModel> {
                       child: Icon(FluentIcons.crown_solid,size: 22,color: Colors.orange.lightest,)):
                   Row(
                     children: [
-                      FlyoutTarget(
-                        key: GlobalKey(),
-                        controller: controller,
-                        child: IconButton(
+                      IconButton(
                           style: ButtonStyle(
-                            backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
+                              backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
                           ),
-                            icon: Icon(
-                              FluentIcons.delete,
-                              color: Colors.red,
-                              size: 20,
-                            ),
-                            onPressed: () => showFlyConfirm(
-                                "Are you sure?",
-                                Strings.yes,
-                                controller,
-                                FlyoutPlacementMode.topCenter,
-                                "delete&&${vm.object.id!}",
-                                vm.onActionCaller)),
-                      ),
+                          icon: const Icon(
+                            FluentIcons.picture_stretch,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                          onPressed: () => vm.onActionCaller("showImg&&${vm.object.id}")),
                       if(vm.stepStatus=="firstStep")
                         ...[
                           const SizedBox(width: 5,),
@@ -201,16 +191,26 @@ class _View extends StatelessView<ObjectItemViewModel> {
                 Positioned(
                     right: 5,
                     top: 5,
-                    child: IconButton(
-                        style: ButtonStyle(
-                            backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
-                        ),
-                        icon: Icon(
-                          FluentIcons.picture_stretch,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        onPressed: () => vm.onActionCaller("showImg&&${vm.object.id}")),)
+                    child: FlyoutTarget(
+                      key: GlobalKey(),
+                      controller: controller,
+                      child: IconButton(
+                          style: ButtonStyle(
+                              backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
+                          ),
+                          icon: Icon(
+                            FluentIcons.delete,
+                            color: Colors.red,
+                            size: 20,
+                          ),
+                          onPressed: () => showFlyConfirm(
+                              "Are you sure?",
+                              Strings.yes,
+                              controller,
+                              FlyoutPlacementMode.topCenter,
+                              "delete&&${vm.object.id!}",
+                              vm.onActionCaller)),
+                    ),)
               ],
             ),
           ),

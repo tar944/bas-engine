@@ -71,7 +71,7 @@ class _View extends StatelessView<ViewObjectsViewModel> {
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: Image.file(File(e.image.target!.path!)).image,
-                                  fit: BoxFit.fitHeight,
+                                  fit: BoxFit.contain,
                                 ),
                               ),
                             );
