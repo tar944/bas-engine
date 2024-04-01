@@ -1,4 +1,3 @@
-import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';

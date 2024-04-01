@@ -38,10 +38,15 @@ class LabelTag extends HookWidget {
               children: [
                 const SizedBox(width: 10,),
                 curGroup.name!=Strings.emptyStr?
-                Text("${curGroup.label.target!.name}${curGroup.name!=""?".":""}${curGroup.name}",
-                  style: TextSystem.textS(Colors.white),
-                ):
-                Text(Strings.notSet,style: TextSystem.textS(Colors.white),),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text("${curGroup.label.target!.name}${curGroup.name!=""?".":""}${curGroup.name}", style: TextSystem.textM(Colors.white),),
+                      if(curGroup.label.target!.levelName=="objects")
+                          Text(" (${curGroup.label.target!.action})",style: TextSystem.textS(Colors.grey[120]),)
+                    ],
+                  )
+                    : Text(Strings.notSet,style: TextSystem.textS(Colors.white),),
                 const SizedBox(
                   width: 8,
                 ),
@@ -58,7 +63,7 @@ class LabelTag extends HookWidget {
                       style: TextSystem.textM(Colors.orange.dark),
                     ),
                   ),
-                if(curGroup.allStates.isNotEmpty&&isSelected)
+                if((curGroup.allStates.isNotEmpty&&isSelected)&&(curGroup.label.target==null||curGroup.label.target!.levelName!="objects"))
                     Container(
                       width: Dimens.tabHeightSmall*2,
                       height: Dimens.tabHeightSmall,
@@ -94,7 +99,7 @@ class LabelTag extends HookWidget {
               ],
             ),
           ),
-          onPressed: curGroup.allStates.isEmpty?null:
+          onPressed: curGroup.allStates.isEmpty||(isSelected&&curGroup.label.target!=null&&curGroup.label.target!.levelName=="objects")?null:
               ()=>onLabelSelectedCaller(
                   isSelected?
                     (curGroup.state==GroupState.generated.name? "labelIt&&${curGroup.id}": "open&&${curGroup.id}"):

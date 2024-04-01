@@ -2,11 +2,9 @@ import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/dlgGuide.dart';
@@ -193,7 +191,8 @@ class CutToPiecesViewModel extends ViewModel {
     if(pageDuty=="cutting"){
       newObject.id=await ObjectDAO().addObject(newObject);
       await ImageGroupDAO().addSubObject(groupId, newObject);
-      subObject.add(newObject);
+      group=await ImageGroupDAO().getDetails(groupId);
+      subObject=group!.subObjects;
       notifyListeners();
     }else if(pageDuty=="drawMainRectangle"){
       newObject.isMainObject=true;
