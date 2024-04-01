@@ -6,9 +6,9 @@ class LabelManageItemViewModel extends ViewModel {
 
   final LabelModel label;
   bool isEditMode=false;
-    final ValueSetter<String> onActionCaller;
-  TextEditingController? ctlTitle ;
+  final ValueSetter<String> onActionCaller;
   final controller = FlyoutController();
+  TextEditingController? ctlTitle ;
 
   LabelManageItemViewModel(this.label, this.onActionCaller);
 

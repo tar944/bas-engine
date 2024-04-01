@@ -97,7 +97,7 @@ class _View extends StatelessView<TabBodyViewModel> {
                                 size: 20,
                                 color: Colors.blue.lighter,
                               ),
-                              onPressed: () => vm.onActionCaller('create&&${vm.ctlTitle.text}&&${vm.actValue}'))),
+                              onPressed: () => vm.onSaveHandler())),
                     ],
                   ),
                 ),

@@ -1,12 +1,13 @@
+
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLevel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
+import 'package:uuid/uuid.dart';
 
 class LabelManagementViewModel extends ViewModel {
 
@@ -32,26 +33,6 @@ class LabelManagementViewModel extends ViewModel {
 
   void onCloseClicked() {
     Navigator.pop(context);
-  }
-
-  void onActionHandler(String action)async{
-    var actions = action.split('&&');
-    switch (actions[0]) {
-      case 'save':
-        LabelModel? label =
-        await LabelDAO().getLabel(int.parse(actions[1]));
-        label!.name = actions[2];
-        label.action=actions.length==3?actions[2]:label.action;
-        await LabelDAO().updateLabel(label);
-        break;
-      case 'delete':
-        await LabelDAO().deleteLabel(int.parse(actions[1]));
-        break;
-      case 'create':
-        await LabelDAO().addLabel(LabelModel(0, actions[1],"",action.length==3?actions[2]:""));
-        break;
-    }
-    allLabels=await LabelDAO().getLabelList("");
   }
 
   onTabChanged(int index){
@@ -89,34 +70,20 @@ class LabelManagementViewModel extends ViewModel {
         onCloseClicked();
         break;
       case "create":
-        if(act[1]==""){
-          Toast(Strings.emptyNameError,false).showWarning(context);
+        if(allLabels.firstWhere((element) => element.name==act[1],orElse: ()=>LabelModel(-1,"","","")).id!=-1){
+          Toast(Strings.lblDuplicateError,false).showWarning(context);
         }else{
-          if(allLabels.firstWhere((element) => element.name==act[1],orElse: ()=>LabelModel(-1,"","","")).id!=-1){
-            Toast(Strings.lblDuplicateError,false).showWarning(context);
-          }else{
-            var newLabel = LabelModel(-1, act[1], allLevels[curIndex],act.length==3?act[2]:"");
-            newLabel.id=await LabelDAO().addLabel(newLabel);
-            await ProjectDAO().addALabel(prjUUID, newLabel);
-            allLabels.add(newLabel);
-            notifyListeners();
-          }
-        }
-        break;
-      case "delete":
-        var objects =await ObjectDAO().getByLabel(int.parse(act[1]));
-        if(objects!.isNotEmpty){
-          Toast(Strings.lblError,false).showWarning(context);
-        }else{
-          await LabelDAO().deleteLabel(int.parse(act[1]));
-          allLabels.removeWhere((element) => element.id==int.parse(act[1]));
+          var newLabel = LabelModel(-1, act[1], allLevels[curIndex],act.length==3?act[2]:"");
+          newLabel.uuid=const Uuid().v4();
+          newLabel.id=await LabelDAO().addLabel(newLabel);
+          await ProjectDAO().addALabel(prjUUID, newLabel);
+          allLabels.add(newLabel);
           notifyListeners();
         }
         break;
-      case "edit":
-        int index=allLabels.indexWhere((element) => element.id==int.parse(act[1]));
-        allLabels[index].name=act[2];
-        await LabelDAO().updateLabel(allLabels[index]);
+      case "delete":
+        await LabelDAO().deleteLabel(int.parse(act[1]));
+        allLabels.removeWhere((element) => element.id==int.parse(act[1]));
         notifyListeners();
         break;
       case "clicked":

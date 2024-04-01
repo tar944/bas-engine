@@ -75,6 +75,7 @@ class _View extends StatelessView<LabelManagementViewModel> {
                             onClosed: ()=>vm.onTabClosed(e),
                             icon: null,
                             body: DlgTabView(
+                              key: GlobalKey(),
                                 allLabels: vm.allLabels.where((element) => element.levelName==e).toList(),
                                 lvlName: e,
                                 onActionCaller: vm.onLabelActionHandler)

@@ -1,5 +1,7 @@
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgConfirm.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelManageItemViewModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
@@ -28,42 +30,38 @@ class _View extends StatelessView<LabelManageItemViewModel> {
 
   @override
   Widget render(context, LabelManageItemViewModel vm) {
-
     return Padding(
       padding: const EdgeInsets.only(left:10.0,right: 10.0),
       child: SizedBox(
         width: double.infinity,
-        height: 35,
+        height: 40,
         child: Row(
           children: [
             Expanded(
-              flex: 82,
-              child: vm.isEditMode?
-              TextBox(
-                controller: vm.ctlTitle,
-                placeholder: Strings.dlgSoftwareTitleHint,
-                expands: false,
-              ):
-              IconButton(
-                  icon: Container(alignment:Alignment.centerLeft,child: Text(vm.label.name)),
+              flex: 93,
+              child: IconButton(
+                  icon: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      Text(vm.label.name,style: TextSystem.textL(Colors.white),),
+                      const SizedBox(width: 5,),
+                      if(vm.label.action!="")
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 3.0),
+                          child: Text("(action: ${vm.label.action})",style: TextSystem.textXs(Colors.grey[80]),),
+                        )
+                    ],
+                  ),
                   onPressed:()=> vm.onActionCaller('clicked&&${vm.label.id}')
               ),
             ),
             const SizedBox(width: 5,),
             Expanded(
                 flex: 7,
-                child: IconButton(
-                    style: ButtonStyle(
-                        padding: ButtonState.all(const EdgeInsets.all(10))),
-                    icon: Icon(
-                      FluentIcons.edit,
-                      size: 15,
-                      color: Colors.green.lighter,
-                    ),
-                    onPressed: () => vm.onEditBtnHandler())),
-            Expanded(
-                flex: 7,
-                child: IconButton(
+                child: FlyoutTarget(
+                    key: GlobalKey(),
+                    controller: vm.controller,
+                    child:IconButton(
                     style: ButtonStyle(
                         padding: ButtonState.all(const EdgeInsets.all(6))),
                     icon: Icon(
@@ -71,7 +69,16 @@ class _View extends StatelessView<LabelManageItemViewModel> {
                       size: 18,
                       color: Colors.red,
                     ),
-                    onPressed: () => vm.onActionCaller('delete&&${vm.label.id}'))),
+                    onPressed: () => showFlyConfirm(
+                        Strings.deleteLabel,
+                        Strings.yes,
+                        vm.controller,
+                        FlyoutPlacementMode.topCenter,
+                        "delete&&${vm.label.id}",
+                        vm.onActionCaller)
+                    )
+                )
+            ),
           ],
         ),
       ),
