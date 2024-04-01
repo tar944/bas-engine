@@ -14,7 +14,7 @@ class LabelManagementViewModel extends ViewModel {
   List<String> allLevels=[];
   int curIndex=0;
   LabelModel? selectedLevel;
-  String prjUUID,returnAction;
+  String prjUUID,returnAction,actValue="none";
   var ctlName = TextEditingController();
   final ValueSetter<String> onActionCaller;
 

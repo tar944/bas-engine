@@ -1,4 +1,5 @@
 enum DefaultActions {
+  choseAction,
   watch,
   click,
   rightClick,
@@ -47,7 +48,7 @@ enum ObjectType {
   checkBox__selectMulty,
   radioRegion__selectOne,
   icon__watch,
-  colorView_watch,
+  colorView__watch,
   richEditBox__type,
   menuItem__click,
   itemWithSubMenu__click,
