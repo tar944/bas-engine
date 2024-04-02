@@ -233,11 +233,6 @@ class LabelingBodyViewModel extends ViewModel {
     );
   }
 
-
-  int getLabelObjectNumber(LabelModel lbl){
-    return 0;
-  }
-
   onObjectActionHandler(String action)async{
     var act = action.split("&&");
     switch (act[0]) {
@@ -263,7 +258,7 @@ class LabelingBodyViewModel extends ViewModel {
         var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[2]));
         if(partUUID==""){
           var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
-          await ImageGroupDAO().addObject(grp!.id, obj!);
+          await ImageGroupDAO().addSubObject(grp!.id, obj!);
           await ImageGroupDAO().removeObject(int.parse(act[1]), obj);
         }else{
           var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
@@ -292,12 +287,20 @@ class LabelingBodyViewModel extends ViewModel {
         onMount();
         break;
       case "showImg":
+        var obj = await ObjectDAO().getDetails(int.parse(act[1]));
+        var grp=await ImageGroupDAO().getDetailsByUUID(grpUUID);
+        final img = await i.decodeImageFile(obj!.image.target!.path!);
+        double mediaW=MediaQuery.sizeOf(context).width;
+        double mediaH=MediaQuery.sizeOf(context).height;
         showDialog(
           context: context,
           barrierDismissible: true,
           builder: (context) =>
               DlgViewObjects(
+                dlgW: img!.width>(mediaW*0.9)?(mediaW*0.9).toDouble():img.width.toDouble(),
+                dlgH: img.width>(mediaW*0.9)?(mediaH*0.9).toDouble():img.height.toDouble(),
                 allObjects: objects,
+                group:grp!,
                 showObjectId: int.parse(act[1]),
                 onActionCaller: onObjectActionHandler,
               ),

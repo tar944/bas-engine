@@ -4,6 +4,7 @@ import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
@@ -18,16 +19,18 @@ class ViewObjectsViewModel extends ViewModel {
 
   final controller = PageController();
   int curImage=0;
+  final ImageGroupModel group;
+  final double dlgW,dlgH;
   final int showObjectId;
   final List<ObjectModel> allObjects;
+  List<ObjectModel> subObjects=[];
 
-  ViewObjectsViewModel(this.allObjects,this.showObjectId);
+  ViewObjectsViewModel(this.dlgW,this.dlgH,this.group,this.allObjects,this.showObjectId);
 
   @override
   void onMount() {
     curImage=allObjects.indexWhere((element) => element.id==showObjectId);
-    print(showObjectId);
-    print(curImage);
+    subObjects=findSubObjects(group,0,0);
     controller.jumpToPage(curImage);
     notifyListeners();
   }
@@ -35,18 +38,39 @@ class ViewObjectsViewModel extends ViewModel {
   nextImage(){
     if(curImage<allObjects.length-1) {
       curImage+=1;
+      subObjects=findSubObjects(group,0,0);
       controller.nextPage(duration: const Duration(milliseconds: 200), curve:Curves.decelerate );
       notifyListeners();
     }
+  }
+
+  List<ObjectModel> findSubObjects(ImageGroupModel curGroup,double offsetX,double offsetY){
+    List<ObjectModel>allSubs=[];
+    for(var grp in curGroup.allGroups){
+      if(grp.mainState.target!=null&&grp.label.target!=null&&grp.label.target!.levelName=="objects"){
+        allSubs.addAll(grp.allStates);
+      }else if(grp.mainState.target!=null&&grp.label.target!=null){
+        allSubs.addAll(findSubObjects(grp,grp.mainState.target!.left+offsetX,grp.mainState.target!.top+offsetY));
+      }
+    }
+    allSubs= allSubs.map((e){
+      e.top+=offsetY;
+      e.bottom+=offsetY;
+      e.left+=offsetX;
+      e.right+=offsetY;
+      return e;
+    }).toList();
+    return allSubs;
   }
 
   actionBtnHandler(String action)async{
     nextImage();
   }
 
-  previousImage(){
+  previousImage()async{
     if(curImage>0) {
       curImage-=1;
+      subObjects=findSubObjects(group,0,0);
       controller.previousPage(duration: const Duration(milliseconds: 200), curve:Curves.decelerate );
       notifyListeners();
     }

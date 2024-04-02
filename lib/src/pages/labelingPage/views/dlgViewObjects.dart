@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/viewObjectsViewModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/viewRegionExplorer.dart';
 import 'package:bas_dataset_generator_engine/src/parts/dialogTitleBar.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
@@ -12,6 +14,9 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 class DlgViewObjects extends StatelessWidget {
   const DlgViewObjects(
       {Key? key,
+        required this.dlgW,
+        required this.dlgH,
+        required this.group,
         required this.allObjects,
         required this.showObjectId,
         required this.onActionCaller
@@ -20,13 +25,15 @@ class DlgViewObjects extends StatelessWidget {
 
   final List<ObjectModel> allObjects;
   final int showObjectId;
+  final ImageGroupModel group;
+  final double dlgW,dlgH;
   final ValueSetter<String> onActionCaller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: ViewObjectsViewModel(allObjects,showObjectId),
+      viewModel: ViewObjectsViewModel(dlgW,dlgH,group,allObjects,showObjectId),
     );
   }
 }
@@ -40,8 +47,8 @@ class _View extends StatelessView<ViewObjectsViewModel> {
       alignment: Alignment.center,
       children: [
         SizedBox(
-            width: Dimens.dialogXLargeWidth+100,
-            height: Dimens.dialogXLargeHeight,
+            width: vm.dlgW+60,
+            height: vm.dlgH+120,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(
@@ -57,29 +64,31 @@ class _View extends StatelessView<ViewObjectsViewModel> {
                     title: Strings.dlgViewStates,
                     onActionListener: vm.onCloseClicked,
                   ),
-                  Stack(children: [
-                    Padding(
-                      padding: const EdgeInsets.only(left: 20.0),
-                      child: SizedBox(
-                        width: Dimens.dialogXLargeWidth+60,
-                        height: Dimens.dialogXLargeHeight - 110,
-                        child: PageView(
-                          physics: const NeverScrollableScrollPhysics(),
-                          controller: vm.controller,
-                          children: vm.allObjects.map((e) {
-                            return Container(
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: Image.file(File(e.image.target!.path!)).image,
-                                  fit: BoxFit.contain,
-                                ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20.0),
+                    child: SizedBox(
+                      width: vm.dlgW,
+                      height: vm.dlgH,
+                      child: PageView(
+                        physics: const NeverScrollableScrollPhysics(),
+                        controller: vm.controller,
+                        children: vm.allObjects.map((e) {
+                          return Container(
+                            decoration: BoxDecoration(
+                              image: DecorationImage(
+                                image: Image.file(File(e.image.target!.path!)).image,
+                                fit: BoxFit.contain,
                               ),
-                            );
-                          }).toList(),
-                        ),
+                            ),
+                            child:ViewRegionExplorer(
+                              itsObjects: vm.subObjects,
+                              onObjectCaller: (e)=>{},
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
-                  ]),
+                  ),
                   Expanded(
                       child: Container(
                         decoration: BoxDecoration(
