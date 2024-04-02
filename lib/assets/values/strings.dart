@@ -62,6 +62,7 @@ class Strings{
   static const String back="back";
   static const String chooseImages="Choose images";
   static const String deleteProject="Are you sure to delete this project?";
+  static const String deletePart="Are you sure to delete this part?";
   static const String deleteObject="Are you sure to delete this object?";
   static const String deleteScreen="Are you sure to delete this screen?";
   static const String deleteLabel="Are you sure to delete this label?";
@@ -141,9 +142,11 @@ class Strings{
   static const String dlgNewSoftware = "New software";
   static const String dlgLevel = "Level manager";
   static const String dlgNewGroup = "New group";
+  static const String dlgNewPart = "New part";
   static const String dlgLabeling = "Manage labels";
   static const String dlgEditSoftware = "Edit software";
   static const String dlgEditGroup = "Edit group";
+  static const String dlgEditPart = "Edit part";
   static const String dlgChapter = "Chapter info";
   static const String dlgLesson = "Lesson info";
   static const String dlgNewChapter = "New chapter";

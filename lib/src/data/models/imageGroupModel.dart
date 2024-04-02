@@ -14,6 +14,7 @@ class ImageGroupModel {
   String type="";
   String state=GroupState.findMainState.name;
   String path;
+  final navObjects = ToMany<ObjectModel>();
   final mainState = ToOne<ObjectModel>();
   final allStates = ToMany<ObjectModel>();
   final subObjects = ToMany<ObjectModel>();

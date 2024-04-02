@@ -214,7 +214,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(15, 8892823931225835339),
       name: 'ObjectModel',
-      lastPropertyId: const IdUid(28, 610347001844851126),
+      lastPropertyId: const IdUid(29, 5118056379320144992),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -307,6 +307,11 @@ final _entities = <ModelEntity>[
             id: const IdUid(28, 610347001844851126),
             name: 'needToCompare',
             type: 1,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(29, 5118056379320144992),
+            name: 'navDuty',
+            type: 9,
             flags: 0)
       ],
       relations: <ModelRelation>[],
@@ -384,6 +389,10 @@ final _entities = <ModelEntity>[
         ModelRelation(
             id: const IdUid(31, 2492633852371909747),
             name: 'allStates',
+            targetId: const IdUid(15, 8892823931225835339)),
+        ModelRelation(
+            id: const IdUid(32, 8973519066316929164),
+            name: 'navObjects',
             targetId: const IdUid(15, 8892823931225835339))
       ],
       backlinks: <ModelBacklink>[]),
@@ -466,7 +475,7 @@ ModelDefinition getObjectBoxModel() {
       entities: _entities,
       lastEntityId: const IdUid(17, 8566624654259097881),
       lastIndexId: const IdUid(23, 5855966450476248403),
-      lastRelationId: const IdUid(31, 2492633852371909747),
+      lastRelationId: const IdUid(32, 8973519066316929164),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [
         5922885288332288138,
@@ -876,7 +885,8 @@ ModelDefinition getObjectBoxModel() {
           final colorOffset = fbb.writeString(object.color);
           final actionTypeOffset = fbb.writeString(object.actionType);
           final typedTextOffset = fbb.writeString(object.typedText);
-          fbb.startTable(29);
+          final navDutyOffset = fbb.writeString(object.navDuty);
+          fbb.startTable(30);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, uuidOffset);
           fbb.addFloat64(2, object.left);
@@ -894,6 +904,7 @@ ModelDefinition getObjectBoxModel() {
           fbb.addInt64(25, object.srcObject.targetId);
           fbb.addBool(26, object.isMainObject);
           fbb.addBool(27, object.needToCompare);
+          fbb.addOffset(28, navDutyOffset);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -927,7 +938,9 @@ ModelDefinition getObjectBoxModel() {
             ..isMainObject =
                 const fb.BoolReader().vTableGet(buffer, rootOffset, 56, false)
             ..needToCompare =
-                const fb.BoolReader().vTableGet(buffer, rootOffset, 58, false);
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 58, false)
+            ..navDuty = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 60, '');
           object.image.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 36, 0);
           object.image.attach(store);
@@ -946,7 +959,8 @@ ModelDefinition getObjectBoxModel() {
         toManyRelations: (ImageGroupModel object) => {
               RelInfo<ImageGroupModel>.toMany(25, object.id): object.allGroups,
               RelInfo<ImageGroupModel>.toMany(26, object.id): object.subObjects,
-              RelInfo<ImageGroupModel>.toMany(31, object.id): object.allStates
+              RelInfo<ImageGroupModel>.toMany(31, object.id): object.allStates,
+              RelInfo<ImageGroupModel>.toMany(32, object.id): object.navObjects
             },
         getId: (ImageGroupModel object) => object.id,
         setId: (ImageGroupModel object, int id) {
@@ -1008,6 +1022,8 @@ ModelDefinition getObjectBoxModel() {
               store, RelInfo<ImageGroupModel>.toMany(26, object.id));
           InternalToManyAccess.setRelInfo<ImageGroupModel>(object.allStates,
               store, RelInfo<ImageGroupModel>.toMany(31, object.id));
+          InternalToManyAccess.setRelInfo<ImageGroupModel>(object.navObjects,
+              store, RelInfo<ImageGroupModel>.toMany(32, object.id));
           return object;
         }),
     ProjectPartModel: EntityDefinition<ProjectPartModel>(
@@ -1270,6 +1286,10 @@ class ObjectModel_ {
   /// see [ObjectModel.needToCompare]
   static final needToCompare =
       QueryBooleanProperty<ObjectModel>(_entities[4].properties[16]);
+
+  /// see [ObjectModel.navDuty]
+  static final navDuty =
+      QueryStringProperty<ObjectModel>(_entities[4].properties[17]);
 }
 
 /// [ImageGroupModel] entity fields to define ObjectBox queries.
@@ -1326,6 +1346,10 @@ class ImageGroupModel_ {
   /// see [ImageGroupModel.allStates]
   static final allStates = QueryRelationToMany<ImageGroupModel, ObjectModel>(
       _entities[5].relations[2]);
+
+  /// see [ImageGroupModel.navObjects]
+  static final navObjects = QueryRelationToMany<ImageGroupModel, ObjectModel>(
+      _entities[5].relations[3]);
 }
 
 /// [ProjectPartModel] entity fields to define ObjectBox queries.

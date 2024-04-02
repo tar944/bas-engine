@@ -68,7 +68,7 @@ class DlgProjectPart extends HookWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   DialogTitleBar(
-                    title: part!=null?Strings.dlgEditGroup:Strings.dlgNewGroup,
+                    title: part!=null?Strings.dlgEditPart:Strings.dlgNewPart,
                     onActionListener: onCloseClicked,
                   ),
                   const SizedBox(

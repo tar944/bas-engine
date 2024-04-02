@@ -13,6 +13,20 @@ enum DefaultActions {
   selectMulti,
 }
 
+enum NavDuties{
+  scrollUp,
+  scrollDown,
+  scrollUpOrDown,
+  scrollRightOrLeft,
+  scrollRight,
+  scrollLeft,
+  zoomIn,
+  zoomOut,
+  zoomInOrOut,
+  confirmAndClose,
+  close,
+}
+
 enum HeaderTabs {
   project,
   projectParts,

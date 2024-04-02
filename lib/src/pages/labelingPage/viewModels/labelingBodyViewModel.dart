@@ -197,7 +197,10 @@ class LabelingBodyViewModel extends ViewModel {
         var grp = await ImageGroupDAO().getDetails(labelGroupId);
         labelGroupId=-1;
         var lbl=await LabelDAO().getLabel(int.parse(act[1]));
-        grp!.name=act[2];
+        if(grp!.mainState.target==null&&lbl!.levelName=="objects"){
+          grp.mainState.target=grp.allStates[0];
+        }
+        grp.name=act[2];
         grp.label.target=lbl;
         grp.state=grp.mainState.target==null?GroupState.findMainState.name:GroupState.findSubObjects.name;
         await ImageGroupDAO().update(grp);

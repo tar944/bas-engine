@@ -13,6 +13,7 @@ class ObjectModel {
   double bottom;
   String color = "blue";
   String actionType = "";
+  String navDuty = "";
   bool isNavTool = false;
   bool isMainObject = false;
   bool needToCompare=false;

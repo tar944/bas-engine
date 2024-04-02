@@ -196,7 +196,7 @@
     },
     {
       "id": "15:8892823931225835339",
-      "lastPropertyId": "28:610347001844851126",
+      "lastPropertyId": "29:5118056379320144992",
       "name": "ObjectModel",
       "properties": [
         {
@@ -293,6 +293,11 @@
           "id": "28:610347001844851126",
           "name": "needToCompare",
           "type": 1
+        },
+        {
+          "id": "29:5118056379320144992",
+          "name": "navDuty",
+          "type": 9
         }
       ],
       "relations": []
@@ -375,6 +380,11 @@
           "id": "31:2492633852371909747",
           "name": "allStates",
           "targetId": "15:8892823931225835339"
+        },
+        {
+          "id": "32:8973519066316929164",
+          "name": "navObjects",
+          "targetId": "15:8892823931225835339"
         }
       ]
     },
@@ -431,7 +441,7 @@
   ],
   "lastEntityId": "17:8566624654259097881",
   "lastIndexId": "23:5855966450476248403",
-  "lastRelationId": "31:2492633852371909747",
+  "lastRelationId": "32:8973519066316929164",
   "lastSequenceId": "0:0",
   "modelVersion": 5,
   "modelVersionParserMinimum": 5,

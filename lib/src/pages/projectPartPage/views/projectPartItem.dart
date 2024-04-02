@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgConfirm.dart';
@@ -77,8 +78,8 @@ class _View extends StatelessView<PartItemViewModel> {
                             size: 20,
                           ),
                           onPressed: () => showFlyConfirm(
-                              "Are you sure?",
-                              "yeh",
+                              Strings.deletePart,
+                              Strings.yes,
                               controller,
                               FlyoutPlacementMode.topCenter,
                               "delete&&${vm.part.id}",
