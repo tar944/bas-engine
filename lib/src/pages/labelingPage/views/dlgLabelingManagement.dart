@@ -42,7 +42,7 @@ class _View extends StatelessView<LabelManagementViewModel> {
       children: [
         SizedBox(
             width: Dimens.dialogBigWidth,
-            height: Dimens.dialogLargeHeight+60,
+            height: Dimens.dialogLargeHeight+100,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(

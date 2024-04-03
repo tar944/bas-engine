@@ -199,6 +199,8 @@ class LabelingBodyViewModel extends ViewModel {
         var lbl=await LabelDAO().getLabel(int.parse(act[1]));
         if(grp!.mainState.target==null&&lbl!.levelName=="objects"){
           grp.mainState.target=grp.allStates[0];
+          grp.allStates[0].isMainObject=true;
+          await ObjectDAO().update(grp.allStates[0]);
         }
         grp.name=act[2];
         grp.label.target=lbl;
@@ -210,7 +212,7 @@ class LabelingBodyViewModel extends ViewModel {
         break;
       case "remove":
         var grp = await ImageGroupDAO().getDetails(int.parse(act[1]));
-        if(grp!.allGroups.isEmpty&&grp.subObjects.isEmpty){
+        if(grp!.allStates.isEmpty&&grp.subObjects.isEmpty){
           await ImageGroupDAO().delete(grp);
           subGroups.removeWhere((element) => element.id==grp.id);
           notifyListeners();
@@ -291,7 +293,14 @@ class LabelingBodyViewModel extends ViewModel {
         break;
       case "showImg":
         var obj = await ObjectDAO().getDetails(int.parse(act[1]));
-        var grp=await ImageGroupDAO().getDetailsByUUID(grpUUID);
+        List<ImageGroupModel> subGroups=[];
+        if(grpUUID!=""){
+          var grp=await ImageGroupDAO().getDetailsByUUID(grpUUID);
+          subGroups=grp!.allGroups;
+        }else{
+          var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
+          subGroups=part!.allGroups;
+        }
         final img = await i.decodeImageFile(obj!.image.target!.path!);
         double mediaW=MediaQuery.sizeOf(context).width;
         double mediaH=MediaQuery.sizeOf(context).height;
@@ -303,7 +312,7 @@ class LabelingBodyViewModel extends ViewModel {
                 dlgW: img!.width>(mediaW*0.9)?(mediaW*0.9).toDouble():img.width.toDouble(),
                 dlgH: img.width>(mediaW*0.9)?(mediaH*0.9).toDouble():img.height.toDouble(),
                 allObjects: objects,
-                group:grp!,
+                subGroups:subGroups,
                 showObjectId: int.parse(act[1]),
                 onActionCaller: onObjectActionHandler,
               ),

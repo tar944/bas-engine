@@ -19,18 +19,18 @@ class ViewObjectsViewModel extends ViewModel {
 
   final controller = PageController();
   int curImage=0;
-  final ImageGroupModel group;
   final double dlgW,dlgH;
   final int showObjectId;
   final List<ObjectModel> allObjects;
+  final List<ImageGroupModel> subGroups;
   List<ObjectModel> subObjects=[];
 
-  ViewObjectsViewModel(this.dlgW,this.dlgH,this.group,this.allObjects,this.showObjectId);
+  ViewObjectsViewModel(this.dlgW,this.dlgH,this.subGroups,this.allObjects,this.showObjectId);
 
   @override
   void onMount() {
     curImage=allObjects.indexWhere((element) => element.id==showObjectId);
-    subObjects=findSubObjects(group,0,0);
+    subObjects=findSubObjects(subGroups,0,0);
     controller.jumpToPage(curImage);
     notifyListeners();
   }
@@ -38,19 +38,19 @@ class ViewObjectsViewModel extends ViewModel {
   nextImage(){
     if(curImage<allObjects.length-1) {
       curImage+=1;
-      subObjects=findSubObjects(group,0,0);
+      subObjects=findSubObjects(subGroups,0,0);
       controller.nextPage(duration: const Duration(milliseconds: 200), curve:Curves.decelerate );
       notifyListeners();
     }
   }
 
-  List<ObjectModel> findSubObjects(ImageGroupModel curGroup,double offsetX,double offsetY){
+  List<ObjectModel> findSubObjects(List<ImageGroupModel> subGroups,double offsetX,double offsetY){
     List<ObjectModel>allSubs=[];
-    for(var grp in curGroup.allGroups){
+    for(var grp in subGroups){
       if(grp.mainState.target!=null&&grp.label.target!=null&&grp.label.target!.levelName=="objects"){
         allSubs.addAll(grp.allStates);
       }else if(grp.mainState.target!=null&&grp.label.target!=null){
-        allSubs.addAll(findSubObjects(grp,grp.mainState.target!.left+offsetX,grp.mainState.target!.top+offsetY));
+        allSubs.addAll(findSubObjects(grp.allGroups,grp.mainState.target!.left+offsetX,grp.mainState.target!.top+offsetY));
       }
     }
     allSubs= allSubs.map((e){
@@ -70,7 +70,7 @@ class ViewObjectsViewModel extends ViewModel {
   previousImage()async{
     if(curImage>0) {
       curImage-=1;
-      subObjects=findSubObjects(group,0,0);
+      subObjects=findSubObjects(subGroups,0,0);
       controller.previousPage(duration: const Duration(milliseconds: 200), curve:Curves.decelerate );
       notifyListeners();
     }

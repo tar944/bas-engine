@@ -58,6 +58,18 @@ class _View extends StatelessView<LabelManageItemViewModel> {
             const SizedBox(width: 5,),
             Expanded(
                 flex: 7,
+                child: IconButton(
+                    style: ButtonStyle(
+                        padding: ButtonState.all(const EdgeInsets.all(6))),
+                    icon: Icon(
+                      FluentIcons.choice_column,
+                      size: 18,
+                      color: Colors.green.dark,
+                    ),
+                    onPressed: () => vm.onActionCaller('finalSelect&&${vm.label.id}'))
+            ),
+            Expanded(
+                flex: 7,
                 child: FlyoutTarget(
                     key: GlobalKey(),
                     controller: vm.controller,

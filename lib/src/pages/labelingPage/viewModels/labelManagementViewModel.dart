@@ -90,6 +90,10 @@ class LabelManagementViewModel extends ViewModel {
         selectedLevel=allLabels.firstWhere((element) => element.id==int.parse(act[1]));
         notifyListeners();
         break;
+      case "finalSelect":
+        onActionCaller("$returnAction&&${act[1]}&&");
+        onCloseClicked();
+        break;
     }
   }
 }
