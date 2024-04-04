@@ -82,7 +82,6 @@ class _View extends StatelessView<ViewObjectsViewModel> {
                             ),
                             child:ViewRegionExplorer(
                               itsObjects: vm.subObjects,
-                              onObjectCaller: (e)=>{},
                             ),
                           );
                         }).toList(),

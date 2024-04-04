@@ -7,18 +7,18 @@ import 'package:pmvvm/pmvvm.dart';
 class PartRegion extends StatelessWidget {
   PartRegion({
     Key? key,
-    required this.curObject,
+    required this.objId,
     required this.onObjectActionCaller,
   }) : super(key: key);
 
-  final ObjectModel curObject;
-  final ValueSetter<String> onObjectActionCaller;
+  final int objId;
+  final VoidCallback onObjectActionCaller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: PartViewModel(curObject, onObjectActionCaller),
+      viewModel: PartViewModel(objId, onObjectActionCaller),
     );
   }
 }
@@ -28,40 +28,26 @@ class _View extends StatelessView<PartViewModel> {
 
   @override
   Widget render(context, PartViewModel vm) {
-    final controller = FlyoutController();
-    return SizedBox(
-      width: vm.isMaximize?(vm.curObject.right - vm.curObject.left).abs():40,
-      height: vm.isMaximize?(vm.curObject.bottom - vm.curObject.top).abs():40,
-      child: Opacity(
-        opacity: vm.isMaximize?1.0:0.3,
+    return IconButton(
+      style: ButtonStyle(
+        padding: ButtonState.all(EdgeInsets.zero)
+      ),
+      onPressed: ()=>vm.onObjectActionCaller(),
+      icon: SizedBox(
+        width: (vm.curObject!.right - vm.curObject!.left).abs(),
+        height:(vm.curObject!.bottom - vm.curObject!.top).abs(),
         child: Stack(
           children: [
             CustomPaint(
               painter: RectanglePainter(
                   object: ObjectModel(0, "", 0.0,
-                      vm.isMaximize?vm.curObject.right - vm.curObject.left:40,
+                      vm.curObject!.right - vm.curObject!.left,
                       0.0,
-                      vm.isMaximize?vm.curObject.bottom - vm.curObject.top:40,
+                      vm.curObject!.bottom - vm.curObject!.top,
                   ),
-                  color: Colors.orange.dark,
-                  isActive: true),
+                  color: vm.curObject!.isNavTool?Colors.magenta.dark:Colors.orange.dark,
+                  isActive: vm.curObject!.isNavTool),
             ),
-            Positioned(
-                  right: 5,
-                  bottom: 5,
-                  child: Row(
-                    children: [
-                      IconButton(
-                          style: ButtonStyle(
-                              backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
-                          ),
-                          icon: Icon(
-                            vm.isMaximize?FluentIcons.arrow_up_right_mirrored8:FluentIcons.arrow_down_right8,
-                            color: Colors.white,
-                          ),
-                          onPressed: () => vm.onShowHandler())
-                    ],
-                  )),
           ],
         ),
       ),

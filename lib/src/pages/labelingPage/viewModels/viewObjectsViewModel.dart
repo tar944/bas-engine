@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -13,7 +14,11 @@ class ViewObjectsViewModel extends ViewModel {
   List<ObjectModel> subObjects = [];
 
   ViewObjectsViewModel(
-      this.dlgW, this.dlgH, this.subGroups, this.allObjects, this.showObjectId);
+      this.dlgW,
+      this.dlgH,
+      this.subGroups,
+      this.allObjects,
+      this.showObjectId);
 
   @override
   void onMount() {
@@ -34,7 +39,6 @@ class ViewObjectsViewModel extends ViewModel {
 
   List<ObjectModel> findSubObjects(List<ImageGroupModel> subGroups, double startX, double startY) {
     List<ObjectModel> allSubs = [];
-    print("===================================");
     for (var grp in subGroups) {
       double offsetX = 0, offsetY = 0;
       if (grp.mainState.target != null && grp.label.target != null && grp.label.target!.levelName == "objects") {
@@ -46,6 +50,7 @@ class ViewObjectsViewModel extends ViewModel {
             grp.allStates[0].top+startY,
             grp.allStates[0].bottom+startY
         );
+        obj.isNavTool=grp.allStates[0].isNavTool;
         allSubs.add(obj);
       } else if (grp.mainState.target != null && grp.label.target != null) {
         if (grp.mainState.target!.left == 0 && grp.mainState.target!.top == 0) {

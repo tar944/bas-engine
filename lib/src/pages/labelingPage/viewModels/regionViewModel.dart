@@ -9,13 +9,15 @@ import 'package:uuid/uuid.dart';
 
 class RegionViewModel extends ViewModel {
   List<ObjectModel> itsObjects;
-  ObjectModel? curObject;
-  final ValueSetter<String> onObjectCaller;
 
   RegionViewModel(
-      this.itsObjects,
-      this.onObjectCaller);
+      this.itsObjects);
 
   onObjectActionHandler(String action)async{
+    var act=action.split("&&");
+    var curObj= await ObjectDAO().getDetails(int.parse(act[1]));
+    curObj!.isNavTool=!curObj.isNavTool;
+    await ObjectDAO().update(curObj);
+    notifyListeners();
   }
 }
