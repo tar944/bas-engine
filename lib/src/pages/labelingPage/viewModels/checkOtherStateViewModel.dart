@@ -62,7 +62,14 @@ class CheckOtherStateViewModel extends ViewModel {
 
   actionBtnHandler(String action)async{
     if(action =="yes"){
-      var obj = ObjectModel(-1, const Uuid().v4(), srcObject.left, srcObject.right, srcObject.top, srcObject.bottom);
+      var obj = ObjectModel(
+          -1,
+          const Uuid().v4(),
+          srcObject.left,
+          srcObject.right,
+          srcObject.top,
+          srcObject.bottom,
+      );
       obj.srcObject.target=allObjects[curImage];
       final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
       i.Command()

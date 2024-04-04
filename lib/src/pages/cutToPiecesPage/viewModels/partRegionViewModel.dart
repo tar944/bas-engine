@@ -88,7 +88,8 @@ class PartRegionViewModel extends ViewModel {
         right > left ? left : right,
         right > left ? right : left,
         top > bottom ? bottom : top,
-        top > bottom ? top : bottom);
+        top > bottom ? top : bottom,
+    );
     if(!isSimpleAction){
       allowDrawing=false;
       itsObjects.add(part);

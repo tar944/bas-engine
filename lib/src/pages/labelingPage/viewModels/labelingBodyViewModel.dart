@@ -99,7 +99,14 @@ class LabelingBodyViewModel extends ViewModel {
               var imgDiff = DiffImage.compareFromMemory(srcImg!, curImg!,asPercentage: true).diffValue;
               print("${curSub.image.target!.name} compare to=> ${curState.image.target!.name!} => $imgDiff");
               if (imgDiff > 0.8) {
-                var obj = ObjectModel(-1, const Uuid().v4(), curSub.left, curSub.right, curSub.top, curSub.bottom);
+                var obj = ObjectModel(
+                    -1,
+                    const Uuid().v4(),
+                    curSub.left,
+                    curSub.right,
+                    curSub.top,
+                    curSub.bottom,
+                );
                 obj.srcObject.target = curState;
                 final path = await DirectoryManager().getObjectImagePath(prjUUID, part!.uuid);
                 final cmd = i.Command()

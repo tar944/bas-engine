@@ -214,7 +214,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(15, 8892823931225835339),
       name: 'ObjectModel',
-      lastPropertyId: const IdUid(29, 5118056379320144992),
+      lastPropertyId: const IdUid(31, 3993222101260499379),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -628,7 +628,9 @@ ModelDefinition getObjectBoxModel() {
         4745844637427822667,
         4178048732557493644,
         6934286019042658826,
-        5847613169931022485
+        5847613169931022485,
+        5666200048488082066,
+        3993222101260499379
       ],
       retiredRelationUids: const [
         7096364116743183016,
@@ -886,7 +888,7 @@ ModelDefinition getObjectBoxModel() {
           final actionTypeOffset = fbb.writeString(object.actionType);
           final typedTextOffset = fbb.writeString(object.typedText);
           final navDutyOffset = fbb.writeString(object.navDuty);
-          fbb.startTable(30);
+          fbb.startTable(32);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, uuidOffset);
           fbb.addFloat64(2, object.left);

@@ -53,7 +53,8 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                   object: ObjectModel(0, "", 0.0,
                       vm.isMaximize?vm.curObject.right - vm.curObject.left:40,
                       0.0,
-                      vm.isMaximize?vm.curObject.bottom - vm.curObject.top:40),
+                      vm.isMaximize?vm.curObject.bottom - vm.curObject.top:40,
+                  ),
                   color: vm.isMine?Colors.blue.dark:Colors.orange.dark,
                   isActive: vm.controller.activeID == vm.curObject.id),
             ),
@@ -106,7 +107,7 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                     height: 120,
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey[170]),
-                      borderRadius: BorderRadius.all(Radius.circular(5.0)),
+                      borderRadius: const BorderRadius.all(Radius.circular(5.0)),
                       color: Colors.grey[190]
                     ),
                     child: Padding(
