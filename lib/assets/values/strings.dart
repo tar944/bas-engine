@@ -77,7 +77,7 @@ class Strings{
   static const String guideProjects="You can create a new project 👆 or choose one of your previous projects 👇";
   static const String guideEmptyProject="You can create a new project 👆";
   static const String partDescriptionHint="Enter a description for this part";
-  static const String appName="BAS Data set generator engine";
+  static const String appName="Dragon food generator";
   static const String project="Project";
   static const String projectParts="Project parts";
   static const String imageGroups="Image groups";

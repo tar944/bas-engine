@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgConfirm.dart';
@@ -90,7 +91,7 @@ class _View extends StatelessView<ImageItemViewModel> {
                           ),
                           onPressed: () => showFlyConfirm(
                               "Are you sure?",
-                              "yeh",
+                              Strings.yes,
                               controller,
                               FlyoutPlacementMode.topCenter,
                               "delete&&${vm.group.id}",

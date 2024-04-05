@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/videoDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/videoModel.dart';
@@ -111,7 +112,7 @@ class VideoItem extends HookWidget {
                               ),
                               onPressed: () => showFlyConfirm(
                                   "Are you sure?",
-                                  "yeh",
+                                  Strings.yes,
                                   controller,
                                   FlyoutPlacementMode.topCenter,
                                   "delete&&${video.id}",
