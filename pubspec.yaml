@@ -58,6 +58,7 @@ dependencies:
   pmvvm: ^4.0.1
   mouse_event: ^0.1.1
   keyboard_event: ^0.3.4
+  xml: ^6.3.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
