@@ -59,6 +59,7 @@ dependencies:
   mouse_event: ^0.1.1
   keyboard_event: ^0.3.4
   xml: ^6.3.0
+  flutter_launcher_icons: ^0.13.1
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.2
@@ -81,6 +82,24 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^2.0.0
 
+#for change icon of app run this on terminal of project ==> flutter pub run flutter_launcher_icons
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "lib/assets/icon/icon.png"
+  web:
+    generate: true
+    image_path: "lib/assets/icon/icon.png"
+    background_color: "#ffffff"
+    theme_color: "#ffffff"
+  windows:
+    generate: true
+    image_path: "lib/assets/icon/icon256.png"
+    icon_size: 256 # min:48, max:256, default: 48
+  macos:
+    generate: true
+    image_path: "lib/assets/icon/icon256.png"
+
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -93,6 +112,8 @@ flutter:
     - lib/assets/testImages/
     - lib/assets/video/
     - lib/assets/img/
+    - lib/assets/icon/icon.png
+    - lib/assets/icon/icon256.png
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
