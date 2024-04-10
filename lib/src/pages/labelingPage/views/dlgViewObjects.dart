@@ -43,11 +43,12 @@ class _View extends StatelessView<ViewObjectsViewModel> {
 
   @override
   Widget render(context, ViewObjectsViewModel vm) {
+    print(vm.dlgW);
     return Stack(
       alignment: Alignment.center,
       children: [
         SizedBox(
-            width: vm.dlgW+60,
+            width: (vm.dlgW<160?160:vm.dlgW)+60,
             height: vm.dlgH+120,
             child: Container(
               decoration: BoxDecoration(

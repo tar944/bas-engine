@@ -164,7 +164,6 @@ class LabelingBodyViewModel extends ViewModel {
         objects=grp!.allStates;
         notifyListeners();
         break;
-        break;
       case "open":
         onGroupActionCaller(action);
         break;
@@ -219,7 +218,7 @@ class LabelingBodyViewModel extends ViewModel {
         break;
       case "remove":
         var grp = await ImageGroupDAO().getDetails(int.parse(act[1]));
-        if(grp!.allStates.isEmpty&&grp.subObjects.isEmpty){
+        if(grp!.allStates.isEmpty){
           await ImageGroupDAO().delete(grp);
           subGroups.removeWhere((element) => element.id==grp.id);
           notifyListeners();

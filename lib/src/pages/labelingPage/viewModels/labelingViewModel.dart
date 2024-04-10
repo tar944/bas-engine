@@ -85,27 +85,29 @@ class LabelingViewModel extends ViewModel {
       List<ImageGroupModel> allGroups = curPart==null?curGroup!.allGroups:curPart!.allGroups;
       List<NavModel> allNavs = [];
       for (var grp in allGroups) {
-        String name=grp.name!;
-        String lblName = grp.label.target!.name;
-        if(grp.name==""){
-          name = lblName;
-          if(grp.partUUID!=""){
-            var parGrp = await ProjectPartDAO().getDetailsByUUID(grp.partUUID);
-            lblName=parGrp!.name!;
-          }else if(grp.groupUUID!=""){
-            var parGrp = await ImageGroupDAO().getDetailsByUUID(grp.groupUUID);
-            lblName=parGrp!.label.target!.name;
+        if(grp.label.target!=null){
+          String name=grp.name!;
+          String lblName = grp.label.target!.name;
+          if(grp.name==""){
+            name = lblName;
+            if(grp.partUUID!=""){
+              var parGrp = await ProjectPartDAO().getDetailsByUUID(grp.partUUID);
+              lblName=parGrp!.name!;
+            }else if(grp.groupUUID!=""){
+              var parGrp = await ImageGroupDAO().getDetailsByUUID(grp.groupUUID);
+              lblName=parGrp!.label.target!.name;
+            }
           }
+          allNavs.add(NavModel(
+              grp.id,
+              grp.allStates.length,
+              "group",
+              name,
+              grp.state != GroupState.findMainState.name ? grp.mainState.target!.image.target!.path! : "",
+              "",
+              lblName
+          ));
         }
-        allNavs.add(NavModel(
-            grp.id,
-            grp.allStates.length,
-            "group",
-            name,
-            grp.state != GroupState.findMainState.name ? grp.mainState.target!.image.target!.path! : "",
-            "",
-            lblName
-        ));
       }
       allNavsRows.add(allNavs);
       selectedNavs.add(allNavs.firstWhere((element) => element.id == curNav.id));

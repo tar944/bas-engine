@@ -36,6 +36,9 @@ class ImageGroupDAO {
   removeObject(int groupId,ObjectModel obj)async{
     var group = await getDetails(groupId);
     group!.allStates.removeWhere((element) => element.id == obj.id);
+    if(group.allStates.isEmpty||(group.mainState.target!=null&&group.mainState.target!.id==obj.id)){
+      group.state=GroupState.findMainState.name;
+    }
     update(group);
   }
 
