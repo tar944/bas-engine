@@ -63,21 +63,34 @@ class LabelTag extends HookWidget {
                       style: TextSystem.textM(Colors.orange.dark),
                     ),
                   ),
-                if((curGroup.allStates.isNotEmpty&&isSelected)&&(curGroup.label.target==null||curGroup.label.target!.levelName!="objects"))
-                    Container(
-                      width: Dimens.tabHeightSmall*2,
-                      height: Dimens.tabHeightSmall,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(Radius.circular(Dimens.tabHeightSmall/2)),
-                          border: Border.all(color: curGroup.state==GroupState.generated.name?Colors.magenta.darkest:Colors.teal.darker),
-                          color:curGroup.state==GroupState.generated.name?Colors.magenta.dark:Colors.teal.dark
+                if(curGroup.allStates.isNotEmpty&&isSelected)
+                  ...[
+                    if(curGroup.label.target==null||curGroup.label.target!.levelName!="objects")
+                      Container(
+                        width: Dimens.tabHeightSmall*2,
+                        height: Dimens.tabHeightSmall,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(Radius.circular(Dimens.tabHeightSmall/2)),
+                            border: Border.all(color: curGroup.state==GroupState.generated.name?Colors.magenta.darkest:Colors.teal.darker),
+                            color:curGroup.state==GroupState.generated.name?Colors.magenta.dark:Colors.teal.dark
+                        ),
+                        child: Text(
+                          curGroup.state==GroupState.generated.name?Strings.labelIt:Strings.open,
+                          style: TextSystem.textM(Colors.white),
+                        ),
                       ),
-                      child: Text(
-                        curGroup.state==GroupState.generated.name?Strings.labelIt:Strings.open,
-                        style: TextSystem.textM(Colors.white),
+                    if(curGroup.label.target!=null&&curGroup.label.target!.levelName=="objects")
+                      Container(
+                        width: Dimens.tabHeightSmall,
+                        height: Dimens.tabHeightSmall,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: Colors.teal.dark)),
+                        child: const Icon(FluentIcons.edit,size: 16,color: Colors.white,),
                       ),
-                    ),
+                  ],
                 if(curGroup.allStates.isEmpty)
                   IconButton(
                       style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
@@ -99,11 +112,14 @@ class LabelTag extends HookWidget {
               ],
             ),
           ),
-          onPressed: curGroup.allStates.isEmpty||(isSelected&&curGroup.label.target!=null&&curGroup.label.target!.levelName=="objects")?null:
+          onPressed: curGroup.allStates.isEmpty?null:
               ()=>onLabelSelectedCaller(
                   isSelected?
-                    (curGroup.state==GroupState.generated.name? "labelIt&&${curGroup.id}": "open&&${curGroup.id}"):
-                  "choose&&${curGroup.id}")),
+                    (curGroup.state==GroupState.generated.name?
+                        "labelIt&&${curGroup.id}":
+                            (curGroup.label.target!=null&&curGroup.label.target!.levelName=="objects")?
+                                "editObject&&${curGroup.id}":"open&&${curGroup.id}"):
+                                    "choose&&${curGroup.id}")),
     );
   }
 }

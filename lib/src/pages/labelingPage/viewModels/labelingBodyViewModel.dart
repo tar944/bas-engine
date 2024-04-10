@@ -180,6 +180,10 @@ class LabelingBodyViewModel extends ViewModel {
       case "showDialog":
         gotoLabelingDialog(act[0]);
         break;
+      case "editObject":
+        labelGroupId=int.parse(act[1]);
+        gotoLabelingDialog("labelIt");
+        break;
       case "saveName":
         var newGroup = ImageGroupModel(-1,partUUID,grpUUID , act[2], "");
         newGroup.uuid=const Uuid().v4();
