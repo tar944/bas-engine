@@ -195,6 +195,8 @@ class LabelingBodyViewModel extends ViewModel {
         if(grpUUID!=""){
           var parGroup= await ImageGroupDAO().getDetailsByUUID(grpUUID);
           for(var obj in grp!.allStates){
+            obj.isMainObject=false;
+            await ObjectDAO().update(obj);
             parGroup!.subObjects.add(obj);
           }
           await ImageGroupDAO().update(parGroup!);
@@ -286,7 +288,7 @@ class LabelingBodyViewModel extends ViewModel {
           if(isState){
             await ImageGroupDAO().removeObject(grp!.id, obj);
           }else{
-            await ImageGroupDAO().removeSubObject(int.parse(act[1]), obj);
+            await ImageGroupDAO().removeSubObject(grp!.id, obj);
             objects.removeWhere((element) => element.id==obj.id);
             notifyListeners();
           }

@@ -14,6 +14,7 @@ import 'package:path/path.dart' as p;
 import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgRecordMenu.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:pmvvm/pmvvm.dart';
 import 'package:screen_capturer/screen_capturer.dart';
 import 'package:uuid/uuid.dart';
 import 'package:window_manager/window_manager.dart';
@@ -79,6 +80,7 @@ class RecordPage extends HookWidget with WindowListener {
   @override
   Widget build(BuildContext context) {
     var imgNumber = useState(0);
+    var lastObjectId = useState(-1);
     var isRecording = useState(false);
     var isShuttering = useState(false);
     var dirPath = useState('');
@@ -89,7 +91,10 @@ class RecordPage extends HookWidget with WindowListener {
       _init(context);
       Future<void>.microtask(() async {
         final part = await ProjectPartDAO().getDetails(partId!);
-        dirPath.value=part!.path;
+        if(part!.allObjects.isNotEmpty){
+          lastObjectId.value=part.allObjects[part.allObjects.length-1].id!;
+        }
+        dirPath.value=part.path;
         imgNumber.value = part.allObjects.length;
       });
       return null;
@@ -130,13 +135,17 @@ class RecordPage extends HookWidget with WindowListener {
 
             ObjectModel obj = ObjectModel(-1,const Uuid().v4(), 0, 0, 0, 0);
             obj.actionType = mouseEvent.mouseMsg.toString();
-            obj.actX=mouseEvent.x;
-            obj.actY=mouseEvent.y;
             var img =ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(imgPath), imgPath);
             img.id= await ImageDAO().add(img);
             obj.image.target=img;
             obj.id=await ObjectDAO().addObject(obj);
             await ProjectPartDAO().addObject(partId!, obj);
+            if(lastObjectId.value!=-1){
+              var lastObj= await ObjectDAO().getDetails(lastObjectId.value);
+              lastObj!.actX=mouseEvent.x;
+              lastObj.actY=mouseEvent.y;
+              await ObjectDAO().update(lastObj);
+            }
             imgNumber.value += 1;
           }
         });
