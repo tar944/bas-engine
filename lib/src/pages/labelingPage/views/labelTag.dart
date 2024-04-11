@@ -46,7 +46,7 @@ class LabelTag extends HookWidget {
                           Text(" (${curGroup.label.target!.action})",style: TextSystem.textS(Colors.grey[120]),)
                     ],
                   )
-                    : Text(Strings.notSet,style: TextSystem.textS(Colors.white),),
+                    : Text(Strings.labelIt,style: TextSystem.textS(Colors.white),),
                 const SizedBox(
                   width: 8,
                 ),
@@ -65,31 +65,54 @@ class LabelTag extends HookWidget {
                   ),
                 if(curGroup.allStates.isNotEmpty&&isSelected)
                   ...[
-                    if(curGroup.label.target==null||curGroup.label.target!.levelName!="objects")
+                    if(curGroup.label.target!=null&&curGroup.label.target!.levelName!="objects")
                       Container(
                         width: Dimens.tabHeightSmall*2,
                         height: Dimens.tabHeightSmall,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                             borderRadius: const BorderRadius.all(Radius.circular(Dimens.tabHeightSmall/2)),
-                            border: Border.all(color: curGroup.state==GroupState.generated.name?Colors.magenta.darkest:Colors.teal.darker),
-                            color:curGroup.state==GroupState.generated.name?Colors.magenta.dark:Colors.teal.dark
+                            border: Border.all(color: Colors.teal.darker),
+                            color:Colors.teal.dark
                         ),
-                        child: Text(
-                          curGroup.state==GroupState.generated.name?Strings.labelIt:Strings.open,
-                          style: TextSystem.textM(Colors.white),
+                        child: Text(Strings.open, style: TextSystem.textM(Colors.white),),
+                      ),
+                    if(curGroup.label.target==null&&curGroup.state==GroupState.generated.name)
+                      IconButton(
+                        style: ButtonStyle(
+                          padding: ButtonState.all(const EdgeInsets.all(0.0))
+                        ),
+                        onPressed: ()=>onLabelSelectedCaller("removeGroup&&${curGroup.id}"),
+                        icon: Container(
+                          width: Dimens.tabHeightSmall,
+                          height: Dimens.tabHeightSmall,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.all(Radius.circular(Dimens.tabHeightSmall/2)),
+                              border: Border.all(color: Colors.magenta.darkest),
+                              color:Colors.magenta.dark
+                          ),
+                          child: const Icon(FluentIcons.remove_link),
                         ),
                       ),
-                    if(curGroup.label.target!=null&&curGroup.label.target!.levelName=="objects")
-                      Container(
-                        width: Dimens.tabHeightSmall,
-                        height: Dimens.tabHeightSmall,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.teal.dark)),
-                        child: const Icon(FluentIcons.edit,size: 16,color: Colors.white,),
+                    if(curGroup.state!=GroupState.generated.name)
+                      ...[
+                        const SizedBox(width: 5.0,),
+                        IconButton(
+                          style: ButtonStyle(
+                            padding: ButtonState.all(EdgeInsets.zero)
+                          ),
+                          onPressed: ()=>onLabelSelectedCaller("editGroup&&${curGroup.id}"),
+                          icon: Container(
+                          width: Dimens.tabHeightSmall,
+                          height: Dimens.tabHeightSmall,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.teal.dark)),
+                          child: const Icon(FluentIcons.edit,size: 16,color: Colors.white,),
                       ),
+                        ),]
                   ],
                 if(curGroup.allStates.isEmpty)
                   IconButton(
@@ -116,9 +139,7 @@ class LabelTag extends HookWidget {
               ()=>onLabelSelectedCaller(
                   isSelected?
                     (curGroup.state==GroupState.generated.name?
-                        "labelIt&&${curGroup.id}":
-                            (curGroup.label.target!=null&&curGroup.label.target!.levelName=="objects")?
-                                "editObject&&${curGroup.id}":"open&&${curGroup.id}"):
+                        "labelIt&&${curGroup.id}":"open&&${curGroup.id}"):
                                     "choose&&${curGroup.id}")),
     );
   }

@@ -12,7 +12,7 @@ class NavigationRow extends StatelessWidget {
     required this.allNavs,
     required this.selectedNav,
     required this.rowNumber,
-    required this.onNavSelectedCaller
+    required this.onNavSelectedCaller,
   }) : super(key: key);
 
   List<NavModel> allNavs;
@@ -54,7 +54,8 @@ class _View extends StatelessView<NavigationRowViewModel> {
                 return NavItem(
                     navItem: vm.allNavs[index],
                     selectStatus: vm.findSelectedStatus(vm.allNavs[index]),
-                    onItemSelectedCaller: vm.onItemSelectHandler);
+                    onItemSelectedCaller: vm.onItemSelectHandler,
+                );
               }),
           ),
         ),

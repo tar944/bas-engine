@@ -116,10 +116,10 @@ class _View extends StatelessView<ObjectItemViewModel> {
                         wrapSettings: const WrapSettings(
                             spacing: 5.0
                         ),
-                        itemsPadding: const EdgeInsets.all(5.0),
+                        itemsPadding: const EdgeInsets.all(2.0),
                         textStyles: MultiSelectTextStyles(
-                            textStyle: TextSystem.textS(Colors.white),
-                            selectedTextStyle: TextSystem.textS(Colors.white)
+                            textStyle: TextSystem.textXs(Colors.white),
+                            selectedTextStyle: TextSystem.textXs(Colors.white)
                         ),
                         itemsDecoration: MultiSelectDecorations(
                             decoration:BoxDecoration(

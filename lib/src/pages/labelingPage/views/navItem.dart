@@ -12,7 +12,7 @@ class NavItem extends HookWidget {
     Key? key,
     required this.navItem,
     required this.selectStatus,
-    required this.onItemSelectedCaller
+    required this.onItemSelectedCaller,
   }) : super(key: key);
 
   NavModel navItem;
@@ -38,8 +38,7 @@ class NavItem extends HookWidget {
               border: Border.all(color: selectStatus=="selected"?Colors.teal:Colors.white),
               borderRadius: const BorderRadius.all(Radius.circular(5.0)),
             ),
-            child: Row(
-              children: [
+            child: Row(children: [
                 Padding(
                   padding: const EdgeInsets.all(3.0),
                   child: Container(
@@ -65,9 +64,7 @@ class NavItem extends HookWidget {
                       Text(navItem.kind=="part"?"${navItem.description.length>20?navItem.description.substring(0,20):navItem.description}...":navItem.lblName,style: TextSystem.textXs(selectStatus=="selected"?Colors.teal:Colors.white),),
                     ],
                   ),
-                )
-              ],
-            ),
+                )],),
           ),
         ),
       ),

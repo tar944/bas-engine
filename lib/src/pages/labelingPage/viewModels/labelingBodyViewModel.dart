@@ -180,9 +180,23 @@ class LabelingBodyViewModel extends ViewModel {
       case "showDialog":
         gotoLabelingDialog(act[0]);
         break;
-      case "editObject":
+      case "editGroup":
         labelGroupId=int.parse(act[1]);
         gotoLabelingDialog("labelIt");
+        break;
+      case "removeGroup":
+        var grp = await ImageGroupDAO().getDetails(int.parse(act[1]));
+        if(grpUUID!=""){
+          var parGroup= await ImageGroupDAO().getDetailsByUUID(grpUUID);
+          for(var obj in grp!.allStates){
+            parGroup!.subObjects.add(obj);
+          }
+          await ImageGroupDAO().update(parGroup!);
+          objects=parGroup.subObjects;
+        }
+        await ImageGroupDAO().delete(grp!);
+        subGroups.removeWhere((element) => element.id==grp.id);
+        notifyListeners();
         break;
       case "saveName":
         var newGroup = ImageGroupModel(-1,partUUID,grpUUID , act[2], "");

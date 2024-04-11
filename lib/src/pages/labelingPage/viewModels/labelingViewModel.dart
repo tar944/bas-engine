@@ -127,7 +127,6 @@ class LabelingViewModel extends ViewModel {
       allNavsRows.removeAt(allNavsRows.length - 1);
       selectedNavs.removeAt(selectedNavs.length - 1);
     }
-
     if (curNav.kind == "part") {
       updateByPartData(curNav);
     } else {
