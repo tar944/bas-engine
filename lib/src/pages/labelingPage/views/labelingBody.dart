@@ -112,7 +112,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                                   children: vm.objects
                                       .map((item) => ObjectItem(
                                             key: GlobalKey(),
-                                            allGroups: vm.subGroups,
+                                            allGroups: vm.subGroups.where((element) => element.state!=GroupState.generated.name).toList(),
                                             isState:vm.isState,
                                             stepStatus: vm.tagLineState==GroupState.findSubObjects?"labelIt":vm.tagLineState==GroupState.findMainState?"firstStep":"hide",
                                             object: item,

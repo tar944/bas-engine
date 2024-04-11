@@ -164,6 +164,12 @@ class LabelingBodyViewModel extends ViewModel {
         objects=grp!.allStates;
         notifyListeners();
         break;
+      case "showSubs":
+        isState=false;
+        var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+        objects=grp!.subObjects;
+        notifyListeners();
+        break;
       case "open":
         onGroupActionCaller(action);
         break;

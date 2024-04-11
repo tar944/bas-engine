@@ -14,7 +14,7 @@ class LabelManagementViewModel extends ViewModel {
   List<LabelModel> allLabels;
   List<String> allLevels=[];
   int curIndex=0;
-  LabelModel? selectedLevel;
+  LabelModel? selectedLabel;
   String prjUUID,returnAction,actValue="none";
   var ctlName = TextEditingController();
   final ValueSetter<String> onActionCaller;
@@ -66,7 +66,7 @@ class LabelManagementViewModel extends ViewModel {
     var act=action.split('&&');
     switch(act[0]){
       case "saveName":
-        onActionCaller("$returnAction&&${selectedLevel!.id}&&${act[1]}");
+        onActionCaller("$returnAction&&${selectedLabel!.id}&&${act[1]}");
         onCloseClicked();
         break;
       case "create":
@@ -87,7 +87,7 @@ class LabelManagementViewModel extends ViewModel {
         notifyListeners();
         break;
       case "clicked":
-        selectedLevel=allLabels.firstWhere((element) => element.id==int.parse(act[1]));
+        selectedLabel=allLabels.firstWhere((element) => element.id==int.parse(act[1]));
         notifyListeners();
         break;
       case "finalSelect":

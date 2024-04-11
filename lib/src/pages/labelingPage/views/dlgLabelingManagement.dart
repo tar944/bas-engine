@@ -78,6 +78,7 @@ class _View extends StatelessView<LabelManagementViewModel> {
                               key: GlobalKey(),
                                 allLabels: vm.allLabels.where((element) => element.levelName==e).toList(),
                                 lvlName: e,
+                                selLabelId: vm.selectedLabel==null?-1:vm.selectedLabel!.id,
                                 onActionCaller: vm.onLabelActionHandler)
                           );
                         }).toList(),
@@ -104,7 +105,7 @@ class _View extends StatelessView<LabelManagementViewModel> {
                     ),
                   ),
                   Opacity(
-                    opacity: vm.selectedLevel==null?0.3:1.0,
+                    opacity: vm.selectedLabel==null?0.3:1.0,
                     child: Padding(
                         padding: const EdgeInsets.all(5.0),
                         child: Row(
@@ -120,7 +121,7 @@ class _View extends StatelessView<LabelManagementViewModel> {
                               child: Text("2",style: TextSystem.textL(Colors.orange.dark),),
                             ),
                             const SizedBox(width: 10,),
-                            Text("${Strings.labelSecondStep} ${vm.selectedLevel==null?"label":vm.selectedLevel!.name}: "),
+                            Text("${Strings.labelSecondStep} ${vm.selectedLabel==null?"label":vm.selectedLabel!.name}: "),
                             SizedBox(
                               width: 250,
                               height: 35,
@@ -128,7 +129,7 @@ class _View extends StatelessView<LabelManagementViewModel> {
                                 children: [
                                   Expanded(
                                     child: TextBox(
-                                      enabled: vm.selectedLevel!=null,
+                                      enabled: vm.selectedLabel!=null,
                                       controller: vm.ctlName,
                                       placeholder: Strings.dlgSoftwareTitleHint,
                                       expands: false,
@@ -142,7 +143,7 @@ class _View extends StatelessView<LabelManagementViewModel> {
                                           padding: ButtonState.all(const EdgeInsets.all(6))),
                                       icon: Icon(FluentIcons.check_mark, size: 20, color: Colors.green.dark,
                                       ),
-                                      onPressed: vm.selectedLevel==null?null:() =>
+                                      onPressed: vm.selectedLabel==null?null:() =>
                                           vm.onLabelActionHandler('saveName&&${vm.ctlName.text}')),
                                 ],
                               ),

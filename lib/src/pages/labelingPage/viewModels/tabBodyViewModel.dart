@@ -11,12 +11,17 @@ class TabBodyViewModel extends ViewModel {
   String actValue="choseAction";
   final ValueSetter<String> onActionCaller;
   var ctlTitle = TextEditingController();
-
-  TabBodyViewModel(this.allLabels,this.lvlName, this.onActionCaller);
+  final int selLabelId;
+  final controller = FlyoutController();
+  TabBodyViewModel(this.allLabels,this.lvlName,this.selLabelId, this.onActionCaller);
 
   onComboBoxChangedHandler(String newValue){
     actValue=newValue;
     notifyListeners();
+  }
+
+  onLabelActionHandler(int lblId){
+    onActionCaller('clicked&&$lblId');
   }
 
   onSaveHandler(){

@@ -44,7 +44,22 @@ class LabelBodyTagLine extends HookWidget {
                   ),
                   onPressed:()=>onLabelActionHandler("showStates&&")
               ),
-              const SizedBox(width: 10,),
+              const SizedBox(width: 9,),
+              IconButton(
+                  style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
+                  icon: Container(
+                    width: Dimens.tabHeightSmall*2.8,
+                    height: Dimens.tabHeightSmall+10,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                        borderRadius: const BorderRadius.all(Radius.circular((Dimens.tabHeightSmall+10/2))),
+                        border: Border.all(color: !isStatesShowing?Colors.teal.dark:Colors.grey[160],width: !isStatesShowing?2.0:1.0)
+                    ),
+                    child: Text(Strings.showAllUnits,style: TextSystem.textS(Colors.white),),
+                  ),
+                  onPressed:()=>onLabelActionHandler("showSubs&&")
+              ),
+              const SizedBox(width: 9,),
             ],
           Container(
             height: Dimens.tabHeightSmall+20,
