@@ -21,6 +21,8 @@ import 'package:simple_animations/movie_tween/movie_tween.dart';
 import 'package:simple_animations/animation_builder/custom_animation_builder.dart';
 import 'package:screen_retriever/screen_retriever.dart';
 import 'package:mouse_event/mouse_event.dart';
+import 'package:audioplayers/audioplayers.dart';
+
 
 class RecordPage extends HookWidget with WindowListener {
   Offset _lastShownPosition = Offset.zero;
@@ -78,7 +80,10 @@ class RecordPage extends HookWidget with WindowListener {
   Widget build(BuildContext context) {
     var imgNumber = useState(0);
     var isRecording = useState(false);
+    var isShuttering = useState(false);
     var dirPath = useState('');
+    final player = AudioPlayer();
+
     final controller = FlyoutController();
     useEffect(() {
       _init(context);
@@ -111,7 +116,10 @@ class RecordPage extends HookWidget with WindowListener {
           if (mouseEvent.mouseMsg == MouseEventMsg.WM_LBUTTONUP ||
               mouseEvent.mouseMsg == MouseEventMsg.WM_RBUTTONUP ||
               mouseEvent.mouseMsg == MouseEventMsg.WM_MBUTTONUP) {
+            isShuttering.value=true;
             await Future.delayed(const Duration(milliseconds: 700));
+            await player.play(AssetSource('../lib/assets/sounds/cameraShutter.wav'));
+            isShuttering.value=false;
             var imgPath = p.join(dirPath.value,'images', 'screen_${DateTime.now().millisecondsSinceEpoch}.png');
             await screenCapturer.capture(
               mode: CaptureMode.screen,
@@ -190,7 +198,7 @@ class RecordPage extends HookWidget with WindowListener {
                 begin: Dimens.recordPnlHeight,
                 end: Dimens.recordPnlHeight + (Dimens.recordPnlHeight * 0.2)))
         .tween('color',
-            ColorTween(begin: Colors.blue.normal, end: Colors.blue.darker));
+            ColorTween(begin: isShuttering.value?Colors.magenta.normal:Colors.teal.normal, end: isShuttering.value?Colors.magenta.darker:Colors.teal.darker));
 
     if (isRecording.value) {
       return CustomAnimationBuilder(

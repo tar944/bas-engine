@@ -5,6 +5,7 @@
 import FlutterMacOS
 import Foundation
 
+import audioplayers_darwin
 import fc_native_video_thumbnail
 import flutter_meedu_videoplayer
 import fvp
@@ -22,6 +23,7 @@ import wakelock_plus
 import window_manager
 
 func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
+  AudioplayersDarwinPlugin.register(with: registry.registrar(forPlugin: "AudioplayersDarwinPlugin"))
   FcNativeVideoThumbnailPlugin.register(with: registry.registrar(forPlugin: "FcNativeVideoThumbnailPlugin"))
   FlutterMeeduVideoplayerPlugin.register(with: registry.registrar(forPlugin: "FlutterMeeduVideoplayerPlugin"))
   FvpPlugin.register(with: registry.registrar(forPlugin: "FvpPlugin"))

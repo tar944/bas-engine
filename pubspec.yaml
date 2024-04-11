@@ -57,6 +57,7 @@ dependencies:
   smooth_page_indicator: ^1.1.0
   pmvvm: ^4.0.1
   mouse_event: ^0.1.1
+  audioplayers: ^5.2.1
   keyboard_event: ^0.3.4
   xml: ^6.3.0
   flutter_launcher_icons: ^0.13.1
@@ -114,6 +115,7 @@ flutter:
     - lib/assets/img/
     - lib/assets/icon/icon.png
     - lib/assets/icon/icon256.png
+    - lib/assets/sounds/cameraShutter.wav
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
