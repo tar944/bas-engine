@@ -56,10 +56,7 @@ class RecordPage extends HookWidget with WindowListener {
     });
   }
 
-  Future<void> _windowShow({
-    bool isShowBelowTray = false,
-  }) async {
-    bool isAlwaysOnTop = await windowManager.isAlwaysOnTop();
+  Future<void> _windowShow() async {
     if (kIsLinux) {
       await windowManager.setPosition(_lastShownPosition);
     }
@@ -70,14 +67,9 @@ class RecordPage extends HookWidget with WindowListener {
     } else {
       await windowManager.focus();
     }
-
-    if (kIsLinux && !isAlwaysOnTop) {
-      await windowManager.setAlwaysOnTop(true);
-      await Future.delayed(const Duration(milliseconds: 10));
-      await windowManager.setAlwaysOnTop(false);
-      await Future.delayed(const Duration(milliseconds: 10));
-      await windowManager.focus();
-    }
+    await windowManager.setAlwaysOnTop(true);
+    await Future.delayed(const Duration(milliseconds: 10));
+    await windowManager.focus();
   }
 
   void onCloseListener(String action) {}
@@ -119,10 +111,7 @@ class RecordPage extends HookWidget with WindowListener {
           if (mouseEvent.mouseMsg == MouseEventMsg.WM_LBUTTONUP ||
               mouseEvent.mouseMsg == MouseEventMsg.WM_RBUTTONUP ||
               mouseEvent.mouseMsg == MouseEventMsg.WM_MBUTTONUP) {
-            await Future.delayed(Duration(
-                milliseconds: mouseEvent.mouseMsg == MouseEventMsg.WM_LBUTTONUP
-                    ? 100
-                    : 300));
+            await Future.delayed(const Duration(milliseconds: 700));
             var imgPath = p.join(dirPath.value,'images', 'screen_${DateTime.now().millisecondsSinceEpoch}.png');
             await screenCapturer.capture(
               mode: CaptureMode.screen,

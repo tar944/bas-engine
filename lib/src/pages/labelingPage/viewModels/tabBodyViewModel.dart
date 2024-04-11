@@ -21,7 +21,11 @@ class TabBodyViewModel extends ViewModel {
   }
 
   onLabelActionHandler(int lblId){
-    onActionCaller('clicked&&$lblId');
+    if(selLabelId==lblId){
+      onActionCaller('finalSelect&&$lblId');
+    }else{
+      onActionCaller('clicked&&$lblId');
+    }
   }
 
   onSaveHandler(){

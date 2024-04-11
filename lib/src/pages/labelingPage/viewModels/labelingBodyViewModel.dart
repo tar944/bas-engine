@@ -277,14 +277,19 @@ class LabelingBodyViewModel extends ViewModel {
         break;
       case 'addToGroup':
         var obj = await ObjectDAO().getDetails(int.parse(act[2]));
+        await ImageGroupDAO().addObject(int.parse(act[1]), obj!);
         if(grpUUID==""){
           var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
-          await ProjectPartDAO().removeObject(part!.id, obj!);
-          await ImageGroupDAO().addObject(int.parse(act[1]), obj);
+          await ProjectPartDAO().removeObject(part!.id, obj);
         }else{
           var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
-          await ImageGroupDAO().removeObject(grp!.id, obj!);
-          await ImageGroupDAO().addObject(int.parse(act[1]), obj);
+          if(isState){
+            await ImageGroupDAO().removeObject(grp!.id, obj);
+          }else{
+            await ImageGroupDAO().removeSubObject(int.parse(act[1]), obj);
+            objects.removeWhere((element) => element.id==obj.id);
+            notifyListeners();
+          }
         }
         subGroups[subGroups.indexWhere((element) => element.id==int.parse(act[1]))].allStates.add(obj);
         notifyListeners();
