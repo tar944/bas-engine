@@ -5,17 +5,11 @@ import 'package:pmvvm/pmvvm.dart';
 
 class ExplorerPartViewModel extends ViewModel {
 
-  ObjectModel curObject,mainObject;
-  ValueSetter<String> onObjectActionCaller;
-  bool isMine;
-  bool isSimpleAction;
-  bool isMaximize=true;
-  RegionRecController controller;
+  final ObjectModel curObject,mainObject;
+  final ValueSetter<String> onObjectActionCaller;
+  final bool isMine,isMinimum;
+  final bool isSimpleAction;
+  final RegionRecController controller;
 
-  ExplorerPartViewModel(this.curObject,this.mainObject,this.isMine,this.isSimpleAction, this.controller,this.onObjectActionCaller);
-
-  onShowHandler()async{
-    isMaximize= !isMaximize;
-    notifyListeners();
-  }
+  ExplorerPartViewModel(this.curObject,this.mainObject,this.isMine,this.isMinimum,this.isSimpleAction, this.controller,this.onObjectActionCaller);
 }

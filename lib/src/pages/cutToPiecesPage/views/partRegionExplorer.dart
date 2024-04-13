@@ -13,15 +13,19 @@ class PartRegionExplorer extends StatelessWidget {
         required this.otherObjects,
         required this.itsObjects,
         required this.mainObject,
+        required this.minimumObjects,
+        required this.onObjectActionCaller,
         required this.prjUUID,
         required this.isSimpleAction
       }) : super(key: key);
 
   final List<ObjectModel> otherObjects;
   final List<ObjectModel> itsObjects;
+  final List<int> minimumObjects;
   final ObjectModel mainObject;
   final bool isSimpleAction;
   final ValueSetter<ObjectModel> onNewObjectCaller;
+  final ValueSetter<String> onObjectActionCaller;
   String prjUUID;
 
   @override
@@ -31,10 +35,12 @@ class PartRegionExplorer extends StatelessWidget {
       viewModel: PartRegionViewModel(
           prjUUID,
           mainObject,
+          minimumObjects,
           otherObjects,
           itsObjects,
           isSimpleAction,
-          onNewObjectCaller
+          onNewObjectCaller,
+          onObjectActionCaller
       ),
     );
   }
@@ -69,9 +75,11 @@ class _View extends StatelessView<PartRegionViewModel> {
             top: item.top,
             left: item.left,
             child: ExploredPartRegion(
-              mainObject:  vm.mainObject,
+              key: GlobalKey(),
+              mainObject: vm.mainObject,
               curObject: item,
               isMine: false,
+              isMinimum: vm.minimumObjects.firstWhere((element) => element==item.id,orElse: ()=>-1)!=-1,
               isSimpleAction: vm.isSimpleAction,
               controller: vm.objectController,
               onObjectActionCaller: (e) => vm.onObjectActionHandler(e),
@@ -83,10 +91,12 @@ class _View extends StatelessView<PartRegionViewModel> {
                   top: item.top,
                   left: item.left,
                   child: ExploredPartRegion(
+                    key: GlobalKey(),
                     mainObject: vm.mainObject,
                     curObject: item,
                     isSimpleAction: vm.isSimpleAction,
                     isMine: true,
+                    isMinimum: vm.minimumObjects.firstWhere((element) => element==item.id,orElse: ()=>-1)!=-1,
                     controller: vm.objectController,
                     onObjectActionCaller: (e) => vm.onObjectActionHandler(e),
                   ),

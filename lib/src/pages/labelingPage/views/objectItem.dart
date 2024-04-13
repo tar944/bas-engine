@@ -191,26 +191,16 @@ class _View extends StatelessView<ObjectItemViewModel> {
                 Positioned(
                     right: 5,
                     top: 5,
-                    child: FlyoutTarget(
-                      key: GlobalKey(),
-                      controller: controller,
-                      child: IconButton(
-                          style: ButtonStyle(
-                              backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
-                          ),
-                          icon: Icon(
-                            FluentIcons.delete,
-                            color: Colors.red,
-                            size: 20,
-                          ),
-                          onPressed: () => showFlyConfirm(
-                              "Are you sure?",
-                              Strings.yes,
-                              controller,
-                              FlyoutPlacementMode.topCenter,
-                              "delete&&${vm.object.id!}",
-                              vm.onActionCaller)),
-                    ),)
+                    child: IconButton(
+                        style: ButtonStyle(
+                            backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
+                        ),
+                        icon: Icon(
+                          FluentIcons.delete,
+                          color: Colors.red,
+                          size: 20,
+                        ),
+                        onPressed: () => vm.onActionCaller("delete&&${vm.object.id!}")),)
               ],
             ),
           ),

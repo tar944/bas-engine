@@ -11,10 +11,12 @@ class PartRegionViewModel extends ViewModel {
   final List<ObjectModel> otherObjects;
   List<ObjectModel> itsObjects;
   List<LabelModel>allLabels=[];
+  final List<int> minimumObjects;
   RegionRecController objectController = RegionRecController();
   ObjectModel? curObject;
   ObjectModel mainObject;
   final ValueSetter<ObjectModel> onNewObjectCaller;
+  final ValueSetter<String> onObjectActionCaller;
   String prjUUID;
   bool allowDrawing=true;
   final bool isSimpleAction;
@@ -24,10 +26,12 @@ class PartRegionViewModel extends ViewModel {
   PartRegionViewModel(
       this.prjUUID,
       this.mainObject,
+      this.minimumObjects,
       this.otherObjects,
       this.itsObjects,
       this.isSimpleAction,
-      this.onNewObjectCaller);
+      this.onNewObjectCaller,
+      this.onObjectActionCaller);
 
 
   @override
@@ -55,20 +59,27 @@ class PartRegionViewModel extends ViewModel {
   }
 
   onObjectActionHandler(String action)async{
-    if(action=="removeRegion"){
-      itsObjects=[];
-      allowDrawing=true;
-      notifyListeners();
-    }else if(action=="confirmRegion"){
-      onNewObjectCaller(itsObjects[0]);
-    } else{
-      curObject = itsObjects.firstWhere((element) => element.id==int.parse(action.split("&&")[1]));
-      itsObjects.remove(curObject);
-      await ObjectDAO().deleteObject(curObject!);
-      curObject=null;
-      notifyListeners();
+    var act = action.split("&&");
+    switch(act[0]){
+      case "maximize":
+      case "minimize":
+        onObjectActionCaller(action);
+        break;
+      case "removeRegion":
+        itsObjects=[];
+        allowDrawing=true;
+        notifyListeners();
+        break;
+      case "confirmRegion":
+        onNewObjectCaller(itsObjects[0]);
+        break;
+      default:
+        curObject = itsObjects.firstWhere((element) => element.id==int.parse(action.split("&&")[1]));
+        itsObjects.remove(curObject);
+        await ObjectDAO().deleteObject(curObject!);
+        curObject=null;
+        notifyListeners();
     }
-
   }
 
   onLabelActionHandler(String action)async{

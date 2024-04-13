@@ -28,6 +28,7 @@ class CutToPiecesViewModel extends ViewModel {
   bool isShowAll=true;
   String pageDuty="cutting";
   List<ObjectModel>subObject=[];
+  List<int>minimizedObjects=[];
   final int groupId;
   final String title,partUUID,prjUUID;
   int indexImage = 0, imgH = 0,imgW = 0;
@@ -164,6 +165,16 @@ class CutToPiecesViewModel extends ViewModel {
     } else {
       return x;
     }
+  }
+
+  onPartObjectHandler(String action){
+    var act=action.split("&&");
+    if(act[0]=="minimize"){
+      minimizedObjects.add(int.parse(act[1]));
+    }else{
+      minimizedObjects.removeWhere((element) => element==int.parse(act[1]));
+    }
+    notifyListeners();
   }
   //todo crop image part is here
   onNewPartCreatedHandler(ObjectModel newObject) async {

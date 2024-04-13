@@ -15,6 +15,7 @@ class ExploredPartRegion extends StatelessWidget {
     required this.curObject,
     required this.mainObject,
     required this.isMine,
+    required this.isMinimum,
     required this.isSimpleAction,
     required this.controller,
     required this.onObjectActionCaller,
@@ -22,14 +23,14 @@ class ExploredPartRegion extends StatelessWidget {
 
   final ObjectModel curObject, mainObject;
   final ValueSetter<String> onObjectActionCaller;
-  final bool isMine,isSimpleAction;
+  final bool isMine,isSimpleAction,isMinimum;
   final RegionRecController controller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: ExplorerPartViewModel(curObject, mainObject, isMine,isSimpleAction,
+      viewModel: ExplorerPartViewModel(curObject, mainObject, isMine,isMinimum,isSimpleAction,
           controller, onObjectActionCaller),
     );
   }
@@ -41,19 +42,20 @@ class _View extends StatelessView<ExplorerPartViewModel> {
   @override
   Widget render(context, ExplorerPartViewModel vm) {
     final controller = FlyoutController();
+    print(vm.isMinimum);
     return SizedBox(
-      width: vm.isMaximize?(vm.curObject.right - vm.curObject.left).abs():40,
-      height: vm.isMaximize?(vm.curObject.bottom - vm.curObject.top).abs():40,
+      width: !vm.isMinimum?(vm.curObject.right - vm.curObject.left).abs():40,
+      height: !vm.isMinimum?(vm.curObject.bottom - vm.curObject.top).abs():40,
       child: Opacity(
-        opacity: vm.isMaximize?1.0:0.3,
+        opacity: !vm.isMinimum?1.0:0.3,
         child: Stack(
           children: [
             CustomPaint(
               painter: RectanglePainter(
                   object: ObjectModel(0, "", 0.0,
-                      vm.isMaximize?vm.curObject.right - vm.curObject.left:40,
+                    !vm.isMinimum?vm.curObject.right - vm.curObject.left:40,
                       0.0,
-                      vm.isMaximize?vm.curObject.bottom - vm.curObject.top:40,
+                    !vm.isMinimum?vm.curObject.bottom - vm.curObject.top:40,
                   ),
                   color: vm.isMine?Colors.blue.dark:Colors.orange.dark,
                   isActive: vm.controller.activeID == vm.curObject.id),
@@ -64,7 +66,7 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                   bottom: 5,
                   child: Row(
                     children: [
-                      vm.isMaximize&&vm.isMine?
+                      !vm.isMinimum&&vm.isMine?
                       FlyoutTarget(
                         key: GlobalKey(),
                         controller: controller,
@@ -92,10 +94,10 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                               backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
                           ),
                           icon: Icon(
-                            vm.isMaximize?FluentIcons.arrow_up_right_mirrored8:FluentIcons.arrow_down_right8,
+                            !vm.isMinimum?FluentIcons.arrow_up_right_mirrored8:FluentIcons.arrow_down_right8,
                             color: Colors.white,
                           ),
-                          onPressed: () => vm.onShowHandler())
+                          onPressed: () => vm.onObjectActionCaller(vm.isMinimum?"maximize&&${vm.curObject.id}":"minimize&&${vm.curObject.id}"))
                     ],
                   )),
             if(!vm.isSimpleAction)
@@ -129,7 +131,7 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                                     height: Dimens.btnHeightBig,
                                     alignment: Alignment.center,
                                     child: const Text(Strings.cancel)),
-                                onPressed: ()=> vm.onObjectActionCaller("removeRegion")),
+                                onPressed: ()=> vm.onObjectActionCaller("removeRegion&&")),
                             const SizedBox(width: 10,),
                             Button(
                                 style:ButtonStyle(
@@ -141,7 +143,7 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                                     color: Colors.teal.dark,
                                     alignment: Alignment.center,
                                     child: Text(Strings.yes)),
-                                onPressed: ()=>vm.onObjectActionCaller("confirmRegion")),
+                                onPressed: ()=>vm.onObjectActionCaller("confirmRegion&&")),
                           ],)
                         ],
                       ),

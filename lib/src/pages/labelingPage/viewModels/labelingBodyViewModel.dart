@@ -31,7 +31,7 @@ class LabelingBodyViewModel extends ViewModel {
   GroupState tagLineState=GroupState.none;
   String prjUUID,grpUUID,partUUID;
   final int partId;
-  int labelGroupId=-1;
+  int labelGroupId=-1,deletedObjId=-1;
   bool isLoading=false,isState=true;
   LabelModel curLabel=LabelModel(-1, "", "","");
   ValueSetter<String> onGroupActionCaller;

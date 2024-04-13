@@ -69,9 +69,11 @@ class _View extends StatelessView<CutToPiecesViewModel> {
                         child: vm.curObject!=null? PartRegionExplorer(
                           key: GlobalKey(),
                           mainObject: vm.curObject!,
+                          minimumObjects: vm.minimizedObjects,
                           otherObjects: vm.subObject.where((element) => element.srcObject.target!=null&&element.srcObject.target!.uuid!=vm.curObject!.uuid).toList(),
                           itsObjects: vm.subObject.where((element) => element.srcObject.target!=null&&element.srcObject.target!.uuid==vm.curObject!.uuid).toList(),
                           onNewObjectCaller: vm.onNewPartCreatedHandler,
+                          onObjectActionCaller: vm.onPartObjectHandler,
                           prjUUID: vm.prjUUID,
                           isSimpleAction: vm.pageDuty!="drawMainRectangle",
                         ):
