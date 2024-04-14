@@ -17,7 +17,8 @@ class DlgCheckOtherState extends StatelessWidget {
         required this.srcObject,
         required this.grpID,
         required this.prjUUID,
-        required this.partUUID
+        required this.partUUID,
+        required this.onUpdateCaller
       })
       : super(key: key);
 
@@ -25,12 +26,13 @@ class DlgCheckOtherState extends StatelessWidget {
   final ObjectModel srcObject;
   final int grpID;
   final String prjUUID,partUUID;
+  final VoidCallback onUpdateCaller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: CheckOtherStateViewModel(allObjects, srcObject,prjUUID,partUUID,grpID),
+      viewModel: CheckOtherStateViewModel(allObjects, srcObject,prjUUID,partUUID,grpID,onUpdateCaller),
     );
   }
 }

@@ -180,19 +180,19 @@ class CutToPiecesViewModel extends ViewModel {
   onNewPartCreatedHandler(ObjectModel newObject) async {
     newObject.uuid=const Uuid().v4();
     newObject.srcObject.target=curObject!;
-    newObject.left=getX(newObject.left.toInt()).toDouble();
-    newObject.right=getX(newObject.right.toInt()).toDouble();
-    newObject.top=getY(newObject.top.toInt()).toDouble();
-    newObject.bottom=getY(newObject.bottom.toInt()).toDouble();
+    // newObject.left=getX(newObject.left.toInt()).toDouble();
+    // newObject.right=getX(newObject.right.toInt()).toDouble();
+    // newObject.top=getY(newObject.top.toInt()).toDouble();
+    // newObject.bottom=getY(newObject.bottom.toInt()).toDouble();
 
     final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
     final cmd = i.Command()
       ..decodeImageFile(curObject!.image.target!.path!)
       ..copyCrop(
-          x: newObject.left.toInt(),
-          y: newObject.top.toInt(),
-          width: (newObject.right.toInt() - newObject.left.toInt()).abs().toInt(),
-          height: (newObject.bottom.toInt() - newObject.top.toInt()))
+          x: getX(newObject.left.toInt()),
+          y: getY(newObject.top.toInt()),
+          width: (getX(newObject.right.toInt()) - getX(newObject.left.toInt())).abs().toInt(),
+          height: (getY(newObject.bottom.toInt()) - getY(newObject.top.toInt())))
       ..writeToFile(path);
     await cmd.executeThread();
     var img = ImageModel(-1, const Uuid().v4(), newObject.uuid, p.basename(path), path);

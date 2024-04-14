@@ -32,7 +32,7 @@ class PartItemViewModel extends ViewModel {
   String getImagePath(){
     if(part.allObjects.isNotEmpty){
       return part.allObjects[0].image.target!.path!;
-    }else if(part.allGroups.isNotEmpty){
+    }else if(part.allGroups.isNotEmpty&&part.allGroups[0].allStates.isNotEmpty){
       return part.allGroups[0].allStates[0].image.target!.path!;
     }
     return "";

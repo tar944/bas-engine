@@ -17,7 +17,6 @@ void showFlyDescription(
     dismissOnPointerMoveAway: false,
     dismissWithEsc: true,
     builder: (context) {
-      print('description');
       return FlyoutContent(
         color: Colors.grey[200],
         child: SizedBox(

@@ -112,7 +112,6 @@ flutter:
     - lib/assets/images/defaultImage.jpg
     - lib/assets/testImages/
     - lib/assets/video/
-    - lib/assets/img/
     - lib/assets/icon/icon.png
     - lib/assets/icon/icon256.png
     - lib/assets/sounds/cameraShutter.wav

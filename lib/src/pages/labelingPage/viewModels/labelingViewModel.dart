@@ -39,6 +39,12 @@ class LabelingViewModel extends ViewModel {
           ObjectType.values
               .map((e) => LabelModel(0, e.name.toString().split('__')[0], "objects",e.name.toString().split('__')[1]))
               .toList());
+
+      await LabelDAO().addList(
+          prjUUID,
+          Windows.values
+              .map((e) => LabelModel(0, e.name.toString(), "windows",""))
+              .toList());
     }
   }
 

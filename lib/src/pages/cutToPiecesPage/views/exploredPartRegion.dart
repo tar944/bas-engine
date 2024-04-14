@@ -42,7 +42,6 @@ class _View extends StatelessView<ExplorerPartViewModel> {
   @override
   Widget render(context, ExplorerPartViewModel vm) {
     final controller = FlyoutController();
-    print(vm.isMinimum);
     return SizedBox(
       width: !vm.isMinimum?(vm.curObject.right - vm.curObject.left).abs():40,
       height: !vm.isMinimum?(vm.curObject.bottom - vm.curObject.top).abs():40,

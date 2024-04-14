@@ -26,9 +26,9 @@ class CheckOtherStateViewModel extends ViewModel {
   List<int> finishedObjectsId =[];
   final List<ObjectModel> allObjects;
   final ObjectModel srcObject;
+  final VoidCallback onUpdateCaller;
 
-
-  CheckOtherStateViewModel(this.allObjects,this.srcObject,this.prjUUID,this.partUUID,this.groupId);
+  CheckOtherStateViewModel(this.allObjects,this.srcObject,this.prjUUID,this.partUUID,this.groupId,this.onUpdateCaller);
 
   @override
   void onMount() async{
@@ -132,6 +132,7 @@ class CheckOtherStateViewModel extends ViewModel {
   }
 
   void onCloseClicked() {
+    onUpdateCaller();
     Navigator.pop(context);
   }
 }

@@ -18,6 +18,7 @@ class DlgViewObjects extends StatelessWidget {
         required this.dlgH,
         required this.subGroups,
         required this.allObjects,
+        required this.showSubObjects,
         required this.showObjectId,
         required this.onActionCaller
       })
@@ -25,6 +26,7 @@ class DlgViewObjects extends StatelessWidget {
 
   final List<ObjectModel> allObjects;
   final int showObjectId;
+  final bool showSubObjects;
   final List<ImageGroupModel> subGroups;
   final double dlgW,dlgH;
   final ValueSetter<String> onActionCaller;
@@ -33,7 +35,7 @@ class DlgViewObjects extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: ViewObjectsViewModel(dlgW,dlgH,subGroups,allObjects,showObjectId),
+      viewModel: ViewObjectsViewModel(dlgW,dlgH,subGroups,showSubObjects,allObjects,showObjectId),
     );
   }
 }
@@ -43,7 +45,6 @@ class _View extends StatelessView<ViewObjectsViewModel> {
 
   @override
   Widget render(context, ViewObjectsViewModel vm) {
-    print(vm.dlgW);
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -81,9 +82,9 @@ class _View extends StatelessView<ViewObjectsViewModel> {
                                 fit: BoxFit.contain,
                               ),
                             ),
-                            child:ViewRegionExplorer(
+                            child:vm.showSubObjects?ViewRegionExplorer(
                               itsObjects: vm.subObjects,
-                            ),
+                            ):Container(),
                           );
                         }).toList(),
                       ),

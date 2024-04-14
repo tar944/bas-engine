@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
@@ -31,7 +32,7 @@ class LabelingBodyViewModel extends ViewModel {
   GroupState tagLineState=GroupState.none;
   String prjUUID,grpUUID,partUUID;
   final int partId;
-  int labelGroupId=-1,deletedObjId=-1;
+  int labelGroupId=-1,deletedObjId=-1,imgW=0,imgH=0;
   bool isLoading=false,isState=true;
   LabelModel curLabel=LabelModel(-1, "", "","");
   ValueSetter<String> onGroupActionCaller;
@@ -46,16 +47,7 @@ class LabelingBodyViewModel extends ViewModel {
 
   @override
   void init() async{
-    if(partUUID!=""){
-      var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
-      subGroups=part!.allGroups;
-      isState=false;
-    }else{
-      var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
-      subGroups=grp!.allGroups;
-      tagLineState=GroupState.values.firstWhere((element) => element.name==grp.state);
-    }
-    notifyListeners();
+    await updateData();
   }
 
   @override
@@ -74,11 +66,15 @@ class LabelingBodyViewModel extends ViewModel {
                   grpID: grp.id,
                   prjUUID: prjUUID,
                   partUUID: part!.uuid,
+                  onUpdateCaller: ()=>updateData(),
                 ));
       }else if(grp.state==GroupState.finishCutting.name){
         isLoading=true;
         notifyListeners();
         ImageGroupModel? newGrp;
+        final img = await i.decodeImageFile(grp.mainState.target!.image.target!.path!);
+        imgH = img!.height;
+        imgW = img.width;
         while (grp.subObjects.isNotEmpty) {
           var curSub = grp.subObjects[0];
           newGrp = ImageGroupModel(-1, "", grp.uuid, Strings.emptyStr, "");
@@ -137,22 +133,55 @@ class LabelingBodyViewModel extends ViewModel {
         grp.state=GroupState.readyToWork.name;
         await ImageGroupDAO().update(grp);
         isLoading=false;
-        notifyListeners();
+        await updateData();
       }
     }
   }
 
+  updateData()async{
+    if(partUUID!=""){
+      var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
+      subGroups=part!.allGroups;
+      isState=false;
+    }else{
+      var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+      subGroups=grp!.allGroups;
+      tagLineState=GroupState.values.firstWhere((element) => element.name==grp.state);
+    }
+    notifyListeners();
+  }
+
   Future<i.Image?> getCroppedImage(ObjectModel srcObject,ObjectModel obj)async{
+    final img = await i.decodeImageFile(obj.image.target!.path!);
+    int goalW=getX(srcObject.right.toInt()) - getX(srcObject.left.toInt())<img!.width?getX(srcObject.right.toInt()) - getX(srcObject.left.toInt()):img.width;
+    int goalH=(getY(srcObject.bottom.toInt()) - getY(srcObject.top.toInt()))<img.height?(getY(srcObject.bottom.toInt()) - getY(srcObject.top.toInt())):img.height;
     final cmd = i.Command()
       ..decodeImageFile(obj.image.target!.path!)
       ..copyCrop(
-          x: srcObject.left.toInt(),
-          y: srcObject.top.toInt(),
-          width: (srcObject.right.toInt() - srcObject.left.toInt()).abs().toInt(),
-          height: (srcObject.bottom.toInt() - srcObject.top.toInt()))
+          x: getX(srcObject.left.toInt()),
+          y: getY(srcObject.top.toInt()),
+          width: goalW,
+          height: goalH)
       ..encodeJpg();
     await cmd.executeThread();
     return cmd.outputImage;
+  }
+
+  int getY(int y) {
+    final curHeight = MediaQuery.of(context).size.height - (Dimens.topBarHeight);
+    if (imgH > curHeight) {
+      return (y * imgH) ~/ curHeight;
+    } else {
+      return y;
+    }
+  }
+
+  int getX(int x) {
+    if (imgW > MediaQuery.of(context).size.width) {
+      return (x * imgW) ~/ MediaQuery.of(context).size.width;
+    } else {
+      return x;
+    }
   }
 
   onLabelActionHandler(String action)async{
@@ -312,6 +341,11 @@ class LabelingBodyViewModel extends ViewModel {
         break;
       case 'delete':
         var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[1]));
+        if(grpUUID!=""&&obj!.isMainObject){
+          var grp=await ImageGroupDAO().getDetailsByUUID(grpUUID);
+          grp!.state=GroupState.findMainState.name;
+          await ImageGroupDAO().update(grp);
+        }
         await ObjectDAO().deleteObject(obj!);
         objects.removeWhere((element) => element.id==obj.id);
         notifyListeners();
@@ -331,9 +365,11 @@ class LabelingBodyViewModel extends ViewModel {
       case "showImg":
         var obj = await ObjectDAO().getDetails(int.parse(act[1]));
         List<ImageGroupModel> subGroups=[];
+        bool showSubObjects=false;
         if(grpUUID!=""){
           var grp=await ImageGroupDAO().getDetailsByUUID(grpUUID);
           subGroups=grp!.allGroups;
+          showSubObjects=grp.label.target!=null&&grp.label.target!.levelName=="windows"?true:false;
         }else{
           var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
           subGroups=part!.allGroups;
@@ -349,6 +385,7 @@ class LabelingBodyViewModel extends ViewModel {
                 dlgW: img!.width>(mediaW*0.9)?(mediaW*0.9).toDouble():img.width.toDouble(),
                 dlgH: img.width>(mediaW*0.9)?(mediaH*0.9).toDouble():img.height.toDouble(),
                 allObjects: objects,
+                showSubObjects: showSubObjects,
                 subGroups:subGroups,
                 showObjectId: int.parse(act[1]),
                 onActionCaller: onObjectActionHandler,

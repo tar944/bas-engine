@@ -78,6 +78,12 @@ enum ObjectType {
   chartObjects__click,
 }
 
+enum Windows{
+  page,
+  dialog,
+  tabPage
+}
+
 enum ImageStatus { finished, created }
 
 enum ActionKind {
