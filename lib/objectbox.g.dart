@@ -180,7 +180,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(14, 6822118099532867753),
       name: 'ImageModel',
-      lastPropertyId: const IdUid(15, 4525821334691087722),
+      lastPropertyId: const IdUid(17, 2691744933026215710),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -207,6 +207,16 @@ final _entities = <ModelEntity>[
             id: const IdUid(15, 4525821334691087722),
             name: 'objUUID',
             type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(16, 7981925570682832356),
+            name: 'width',
+            type: 8,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(17, 2691744933026215710),
+            name: 'height',
+            type: 8,
             flags: 0)
       ],
       relations: <ModelRelation>[],
@@ -214,7 +224,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(15, 8892823931225835339),
       name: 'ObjectModel',
-      lastPropertyId: const IdUid(31, 3993222101260499379),
+      lastPropertyId: const IdUid(33, 323244748199649629),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -626,7 +636,9 @@ ModelDefinition getObjectBoxModel() {
         5847613169931022485,
         5666200048488082066,
         3993222101260499379,
-        5118056379320144992
+        5118056379320144992,
+        8918238754733140373,
+        323244748199649629
       ],
       retiredRelationUids: const [
         7096364116743183016,
@@ -842,12 +854,14 @@ ModelDefinition getObjectBoxModel() {
           final pathOffset =
               object.path == null ? null : fbb.writeString(object.path!);
           final objUUIDOffset = fbb.writeString(object.objUUID);
-          fbb.startTable(16);
+          fbb.startTable(18);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, uuidOffset);
           fbb.addOffset(4, nameOffset);
           fbb.addOffset(5, pathOffset);
           fbb.addOffset(14, objUUIDOffset);
+          fbb.addFloat64(15, object.width);
+          fbb.addFloat64(16, object.height);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -862,10 +876,14 @@ ModelDefinition getObjectBoxModel() {
               .vTableGet(buffer, rootOffset, 32, '');
           final nameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGetNullable(buffer, rootOffset, 12);
+          final widthParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 34, 0);
+          final heightParam =
+              const fb.Float64Reader().vTableGet(buffer, rootOffset, 36, 0);
           final pathParam = const fb.StringReader(asciiOptimization: true)
               .vTableGetNullable(buffer, rootOffset, 14);
-          final object = ImageModel(
-              idParam, uuidParam, objUUIDParam, nameParam, pathParam);
+          final object = ImageModel(idParam, uuidParam, objUUIDParam, nameParam,
+              widthParam, heightParam, pathParam);
 
           return object;
         }),
@@ -883,7 +901,7 @@ ModelDefinition getObjectBoxModel() {
           final colorOffset = fbb.writeString(object.color);
           final actionTypeOffset = fbb.writeString(object.actionType);
           final typedTextOffset = fbb.writeString(object.typedText);
-          fbb.startTable(32);
+          fbb.startTable(34);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, uuidOffset);
           fbb.addFloat64(2, object.left);
@@ -1209,6 +1227,14 @@ class ImageModel_ {
   /// see [ImageModel.objUUID]
   static final objUUID =
       QueryStringProperty<ImageModel>(_entities[3].properties[4]);
+
+  /// see [ImageModel.width]
+  static final width =
+      QueryDoubleProperty<ImageModel>(_entities[3].properties[5]);
+
+  /// see [ImageModel.height]
+  static final height =
+      QueryDoubleProperty<ImageModel>(_entities[3].properties[6]);
 }
 
 /// [ObjectModel] entity fields to define ObjectBox queries.

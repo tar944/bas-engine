@@ -126,7 +126,7 @@ class RecordPage extends HookWidget with WindowListener {
             await player.play(AssetSource('../lib/assets/sounds/cameraShutter.wav'));
             isShuttering.value=false;
             var imgPath = p.join(dirPath.value,'images', 'screen_${DateTime.now().millisecondsSinceEpoch}.png');
-            await screenCapturer.capture(
+            var captureData=await screenCapturer.capture(
               mode: CaptureMode.screen,
               imagePath: imgPath,
               copyToClipboard: false,
@@ -135,7 +135,7 @@ class RecordPage extends HookWidget with WindowListener {
 
             ObjectModel obj = ObjectModel(-1,const Uuid().v4(), 0, 0, 0, 0);
             obj.actionType = mouseEvent.mouseMsg.toString();
-            var img =ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(imgPath), imgPath);
+            var img =ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(imgPath),captureData!.imageWidth!.toDouble(),captureData.imageHeight!.toDouble(), imgPath);
             img.id= await ImageDAO().add(img);
             obj.image.target=img;
             obj.id=await ObjectDAO().addObject(obj);

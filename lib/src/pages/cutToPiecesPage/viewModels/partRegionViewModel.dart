@@ -1,20 +1,22 @@
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/main.dart';
 import 'package:bas_dataset_generator_engine/src/controllers/regionRecController.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 import 'package:uuid/uuid.dart';
+import 'package:image/image.dart' as i;
 
 class PartRegionViewModel extends ViewModel {
   final List<ObjectModel> otherObjects;
   List<ObjectModel> itsObjects;
-  List<LabelModel>allLabels=[];
   final List<int> minimumObjects;
   RegionRecController objectController = RegionRecController();
   ObjectModel? curObject;
   ObjectModel mainObject;
+  int imgW=0,imgH=0;
   final ValueSetter<ObjectModel> onNewObjectCaller;
   final ValueSetter<String> onObjectActionCaller;
   String prjUUID;
@@ -22,6 +24,7 @@ class PartRegionViewModel extends ViewModel {
   final bool isSimpleAction;
   double left = 0.0, top = 0.0, right = 0.0, bottom = 0.0;
   bool isPainting = false;
+
 
   PartRegionViewModel(
       this.prjUUID,
@@ -36,7 +39,9 @@ class PartRegionViewModel extends ViewModel {
 
   @override
   void init() async{
-    allLabels=await LabelDAO().getLabelList(prjUUID);
+    final img = await i.decodeImageFile(mainObject.image.target!.path!);
+    imgH = img!.height;
+    imgW = img.width;
     notifyListeners();
   }
 

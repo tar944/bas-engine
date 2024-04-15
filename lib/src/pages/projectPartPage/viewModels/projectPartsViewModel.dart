@@ -13,6 +13,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:path/path.dart' as path;
+import 'package:image/image.dart' as i;
 import 'package:pmvvm/pmvvm.dart';
 import 'package:uuid/uuid.dart';
 
@@ -75,8 +76,9 @@ class ProjectPartsViewModel extends ViewModel {
             obj.actionType = "notSet";
             obj.actX = -1;
             obj.actY = -1;
+            final importedImg = await i.decodeImageFile(imgPath);
             var img = ImageModel(-1, const Uuid().v4(), obj.uuid,
-                path.basename(p.path!), imgPath);
+                path.basename(p.path!),importedImg!.width.toDouble(),importedImg.height.toDouble(), imgPath);
             img.id = await ImageDAO().add(img);
             obj.image.target = img;
             obj.id = await ObjectDAO().addObject(obj);

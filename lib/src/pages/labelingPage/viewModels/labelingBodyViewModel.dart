@@ -105,16 +105,18 @@ class LabelingBodyViewModel extends ViewModel {
                 );
                 obj.srcObject.target = curState;
                 final path = await DirectoryManager().getObjectImagePath(prjUUID, part!.uuid);
+                int w =(curSub.right.toInt() - curSub.left.toInt()).abs().toInt();
+                int h=(curSub.bottom.toInt() - curSub.top.toInt());
                 final cmd = i.Command()
                   ..decodeImageFile(curState.image.target!.path!)
                   ..copyCrop(
                       x: curSub.left.toInt(),
                       y: curSub.top.toInt(),
-                      width: (curSub.right.toInt() - curSub.left.toInt()).abs().toInt(),
-                      height: (curSub.bottom.toInt() - curSub.top.toInt()))
+                      width: w,
+                      height: h)
                   ..writeToFile(path);
                 await cmd.executeThread();
-                var img = ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(path), path);
+                var img = ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(path),w.toDouble(),h.toDouble(), path);
                 img.id = await ImageDAO().add(img);
                 obj.image.target = img;
                 obj.id = await ObjectDAO().addObject(obj);

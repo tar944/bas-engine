@@ -1,4 +1,3 @@
-import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -84,7 +83,7 @@ class ViewObjectsViewModel extends ViewModel {
   }
 
   int getY(int y) {
-    var curH = dlgH+320;
+    var curH = dlgH;
     if (imgH > curH) {
       return (y * curH) ~/ imgH;
     } else {
@@ -93,7 +92,7 @@ class ViewObjectsViewModel extends ViewModel {
   }
 
   int getX(int x) {
-    var curW=dlgW+150;
+    var curW=dlgW;
     if (imgW > curW) {
       return (x * curW) ~/ imgW;
     } else {

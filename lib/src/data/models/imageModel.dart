@@ -8,6 +8,14 @@ class ImageModel {
   String objUUID;
   String? name;
   String? path;
+  double width;
+  double height;
 
-  ImageModel(this.id,this.uuid,this.objUUID, this.name, this.path);
+  ImageModel(this.id,
+      this.uuid,
+      this.objUUID,
+      this.name,
+      this.width,
+      this.height,
+      this.path);
 }

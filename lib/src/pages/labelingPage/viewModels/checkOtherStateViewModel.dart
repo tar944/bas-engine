@@ -76,7 +76,8 @@ class CheckOtherStateViewModel extends ViewModel {
         ..decodeJpg(allImages[curImage])
         ..writeToFile(path)
         ..executeThread();
-      var img = ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(path), path);
+      var curImg = Image.memory(allImages[curImage]);
+      var img = ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(path),curImg.width!.toDouble(),curImg.height!.toDouble(), path);
       img.id =await ImageDAO().add(img);
       obj.image.target=img;
       obj.id=await ObjectDAO().addObject(obj);

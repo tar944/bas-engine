@@ -1,5 +1,6 @@
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:objectbox/objectbox.dart';
 
 @Entity()
@@ -29,4 +30,9 @@ class ObjectModel {
       this.right,
       this.top,
       this.bottom);
+
+  double getLeft(BuildContext context){
+
+    return left;
+  }
 }

@@ -65,18 +65,28 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                   bottom: 5,
                   child: Row(
                     children: [
+                      IconButton(
+                        style: ButtonStyle(
+                            backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
+                        ),
+                        icon: Icon(
+                          !vm.isMinimum?FluentIcons.arrow_up_right_mirrored8:FluentIcons.arrow_down_right8,
+                          color: Colors.white,
+                        ),
+                        onPressed: () => vm.onObjectActionCaller(vm.isMinimum?"maximize&&${vm.curObject.id}":"minimize&&${vm.curObject.id}")),
+                      const SizedBox(width: 5,),
                       !vm.isMinimum&&vm.isMine?
                       FlyoutTarget(
                         key: GlobalKey(),
                         controller: controller,
                         child:
                         IconButton(
-                          style: ButtonStyle(
-                            backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
-                          ),
+                            style: ButtonStyle(
+                                backgroundColor: ButtonState.all(Colors.red.dark.withOpacity(.3))
+                            ),
                             icon: Icon(
                               FluentIcons.delete,
-                              color: Colors.red,
+                              color: Colors.white,
                             ),
                             onPressed: () => showFlyConfirm(
                                 Strings.deleteObject,
@@ -87,16 +97,6 @@ class _View extends StatelessView<ExplorerPartViewModel> {
                                 vm.onObjectActionCaller)),
                       ):
                       Container(),
-                      const SizedBox(width: 5,),
-                      IconButton(
-                          style: ButtonStyle(
-                              backgroundColor: ButtonState.all(Colors.grey[180].withOpacity(.7))
-                          ),
-                          icon: Icon(
-                            !vm.isMinimum?FluentIcons.arrow_up_right_mirrored8:FluentIcons.arrow_down_right8,
-                            color: Colors.white,
-                          ),
-                          onPressed: () => vm.onObjectActionCaller(vm.isMinimum?"maximize&&${vm.curObject.id}":"minimize&&${vm.curObject.id}"))
                     ],
                   )),
             if(!vm.isSimpleAction)

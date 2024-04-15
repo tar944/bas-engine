@@ -33,7 +33,7 @@ class _View extends StatelessView<PartViewModel> {
         padding: ButtonState.all(EdgeInsets.zero)
       ),
       onPressed: ()=>vm.onObjectActionCaller(),
-      icon: SizedBox(
+      icon: vm.curObject!=null?SizedBox(
         width: (vm.curObject!.right - vm.curObject!.left).abs(),
         height:(vm.curObject!.bottom - vm.curObject!.top).abs(),
         child: Stack(
@@ -50,7 +50,7 @@ class _View extends StatelessView<PartViewModel> {
             ),
           ],
         ),
-      ),
+      ):Container(),
     );
   }
 }
