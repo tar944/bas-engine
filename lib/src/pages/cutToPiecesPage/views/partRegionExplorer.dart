@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/viewModels/partRegionViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/rectanglePainter.dart';
@@ -72,8 +73,8 @@ class _View extends StatelessView<PartRegionViewModel> {
             )),
         ...vm.otherObjects.map((item) {
           return Positioned(
-            top: item.top,
-            left: item.left,
+            top: item.curTop(vm.mainObject.image.target!,context,Dimens.topBarHeight),
+            left: item.curLeft(vm.mainObject.image.target!,context),
             child: ExploredPartRegion(
               key: GlobalKey(),
               mainObject: vm.mainObject,
@@ -88,8 +89,8 @@ class _View extends StatelessView<PartRegionViewModel> {
         }).toList(),
         ...vm.itsObjects.map((item) {
           return Positioned(
-                  top: item.top,
-                  left: item.left,
+                  top: vm.isSimpleAction?item.curTop(vm.mainObject.image.target!,context,Dimens.topBarHeight):item.top,
+                  left: vm.isSimpleAction?item.curLeft(vm.mainObject.image.target!,context):item.left,
                   child: ExploredPartRegion(
                     key: GlobalKey(),
                     mainObject: vm.mainObject,

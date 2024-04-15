@@ -31,8 +31,64 @@ class ObjectModel {
       this.top,
       this.bottom);
 
-  double getLeft(BuildContext context){
-
-    return left;
+  double srcLeft(BuildContext context){
+    if (image.target!.width > MediaQuery.of(context).size.width) {
+      return ((left * image.target!.width) ~/ MediaQuery.of(context).size.width).toDouble();
+    } else {
+      return left;
+    }
+  }
+  double srcRight(BuildContext context){
+    if (image.target!.width > MediaQuery.of(context).size.width) {
+      return ((right * image.target!.width) ~/ MediaQuery.of(context).size.width).toDouble();
+    } else {
+      return right;
+    }
+  }
+  double srcTop(BuildContext context,double offsetY){
+    final curHeight = MediaQuery.of(context).size.height - offsetY;
+    if (image.target!.height > curHeight) {
+      return ((top * image.target!.height) ~/ curHeight).toDouble();
+    } else {
+      return top;
+    }
+  }
+  double srcButton(BuildContext context,double offsetY){
+    final curHeight = MediaQuery.of(context).size.height - offsetY;
+    if (image.target!.height > curHeight) {
+      return ((bottom * image.target!.height) ~/ curHeight).toDouble();
+    } else {
+      return bottom;
+    }
+  }
+  double curLeft(ImageModel img,BuildContext context){
+    if (img.width > MediaQuery.of(context).size.width) {
+      return ((left * MediaQuery.of(context).size.width) ~/ img.width).toDouble();
+    } else {
+      return left;
+    }
+  }
+  double curRight(ImageModel img,BuildContext context){
+    if (img.width > MediaQuery.of(context).size.width) {
+      return ((right * MediaQuery.of(context).size.width) ~/ img.width).toDouble();
+    } else {
+      return right;
+    }
+  }
+  double curTop(ImageModel img,BuildContext context,double offsetY){
+    final curHeight = MediaQuery.of(context).size.height - offsetY;
+    if (img.height > curHeight) {
+      return ((top * curHeight) ~/ img.height).toDouble();
+    } else {
+      return top;
+    }
+  }
+  double curBottom(ImageModel img,BuildContext context,double offsetY){
+    final curHeight = MediaQuery.of(context).size.height - offsetY;
+    if (img.height > curHeight) {
+      return ((bottom * curHeight) ~/ img.height).toDouble();
+    } else {
+      return bottom;
+    }
   }
 }

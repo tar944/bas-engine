@@ -84,32 +84,6 @@ class CutToPiecesViewModel extends ViewModel {
     notifyListeners();
   }
 
-
-  ObjectModel convertCoordinates(ObjectModel obj){
-    obj.left=getX(obj.left.toInt()).toDouble();
-    obj.right=getX(obj.right.toInt()).toDouble();
-    obj.top =getY(obj.top.toInt()).toDouble();
-    obj.bottom=getY(obj.bottom.toInt()).toDouble();
-    return obj;
-  }
-
-  int convertedX(int x) {
-    if (imgW > MediaQuery.of(context).size.width) {
-      return (x * MediaQuery.of(context).size.width) ~/ imgW;
-    } else {
-      return x;
-    }
-  }
-
-  int convertedY(int y) {
-    final curHeight = MediaQuery.of(context).size.height - (Dimens.topBarHeight);
-    if (imgH > curHeight) {
-      return (y * curHeight) ~/ imgH;
-    } else {
-      return y;
-    }
-  }
-
   onBackClicked(){
     context.goNamed('mainPage');
   }
@@ -176,18 +150,18 @@ class CutToPiecesViewModel extends ViewModel {
     }
   }
 
-  int getX(int x) {
+  double getX(double x) {
     if (imgW > MediaQuery.of(context).size.width) {
-      return (x * imgW) ~/ MediaQuery.of(context).size.width;
+      return ((x * imgW) ~/ MediaQuery.of(context).size.width).toDouble();
     } else {
       return x;
     }
   }
 
-  int getY(int y) {
+  double getY(double y) {
     final curHeight = MediaQuery.of(context).size.height - (Dimens.topBarHeight);
     if (imgH > curHeight) {
-      return (y * imgH) ~/ curHeight;
+      return ((y * imgH) ~/ curHeight).toDouble();
     } else {
       return y;
     }
@@ -202,19 +176,20 @@ class CutToPiecesViewModel extends ViewModel {
     }
     notifyListeners();
   }
-  //todo crop image part is here
+
   onNewPartCreatedHandler(ObjectModel newObject) async {
     newObject.uuid=const Uuid().v4();
     newObject.srcObject.target=curObject!;
 
-    newObject.left=getX(newObject.left.toInt()).toDouble();
-    newObject.right=getX(newObject.right.toInt()).toDouble();
-    newObject.top=getY(newObject.top.toInt()).toDouble();
-    newObject.bottom=getY(newObject.bottom.toInt()).toDouble();
+    newObject.left=getX(newObject.left);
+    newObject.right=getX(newObject.right);
+    newObject.top=getY(newObject.top);
+    newObject.bottom=getY(newObject.bottom);
 
     final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
     int w =(newObject.right - newObject.left).abs().toInt();
     int h =(newObject.bottom - newObject.top).toInt();
+
     final cmd = i.Command()
       ..decodeImageFile(curObject!.image.target!.path!)
       ..copyCrop(

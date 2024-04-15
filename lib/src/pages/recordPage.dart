@@ -82,7 +82,7 @@ class RecordPage extends HookWidget with WindowListener {
     var imgNumber = useState(0);
     var lastObjectId = useState(-1);
     var isRecording = useState(false);
-    var isShuttering = useState(false);
+    var shutterState = useState("normal");
     var dirPath = useState('');
     final player = AudioPlayer();
 
@@ -121,10 +121,11 @@ class RecordPage extends HookWidget with WindowListener {
           if (mouseEvent.mouseMsg == MouseEventMsg.WM_LBUTTONUP ||
               mouseEvent.mouseMsg == MouseEventMsg.WM_RBUTTONUP ||
               mouseEvent.mouseMsg == MouseEventMsg.WM_MBUTTONUP) {
-            isShuttering.value=true;
-            await Future.delayed(const Duration(milliseconds: 700));
+            shutterState.value="waiting";
+            await Future.delayed(const Duration(milliseconds: 600));
+            shutterState.value="capturing";
+            await Future.delayed(const Duration(milliseconds: 100));
             await player.play(AssetSource('../lib/assets/sounds/cameraShutter.wav'));
-            isShuttering.value=false;
             var imgPath = p.join(dirPath.value,'images', 'screen_${DateTime.now().millisecondsSinceEpoch}.png');
             var captureData=await screenCapturer.capture(
               mode: CaptureMode.screen,
@@ -147,6 +148,7 @@ class RecordPage extends HookWidget with WindowListener {
               await ObjectDAO().update(lastObj);
             }
             imgNumber.value += 1;
+            shutterState.value="normal";
           }
         });
       } else {
@@ -207,10 +209,10 @@ class RecordPage extends HookWidget with WindowListener {
                 begin: Dimens.recordPnlHeight,
                 end: Dimens.recordPnlHeight + (Dimens.recordPnlHeight * 0.2)))
         .tween('color',
-            ColorTween(begin: isShuttering.value?Colors.magenta.normal:Colors.teal.normal, end: isShuttering.value?Colors.magenta.darker:Colors.teal.darker));
+            ColorTween(begin: shutterState.value!="normal"?Colors.magenta.normal:Colors.teal.normal, end: shutterState.value!="normal"?Colors.magenta.darker:Colors.teal.darker));
 
     if (isRecording.value) {
-      return CustomAnimationBuilder(
+      return shutterState.value!="capturing"?CustomAnimationBuilder(
         control: Control.mirror,
         builder: (context, value, child) {
           return Container(
@@ -229,7 +231,7 @@ class RecordPage extends HookWidget with WindowListener {
         },
         tween: tween,
         duration: tween.duration,
-      );
+      ):Container();
     } else {
       return Container(
         alignment: Alignment.bottomCenter,

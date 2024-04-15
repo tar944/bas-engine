@@ -76,8 +76,16 @@ class CheckOtherStateViewModel extends ViewModel {
         ..decodeJpg(allImages[curImage])
         ..writeToFile(path)
         ..executeThread();
-      var curImg = Image.memory(allImages[curImage]);
-      var img = ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(path),curImg.width!.toDouble(),curImg.height!.toDouble(), path);
+
+      var img = ImageModel(
+          -1,
+          const Uuid().v4(),
+          obj.uuid,
+          p.basename(path),
+          srcObject.image.target!.width,
+          srcObject.image.target!.height,
+          path);
+
       img.id =await ImageDAO().add(img);
       obj.image.target=img;
       obj.id=await ObjectDAO().addObject(obj);
@@ -109,8 +117,8 @@ class CheckOtherStateViewModel extends ViewModel {
       ..copyCrop(
           x: srcObject.left.toInt(),
           y: srcObject.top.toInt(),
-          width: (srcObject.right.toInt() - srcObject.left.toInt()).abs().toInt(),
-          height: (srcObject.bottom.toInt() - srcObject.top.toInt()))
+          width: srcObject.image.target!.width.toInt(),
+          height: srcObject.image.target!.height.toInt())
       ..encodeJpg();
     await cmd.executeThread();
     return cmd.outputBytes;

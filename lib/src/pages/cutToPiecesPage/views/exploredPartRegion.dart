@@ -42,9 +42,9 @@ class _View extends StatelessView<ExplorerPartViewModel> {
   @override
   Widget render(context, ExplorerPartViewModel vm) {
     final controller = FlyoutController();
-    return SizedBox(
-      width: !vm.isMinimum?(vm.curObject.right - vm.curObject.left).abs():40,
-      height: !vm.isMinimum?(vm.curObject.bottom - vm.curObject.top).abs():40,
+   return SizedBox(
+      width: !vm.isMinimum?vm.getSize(isWidth: true):40,
+      height: !vm.isMinimum?vm.getSize():40,
       child: Opacity(
         opacity: !vm.isMinimum?1.0:0.3,
         child: Stack(
@@ -52,9 +52,9 @@ class _View extends StatelessView<ExplorerPartViewModel> {
             CustomPaint(
               painter: RectanglePainter(
                   object: ObjectModel(0, "", 0.0,
-                    !vm.isMinimum?vm.curObject.right - vm.curObject.left:40,
+                    !vm.isMinimum?vm.getSize(isWidth: true):40,
                       0.0,
-                    !vm.isMinimum?vm.curObject.bottom - vm.curObject.top:40,
+                    !vm.isMinimum?vm.getSize():40,
                   ),
                   color: vm.isMine?Colors.blue.dark:Colors.orange.dark,
                   isActive: vm.controller.activeID == vm.curObject.id),

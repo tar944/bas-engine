@@ -93,7 +93,7 @@ class LabelingBodyViewModel extends ViewModel {
             if(curSub.srcObject.targetId!=curState.id){
               var curImg = await getCroppedImage(curSub, curState);
               var imgDiff = DiffImage.compareFromMemory(srcImg!, curImg!,asPercentage: true).diffValue;
-              print("${curSub.image.target!.name} compare to=> ${curState.image.target!.name!} => $imgDiff");
+              print("${curSub.image.target!.name} compare to=> ${curState.image.target!.name!} image diff: $imgDiff");
               if (imgDiff > 0.8) {
                 var obj = ObjectModel(
                     -1,
@@ -153,37 +153,17 @@ class LabelingBodyViewModel extends ViewModel {
     notifyListeners();
   }
 
-  Future<i.Image?> getCroppedImage(ObjectModel srcObject,ObjectModel obj)async{
-    final img = await i.decodeImageFile(obj.image.target!.path!);
-    int goalW=getX(srcObject.right.toInt()) - getX(srcObject.left.toInt())<img!.width?getX(srcObject.right.toInt()) - getX(srcObject.left.toInt()):img.width;
-    int goalH=(getY(srcObject.bottom.toInt()) - getY(srcObject.top.toInt()))<img.height?(getY(srcObject.bottom.toInt()) - getY(srcObject.top.toInt())):img.height;
+  Future<i.Image?> getCroppedImage(ObjectModel subObj,ObjectModel srcObj)async{
     final cmd = i.Command()
-      ..decodeImageFile(obj.image.target!.path!)
+      ..decodeImageFile(srcObj.image.target!.path!)
       ..copyCrop(
-          x: getX(srcObject.left.toInt()),
-          y: getY(srcObject.top.toInt()),
-          width: goalW,
-          height: goalH)
+          x: subObj.left.toInt(),
+          y: subObj.top.toInt(),
+          width: subObj.image.target!.width.toInt(),
+          height: subObj.image.target!.height.toInt())
       ..encodeJpg();
     await cmd.executeThread();
     return cmd.outputImage;
-  }
-
-  int getY(int y) {
-    final curHeight = MediaQuery.of(context).size.height - (Dimens.topBarHeight);
-    if (imgH > curHeight) {
-      return (y * imgH) ~/ curHeight;
-    } else {
-      return y;
-    }
-  }
-
-  int getX(int x) {
-    if (imgW > MediaQuery.of(context).size.width) {
-      return (x * imgW) ~/ MediaQuery.of(context).size.width;
-    } else {
-      return x;
-    }
   }
 
   onLabelActionHandler(String action)async{
