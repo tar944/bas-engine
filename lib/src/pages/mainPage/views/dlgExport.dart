@@ -1,5 +1,6 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/viewModels/exportViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/tabSaveInPC.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/tabSaveInServer.dart';
@@ -29,12 +30,13 @@ class _View extends StatelessView<ExportViewModel> {
 
   @override
   Widget render(context, ExportViewModel vm) {
+
     return Stack(
       alignment: Alignment.center,
       children: [
         SizedBox(
             width: Dimens.dialogBigWidth,
-            height: Dimens.dialogLargeHeight,
+            height: Dimens.dialogLargeHeight-20,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(
@@ -50,38 +52,23 @@ class _View extends StatelessView<ExportViewModel> {
                     title: Strings.dlgExportTitle,
                     onActionListener: vm.onCloseClicked,
                   ),
-                  Row(children: [
-                    const Text(Strings.projectName),
-                    const SizedBox(width: 10,),
-                    Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(color: Colors.grey[160]),
-                        borderRadius: const BorderRadius.all(Radius.circular(5.0))
-                      ),
-                      child: Text(vm.prjName),
-                    )
-                  ],),
-                  Row(children: [
-                    Text(Strings.exportFormat),
-                    SizedBox(width: 10,),
-                    Container(
-                      width: double.infinity,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(5.0)),
-                        border: Border.all(color: Colors.grey[170])
-                      ),
-                      child: Row(
-                        children: [
-                          RadioButton(checked: false, onChanged: (e){}),
-                          Text("Text"),
-                          RadioButton(checked: false, onChanged: (e){}),
-                          Text("Yaml"),
-                          RadioButton(checked: false, onChanged: (e){}),
-                          Text("Json"),
-                        ],
-                      ),
-                    )
-                  ],),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(children: [
+                      Text(vm.prjName),
+                      const SizedBox(width: 10,),
+                      Container(
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.grey[160]),
+                            borderRadius: const BorderRadius.all(Radius.circular(5.0))
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8.0,left: 8,right: 8,bottom: 11),
+                          child: Text(vm.prjName),
+                        ),
+                      )
+                    ],),
+                  ),
                   Expanded(
                       child: Padding(
                         padding: const EdgeInsets.all(5.0),
@@ -99,16 +86,38 @@ class _View extends StatelessView<ExportViewModel> {
                                 onClosed: null,
                                 icon: e==Strings.inPc?const Icon(FluentIcons.this_p_c):const Icon(FluentIcons.cloud_upload),
                                 body: e==Strings.inPc?
-                                  TabSaveInPC(pathController: vm.pathController, exportPath: ""):
-                                  TabSaveInServer(domainController: vm.domainController, tokenController: vm.tokenController, uploadDomain: "", authToken: "")
+                                TabSaveInPC(pathController:
+                                  vm.pathController,
+                                  needBackup: vm.needBackup,
+                                  selectFolderCaller: (e)=>vm.saveInPcHandler(e),):
+                                TabSaveInServer(domainController: vm.domainController, tokenController: vm.tokenController, uploadDomain: "", authToken: "")
                             );
                           }).toList(),
                         ),
                       )
                   ),
+                  Container(
+                    height: 70,
+                    alignment: Alignment.centerRight,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(bottomRight: Radius.circular(Dimens.dialogCornerRadius),bottomLeft: Radius.circular(Dimens.dialogCornerRadius)),
+                      color: Colors.grey[210]
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Button(
+                        style: ButtonStyle(
+                          backgroundColor: ButtonState.all(Colors.orange.dark),
+                          padding: ButtonState.all(const EdgeInsets.only(left: 30,right: 30,top: 10,bottom: 10))
+                        ),
+                        child: Text(Strings.export,style: TextSystem.textM(Colors.white),),
+                        onPressed: ()=>{},
+                      ),
+                    ),
+                  )
                 ],
               ),
-            )),
+            ))
       ],
     );
   }

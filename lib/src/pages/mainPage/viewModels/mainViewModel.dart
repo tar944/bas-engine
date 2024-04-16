@@ -143,8 +143,6 @@ class MainPageViewModel extends ViewModel with WindowListener {
         notifyListeners();
         await setGroupGuideText();
         break;
-      case "gotoLabeling":
-        break;
     }
   }
 
@@ -165,7 +163,7 @@ class MainPageViewModel extends ViewModel with WindowListener {
       showDialog(
           context: context,
           barrierDismissible: true,
-          builder: (context) => const DlgExport(prjName: "photoshop ui",));
+          builder: (context) => DlgExport(prjName: curProject!.title!,));
     }else if (selTab == HeaderTabs.addProject) {
       projectController.call();
     } else if (selTab == HeaderTabs.addPart) {

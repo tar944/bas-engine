@@ -18,14 +18,15 @@ class Strings{
   static const String srcState="Source state";
   static const String curState="Current state";
   static const String exportFormat="Export format:";
-  static const String projectName="Project name";
+  static const String projectName="Project name: ";
   static const String uploadWarning="Your data will upload in ZIP format with using the post method.";
   static const String uploadDomain="Upload link:";
   static const String activeAuth="Active auth:";
   static const String domainHint="Enter your server link here";
   static const String authTokenHint="Enter your auth token here";
   static const String dirPathHint="Type export directory path here";
-  static const String dirPath="Directory path:";
+  static const String dirPath="Directory path";
+  static const String needBackUp="Backup status:";
   static const String inPc="In this PC";
   static const String inAServer="In a server";
   static const String export="Export project";

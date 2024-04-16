@@ -62,7 +62,7 @@ class TabSaveInServer extends HookWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Checkbox(checked: isChecked.value, onChanged: (e)=>isChecked.value=e!),
-              Text(Strings.dirPath,style: TextSystem.textS(isChecked.value?Colors.white:Colors.white.withOpacity(0.5)),),
+              Text("${Strings.dirPath}:",style: TextSystem.textS(isChecked.value?Colors.white:Colors.white.withOpacity(0.5)),),
               const SizedBox(
                 height: 10,
               ),

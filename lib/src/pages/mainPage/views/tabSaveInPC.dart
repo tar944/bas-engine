@@ -9,11 +9,13 @@ class TabSaveInPC extends StatelessWidget {
       {
         Key? key,
         required this.pathController,
-        required this.exportPath,
+        required this.needBackup,
+        required this.selectFolderCaller
       }) : super(key: key);
 
-  final String exportPath;
+  final bool needBackup;
   final TextEditingController pathController;
+  final ValueSetter<String> selectFolderCaller;
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +30,13 @@ class TabSaveInPC extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(
-            height: 10,
-          ),
             Padding(
-              padding: const EdgeInsets.only(left: 15.0, right: 15, bottom: 10),
+              padding: const EdgeInsets.only(left: 15.0, right: 15, bottom: 10,top: 35),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Text(Strings.dirPath,style: TextSystem.textS(Colors.white),),
+                  Text("${Strings.dirPath}:",style: TextSystem.textS(Colors.white),),
                   const SizedBox(
                     width: 10,
                   ),
@@ -60,10 +59,30 @@ class TabSaveInPC extends StatelessWidget {
                         ),
                         Positioned(
                             right: 0,
-                            child: IconButton(onPressed: (){},icon: const Icon(FluentIcons.folder_horizontal,size: 17,),))
+                            child: IconButton(
+                              onPressed: ()=>selectFolderCaller("chosePath"),
+                              icon: const Icon(FluentIcons.folder_horizontal,size: 17,),))
                       ],
                     ),
                   ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 15.0, right: 15, bottom: 10,top: 25),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(Strings.needBackUp,style: TextSystem.textS(Colors.white),),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  ToggleSwitch(
+                    checked: needBackup,
+                    content: Text(needBackup ? 'Backup ON' : 'Backup OFF'),
+                    onChanged: (bool value) => selectFolderCaller(value?"backupOn":"backupOff"),
+                  )
                 ],
               ),
             ),
