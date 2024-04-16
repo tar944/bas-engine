@@ -13,7 +13,6 @@ class ImageGroupModel {
   String? name;
   String type="";
   String state=GroupState.findMainState.name;
-  String path;
   final navObjects = ToMany<ObjectModel>();
   final mainState = ToOne<ObjectModel>();
   final allStates = ToMany<ObjectModel>();
@@ -21,5 +20,35 @@ class ImageGroupModel {
   final allGroups = ToMany<ImageGroupModel>();
   final label = ToOne<LabelModel>();
 
-  ImageGroupModel(this.id,this.partUUID,this.groupUUID, this.name, this.path);
+  ImageGroupModel(this.id,this.partUUID,this.groupUUID, this.name);
+
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = uuid;
+    data['partUUID'] = partUUID;
+    data['groupUUID'] = groupUUID;
+    data['name'] = name;
+    data['type'] = type;
+    data['state'] = state;
+    if (navObjects.isNotEmpty) {
+      data['navObjects'] = navObjects.map((v) => v.toJson()).toList();
+    }
+    if (mainState.target!=null) {
+      data['mainState'] = mainState.target!.toJson();
+    }
+    if (allStates.isNotEmpty) {
+      data['allStates'] = allStates.map((v) => v.toJson()).toList();
+    }
+    if (subObjects.isNotEmpty) {
+      data['subObjects'] = subObjects.map((v) => v.toJson()).toList();
+    }
+    if (allGroups.isNotEmpty) {
+      data['allGroups'] = allGroups.map((v) => v.toJson()).toList();
+    }
+    if (label.target!=null) {
+      data['label'] = label.target!.toJson();
+    }
+    return data;
+  }
 }

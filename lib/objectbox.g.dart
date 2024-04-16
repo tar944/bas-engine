@@ -353,11 +353,6 @@ final _entities = <ModelEntity>[
             type: 9,
             flags: 0),
         ModelProperty(
-            id: const IdUid(6, 623411051368177646),
-            name: 'path',
-            type: 9,
-            flags: 0),
-        ModelProperty(
             id: const IdUid(8, 1229418524994533953),
             name: 'labelId',
             type: 11,
@@ -638,7 +633,8 @@ ModelDefinition getObjectBoxModel() {
         3993222101260499379,
         5118056379320144992,
         8918238754733140373,
-        323244748199649629
+        323244748199649629,
+        623411051368177646
       ],
       retiredRelationUids: const [
         7096364116743183016,
@@ -745,16 +741,16 @@ ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
           final idParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final uuidParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 10, '');
           final nameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 6, '');
           final levelNameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 12, '');
           final actionParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 16, '');
-          final object =
-              LabelModel(idParam, nameParam, levelNameParam, actionParam)
-                ..uuid = const fb.StringReader(asciiOptimization: true)
-                    .vTableGet(buffer, rootOffset, 10, '');
+          final object = LabelModel(
+              idParam, uuidParam, nameParam, levelNameParam, actionParam);
 
           return object;
         }),
@@ -984,7 +980,6 @@ ModelDefinition getObjectBoxModel() {
           final nameOffset =
               object.name == null ? null : fbb.writeString(object.name!);
           final typeOffset = fbb.writeString(object.type);
-          final pathOffset = fbb.writeString(object.path);
           final groupUUIDOffset = fbb.writeString(object.groupUUID);
           final stateOffset = fbb.writeString(object.state);
           fbb.startTable(12);
@@ -993,7 +988,6 @@ ModelDefinition getObjectBoxModel() {
           fbb.addOffset(2, partUUIDOffset);
           fbb.addOffset(3, nameOffset);
           fbb.addOffset(4, typeOffset);
-          fbb.addOffset(5, pathOffset);
           fbb.addInt64(7, object.label.targetId);
           fbb.addOffset(8, groupUUIDOffset);
           fbb.addInt64(9, object.mainState.targetId);
@@ -1012,16 +1006,14 @@ ModelDefinition getObjectBoxModel() {
               .vTableGet(buffer, rootOffset, 20, '');
           final nameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGetNullable(buffer, rootOffset, 10);
-          final pathParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 14, '');
-          final object = ImageGroupModel(
-              idParam, partUUIDParam, groupUUIDParam, nameParam, pathParam)
-            ..uuid = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 6, '')
-            ..type = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 12, '')
-            ..state = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 24, '');
+          final object =
+              ImageGroupModel(idParam, partUUIDParam, groupUUIDParam, nameParam)
+                ..uuid = const fb.StringReader(asciiOptimization: true)
+                    .vTableGet(buffer, rootOffset, 6, '')
+                ..type = const fb.StringReader(asciiOptimization: true)
+                    .vTableGet(buffer, rootOffset, 12, '')
+                ..state = const fb.StringReader(asciiOptimization: true)
+                    .vTableGet(buffer, rootOffset, 24, '');
           object.label.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 18, 0);
           object.label.attach(store);
@@ -1330,25 +1322,21 @@ class ImageGroupModel_ {
   static final type =
       QueryStringProperty<ImageGroupModel>(_entities[5].properties[4]);
 
-  /// see [ImageGroupModel.path]
-  static final path =
-      QueryStringProperty<ImageGroupModel>(_entities[5].properties[5]);
-
   /// see [ImageGroupModel.label]
   static final label = QueryRelationToOne<ImageGroupModel, LabelModel>(
-      _entities[5].properties[6]);
+      _entities[5].properties[5]);
 
   /// see [ImageGroupModel.groupUUID]
   static final groupUUID =
-      QueryStringProperty<ImageGroupModel>(_entities[5].properties[7]);
+      QueryStringProperty<ImageGroupModel>(_entities[5].properties[6]);
 
   /// see [ImageGroupModel.mainState]
   static final mainState = QueryRelationToOne<ImageGroupModel, ObjectModel>(
-      _entities[5].properties[8]);
+      _entities[5].properties[7]);
 
   /// see [ImageGroupModel.state]
   static final state =
-      QueryStringProperty<ImageGroupModel>(_entities[5].properties[9]);
+      QueryStringProperty<ImageGroupModel>(_entities[5].properties[8]);
 
   /// see [ImageGroupModel.allGroups]
   static final allGroups =

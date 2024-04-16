@@ -31,36 +31,35 @@ class ObjectModel {
       this.top,
       this.bottom);
 
-  double srcLeft(BuildContext context){
-    if (image.target!.width > MediaQuery.of(context).size.width) {
-      return ((left * image.target!.width) ~/ MediaQuery.of(context).size.width).toDouble();
-    } else {
-      return left;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = uuid;
+    data['left'] = left;
+    data['right'] = right;
+    data['top'] = top;
+    data['bottom'] = bottom;
+    data['color'] = color;
+    data['actionType'] = actionType;
+    data['isNavTool'] = isNavTool;
+    data['isMainObject'] = isMainObject;
+    data['needToCompare'] = needToCompare;
+    data['actX'] = actX;
+    data['actY'] = actY;
+    data['typedText'] = typedText;
+    if(srcObject.target!=null){
+      data['srcObjectId']=srcObject.target!.uuid;
     }
-  }
-  double srcRight(BuildContext context){
-    if (image.target!.width > MediaQuery.of(context).size.width) {
-      return ((right * image.target!.width) ~/ MediaQuery.of(context).size.width).toDouble();
-    } else {
-      return right;
+    if(image.target!=null){
+      data['image']=image.target!.toJson();
     }
-  }
-  double srcTop(BuildContext context,double offsetY){
-    final curHeight = MediaQuery.of(context).size.height - offsetY;
-    if (image.target!.height > curHeight) {
-      return ((top * image.target!.height) ~/ curHeight).toDouble();
-    } else {
-      return top;
+    if(label.target!=null){
+      data['labelId']=label.target!.uuid;
     }
+    return data;
   }
-  double srcButton(BuildContext context,double offsetY){
-    final curHeight = MediaQuery.of(context).size.height - offsetY;
-    if (image.target!.height > curHeight) {
-      return ((bottom * image.target!.height) ~/ curHeight).toDouble();
-    } else {
-      return bottom;
-    }
-  }
+
+
   double curLeft(ImageModel img,BuildContext context){
     if (img.width > MediaQuery.of(context).size.width) {
       return ((left * MediaQuery.of(context).size.width) ~/ img.width).toDouble();

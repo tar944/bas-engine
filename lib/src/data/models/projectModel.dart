@@ -27,4 +27,20 @@ class ProjectModel {
       this.description,
       this.icon,
       this.companyLogo);
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['_id'] = uuid;
+    data['title'] = title;
+    data['companyId'] = companyId;
+    data['companyName'] = companyName;
+    data['description'] = description;
+    if (allParts.isNotEmpty) {
+      data['allParts'] = allParts.map((v) => v.toJson()).toList();
+    }
+    if (allLabels.isNotEmpty) {
+      data['allLabels'] = allLabels.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
 }

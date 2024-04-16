@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
@@ -34,7 +33,7 @@ class LabelingBodyViewModel extends ViewModel {
   final int partId;
   int labelGroupId=-1,deletedObjId=-1,imgW=0,imgH=0;
   bool isLoading=false,isState=true;
-  LabelModel curLabel=LabelModel(-1, "", "","");
+  LabelModel curLabel=LabelModel(-1, "", "","","");
   ValueSetter<String> onGroupActionCaller;
 
   LabelingBodyViewModel(
@@ -77,7 +76,7 @@ class LabelingBodyViewModel extends ViewModel {
         imgW = img.width;
         while (grp.subObjects.isNotEmpty) {
           var curSub = grp.subObjects[0];
-          newGrp = ImageGroupModel(-1, "", grp.uuid, Strings.emptyStr, "");
+          newGrp = ImageGroupModel(-1, "", grp.uuid, Strings.emptyStr);
           newGrp.uuid = const Uuid().v4();
           newGrp.state = GroupState.generated.name;
           await ImageGroupDAO().add(newGrp);
@@ -218,7 +217,7 @@ class LabelingBodyViewModel extends ViewModel {
         notifyListeners();
         break;
       case "saveName":
-        var newGroup = ImageGroupModel(-1,partUUID,grpUUID , act[2], "");
+        var newGroup = ImageGroupModel(-1,partUUID,grpUUID , act[2]);
         newGroup.uuid=const Uuid().v4();
         var lbl=await LabelDAO().getLabel(int.parse(act[1]));
         newGroup.label.target=lbl;

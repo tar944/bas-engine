@@ -11,16 +11,19 @@ import 'package:pmvvm/pmvvm.dart';
 class DlgExport extends StatelessWidget {
   const DlgExport({
     Key? key,
-    required this.prjName
+    required this.prjName,
+    required this.prjUUID,
+    required this.onExportCaller
   }) : super(key: key);
 
-  final String prjName;
+  final String prjUUID,prjName;
+  final ValueSetter<String> onExportCaller;
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
       viewModel:
-      ExportViewModel(prjName),
+      ExportViewModel(prjUUID,prjName,onExportCaller),
     );
   }
 }
@@ -110,8 +113,8 @@ class _View extends StatelessView<ExportViewModel> {
                           backgroundColor: ButtonState.all(Colors.orange.dark),
                           padding: ButtonState.all(const EdgeInsets.only(left: 30,right: 30,top: 10,bottom: 10))
                         ),
+                        onPressed: vm.onExportBtnHandler(),
                         child: Text(Strings.export,style: TextSystem.textM(Colors.white),),
-                        onPressed: ()=>{},
                       ),
                     ),
                   )

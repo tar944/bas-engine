@@ -32,4 +32,34 @@ class Preference {
     prefs = await SharedPreferences.getInstance();
     return prefs.getBool(name) ?? true;
   }
+
+  setExportPath(String prjUUID,String path) async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString("path&&$prjUUID", path);
+  }
+
+  Future<String> getExportPath(String prjUUID)async{
+    prefs = await SharedPreferences.getInstance();
+    return prefs.getString("path&&$prjUUID") ?? "";
+  }
+
+  setUploadLink(String prjUUID,String link) async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString("link&&$prjUUID", link);
+  }
+
+  Future<String> getUploadLink(String prjUUID)async{
+    prefs = await SharedPreferences.getInstance();
+    return prefs.getString("link&&$prjUUID") ?? "";
+  }
+
+  setAuthToken(String prjUUID,String token) async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setString("token&&$prjUUID", token);
+  }
+
+  Future<String> getAuthToken(String prjUUID)async{
+    prefs = await SharedPreferences.getInstance();
+    return prefs.getString("token&&$prjUUID") ?? "";
+  }
 }

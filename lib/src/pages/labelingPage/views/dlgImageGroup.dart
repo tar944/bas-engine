@@ -38,7 +38,7 @@ class DlgImageGroup extends HookWidget {
       if (group == null) {
         String partUUID=const Uuid().v4();
         onSaveCaller(
-            ImageGroupModel(0,partUUID,const Uuid().v4(), ctlTitle.text, ""));
+            ImageGroupModel(0,partUUID,const Uuid().v4(), ctlTitle.text));
       } else {
         group!.name = ctlTitle.text;
         onSaveCaller(group!);

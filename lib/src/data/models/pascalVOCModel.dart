@@ -16,7 +16,6 @@ class PascalVOCModel{
       this.depth,
       this.objects);
 
-
   PascalVOCModel.fromXML(XmlDocument xml) {
     filename = xml.findElements("filename").single.innerText;
     path = xml.findElements("path").single.innerText;
@@ -26,9 +25,9 @@ class PascalVOCModel{
     depth= int.parse(size.findElements("depth").single.innerText);
     var allObjects = xml.findAllElements("object");
     if (allObjects.isNotEmpty) {
-      allObjects.forEach((element) {
-        objects.add(PascalObjectModel.fromXML(element));
-      });
+      for (var obj in allObjects) {
+        objects.add(PascalObjectModel.fromXML(obj));
+      }
     }
   }
 

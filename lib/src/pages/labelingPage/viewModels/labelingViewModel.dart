@@ -12,6 +12,7 @@ import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pmvvm/pmvvm.dart';
+import 'package:uuid/uuid.dart';
 
 class LabelingViewModel extends ViewModel {
   List<ObjectModel> objects = [];
@@ -37,13 +38,13 @@ class LabelingViewModel extends ViewModel {
       await LabelDAO().addList(
           prjUUID,
           ObjectType.values
-              .map((e) => LabelModel(0, e.name.toString().split('__')[0], "objects",e.name.toString().split('__')[1]))
+              .map((e) => LabelModel(0,const Uuid().v4(), e.name.toString().split('__')[0], "objects",e.name.toString().split('__')[1]))
               .toList());
 
       await LabelDAO().addList(
           prjUUID,
           Windows.values
-              .map((e) => LabelModel(0, e.name.toString(), "windows",""))
+              .map((e) => LabelModel(0,const Uuid().v4(), e.name.toString(), "windows",""))
               .toList());
     }
   }

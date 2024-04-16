@@ -92,7 +92,23 @@ class DirectoryManager {
     }
   }
 
+  Future<String> getFinalExportPath(String curPath) async {
+    var path = Directory(curPath);
+    if (!path.existsSync()) {
+      return "errNotFoundDirectory";
+    }
+    final filePath =p.join(path.path, DateTime.now().millisecondsSinceEpoch.toString());
+    await Directory(filePath).create();
+    await Directory(p.join(filePath, 'trainData')).create();
+    await Directory(p.join(filePath, 'dbDta')).create();
+    return filePath;
+  }
 
+  Future<bool> saveFileInLocal(String path,String dataToSave)async{
+    final file = File(path);
+    file.writeAsStringSync(dataToSave);
+    return true;
+  }
 
   Future<String> getPartImageDirectoryPath(String prjUUID, String partUUID) async {
     return p.join(await getPartDir(prjUUID, partUUID),'images');

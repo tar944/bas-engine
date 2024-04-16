@@ -1,5 +1,6 @@
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
@@ -33,6 +34,13 @@ class ProjectPartsViewModel extends ViewModel {
     final address = await Preference().getMainAddress();
     if(address!=''){
       onPartSelect('goto&&${address.split("&&")[1]}');
+    }
+    //todo this part of code should remove after running one time
+    for(var lbl in prj.allLabels){
+      if(lbl.uuid==""){
+        lbl.uuid=const Uuid().v4();
+        await LabelDAO().updateLabel(lbl);
+      }
     }
   }
 

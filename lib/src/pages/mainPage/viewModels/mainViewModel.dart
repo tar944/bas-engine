@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/controllers/headerController.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
@@ -158,12 +159,23 @@ class MainPageViewModel extends ViewModel with WindowListener {
     }
   }
 
+  exportHandler(String action)async{
+    if(action=="savePC"){
+
+    }else{
+
+    }
+  }
+
   onNavigationChanged(HeaderTabs selTab) {
     if(selTab==HeaderTabs.export){
       showDialog(
           context: context,
           barrierDismissible: true,
-          builder: (context) => DlgExport(prjName: curProject!.title!,));
+          builder: (context) => DlgExport(
+                                  prjUUID:curProject!.uuid,
+                                  prjName: curProject!.title!,
+                                  onExportCaller:exportHandler,));
     }else if (selTab == HeaderTabs.addProject) {
       projectController.call();
     } else if (selTab == HeaderTabs.addPart) {

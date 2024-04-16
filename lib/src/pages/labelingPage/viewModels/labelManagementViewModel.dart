@@ -70,10 +70,10 @@ class LabelManagementViewModel extends ViewModel {
         onCloseClicked();
         break;
       case "create":
-        if(allLabels.firstWhere((element) => element.name==act[1],orElse: ()=>LabelModel(-1,"","","")).id!=-1){
+        if(allLabels.firstWhere((element) => element.name==act[1],orElse: ()=>LabelModel(-1,"","","","")).id!=-1){
           Toast(Strings.lblDuplicateError,false).showWarning(context);
         }else{
-          var newLabel = LabelModel(-1, act[1], allLevels[curIndex],act.length==3?act[2]:"");
+          var newLabel = LabelModel(-1,const Uuid().v4(), act[1], allLevels[curIndex],act.length==3?act[2]:"");
           newLabel.uuid=const Uuid().v4();
           newLabel.id=await LabelDAO().addLabel(newLabel);
           await ProjectDAO().addALabel(prjUUID, newLabel);

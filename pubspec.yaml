@@ -47,6 +47,7 @@ dependencies:
   screen_retriever: ^0.1.6
   indexed: ^0.0.8
   uuid: ^3.0.6
+  archive: ^3.4.10
   flutter_meedu_videoplayer: ^4.2.1
   fc_native_video_thumbnail: ^0.4.0
   objectbox: 2.2.1
