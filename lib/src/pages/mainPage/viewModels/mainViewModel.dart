@@ -12,6 +12,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.da
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgCheckOtherState.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/dlgExport.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
+import 'package:bas_dataset_generator_engine/src/utility/formatManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
@@ -167,15 +168,16 @@ class MainPageViewModel extends ViewModel with WindowListener {
     }
   }
 
-  onNavigationChanged(HeaderTabs selTab) {
+  onNavigationChanged(HeaderTabs selTab) async{
     if(selTab==HeaderTabs.export){
-      showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) => DlgExport(
-                                  prjUUID:curProject!.uuid,
-                                  prjName: curProject!.title!,
-                                  onExportCaller:exportHandler,));
+      // showDialog(
+      //     context: context,
+      //     barrierDismissible: true,
+      //     builder: (context) => DlgExport(
+      //                             prjUUID:curProject!.uuid,
+      //                             prjName: curProject!.title!,
+      //                             onExportCaller:exportHandler,));
+      await FormatManager().generateFile(curProject!.uuid, false);
     }else if (selTab == HeaderTabs.addProject) {
       projectController.call();
     } else if (selTab == HeaderTabs.addPart) {

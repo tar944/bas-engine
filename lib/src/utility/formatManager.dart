@@ -10,22 +10,31 @@ import 'package:path/path.dart' as path;
 class FormatManager{
 
   Future<String> generateFile(String prjUUID,bool needBackUp) async {
-    String filePath = await DirectoryManager().getFinalExportPath(await Preference().getExportPath(prjUUID));
-    if(filePath=="errNotFoundDirectory"){
-      return filePath;
-    }
+    String filePath = "";
+    // String filePath = await DirectoryManager().getFinalExportPath(await Preference().getExportPath(prjUUID));
+    // if(filePath=="errNotFoundDirectory"){
+    //   return filePath;
+    // }
     var curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
     print("creating Export file =========================================");
 
+    int count=0;
     for(var part in curProject!.allParts){
-
+      for(var grp in part.allGroups){
+        for(var obj in grp.allStates){
+          if(obj.srcObject.target!=null){
+            count++;
+            print("$count = ${obj.srcObject.target!.image.target!.name}");
+          }
+        }
+      }
     }
 
-    if(needBackUp){
-      await generateBackupData(filePath,prjUUID);
-    }
-
-    ZipFileEncoder().zipDirectory(Directory(filePath), filename: '$filePath.zip');
+    // if(needBackUp){
+    //   await generateBackupData(filePath,prjUUID);
+    // }
+    //
+    // ZipFileEncoder().zipDirectory(Directory(filePath), filename: '$filePath.zip');
     return filePath;
   }
 
