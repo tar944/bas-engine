@@ -1,5 +1,6 @@
 import 'package:bas_dataset_generator_engine/src/data/dao/objectBox.dart';
 import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/cutToPiecesPage.dart';
+import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/exportReviewPage.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/mainPage.dart';
 import 'package:bas_dataset_generator_engine/src/pages/recordPage.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
@@ -104,6 +105,14 @@ final router = GoRouter(
               partUUID: state.params['partUUID']!,
               prjUUID: state.params['prjUUID']!,
               title: state.params['title']!,
+          ),
+    ),
+    GoRoute(
+      path: '/exportReview/:prjUUID',
+      name: 'exportReview',
+      builder: (context, state) =>
+          ExportReviewPage(
+              prjUUID: state.params['prjUUID']!,
           ),
     ),
     GoRoute(

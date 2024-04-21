@@ -15,6 +15,7 @@ import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/formatManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
+import 'package:go_router/go_router.dart';
 import 'package:pmvvm/pmvvm.dart';
 import 'package:window_manager/window_manager.dart';
 
@@ -177,7 +178,10 @@ class MainPageViewModel extends ViewModel with WindowListener {
       //                             prjUUID:curProject!.uuid,
       //                             prjName: curProject!.title!,
       //                             onExportCaller:exportHandler,));
-      await FormatManager().generateFile(curProject!.uuid, false);
+      // await FormatManager().generateFile(curProject!.uuid, false);
+      context.goNamed('exportReview',params: {
+        'prjUUID':curProject!.uuid
+      });
     }else if (selTab == HeaderTabs.addProject) {
       projectController.call();
     } else if (selTab == HeaderTabs.addPart) {

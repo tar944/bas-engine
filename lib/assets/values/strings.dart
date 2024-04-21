@@ -2,6 +2,7 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String exportReview="Export review";
   static const String setAsNavObject="Are you sure to want set this object as a navigation objects?";
   static const String removeFromNavObject="Are you sure to want remove this object from navigation objects?";
   static const String sureToSetItMain="Are you sure to want set it as a main state?";

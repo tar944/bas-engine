@@ -1,6 +1,4 @@
-import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/viewModels/partRegionViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/regionWidget.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -12,11 +10,11 @@ class PartRegionExplorer extends StatelessWidget {
         Key? key,
         required this.itsObjects,
         required this.onObjectActionCaller,
-        required this.curImage
+        required this.imgPath
       }) : super(key: key);
 
-  final List<ObjectModel> itsObjects;
-  final ImageModel curImage;
+  final List<PascalObjectModel> itsObjects;
+  final String imgPath;
   final ValueSetter<String> onObjectActionCaller;
 
   @override
@@ -25,7 +23,7 @@ class PartRegionExplorer extends StatelessWidget {
       view: () => const _View(),
       viewModel: PartRegionViewModel(
           itsObjects,
-          curImage,
+          imgPath,
           onObjectActionCaller
       ),
     );
@@ -41,8 +39,8 @@ class _View extends StatelessView<PartRegionViewModel> {
       child: Stack(children: [
         ...vm.itsObjects.map((item) {
           return Positioned(
-                  top: item.curTop(vm.curImage,context,Dimens.topBarHeight),
-                  left: item.curLeft(vm.curImage,context),
+                  top: item.ymin!.toDouble(),
+                  left: item.xmin!.toDouble(),
                   child: RegionWidget(
                     key: GlobalKey(),
                     curObject: item,

@@ -64,9 +64,6 @@ class ViewObjectsViewModel extends ViewModel {
             getY(grp.allStates[0].bottom.toInt())+startY
         );
         obj.isNavTool=grp.allStates[0].isNavTool;
-        print('------------------------------');
-        print("${grp.label.target!.name} => {L:${grp.allStates[0].left}, T:${grp.allStates[0].top}, R:${grp.allStates[0].right}, B:${grp.allStates[0].bottom}}");
-        print("${grp.label.target!.name} => {L:${obj.left}, T:${obj.top}, R:${obj.right}, B:${obj.bottom}}");
         allSubs.add(obj);
       } else if (grp.mainState.target != null && grp.label.target != null) {
         if (grp.mainState.target!.left == 0 && grp.mainState.target!.top == 0) {

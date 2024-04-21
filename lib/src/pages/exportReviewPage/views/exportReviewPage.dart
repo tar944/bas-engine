@@ -1,12 +1,9 @@
 import 'dart:io';
-
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
-import 'package:bas_dataset_generator_engine/src/dialogs/flyDlgConfirm.dart';
-import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/viewModels/cutToPiecesViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/flyImagesList.dart';
-import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/partRegionExplorer.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/viewModels/exportReviewViewModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/partRegionExplorer.dart';
 import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
@@ -28,17 +25,17 @@ class ExportReviewPage extends StatelessWidget {
   }
 }
 
-class _View extends StatelessView<CutToPiecesViewModel> {
+class _View extends StatelessView<ExportReviewViewModel> {
   const _View({Key? key}) : super(key: key);
 
   @override
-  Widget render(context, CutToPiecesViewModel vm) {
+  Widget render(context, ExportReviewViewModel vm) {
     return ScaffoldPage(
         padding: const EdgeInsets.only(top: 0, bottom: 0),
         content: SizedBox.expand(
           child: Column(children: [
             TopBarPanel(
-              title: vm.title,
+              title: Strings.exportReview,
               needBack: true,
               needHelp: false,
               onBackCaller: vm.onBackClicked,
@@ -52,26 +49,19 @@ class _View extends StatelessView<CutToPiecesViewModel> {
                     alignment: Alignment.center,
                     children: [
                       Container(
-                        width: vm.imgSize.width,
-                        height: vm.imgSize.height,
+                        width: double.infinity,
+                        height: double.infinity,
                         decoration: BoxDecoration(
-                          image: vm.curObject!=null?DecorationImage(
-                            image: Image.file(File(vm.curObject!.image.target!.path!)).image,
-                            fit: (vm.imgW > MediaQuery.of(context).size.width ||
-                                vm.imgH > (MediaQuery.of(context).size.height - Dimens.topBarHeight))
-                                ? BoxFit.fill : BoxFit.none,
+                          image: vm.mainStates.isNotEmpty?DecorationImage(
+                            image: Image.file(File(vm.mainStates[vm.indexImage].path!)).image,
+                            fit: BoxFit.fill,
                           ):null,
                         ),
-                        child: vm.curObject!=null? PartRegionExplorer(
+                        child: vm.mainStates.isNotEmpty? PartRegionExplorer(
                           key: GlobalKey(),
-                          mainObject: vm.curObject!,
-                          minimumObjects: vm.minimizedObjects,
-                          otherObjects: vm.subObject.where((element) => element.srcObject.target!=null&&element.srcObject.target!.uuid!=vm.curObject!.uuid).toList(),
-                          itsObjects: vm.subObject.where((element) => element.srcObject.target!=null&&element.srcObject.target!.uuid==vm.curObject!.uuid).toList(),
-                          onNewObjectCaller: vm.onNewPartCreatedHandler,
-                          onObjectActionCaller: vm.onPartObjectHandler,
-                          prjUUID: vm.prjUUID,
-                          isSimpleAction: vm.pageDuty!="drawMainRectangle",
+                          imgPath:vm.mainStates[vm.indexImage].path! ,
+                          itsObjects: vm.mainStates[vm.indexImage].objects,
+                          onObjectActionCaller: vm.onObjectActionHandler,
                         ):
                         Container(),
                       ),
@@ -100,26 +90,6 @@ class _View extends StatelessView<CutToPiecesViewModel> {
                                       size: 25,
                                     ),
                                     onPressed: () => vm.perviousImage()),
-                                  const SizedBox(width: 5,),
-                                  FlyoutTarget(
-                                    key: GlobalKey(),
-                                    controller: vm.confirmController,
-                                    child: IconButton(
-                                        style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                        icon: Icon(
-                                          FluentIcons.accept_medium,
-                                          color: Colors.green.dark,
-                                          size: 25,
-                                        ),
-                                        onPressed: () => showFlyConfirm(
-                                            Strings.finishLabeling,
-                                            Strings.yes,
-                                            vm.confirmController,
-                                            FlyoutPlacementMode.right,
-                                            "confirm&&${vm.curObject!.id!}",
-                                            vm.onObjectActionHandler)),
-                                  ),
-
                                 ],
                               ),
                             ),
@@ -133,24 +103,24 @@ class _View extends StatelessView<CutToPiecesViewModel> {
                               child: Row(
                                 children: [
                                   const SizedBox(width: 5,),
-                                  FlyoutTarget(
-                                    key: GlobalKey(),
-                                    controller: vm.moreController,
-                                    child: IconButton(
-                                        style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                        icon: const Icon(
-                                          FluentIcons.password_field,
-                                          color: Colors.white,
-                                          size: 25,
-                                        ),
-                                        onPressed: () => showFlyImagesList(
-                                            vm.group!.allStates,
-                                            vm.curObject!.id!,
-                                            vm.moreController,
-                                            FlyoutPlacementMode.left,
-                                            vm.onObjectActionHandler),
-                                    ),
-                                  ),
+                                  // FlyoutTarget(
+                                  //   key: GlobalKey(),
+                                  //   controller: vm.moreController,
+                                  //   child: IconButton(
+                                  //       style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                  //       icon: const Icon(
+                                  //         FluentIcons.password_field,
+                                  //         color: Colors.white,
+                                  //         size: 25,
+                                  //       ),
+                                  //       onPressed: () => showFlyImagesList(
+                                  //           vm.group!.allStates,
+                                  //           vm.curObject!.id!,
+                                  //           vm.moreController,
+                                  //           FlyoutPlacementMode.left,
+                                  //           vm.onObjectActionHandler),
+                                  //   ),
+                                  // ),
                                   const SizedBox(width: 5,),
                                   IconButton(
                                     style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),

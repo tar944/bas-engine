@@ -1,26 +1,27 @@
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 import 'package:image/image.dart' as i;
 
 class PartRegionViewModel extends ViewModel {
-  List<ObjectModel> itsObjects;
+  List<PascalObjectModel> itsObjects;
   ObjectModel? curObject;
   int imgW=0,imgH=0;
   final ValueSetter<String> onObjectActionCaller;
-  final ImageModel curImage;
+  final String imgPath;
 
 
   PartRegionViewModel(
       this.itsObjects,
-      this.curImage,
+      this.imgPath,
       this.onObjectActionCaller);
 
 
   @override
   void init() async{
-    final img = await i.decodeImageFile(curImage.path!);
+    final img = await i.decodeImageFile(imgPath);
     imgH = img!.height;
     imgW = img.width;
     notifyListeners();

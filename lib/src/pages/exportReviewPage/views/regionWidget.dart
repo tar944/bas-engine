@@ -1,4 +1,5 @@
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/rectanglePainter.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/viewModels/regionViewModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -11,7 +12,7 @@ class RegionWidget extends StatelessWidget {
     required this.onObjectActionCaller,
   }) : super(key: key);
 
-  final ObjectModel curObject;
+  final PascalObjectModel curObject;
   final ValueSetter<String> onObjectActionCaller;
 
   @override

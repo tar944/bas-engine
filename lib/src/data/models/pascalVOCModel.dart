@@ -3,18 +3,17 @@ import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.d
 import 'package:xml/xml.dart';
 
 class PascalVOCModel{
-  String? filename,path;
+  String? filename,path,objUUID;
   int? width,height;
   int depth=3;
   List<PascalObjectModel> objects=[];
 
   PascalVOCModel(
+      this.objUUID,
       this.filename,
       this.path,
       this.width,
-      this.height,
-      this.depth,
-      this.objects);
+      this.height);
 
   PascalVOCModel.fromXML(XmlDocument xml) {
     filename = xml.findElements("filename").single.innerText;

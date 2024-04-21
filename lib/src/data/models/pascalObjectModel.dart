@@ -1,17 +1,17 @@
 import 'package:xml/xml.dart';
 
 class PascalObjectModel{
-  String? name,pose;
+  String? name,pose="Unspecified";
   int truncated=0,difficult=0,occluded=0;
   int? xmin,xmax,ymin,ymax;
 
-  PascalObjectModel({
-    status,
-    message,
-    downloadLink,
-    projectId,
-    cvcActions
-  });
+  PascalObjectModel(
+    this.name,
+    this.xmin,
+    this.xmax,
+    this.ymin,
+    this.ymax
+  );
 
   PascalObjectModel.fromXML(XmlElement xml) {
     name = xml.findElements("name").single.innerText;
