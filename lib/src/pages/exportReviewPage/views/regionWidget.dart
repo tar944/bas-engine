@@ -9,17 +9,20 @@ class RegionWidget extends StatelessWidget {
   RegionWidget({
     Key? key,
     required this.curObject,
+    required this.width,
+    required this.height,
     required this.onObjectActionCaller,
   }) : super(key: key);
 
   final PascalObjectModel curObject;
+  final double width,height;
   final ValueSetter<String> onObjectActionCaller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: RegionViewModel(curObject, onObjectActionCaller),
+      viewModel: RegionViewModel(curObject,width,height, onObjectActionCaller),
     );
   }
 }
@@ -30,14 +33,14 @@ class _View extends StatelessView<RegionViewModel> {
   @override
   Widget render(context, RegionViewModel vm) {
    return SizedBox(
-      width: vm.getSize(isWidth: true),
-      height: vm.getSize(),
+      width: vm.width,
+      height: vm.height,
       child: CustomPaint(
         painter: RectanglePainter(
             object: ObjectModel(0, "", 0.0,
-              vm.getSize(isWidth: true),
+              vm.width,
                 0.0,
-              vm.getSize(),
+              vm.height,
             ),
             color: Colors.blue.dark,
             isActive: false),

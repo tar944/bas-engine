@@ -179,9 +179,7 @@ class MainPageViewModel extends ViewModel with WindowListener {
       //                             prjName: curProject!.title!,
       //                             onExportCaller:exportHandler,));
       // await FormatManager().generateFile(curProject!.uuid, false);
-      context.goNamed('exportReview',params: {
-        'prjUUID':curProject!.uuid
-      });
+      context.goNamed('exportReview',params: {'prjUUID':curProject!.uuid});
     }else if (selTab == HeaderTabs.addProject) {
       projectController.call();
     } else if (selTab == HeaderTabs.addPart) {

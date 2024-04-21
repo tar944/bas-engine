@@ -47,13 +47,14 @@ class ExportReviewViewModel extends ViewModel {
         if(grp.label.target!=null){
           mainGroups.add(grp);
           for(var obj in grp.allStates){
+            var curObject = obj.srcObject.target!=null?obj.srcObject.target!:obj;
             mainStates.add(
                 PascalVOCModel(
-                    obj.uuid,
-                    obj.image.target!.name,
-                    obj.image.target!.path,
-                    obj.image.target!.width.toInt(),
-                    obj.image.target!.height.toInt()));
+                    curObject.uuid,
+                    curObject.image.target!.name,
+                    curObject.image.target!.path,
+                    curObject.image.target!.width.toInt(),
+                    curObject.image.target!.height.toInt()));
             print("======================================================");
             print("${grp.label.target!.levelName}&&${grp.label.target!.name}${grp.name!=""?"&&${grp.name}":""}");
             mainStates[mainStates.length-1].objects.addAll(
@@ -120,18 +121,16 @@ class ExportReviewViewModel extends ViewModel {
 
   nextImage() async{
     indexImage = ++indexImage;
-    // if (indexImage == group!.allStates.length) {
-    //   return indexImage = 0;
-    // }
+    notifyListeners();
   }
 
   perviousImage() async{
-    if (indexImage == 0) return;
     indexImage = --indexImage;
   }
 
   onObjectActionHandler(String action) async {
-    var actions = action.split('&&');
-
+    var act = action.split('&&');
+    indexImage=mainStates.indexWhere((element) => element.objUUID==act[1]);
+    notifyListeners();
   }
 }

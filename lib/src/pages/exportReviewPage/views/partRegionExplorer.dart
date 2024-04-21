@@ -39,10 +39,12 @@ class _View extends StatelessView<PartRegionViewModel> {
       child: Stack(children: [
         ...vm.itsObjects.map((item) {
           return Positioned(
-                  top: item.ymin!.toDouble(),
-                  left: item.xmin!.toDouble(),
+                  top: vm.getY(item.ymin!).toDouble(),
+                  left: vm.getX(item.xmin!).toDouble(),
                   child: RegionWidget(
                     key: GlobalKey(),
+                    width: (vm.getX(item.xmax!)-vm.getX(item.xmin!)).toDouble(),
+                    height: (vm.getY(item.ymax!)-vm.getY(item.ymin!)).toDouble(),
                     curObject: item,
                     onObjectActionCaller: (e) => vm.onObjectActionHandler(e),
                   ),

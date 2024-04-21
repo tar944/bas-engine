@@ -9,10 +9,7 @@ class RegionViewModel extends ViewModel {
 
   final PascalObjectModel curObject;
   final ValueSetter<String> onObjectActionCaller;
+  final double width,height;
 
-  RegionViewModel(this.curObject, this.onObjectActionCaller);
-
-  double getSize({bool isWidth=false}){
-    return isWidth?(curObject.xmax!.toDouble()-curObject.xmin!.toDouble()).abs(): (curObject.ymax!.toDouble() - curObject.ymin!.toDouble()).abs();
-  }
+  RegionViewModel(this.curObject,this.width,this.height, this.onObjectActionCaller);
 }

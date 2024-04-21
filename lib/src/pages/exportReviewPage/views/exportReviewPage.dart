@@ -3,6 +3,7 @@ import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/flyImagesList.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/viewModels/exportReviewViewModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/flyScreensList.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/partRegionExplorer.dart';
 import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -73,7 +74,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Container(
-                              width: Dimens.btnWidthNormal,
+                              width: Dimens.actionBtnH,
                               height: Dimens.actionBtnH,
                               decoration: BoxDecoration(
                                 color: Colors.grey[170].withOpacity(0.5),
@@ -89,7 +90,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
                                       color: Colors.white,
                                       size: 25,
                                     ),
-                                    onPressed: () => vm.perviousImage()),
+                                    onPressed: vm.indexImage==0?null:() => vm.perviousImage()),
                                 ],
                               ),
                             ),
@@ -103,24 +104,24 @@ class _View extends StatelessView<ExportReviewViewModel> {
                               child: Row(
                                 children: [
                                   const SizedBox(width: 5,),
-                                  // FlyoutTarget(
-                                  //   key: GlobalKey(),
-                                  //   controller: vm.moreController,
-                                  //   child: IconButton(
-                                  //       style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                  //       icon: const Icon(
-                                  //         FluentIcons.password_field,
-                                  //         color: Colors.white,
-                                  //         size: 25,
-                                  //       ),
-                                  //       onPressed: () => showFlyImagesList(
-                                  //           vm.group!.allStates,
-                                  //           vm.curObject!.id!,
-                                  //           vm.moreController,
-                                  //           FlyoutPlacementMode.left,
-                                  //           vm.onObjectActionHandler),
-                                  //   ),
-                                  // ),
+                                  FlyoutTarget(
+                                    key: GlobalKey(),
+                                    controller: vm.moreController,
+                                    child: IconButton(
+                                        style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                        icon: const Icon(
+                                          FluentIcons.password_field,
+                                          color: Colors.white,
+                                          size: 25,
+                                        ),
+                                        onPressed: () => showFlyScreensList(
+                                            vm.mainStates,
+                                            vm.mainStates[vm.indexImage].objUUID!,
+                                            vm.moreController,
+                                            FlyoutPlacementMode.left,
+                                            vm.onObjectActionHandler),
+                                    ),
+                                  ),
                                   const SizedBox(width: 5,),
                                   IconButton(
                                     style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
@@ -129,7 +130,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
                                       color: Colors.white,
                                       size: 25,
                                     ),
-                                    onPressed: () => vm.nextImage()),
+                                    onPressed: vm.mainStates.length-1==vm.indexImage?null:() => vm.nextImage()),
                                 ],
                               ),
                             ),

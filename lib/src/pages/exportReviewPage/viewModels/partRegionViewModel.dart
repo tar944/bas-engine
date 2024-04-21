@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
@@ -25,6 +26,24 @@ class PartRegionViewModel extends ViewModel {
     imgH = img!.height;
     imgW = img.width;
     notifyListeners();
+  }
+
+  int getY(int y) {
+    var curH = MediaQuery.of(context).size.height - Dimens.topBarHeight;
+    if (imgH > curH) {
+      return (y * curH) ~/ imgH;
+    } else {
+      return y;
+    }
+  }
+
+  int getX(int x) {
+    var curW=MediaQuery.of(context).size.width;
+    if (imgW > curW) {
+      return (x * curW) ~/ imgW;
+    } else {
+      return x;
+    }
   }
 
   onObjectActionHandler(String action)async{
