@@ -1,11 +1,13 @@
 import 'package:xml/xml.dart';
 
 class PascalObjectModel{
-  String? name,pose="Unspecified";
+  String? name,pose="Unspecified",objUUID,state;
   int truncated=0,difficult=0,occluded=0;
   int? xmin,xmax,ymin,ymax;
 
   PascalObjectModel(
+      this.objUUID,
+    this.state,
     this.name,
     this.xmin,
     this.xmax,

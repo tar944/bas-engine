@@ -48,6 +48,11 @@ enum GroupState {
   readyToWork,
   finished
 }
+enum ExportState {
+  none,
+  active,
+  deActive,
+}
 
 enum ObjectType {
   label__watch,

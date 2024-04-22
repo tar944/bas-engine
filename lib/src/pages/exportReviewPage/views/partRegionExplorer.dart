@@ -38,6 +38,7 @@ class _View extends StatelessView<PartRegionViewModel> {
     return Listener(
       child: Stack(children: [
         ...vm.itsObjects.map((item) {
+          // print(item.name);
           return Positioned(
                   top: vm.getY(item.ymin!).toDouble(),
                   left: vm.getX(item.xmin!).toDouble(),

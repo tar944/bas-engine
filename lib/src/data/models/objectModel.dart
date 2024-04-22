@@ -1,5 +1,6 @@
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
+import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:objectbox/objectbox.dart';
 
@@ -13,24 +14,19 @@ class ObjectModel {
   double top;
   double bottom;
   String color = "blue";
+  String exportState = ExportState.none.name;
+  String exportName = "";
   String actionType = "";
   bool isNavTool = false;
   bool isMainObject = false;
-  bool needToCompare=false;
+  bool needToCompare = false;
   String typedText = "";
   int actX = -1, actY = -1;
   final srcObject = ToOne<ObjectModel>();
   final image = ToOne<ImageModel>();
   final label = ToOne<LabelModel>();
 
-  ObjectModel(
-      this.id,
-      this.uuid,
-      this.left,
-      this.right,
-      this.top,
-      this.bottom);
-
+  ObjectModel(this.id, this.uuid, this.left, this.right, this.top, this.bottom);
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -47,34 +43,37 @@ class ObjectModel {
     data['actX'] = actX;
     data['actY'] = actY;
     data['typedText'] = typedText;
-    if(srcObject.target!=null){
-      data['srcObjectId']=srcObject.target!.uuid;
+    if (srcObject.target != null) {
+      data['srcObjectId'] = srcObject.target!.uuid;
     }
-    if(image.target!=null){
-      data['image']=image.target!.toJson();
+    if (image.target != null) {
+      data['image'] = image.target!.toJson();
     }
-    if(label.target!=null){
-      data['labelId']=label.target!.uuid;
+    if (label.target != null) {
+      data['labelId'] = label.target!.uuid;
     }
     return data;
   }
 
-
-  double curLeft(ImageModel img,BuildContext context){
+  double curLeft(ImageModel img, BuildContext context) {
     if (img.width > MediaQuery.of(context).size.width) {
-      return ((left * MediaQuery.of(context).size.width) ~/ img.width).toDouble();
+      return ((left * MediaQuery.of(context).size.width) ~/ img.width)
+          .toDouble();
     } else {
       return left;
     }
   }
-  double curRight(ImageModel img,BuildContext context){
+
+  double curRight(ImageModel img, BuildContext context) {
     if (img.width > MediaQuery.of(context).size.width) {
-      return ((right * MediaQuery.of(context).size.width) ~/ img.width).toDouble();
+      return ((right * MediaQuery.of(context).size.width) ~/ img.width)
+          .toDouble();
     } else {
       return right;
     }
   }
-  double curTop(ImageModel img,BuildContext context,double offsetY){
+
+  double curTop(ImageModel img, BuildContext context, double offsetY) {
     final curHeight = MediaQuery.of(context).size.height - offsetY;
     if (img.height > curHeight) {
       return ((top * curHeight) ~/ img.height).toDouble();
@@ -82,7 +81,8 @@ class ObjectModel {
       return top;
     }
   }
-  double curBottom(ImageModel img,BuildContext context,double offsetY){
+
+  double curBottom(ImageModel img, BuildContext context, double offsetY) {
     final curHeight = MediaQuery.of(context).size.height - offsetY;
     if (img.height > curHeight) {
       return ((bottom * curHeight) ~/ img.height).toDouble();

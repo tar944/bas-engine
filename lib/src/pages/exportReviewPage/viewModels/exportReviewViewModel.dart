@@ -8,14 +8,12 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pmvvm/pmvvm.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:image/image.dart' as i;
 
 class ExportReviewViewModel extends ViewModel {
 
   final confirmController = FlyoutController();
   final moreController = FlyoutController();
   List<PascalVOCModel>mainStates=[];
-  List<ImageGroupModel>mainGroups=[];
   final String prjUUID;
   int indexImage = 0;
   int imgW=0, imgH=0;
@@ -35,17 +33,21 @@ class ExportReviewViewModel extends ViewModel {
         }
         await windowManager.setPosition(Offset.zero);
       }
-      await windowManager.setSkipTaskbar(true);
+      await windowManager.setSkipTaskbar(false);
       await windowManager.setFullScreen(true);
       await Future.delayed(const Duration(milliseconds: 100));
       await _windowShow();
     });
+  }
+
+
+  @override
+  void onMount() async{
     var curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
 
     for(var part in curProject!.allParts){
       for (var grp in part.allGroups){
-        if(grp.label.target!=null){
-          mainGroups.add(grp);
+        if(grp.label.target!=null&&grp.mainState.target!=null){
           for(var obj in grp.allStates){
             var curObject = obj.srcObject.target!=null?obj.srcObject.target!:obj;
             mainStates.add(
@@ -56,16 +58,22 @@ class ExportReviewViewModel extends ViewModel {
                     curObject.image.target!.width.toInt(),
                     curObject.image.target!.height.toInt()));
             print("======================================================");
-            print("${grp.label.target!.levelName}&&${grp.label.target!.name}${grp.name!=""?"&&${grp.name}":""}");
+            var name = "${grp.label.target!.levelName}&&${grp.label.target!.name}${grp.name!=""?"&&${grp.name}":""}";
+            if(obj.isMainObject){
+              mainStates[mainStates.length-1].objects.add(PascalObjectModel(obj.uuid,obj.exportState,name, obj.left.toInt(), obj.right.toInt(), obj.top.toInt(), obj.bottom.toInt()));
+            }
             mainStates[mainStates.length-1].objects.addAll(
                 findSubObjects(
                     obj,
                     grp.allGroups,
-                    "${grp.label.target!.levelName}&&${grp.label.target!.name}${grp.name!=""?"&&${grp.name}":""}",0,0));
+                    name,
+                    grp.mainState.target!.left,
+                    grp.mainState.target!.top));
           }
         }
       }
     }
+    print(mainStates.length);
   }
 
   List<PascalObjectModel> findSubObjects(ObjectModel mainObject,List<ImageGroupModel>allGroups,String preName,double startX,double startY){
@@ -73,19 +81,21 @@ class ExportReviewViewModel extends ViewModel {
     for(var grp in allGroups){
       if(grp.label.target!=null){
         for(var state in grp.allStates){
+          var name ="$preName&&${grp.label.target!.name}${grp.name!=""?"&&${grp.name}":""}";
           if(state.srcObject.target!.uuid==mainObject.uuid){
-            var name ="$preName&&${grp.label.target!.name}${grp.name!=""?"&&${grp.name}":""}";
             allObjects.add(PascalObjectModel(
+              state.uuid,
+              state.exportState,
               name,
               (state.left+startX).toInt(),
               (state.right+startX).toInt(),
               (state.top+startY).toInt(),
               (state.bottom+startY).toInt()
             ));
-            print(name);
-            if(grp.label.target!.levelName!="objects"){
-              allObjects.addAll(findSubObjects(state, grp.allGroups, name, state.left+startX, state.top+startY));
-            }
+          }
+
+          if(grp.label.target!.levelName!="objects"&&grp.mainState.target!=null){
+            allObjects.addAll(findSubObjects(state, grp.allGroups, name, grp.mainState.target!.left+startX, grp.mainState.target!.top+startY));
           }
         }
       }
@@ -122,10 +132,15 @@ class ExportReviewViewModel extends ViewModel {
   nextImage() async{
     indexImage = ++indexImage;
     notifyListeners();
+    print("------------------------------------");
+    print(mainStates[indexImage].filename);
   }
 
   perviousImage() async{
     indexImage = --indexImage;
+    notifyListeners();
+    print("------------------------------------");
+    print(mainStates[indexImage].filename);
   }
 
   onObjectActionHandler(String action) async {

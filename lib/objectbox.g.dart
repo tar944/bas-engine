@@ -224,7 +224,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(15, 8892823931225835339),
       name: 'ObjectModel',
-      lastPropertyId: const IdUid(33, 323244748199649629),
+      lastPropertyId: const IdUid(36, 3308857130380351767),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -317,6 +317,16 @@ final _entities = <ModelEntity>[
             id: const IdUid(28, 610347001844851126),
             name: 'needToCompare',
             type: 1,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(35, 2237997811502418755),
+            name: 'exportName',
+            type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(36, 3308857130380351767),
+            name: 'exportState',
+            type: 9,
             flags: 0)
       ],
       relations: <ModelRelation>[],
@@ -634,7 +644,8 @@ ModelDefinition getObjectBoxModel() {
         5118056379320144992,
         8918238754733140373,
         323244748199649629,
-        623411051368177646
+        623411051368177646,
+        7094693992893619014
       ],
       retiredRelationUids: const [
         7096364116743183016,
@@ -897,7 +908,9 @@ ModelDefinition getObjectBoxModel() {
           final colorOffset = fbb.writeString(object.color);
           final actionTypeOffset = fbb.writeString(object.actionType);
           final typedTextOffset = fbb.writeString(object.typedText);
-          fbb.startTable(34);
+          final exportNameOffset = fbb.writeString(object.exportName);
+          final exportStateOffset = fbb.writeString(object.exportState);
+          fbb.startTable(37);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, uuidOffset);
           fbb.addFloat64(2, object.left);
@@ -915,6 +928,8 @@ ModelDefinition getObjectBoxModel() {
           fbb.addInt64(25, object.srcObject.targetId);
           fbb.addBool(26, object.isMainObject);
           fbb.addBool(27, object.needToCompare);
+          fbb.addOffset(34, exportNameOffset);
+          fbb.addOffset(35, exportStateOffset);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -948,7 +963,11 @@ ModelDefinition getObjectBoxModel() {
             ..isMainObject =
                 const fb.BoolReader().vTableGet(buffer, rootOffset, 56, false)
             ..needToCompare =
-                const fb.BoolReader().vTableGet(buffer, rootOffset, 58, false);
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 58, false)
+            ..exportName = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 72, '')
+            ..exportState = const fb.StringReader(asciiOptimization: true)
+                .vTableGet(buffer, rootOffset, 74, '');
           object.image.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 36, 0);
           object.image.attach(store);
@@ -1298,6 +1317,14 @@ class ObjectModel_ {
   /// see [ObjectModel.needToCompare]
   static final needToCompare =
       QueryBooleanProperty<ObjectModel>(_entities[4].properties[16]);
+
+  /// see [ObjectModel.exportName]
+  static final exportName =
+      QueryStringProperty<ObjectModel>(_entities[4].properties[17]);
+
+  /// see [ObjectModel.exportState]
+  static final exportState =
+      QueryStringProperty<ObjectModel>(_entities[4].properties[18]);
 }
 
 /// [ImageGroupModel] entity fields to define ObjectBox queries.
