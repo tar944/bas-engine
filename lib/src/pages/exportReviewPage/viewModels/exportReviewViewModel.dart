@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
@@ -62,7 +63,19 @@ class ExportReviewViewModel extends ViewModel {
             var name = "${grp.label.target!.levelName}&&${grp.label.target!.name}${grp.name!=""?"&&${grp.name}":""}";
             print("=====> $name");
             if(obj.isMainObject){
-              mainStates[mainStates.length-1].objects.add(PascalObjectModel(obj.uuid,obj.exportState,obj.exportName,name, obj.left.toInt(), obj.right.toInt(), obj.top.toInt(), obj.bottom.toInt()));
+              mainStates[mainStates.length-1].objects.add(
+                  PascalObjectModel(
+                      obj.uuid,
+                      grp.uuid,
+                      grp.label.target!.levelName,
+                      obj.exportState,
+                      obj.exportName,
+                      name,
+                      obj.left.toInt(),
+                      obj.right.toInt(),
+                      obj.top.toInt(),
+                      obj.bottom.toInt()
+                  ));
             }
             mainStates[mainStates.length-1].objects.addAll(
                 findSubObjects(
@@ -78,11 +91,11 @@ class ExportReviewViewModel extends ViewModel {
     print(mainStates.length);
   }
 
-  List<PascalObjectModel> findSubObjects(ObjectModel mainObject,List<ImageGroupModel>allGroups,String preName,double startX,double startY){
+  List<PascalObjectModel> findSubObjects(ObjectModel mainObject,List<ImageGroupModel>allGroups,String preName,double startX,double startY)async{
     List<PascalObjectModel> allObjects=[];
     for(var grp in allGroups){
       if(grp.label.target!=null){
-        var name ="$preName&&${grp.label.target!.name}${grp.name!=""?"&&${grp.name}":""}";
+        var name ="$preName**${grp.label.target!.name}${grp.name!=""?"**${grp.name}":""}";
         for(var state in grp.allStates){
           if(state.srcObject.target!.uuid==mainObject.uuid||state.srcObject.target!.srcObject.target!.uuid==mainObject.uuid){
             var left = state.srcObject.target!.uuid==mainObject.uuid?state.left:state.srcObject.target!.left;
@@ -91,6 +104,8 @@ class ExportReviewViewModel extends ViewModel {
             var bottom = state.srcObject.target!.uuid==mainObject.uuid?state.bottom:state.srcObject.target!.bottom;
             allObjects.add(PascalObjectModel(
               state.uuid,
+              grp.uuid,
+              grp.label.target!.levelName,
               state.exportState,
               state.exportName,
               name,
@@ -99,6 +114,10 @@ class ExportReviewViewModel extends ViewModel {
               (top+startY).toInt(),
               (bottom+startY).toInt()
             ));
+            if(state.exportName==""){
+              state.exportName=name;
+              await ObjectDAO().update(state);
+            }
             if(grp.label.target!.levelName!="objects"&&grp.mainState.target!=null){
               allObjects.addAll(findSubObjects(state, grp.allGroups, name,left+startX, top+startY));
             }
