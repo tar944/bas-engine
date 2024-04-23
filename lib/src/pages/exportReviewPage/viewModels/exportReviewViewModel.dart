@@ -18,6 +18,7 @@ class ExportReviewViewModel extends ViewModel {
   int indexImage = 0;
   int imgW=0, imgH=0;
   Size imgSize = const Size(0, 0);
+  String guidePos="bottomLeft";
 
   ExportReviewViewModel(this.prjUUID);
 
@@ -61,7 +62,7 @@ class ExportReviewViewModel extends ViewModel {
             var name = "${grp.label.target!.levelName}&&${grp.label.target!.name}${grp.name!=""?"&&${grp.name}":""}";
             print("=====> $name");
             if(obj.isMainObject){
-              mainStates[mainStates.length-1].objects.add(PascalObjectModel(obj.uuid,obj.exportState,name, obj.left.toInt(), obj.right.toInt(), obj.top.toInt(), obj.bottom.toInt()));
+              mainStates[mainStates.length-1].objects.add(PascalObjectModel(obj.uuid,obj.exportState,obj.exportName,name, obj.left.toInt(), obj.right.toInt(), obj.top.toInt(), obj.bottom.toInt()));
             }
             mainStates[mainStates.length-1].objects.addAll(
                 findSubObjects(
@@ -91,6 +92,7 @@ class ExportReviewViewModel extends ViewModel {
             allObjects.add(PascalObjectModel(
               state.uuid,
               state.exportState,
+              state.exportName,
               name,
               (left+startX).toInt(),
               (right+startX).toInt(),
@@ -151,5 +153,34 @@ class ExportReviewViewModel extends ViewModel {
     var act = action.split('&&');
     indexImage=mainStates.indexWhere((element) => element.objUUID==act[1]);
     notifyListeners();
+  }
+
+  onMouseEnter(){
+    if(guidePos=="bottomLeft"){
+      guidePos="topLeft";
+    }else if(guidePos=="topLeft"){
+      guidePos="topRight";
+    }else if(guidePos=="topRight"){
+      guidePos="bottomRight";
+    }else{
+      guidePos="bottomLeft";
+    }
+    notifyListeners();
+  }
+
+  double getGuidePos(int dir){
+    //[L,T,R,B]
+    switch (guidePos){
+      case "bottomRight":
+        return [-1.0,-1.0,20.0,20.0][dir];
+      case "bottomLeft":
+        return [20.0,-1.0,-1.0,20.0][dir];
+      case "topRight":
+        return [-1.0,20.0,20.0,-1.0][dir];
+      case "topLeft":
+        return [20.0,20.0,-1.0,-1.0][dir];
+      default:
+        return [20.0,-1.0,-1.0,20.0][dir];
+    }
   }
 }

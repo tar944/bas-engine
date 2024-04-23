@@ -2,6 +2,10 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String actionGuide="Action guides:";
+  static const String leftClick="Left click for set name";
+  static const String middleClick="Middle click for set default values";
+  static const String rightClick="Right click for change export state";
   static const String exportReview="Export review";
   static const String setAsNavObject="Are you sure to want set this object as a navigation objects?";
   static const String removeFromNavObject="Are you sure to want remove this object from navigation objects?";

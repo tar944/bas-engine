@@ -48,5 +48,6 @@ class PartRegionViewModel extends ViewModel {
 
   onObjectActionHandler(String action)async{
     var act = action.split("&&");
+    print(action);
   }
 }
