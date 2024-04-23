@@ -17,7 +17,21 @@ class RegionViewModel extends ViewModel {
   onHoverHandler(bool isHover){
     if(curObject.state!=ExportState.deActive.name) {
       this.isHover = isHover;
+      onObjectActionCaller("hover&&${curObject.objUUID}");
       notifyListeners();
     }
+  }
+
+  onRightClickHandler(){
+    if(curObject.state==ExportState.none.name){
+      curObject.state=ExportState.active.name;
+    }else if(curObject.state==ExportState.active.name){
+      curObject.state=ExportState.deActive.name;
+      isHover=false;
+    }else{
+      curObject.state=ExportState.none.name;
+    }
+    onObjectActionCaller("rightClick&&${curObject.objUUID}&&${curObject.state}");
+    notifyListeners();
   }
 }

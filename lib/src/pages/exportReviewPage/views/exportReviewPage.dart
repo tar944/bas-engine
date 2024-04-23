@@ -6,6 +6,7 @@ import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/viewMode
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/flyScreensList.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/partRegionExplorer.dart';
 import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
+import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pmvvm/pmvvm.dart';
@@ -61,7 +62,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
                         key: GlobalKey(),
                         imgPath:vm.mainStates[vm.indexImage].path! ,
                         itsObjects: vm.mainStates[vm.indexImage].objects,
-                        onObjectActionCaller: vm.onObjectActionHandler,
+                        onObjectActionCaller: vm.onRegionActionHandler,
                       ):
                       Container(),
                     ),
@@ -165,7 +166,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
                                         width:Dimens.dotSize,
                                         height: Dimens.dotSize,
                                         decoration: BoxDecoration(
-                                          color: Colors.orange.dark,
+                                          color: Colors.teal.dark,
                                           borderRadius: const BorderRadius.all(Radius.circular(Dimens.dotSize/2))
                                         )),
                                       const SizedBox(width: 10,),
@@ -179,7 +180,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
                                         width:Dimens.dotSize,
                                         height: Dimens.dotSize,
                                         decoration: BoxDecoration(
-                                          color: Colors.orange.dark,
+                                          color: Colors.teal.dark,
                                           borderRadius: const BorderRadius.all(Radius.circular(Dimens.dotSize/2))
                                         )),
                                       const SizedBox(width: 10,),
@@ -193,7 +194,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
                                         width:Dimens.dotSize,
                                         height: Dimens.dotSize,
                                         decoration: BoxDecoration(
-                                          color: Colors.orange.dark,
+                                          color: Colors.teal.dark,
                                           borderRadius: const BorderRadius.all(Radius.circular(Dimens.dotSize/2))
                                         )),
                                       const SizedBox(width: 10,),

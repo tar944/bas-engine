@@ -1,9 +1,11 @@
+import 'package:bas_dataset_generator_engine/main.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalVOCModel.dart';
+import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
@@ -78,7 +80,7 @@ class ExportReviewViewModel extends ViewModel {
                   ));
             }
             mainStates[mainStates.length-1].objects.addAll(
-                findSubObjects(
+                await findSubObjects(
                     obj,
                     grp.allGroups,
                     name,
@@ -91,7 +93,7 @@ class ExportReviewViewModel extends ViewModel {
     print(mainStates.length);
   }
 
-  List<PascalObjectModel> findSubObjects(ObjectModel mainObject,List<ImageGroupModel>allGroups,String preName,double startX,double startY)async{
+  Future<List<PascalObjectModel>> findSubObjects(ObjectModel mainObject,List<ImageGroupModel>allGroups,String preName,double startX,double startY)async{
     List<PascalObjectModel> allObjects=[];
     for(var grp in allGroups){
       if(grp.label.target!=null){
@@ -119,7 +121,7 @@ class ExportReviewViewModel extends ViewModel {
               await ObjectDAO().update(state);
             }
             if(grp.label.target!.levelName!="objects"&&grp.mainState.target!=null){
-              allObjects.addAll(findSubObjects(state, grp.allGroups, name,left+startX, top+startY));
+              allObjects.addAll(await findSubObjects(state, grp.allGroups, name,left+startX, top+startY));
             }
           }
         }
@@ -157,21 +159,30 @@ class ExportReviewViewModel extends ViewModel {
   nextImage() async{
     indexImage = ++indexImage;
     notifyListeners();
-    print("------------------------------------");
-    print(mainStates[indexImage].filename);
   }
 
   perviousImage() async{
     indexImage = --indexImage;
     notifyListeners();
-    print("------------------------------------");
-    print(mainStates[indexImage].filename);
   }
 
   onObjectActionHandler(String action) async {
     var act = action.split('&&');
     indexImage=mainStates.indexWhere((element) => element.objUUID==act[1]);
     notifyListeners();
+  }
+
+  onRegionActionHandler(String action)async{
+    var act = action.split("&&");
+    switch(act[0]){
+      case "click":
+        break;
+      case "rightClick":
+        await ObjectDAO().updateExportState(act[1], act[2]);
+        break;
+      case "middleClick":
+        break;
+    }
   }
 
   onMouseEnter(){

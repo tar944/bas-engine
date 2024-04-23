@@ -102,8 +102,10 @@ class _View extends StatelessView<ObjectPropertiesViewModel> {
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        IconButton(icon: Icon(FluentIcons.delete,color: Colors.red.dark,), onPressed: ()=>vm.onActionCaller("delete&&${vm.object.objUUID}")),
+                        const Spacer(),
                         CButton(
                             text: Strings.confirm,
                             color: Colors.blue.normal,

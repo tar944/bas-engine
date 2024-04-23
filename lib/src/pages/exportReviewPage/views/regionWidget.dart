@@ -37,9 +37,9 @@ class _View extends StatelessView<RegionViewModel> {
      onEnter:(e)=> vm.onHoverHandler(true),
      onExit: (e)=> vm.onHoverHandler(false),
      child: GestureDetector(
-       onTapUp: (e)=>vm.onObjectActionCaller("click"),
-       onSecondaryTapUp: (e)=>vm.onObjectActionCaller("rightClick"),
-       onTertiaryTapUp: (e)=>vm.onObjectActionCaller("middleClick"),
+       onTapUp: (e)=>vm.onObjectActionCaller("click&&${vm.curObject.objUUID}"),
+       onSecondaryTapUp: (e)=>vm.onRightClickHandler(),
+       onTertiaryTapUp: (e)=>vm.onObjectActionCaller("middleClick&&${vm.curObject.objUUID}"),
        child: SizedBox(
           width: vm.width,
           height: vm.height,
@@ -50,7 +50,7 @@ class _View extends StatelessView<RegionViewModel> {
                     0.0,
                   vm.height,
                 ),
-                color: vm.curObject.state==ExportState.none.name?Colors.orange.dark:vm.curObject.state==ExportState.deActive.name?Colors.grey[190].withOpacity(.7):Colors.green.dark,
+                color: vm.curObject.state==ExportState.none.name?Colors.orange.dark:vm.curObject.state==ExportState.deActive.name?Colors.grey[150]:Colors.green.dark,
                 isActive: vm.isHover),
           ),
         ),

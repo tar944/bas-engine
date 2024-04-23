@@ -44,9 +44,4 @@ class PartRegionViewModel extends ViewModel {
       return x;
     }
   }
-
-  onObjectActionHandler(String action)async{
-    var act = action.split("&&");
-    print(action);
-  }
 }

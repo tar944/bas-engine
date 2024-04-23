@@ -32,7 +32,11 @@ class ObjectPropertiesViewModel extends ViewModel {
   }
 
   void onBtnConfirmListener() {
-
+    var finalName="";
+    for(var str in exportParts){
+      finalName +="**$str";
+    }
+    onActionCaller("confirm&&$finalName");
     onCloseClicked();
   }
 }

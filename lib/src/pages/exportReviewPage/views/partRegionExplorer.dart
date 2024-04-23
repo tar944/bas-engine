@@ -47,7 +47,7 @@ class _View extends StatelessView<PartRegionViewModel> {
                     width: (vm.getX(item.xmax!)-vm.getX(item.xmin!)).toDouble(),
                     height: (vm.getY(item.ymax!)-vm.getY(item.ymin!)).toDouble(),
                     curObject: item,
-                    onObjectActionCaller: (e) => vm.onObjectActionHandler(e),
+                    onObjectActionCaller: (e) => vm.onObjectActionCaller(e),
                   ),
                 );
         }).toList(),
