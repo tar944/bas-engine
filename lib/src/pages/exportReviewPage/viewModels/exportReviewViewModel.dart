@@ -57,8 +57,9 @@ class ExportReviewViewModel extends ViewModel {
                     curObject.image.target!.path,
                     curObject.image.target!.width.toInt(),
                     curObject.image.target!.height.toInt()));
-            print("======================================================");
+            print("=====================================================================");
             var name = "${grp.label.target!.levelName}&&${grp.label.target!.name}${grp.name!=""?"&&${grp.name}":""}";
+            print("=====> $name");
             if(obj.isMainObject){
               mainStates[mainStates.length-1].objects.add(PascalObjectModel(obj.uuid,obj.exportState,name, obj.left.toInt(), obj.right.toInt(), obj.top.toInt(), obj.bottom.toInt()));
             }
@@ -80,22 +81,25 @@ class ExportReviewViewModel extends ViewModel {
     List<PascalObjectModel> allObjects=[];
     for(var grp in allGroups){
       if(grp.label.target!=null){
+        var name ="$preName&&${grp.label.target!.name}${grp.name!=""?"&&${grp.name}":""}";
         for(var state in grp.allStates){
-          var name ="$preName&&${grp.label.target!.name}${grp.name!=""?"&&${grp.name}":""}";
-          if(state.srcObject.target!.uuid==mainObject.uuid){
+          if(state.srcObject.target!.uuid==mainObject.uuid||state.srcObject.target!.srcObject.target!.uuid==mainObject.uuid){
+            var left = state.srcObject.target!.uuid==mainObject.uuid?state.left:state.srcObject.target!.left;
+            var top = state.srcObject.target!.uuid==mainObject.uuid?state.top:state.srcObject.target!.top;
+            var right = state.srcObject.target!.uuid==mainObject.uuid?state.right:state.srcObject.target!.right;
+            var bottom = state.srcObject.target!.uuid==mainObject.uuid?state.bottom:state.srcObject.target!.bottom;
             allObjects.add(PascalObjectModel(
               state.uuid,
               state.exportState,
               name,
-              (state.left+startX).toInt(),
-              (state.right+startX).toInt(),
-              (state.top+startY).toInt(),
-              (state.bottom+startY).toInt()
+              (left+startX).toInt(),
+              (right+startX).toInt(),
+              (top+startY).toInt(),
+              (bottom+startY).toInt()
             ));
-          }
-
-          if(grp.label.target!.levelName!="objects"&&grp.mainState.target!=null){
-            allObjects.addAll(findSubObjects(state, grp.allGroups, name, grp.mainState.target!.left+startX, grp.mainState.target!.top+startY));
+            if(grp.label.target!.levelName!="objects"&&grp.mainState.target!=null){
+              allObjects.addAll(findSubObjects(state, grp.allGroups, name,left+startX, top+startY));
+            }
           }
         }
       }
