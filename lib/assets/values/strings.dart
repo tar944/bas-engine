@@ -2,6 +2,9 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String objectWarn="You can not change name an object";
+  static const String errorDelete="You only can delete an object item";
+  static const String objectExpProperties="Object properties";
   static const String actionGuide="Action guides:";
   static const String leftClick="Left click for set name";
   static const String middleClick="Middle click for set default values";

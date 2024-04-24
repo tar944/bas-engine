@@ -41,7 +41,7 @@ class _View extends StatelessView<ObjectPropertiesViewModel> {
       alignment: Alignment.center,
       children: [
         SizedBox(
-            width: Dimens.dialogSmallWidth,
+            width: Dimens.dialogNormalWidth,
             height: Dimens.dialogSmallHeight,
             child: Container(
               decoration: BoxDecoration(
@@ -55,41 +55,46 @@ class _View extends StatelessView<ObjectPropertiesViewModel> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   DialogTitleBar(
-                    title: Strings.dlgEditGroup,
+                    title: Strings.objectExpProperties,
                     onActionListener: vm.onCloseClicked,
                   ),
                   const SizedBox(
                     height: 10,
                   ),
-                  MultiSelectContainer(
-                      singleSelectedItem: true,
-                      wrapSettings: const WrapSettings(
-                          spacing: 5.0
-                      ),
-                      itemsPadding: const EdgeInsets.all(2.0),
-                      textStyles: MultiSelectTextStyles(
-                          textStyle: TextSystem.textXs(Colors.white),
-                          selectedTextStyle: TextSystem.textXs(Colors.white)
-                      ),
-                      itemsDecoration: MultiSelectDecorations(
-                          decoration:BoxDecoration(
-                              color: Colors.grey[170],
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: MultiSelectContainer(
+                        key: GlobalKey(),
+                        singleSelectedItem: true,
+                        wrapSettings: const WrapSettings(
+                            spacing: 5.0
+                        ),
+                        itemsPadding: const EdgeInsets.all(2.0),
+                        textStyles: MultiSelectTextStyles(
+                            textStyle: TextSystem.textXs(Colors.white),
+                            selectedTextStyle: TextSystem.textXs(Colors.white)
+                        ),
+                        itemsDecoration: MultiSelectDecorations(
+                            decoration:BoxDecoration(
+                                color: Colors.grey[170],
+                                borderRadius: const BorderRadius.all(Radius.circular(15)),
+                                border: Border.all(color: Colors.grey[150])
+                            ) ,
+                            selectedDecoration: BoxDecoration(
+                              color: Colors.teal.dark,
                               borderRadius: const BorderRadius.all(Radius.circular(15)),
-                              border: Border.all(color: Colors.grey[150])
-                          ) ,
-                          selectedDecoration: BoxDecoration(
-                            color: Colors.teal.dark,
-                            borderRadius: const BorderRadius.all(Radius.circular(15)),
-                            border: Border.all(color: Colors.teal),
-                          )
-                      ),
-                      items: vm.nameParts.map((e)=>MultiSelectCard(
-                        selected: vm.exportParts.contains(e),
-                        value: e,
-                        label: e,
-                      )
-                      ).toList(),
-                      onChange: vm.onNamePartSelected),
+                              border: Border.all(color: Colors.teal),
+                            )
+                        ),
+                        items: vm.nameParts.map((e)=>MultiSelectCard(
+                          selected: vm.exportParts.contains(e),
+                          value: e,
+                          label: e,
+                        )
+                        ).toList(),
+                        onChange: vm.onNamePartSelected),
+                  ),
+                  const Spacer(),
                   Container(
                     height: Dimens.dialogBottomSize,
                     decoration: BoxDecoration(
@@ -104,7 +109,12 @@ class _View extends StatelessView<ObjectPropertiesViewModel> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        IconButton(icon: Icon(FluentIcons.delete,color: Colors.red.dark,), onPressed: ()=>vm.onActionCaller("delete&&${vm.object.objUUID}")),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 8.0),
+                          child: IconButton(
+                              icon: Icon(FluentIcons.delete,color: Colors.red.dark,size: 20,),
+                              onPressed: ()=>vm.onBtnDeleteHandler()),
+                        ),
                         const Spacer(),
                         CButton(
                             text: Strings.confirm,

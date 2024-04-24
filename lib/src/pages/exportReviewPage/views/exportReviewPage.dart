@@ -184,20 +184,6 @@ class _View extends StatelessView<ExportReviewViewModel> {
                                           borderRadius: const BorderRadius.all(Radius.circular(Dimens.dotSize/2))
                                         )),
                                       const SizedBox(width: 10,),
-                                      Text(Strings.middleClick,style: TextSystem.textM(Colors.white),)
-                                    ],),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Row(children: [
-                                      Container(
-                                        width:Dimens.dotSize,
-                                        height: Dimens.dotSize,
-                                        decoration: BoxDecoration(
-                                          color: Colors.teal.dark,
-                                          borderRadius: const BorderRadius.all(Radius.circular(Dimens.dotSize/2))
-                                        )),
-                                      const SizedBox(width: 10,),
                                       Text(Strings.rightClick,style: TextSystem.textM(Colors.white),)
                                     ],),
                                   ),

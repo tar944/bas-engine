@@ -1,8 +1,7 @@
-import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
-import 'package:bas_dataset_generator_engine/src/controllers/regionRecController.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
-import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 
@@ -27,16 +26,29 @@ class ObjectPropertiesViewModel extends ViewModel {
   }
 
   onNamePartSelected(List<String> allSelected, String curName) {
-    exportParts=allSelected;
+    if (exportParts.contains(curName)){
+      exportParts.removeWhere((element) => element==curName);
+    }else{
+      exportParts.add(curName);
+    }
     notifyListeners();
+  }
+
+  onBtnDeleteHandler(){
+    onActionCaller("delete&&${object.objUUID}&&${object.lvlKind}");
+    onCloseClicked();
   }
 
   void onBtnConfirmListener() {
     var finalName="";
-    for(var str in exportParts){
-      finalName +="**$str";
+    for(int i=exportParts.length-1;i>=0;i--){
+      finalName +="${exportParts[i]}**";
     }
-    onActionCaller("confirm&&$finalName");
+    if(object.lvlKind=="objects"){
+      Toast(Strings.objectWarn, false).showWarning(context);
+    }else{
+      onActionCaller("confirm&&${object.objUUID}&&$finalName");
+    }
     onCloseClicked();
   }
 }

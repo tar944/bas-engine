@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/main.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
@@ -5,6 +6,8 @@ import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dar
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalVOCModel.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
+import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/dlgObjProperties.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -61,10 +64,12 @@ class ExportReviewViewModel extends ViewModel {
                     curObject.image.target!.path,
                     curObject.image.target!.width.toInt(),
                     curObject.image.target!.height.toInt()));
-            print("=====================================================================");
-            var name = "${grp.label.target!.levelName}&&${grp.label.target!.name}${grp.name!=""?"&&${grp.name}":""}";
-            print("=====> $name");
+            var name = "${grp.label.target!.levelName}**${grp.label.target!.name}${grp.name!=""?"**${grp.name}":""}";
             if(obj.isMainObject){
+              if(obj.exportName==""){
+                obj.exportName=grp.label.target!.levelName=="objects"?grp.label.target!.name:name;
+                await ObjectDAO().update(obj);
+              }
               mainStates[mainStates.length-1].objects.add(
                   PascalObjectModel(
                       obj.uuid,
@@ -90,7 +95,6 @@ class ExportReviewViewModel extends ViewModel {
         }
       }
     }
-    print(mainStates.length);
   }
 
   Future<List<PascalObjectModel>> findSubObjects(ObjectModel mainObject,List<ImageGroupModel>allGroups,String preName,double startX,double startY)async{
@@ -104,6 +108,10 @@ class ExportReviewViewModel extends ViewModel {
             var top = state.srcObject.target!.uuid==mainObject.uuid?state.top:state.srcObject.target!.top;
             var right = state.srcObject.target!.uuid==mainObject.uuid?state.right:state.srcObject.target!.right;
             var bottom = state.srcObject.target!.uuid==mainObject.uuid?state.bottom:state.srcObject.target!.bottom;
+            if(state.exportName==""){
+              state.exportName=grp.label.target!.levelName=="objects"?grp.label.target!.name:name;
+              await ObjectDAO().update(state);
+            }
             allObjects.add(PascalObjectModel(
               state.uuid,
               grp.uuid,
@@ -116,10 +124,6 @@ class ExportReviewViewModel extends ViewModel {
               (top+startY).toInt(),
               (bottom+startY).toInt()
             ));
-            if(state.exportName==""){
-              state.exportName=name;
-              await ObjectDAO().update(state);
-            }
             if(grp.label.target!.levelName!="objects"&&grp.mainState.target!=null){
               allObjects.addAll(await findSubObjects(state, grp.allGroups, name,left+startX, top+startY));
             }
@@ -176,12 +180,38 @@ class ExportReviewViewModel extends ViewModel {
     var act = action.split("&&");
     switch(act[0]){
       case "click":
+        showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) =>
+              DlgObjProperties(
+                  object: mainStates[indexImage].objects.firstWhere((element) => element.objUUID==act[1]),
+                  onActionCaller: onObjPropertiesHandler),
+        );
         break;
       case "rightClick":
         await ObjectDAO().updateExportState(act[1], act[2]);
         break;
-      case "middleClick":
-        break;
+    }
+  }
+
+  onObjPropertiesHandler(String action)async{
+    var act = action.split("&&");
+    if(act[0]=="delete"){
+      if(act[2]!="objects"){
+        Toast(Strings.errorDelete, false).showError(context);
+        return;
+      }
+      var obj= await ObjectDAO().getDetailsByUUID(act[1]);
+      await ObjectDAO().deleteObject(obj!);
+      mainStates[indexImage].objects.removeWhere((element) => element.objUUID==act[1]);
+      notifyListeners();
+    }else if(act[0]=="confirm"){
+      var obj= await ObjectDAO().getDetailsByUUID(act[1]);
+      obj!.exportName=act[2];
+      await ObjectDAO().update(obj);
+      mainStates[indexImage].objects[mainStates[indexImage].objects.indexWhere((element) => element.objUUID==act[1])].exportName=act[2];
+      notifyListeners();
     }
   }
 
