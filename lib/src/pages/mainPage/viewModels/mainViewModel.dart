@@ -171,14 +171,6 @@ class MainPageViewModel extends ViewModel with WindowListener {
 
   onNavigationChanged(HeaderTabs selTab) async{
     if(selTab==HeaderTabs.export){
-      // showDialog(
-      //     context: context,
-      //     barrierDismissible: true,
-      //     builder: (context) => DlgExport(
-      //                             prjUUID:curProject!.uuid,
-      //                             prjName: curProject!.title!,
-      //                             onExportCaller:exportHandler,));
-      // await FormatManager().generateFile(curProject!.uuid, false);
       context.goNamed('exportReview',params: {'prjUUID':curProject!.uuid});
     }else if (selTab == HeaderTabs.addProject) {
       projectController.call();

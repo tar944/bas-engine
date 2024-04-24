@@ -11,17 +11,17 @@ class TabSaveInServer extends HookWidget {
         Key? key,
         required this.domainController,
         required this.tokenController,
-        required this.uploadDomain,
-        required this.authToken
+        required this.needToken,
+        required this.onAuthCaller,
       }) : super(key: key);
 
-  String uploadDomain,authToken;
-  TextEditingController domainController;
-  TextEditingController tokenController;
+  final bool needToken;
+  final TextEditingController domainController;
+  final TextEditingController tokenController;
+  final ValueSetter<String> onAuthCaller;
 
   @override
   Widget build(BuildContext context) {
-    final isChecked=useState(false);
     return Container(
       decoration: BoxDecoration(
           border: Border.all(color: Colors.grey[170],width: 2.0),
@@ -33,67 +33,85 @@ class TabSaveInServer extends HookWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(
-            height: 10,
-          ),
-          const SizedBox(height: 10,),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Text(Strings.uploadDomain,style: TextSystem.textS(Colors.white),),
-              const SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                width: 500,
-                height: 35,
-                child: TextBox(
-                  controller: domainController,
-                  placeholder: Strings.domainHint,
-                  expands: false,
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0, right: 15, bottom: 10,top: 15),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("${Strings.uploadDomain}:",style: TextSystem.textS(Colors.white),),
+                const SizedBox(
+                  width: 20,
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 15,),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Checkbox(checked: isChecked.value, onChanged: (e)=>isChecked.value=e!),
-              Text("${Strings.dirPath}:",style: TextSystem.textS(isChecked.value?Colors.white:Colors.white.withOpacity(0.5)),),
-              const SizedBox(
-                height: 10,
-              ),
-              Container(
-                width: 500,
-                height: 35,
-                decoration: BoxDecoration(
-                    color: Colors.grey[190],
-                    border: Border.all(color:Colors.grey[170]),
-                    borderRadius: const BorderRadius.all(Radius.circular(5.0))
+                Container(
+                  width: Dimens.dialogBigWidth-150,
+                  height: 35,
+                  decoration: BoxDecoration(
+                      color: Colors.grey[190],
+                      border: Border.all(color:Colors.grey[170]),
+                      borderRadius: const BorderRadius.all(Radius.circular(5.0))
+                  ),
+                  child: Expanded(
+                    child: TextBox(
+                      controller: domainController,
+                      placeholder: Strings.domainHint,
+                      expands: false,
+                    ),
+                  ),
                 ),
-                child: TextBox(
-                  controller: domainController,
-                  placeholder: Strings.dirPathHint,
-                  expands: false,
-                  enabled: isChecked.value,
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
-          const SizedBox(height: 15,),
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Icon(FluentIcons.warning,color: Colors.orange.dark,size: 18,),
-              const SizedBox(
-                height: 10,
+          Padding(
+            padding: const EdgeInsets.only(left: 15.0, right: 15, bottom: 10,top: 8),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(Strings.needBackUp,style: TextSystem.textS(Colors.white),),
+                const SizedBox(
+                  width: 8,
+                ),
+                ToggleSwitch(
+                  checked: needToken,
+                  content: Text(needToken ? 'Auth ON' : 'Auth OFF'),
+                  onChanged: (bool value) => onAuthCaller(value?"authOn":"authOff"),
+                )
+              ],
+            ),
+          ),
+          Opacity(
+            opacity: needToken?1.0:0.5,
+            child: Padding(
+              padding: const EdgeInsets.only(left: 15.0, right: 15, bottom: 10,top: 8),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text("${Strings.authToken}:",style: TextSystem.textS(Colors.white),),
+                  const SizedBox(
+                    width: 22,
+                  ),
+                  Container(
+                    width: Dimens.dialogBigWidth-150,
+                    height: 35,
+                    decoration: BoxDecoration(
+                        color: Colors.grey[190],
+                        border: Border.all(color:Colors.grey[170]),
+                        borderRadius: const BorderRadius.all(Radius.circular(5.0))
+                    ),
+                    child: Expanded(
+                      child: TextBox(
+                        controller: tokenController,
+                        placeholder: Strings.authTokenHint,
+                        expands: false,
+                        enabled: needToken,
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              Text(Strings.uploadWarning,style: TextSystem.textS(Colors.white.withOpacity(0.5)),)
-            ],
+            ),
           ),
         ],
       ),

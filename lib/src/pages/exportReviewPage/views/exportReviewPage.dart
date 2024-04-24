@@ -74,7 +74,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Container(
-                            width: Dimens.actionBtnH,
+                            width: Dimens.btnWidthNormal,
                             height: Dimens.actionBtnH,
                             decoration: BoxDecoration(
                               color: Colors.grey[170].withOpacity(0.5),
@@ -91,6 +91,15 @@ class _View extends StatelessView<ExportReviewViewModel> {
                                     size: 25,
                                   ),
                                   onPressed: vm.indexImage==0?null:() => vm.perviousImage()),
+                                const SizedBox(width: 5,),
+                                IconButton(
+                                    style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                    icon: Icon(
+                                      FluentIcons.cloud_import_export,
+                                      color: Colors.teal,
+                                      size: 25,
+                                    ),
+                                    onPressed:()=> vm.onExportBtnHandler()),
                               ],
                             ),
                           ),
@@ -146,7 +155,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
                           onEnter: (e)=>vm.onMouseEnter(),
                           child: Container(
                             decoration: BoxDecoration(
-                              color: Colors.grey[180].withOpacity(.7),
+                              color: Colors.grey[190].withOpacity(.7),
                               border: Border.all(color: Colors.grey[150],width: 1.0),
                               borderRadius: const BorderRadius.all(Radius.circular(10))
                             ),

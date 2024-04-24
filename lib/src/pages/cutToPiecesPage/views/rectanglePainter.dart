@@ -20,7 +20,7 @@ class RectanglePainter extends CustomPainter {
       paint = Paint()
         ..color = color.withOpacity(0.5)
         ..style =PaintingStyle.fill
-        ..strokeWidth = 1.5;
+        ..strokeWidth = 2.0;
 
       rect = Rect.fromLTRB(object!.left, object!.top, object!.right, object!.bottom);
       canvas.drawRect(rect, paint);

@@ -27,9 +27,10 @@ class Strings{
   static const String curState="Current state";
   static const String exportFormat="Export format:";
   static const String projectName="Project name: ";
-  static const String uploadWarning="Your data will upload in ZIP format with using the post method.";
-  static const String uploadDomain="Upload link:";
+  static const String uploadWarning="Your ZIP file will upload with post method.";
+  static const String uploadDomain="Upload link";
   static const String activeAuth="Active auth:";
+  static const String authToken="Auth token";
   static const String domainHint="Enter your server link here";
   static const String authTokenHint="Enter your auth token here";
   static const String dirPathHint="Type export directory path here";

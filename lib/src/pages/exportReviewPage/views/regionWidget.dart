@@ -50,7 +50,7 @@ class _View extends StatelessView<RegionViewModel> {
                     0.0,
                   vm.height,
                 ),
-                color: vm.curObject.state==ExportState.none.name?Colors.orange.dark:vm.curObject.state==ExportState.deActive.name?Colors.grey[150]:Colors.green.dark,
+                color: vm.curObject.state==ExportState.none.name?Colors.orange:vm.curObject.state==ExportState.deActive.name?Colors.grey[120]:Colors.green.light,
                 isActive: vm.isHover),
           ),
         ),

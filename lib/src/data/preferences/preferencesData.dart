@@ -33,6 +33,26 @@ class Preference {
     return prefs.getBool(name) ?? true;
   }
 
+  needBackUp(String prjUUID,bool needBackup) async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setBool("backup&&$prjUUID", needBackup);
+  }
+
+  Future<bool> shouldBackUp(String prjUUID)async{
+    prefs = await SharedPreferences.getInstance();
+    return prefs.getBool("backup&&$prjUUID") ?? false;
+  }
+
+  needAuth(String prjUUID,bool needAuth) async {
+    prefs = await SharedPreferences.getInstance();
+    prefs.setBool("auth&&$prjUUID", needAuth);
+  }
+
+  Future<bool> shouldAuth(String prjUUID)async{
+    prefs = await SharedPreferences.getInstance();
+    return prefs.getBool("auth&&$prjUUID") ?? false;
+  }
+
   setExportPath(String prjUUID,String path) async {
     prefs = await SharedPreferences.getInstance();
     prefs.setString("path&&$prjUUID", path);

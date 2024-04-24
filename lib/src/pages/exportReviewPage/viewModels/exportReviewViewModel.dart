@@ -8,6 +8,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.d
 import 'package:bas_dataset_generator_engine/src/data/models/pascalVOCModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/dlgObjProperties.dart';
+import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/dlgExport.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -168,6 +169,21 @@ class ExportReviewViewModel extends ViewModel {
   perviousImage() async{
     indexImage = --indexImage;
     notifyListeners();
+  }
+
+  onExportBtnHandler()async{
+    var curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => DlgExport(
+                                prjUUID:prjUUID,
+                                prjName: curProject!.title!,
+                                onExportCaller:exportHandler,));
+  }
+
+  exportHandler(String action){
+
   }
 
   onObjectActionHandler(String action) async {

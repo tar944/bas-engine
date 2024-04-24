@@ -93,7 +93,12 @@ class _View extends StatelessView<ExportViewModel> {
                                   vm.pathController,
                                   needBackup: vm.needBackup,
                                   selectFolderCaller: (e)=>vm.saveInPcHandler(e),):
-                                TabSaveInServer(domainController: vm.domainController, tokenController: vm.tokenController, uploadDomain: "", authToken: "")
+                                TabSaveInServer(
+                                    domainController: vm.domainController,
+                                    needToken: vm.needToken,
+                                    tokenController: vm.tokenController,
+                                    onAuthCaller: (e)=>vm.saveInServerHandler(e),
+                                    )
                             );
                           }).toList(),
                         ),
@@ -101,21 +106,37 @@ class _View extends StatelessView<ExportViewModel> {
                   ),
                   Container(
                     height: 70,
-                    alignment: Alignment.centerRight,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.only(bottomRight: Radius.circular(Dimens.dialogCornerRadius),bottomLeft: Radius.circular(Dimens.dialogCornerRadius)),
                       color: Colors.grey[210]
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Button(
-                        style: ButtonStyle(
-                          backgroundColor: ButtonState.all(Colors.orange.dark),
-                          padding: ButtonState.all(const EdgeInsets.only(left: 30,right: 30,top: 10,bottom: 10))
+                    child: Row(
+                      children: [
+                        if(vm.curIndex==1)
+                          ...[
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            Icon(FluentIcons.warning,color: Colors.orange.dark,size: 18,),
+                            const SizedBox(
+                              width: 5,
+                            ),
+                            Text(Strings.uploadWarning,style: TextSystem.textS(Colors.white.withOpacity(0.5)),),
+                          ],
+                        const Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Button(
+                            style: ButtonStyle(
+                              backgroundColor: ButtonState.all(Colors.orange.dark),
+                              padding: ButtonState.all(const EdgeInsets.only(left: 30,right: 30,top: 10,bottom: 10))
+                            ),
+                            onPressed:()=> vm.onExportBtnHandler(),
+                            child: Text(Strings.export,style: TextSystem.textM(Colors.white),),
+                          ),
                         ),
-                        onPressed: vm.onExportBtnHandler(),
-                        child: Text(Strings.export,style: TextSystem.textM(Colors.white),),
-                      ),
+                        const SizedBox(width: 10,)
+                      ],
                     ),
                   )
                 ],
