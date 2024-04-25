@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bas_dataset_generator_engine/src/utility/utility.dart';
+import 'package:image_compression_flutter/image_compression_flutter.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:path/path.dart' as p;
 
@@ -100,7 +101,7 @@ class DirectoryManager {
     final filePath =p.join(path.path, DateTime.now().millisecondsSinceEpoch.toString());
     await Directory(filePath).create();
     await Directory(p.join(filePath, 'trainData')).create();
-    await Directory(p.join(filePath, 'dbDta')).create();
+    await Directory(p.join(filePath, 'dbData')).create();
     return filePath;
   }
 
@@ -108,6 +109,26 @@ class DirectoryManager {
     final file = File(path);
     file.writeAsStringSync(dataToSave);
     return true;
+  }
+
+
+  Future<String> copyImage({required String srcPath,required String desPath,required int quality}) async {
+    ImageFile img = await XFile(srcPath).asImageFile;
+
+    Configuration config = Configuration(
+      outputType: ImageOutputType.jpg,
+      // can only be true for Android and iOS while using ImageOutputType.jpg or ImageOutputType.pngÏ
+      useJpgPngNativeCompressor: true,
+      // set quality between 0-100
+      quality: quality,
+    );
+
+    final param = ImageFileConfiguration(input: img, config: config);
+    final output = await compressor.compress(param);
+
+    File(desPath).writeAsBytesSync(output.rawBytes);
+
+    return desPath;
   }
 
   Future<String> getPartImageDirectoryPath(String prjUUID, String partUUID) async {

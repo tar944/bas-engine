@@ -12,6 +12,7 @@
 #include <flutter_meedu_videoplayer/flutter_meedu_videoplayer_plugin_c_api.h>
 #include <fullscreen_window/fullscreen_window_plugin_c_api.h>
 #include <fvp/fvp_plugin_c_api.h>
+#include <image_compression_flutter/image_compression_flutter_plugin.h>
 #include <keyboard_event/keyboard_event_plugin.h>
 #include <mouse_event/mouse_event_plugin.h>
 #include <objectbox_flutter_libs/objectbox_flutter_libs_plugin.h>
@@ -34,6 +35,8 @@ void RegisterPlugins(flutter::PluginRegistry* registry) {
       registry->GetRegistrarForPlugin("FullscreenWindowPluginCApi"));
   FvpPluginCApiRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("FvpPluginCApi"));
+  ImageCompressionFlutterPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("ImageCompressionFlutterPlugin"));
   KeyboardEventPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("KeyboardEventPlugin"));
   MouseEventPluginRegisterWithRegistrar(

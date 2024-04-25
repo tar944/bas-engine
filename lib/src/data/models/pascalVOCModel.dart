@@ -1,5 +1,6 @@
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
+import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:xml/xml.dart';
 
 class PascalVOCModel{
@@ -33,9 +34,9 @@ class PascalVOCModel{
   XmlDocument toXML() {
     final builder = XmlBuilder();
     builder.element('annotation', nest: () {
-      builder.element('folder');
+      builder.element('folder',nest: "");
       builder.element('filename',nest:filename);
-      builder.element('path',nest: path);
+      builder.element('path',nest: filename);
       builder.element('source',nest:(){
         builder.element('database',nest: Strings.appName);
       });
@@ -46,7 +47,21 @@ class PascalVOCModel{
       });
       builder.element('segmented',nest: 0);
       for (var element in objects) {
-        element.toXML();
+        if(element.state==ExportState.active.name){
+          builder.element('object', nest:() {
+            builder.element('name',nest: element.exportName);
+            builder.element('pose',nest:element.pose);
+            builder.element('truncated',nest: element.truncated);
+            builder.element('difficult',nest: element.difficult);
+            builder.element('occluded',nest: element.occluded);
+            builder.element('bndbox',nest:(){
+              builder.element('xmin',nest: element.xmin);
+              builder.element('xmax',nest: element.xmax);
+              builder.element('ymin',nest: element.ymin);
+              builder.element('ymax', nest: element.ymax);
+            });
+          });
+        }
       }
     });
     return builder.buildDocument();

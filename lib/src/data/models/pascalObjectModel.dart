@@ -30,22 +30,4 @@ class PascalObjectModel{
     ymin = int.parse(xml.findElements("ymin").single.innerText);
     ymax = int.parse(xml.findElements("ymax").single.innerText);
   }
-
-  XmlBuilder toXML() {
-    final builder = XmlBuilder();
-    builder.element('object', nest: () {
-      builder.element('name',nest: name);
-      builder.element('pose',nest:pose);
-      builder.element('truncated',nest: truncated);
-      builder.element('difficult',nest: difficult);
-      builder.element('occluded',nest: occluded);
-      builder.element('bndbox',nest:(){
-        builder.element('xmin',nest: xmin);
-        builder.element('xmax',nest: xmax);
-        builder.element('ymin',nest: ymin);
-        builder.element('ymax', nest: ymax);
-      });
-    });
-    return builder;
-  }
 }

@@ -7,6 +7,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   flutter_acrylic
   flutter_meedu_videoplayer
   fvp
+  image_compression_flutter
   objectbox_flutter_libs
   screen_capturer
   screen_retriever

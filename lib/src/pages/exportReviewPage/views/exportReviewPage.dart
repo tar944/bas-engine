@@ -200,6 +200,44 @@ class _View extends StatelessView<ExportReviewViewModel> {
                               ),
                             ),
                           ),
+                        )),
+                    if(vm.processedNumber!=-1)
+                      Positioned(
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        bottom: 0,
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.grey[190].withOpacity(.7)
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(Strings.waitToGenerateFile,style: TextSystem.textL(Colors.white),),
+
+                            const SizedBox(height: 30,),
+                            SizedBox(
+                              width: 300,
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.only(top: 4.0),
+                                    child: ProgressBar(
+                                      key: GlobalKey(),
+                                      value: vm.percent.toDouble(),
+                                      activeColor: Colors.teal.dark,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 10,),
+                                  Text("( ${vm.processedNumber} of ${vm.mainStates.length})",style: TextSystem.textS(Colors.grey[100]),)
+                                ],
+                              ),
+                            )
+                          ],),
                         ))
                   ],
                 ),

@@ -35,6 +35,8 @@ class ObjectModel {
     data['right'] = right;
     data['top'] = top;
     data['bottom'] = bottom;
+    data['exportState'] = exportState;
+    data['exportName'] = exportName;
     data['color'] = color;
     data['actionType'] = actionType;
     data['isNavTool'] = isNavTool;

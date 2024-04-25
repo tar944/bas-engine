@@ -9,6 +9,7 @@ list(APPEND FLUTTER_PLUGIN_LIST
   flutter_meedu_videoplayer
   fullscreen_window
   fvp
+  image_compression_flutter
   keyboard_event
   mouse_event
   objectbox_flutter_libs

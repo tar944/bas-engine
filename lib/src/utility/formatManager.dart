@@ -1,37 +1,43 @@
 import 'dart:convert';
-import 'dart:typed_data';
-import 'dart:ui';
-
+import 'dart:io';
+import 'package:archive/archive_io.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/pascalVOCModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
+import 'package:fluent_ui/fluent_ui.dart';
 import 'package:path/path.dart' as path;
 import 'package:image/image.dart' as i;
 
 class FormatManager{
 
-  Future<String> generateFile(String prjUUID,bool needBackUp) async {
-    String filePath = "";
-    // String filePath = await DirectoryManager().getFinalExportPath(await Preference().getExportPath(prjUUID));
-    // if(filePath=="errNotFoundDirectory"){
-    //   return filePath;
-    // }
-    var curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
+  Future<String> generateFile(String prjUUID,List<PascalVOCModel>allStates,ValueSetter<int>onItemProcessCaller) async {
+    String filePath = await DirectoryManager().getFinalExportPath(await Preference().getExportPath(prjUUID));
+    bool needBackup = await Preference().shouldBackUp(prjUUID);
+    if(filePath=="errNotFoundDirectory"){
+      return filePath;
+    }
     print("creating Export file =========================================");
 
+    for(var item in allStates){
+      item.filename = item.filename!.replaceAll(".png", ".jpg");
+      await DirectoryManager().copyImage(
+          srcPath: item.path!,
+          desPath: path.join(filePath, "trainData", item.filename),
+          quality: 50);
+      await DirectoryManager().saveFileInLocal(
+          path.join(filePath,'trainData', '${item.filename}.xml'), item.toXML().toXmlString(pretty: true));
+      onItemProcessCaller(allStates.indexOf(item)+1);
+    }
+    print("compression finished");
 
-    // for(var part in curProject!.allParts){
-    //   print("==============================");
-    //   trackAllGroups(part.allGroups);
-    // }
+    if(needBackup){
+      await generateBackupData(filePath,prjUUID);
+    }
 
-    // getBytesFromCanvas(100, 200, curProject!.allParts[0].allGroups[0].allStates[0].image.target!.path!);
-
-    // if(needBackUp){
-    //   await generateBackupData(filePath,prjUUID);
-    // }
-    //
-    // ZipFileEncoder().zipDirectory(Directory(filePath), filename: '$filePath.zip');
+    ZipFileEncoder().zipDirectory(Directory(filePath), filename: '$filePath.zip');
+    onItemProcessCaller(-1);
     return filePath;
   }
 
@@ -56,6 +62,6 @@ class FormatManager{
   generateBackupData(String exportPath,String prjUUID) async{
     var curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
     await DirectoryManager().saveFileInLocal(
-        path.join(exportPath, 'db_${DateTime.now().millisecondsSinceEpoch.toString()}.json'), jsonEncode(curProject!.toJson()));
+        path.join(exportPath,'dbData', 'db_${DateTime.now().millisecondsSinceEpoch.toString()}.json'), jsonEncode(curProject!.toJson()));
   }
 }

@@ -41,8 +41,10 @@ class ObjectPropertiesViewModel extends ViewModel {
 
   void onBtnConfirmListener() {
     var finalName="";
-    for(int i=exportParts.length-1;i>=0;i--){
-      finalName +="${exportParts[i]}**";
+    for(var str in nameParts){
+      if(exportParts.contains(str)){
+        finalName +="$str**";
+      }
     }
     if(object.lvlKind=="objects"){
       Toast(Strings.objectWarn, false).showWarning(context);

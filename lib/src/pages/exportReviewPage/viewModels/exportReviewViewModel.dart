@@ -1,5 +1,4 @@
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
-import 'package:bas_dataset_generator_engine/main.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
@@ -9,7 +8,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/pascalVOCModel.dart
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/dlgObjProperties.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/dlgExport.dart';
-import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
+import 'package:bas_dataset_generator_engine/src/utility/formatManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
@@ -22,7 +21,7 @@ class ExportReviewViewModel extends ViewModel {
   final moreController = FlyoutController();
   List<PascalVOCModel>mainStates=[];
   final String prjUUID;
-  int indexImage = 0;
+  int indexImage = 0,processedNumber=-1,percent=0;
   int imgW=0, imgH=0;
   Size imgSize = const Size(0, 0);
   String guidePos="bottomLeft";
@@ -182,8 +181,18 @@ class ExportReviewViewModel extends ViewModel {
                                 onExportCaller:exportHandler,));
   }
 
-  exportHandler(String action){
+  exportHandler(String action)async{
+    processedNumber=1;
+    notifyListeners();
+    await FormatManager().generateFile(prjUUID, mainStates,onItemProcessedHandler);
+  }
 
+  onItemProcessedHandler(int count){
+    processedNumber=count;
+    if(count!=-1){
+      percent=count*100~/mainStates.length;
+    }
+    notifyListeners();
   }
 
   onObjectActionHandler(String action) async {
