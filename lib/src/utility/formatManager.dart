@@ -12,7 +12,7 @@ import 'package:image/image.dart' as i;
 
 class FormatManager{
 
-  Future<String> generateFile(String prjUUID,List<PascalVOCModel>allStates,ValueSetter<int>onItemProcessCaller) async {
+  Future<String> generateFile(String prjUUID,String exportAction,List<PascalVOCModel>allStates,ValueSetter<int>onItemProcessCaller) async {
     String filePath = await DirectoryManager().getFinalExportPath(await Preference().getExportPath(prjUUID));
     bool needBackup = await Preference().shouldBackUp(prjUUID);
     if(filePath=="errNotFoundDirectory"){
@@ -32,13 +32,13 @@ class FormatManager{
     }
     print("compression finished");
 
-    if(needBackup){
+    if(exportAction=="saveInServer"||needBackup){
       await generateBackupData(filePath,prjUUID);
     }
 
     ZipFileEncoder().zipDirectory(Directory(filePath), filename: '$filePath.zip');
     onItemProcessCaller(-1);
-    return filePath;
+    return '$filePath.zip';
   }
 
   trackAllGroups(List<ImageGroupModel> allGroups)

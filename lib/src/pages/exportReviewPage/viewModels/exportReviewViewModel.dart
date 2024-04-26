@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
@@ -5,11 +7,13 @@ import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dar
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalVOCModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/dlgObjProperties.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/dlgExport.dart';
 import 'package:bas_dataset_generator_engine/src/utility/formatManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
+import 'package:dio/dio.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pmvvm/pmvvm.dart';
@@ -24,7 +28,7 @@ class ExportReviewViewModel extends ViewModel {
   int indexImage = 0,processedNumber=-1,percent=0;
   int imgW=0, imgH=0;
   Size imgSize = const Size(0, 0);
-  String guidePos="bottomLeft";
+  String guidePos="bottomLeft",exportAction="";
 
   ExportReviewViewModel(this.prjUUID);
 
@@ -183,14 +187,48 @@ class ExportReviewViewModel extends ViewModel {
 
   exportHandler(String action)async{
     processedNumber=1;
+    exportAction=action;
     notifyListeners();
-    await FormatManager().generateFile(prjUUID, mainStates,onItemProcessedHandler);
+    var path = await FormatManager().generateFile(prjUUID,action, mainStates,onItemProcessedHandler);
+    if(action=="saveInServer"){
+      var file=File(path);
+      if(file.existsSync())
+      {
+        await uploadFile(file);
+      }
+    }
+  }
+
+  Future<String> uploadFile(File file) async {
+    String fileName = file.path.split('/').last;
+    FormData formData = FormData.fromMap({
+      "dataSet":
+      await MultipartFile.fromFile(file.path, filename:fileName),
+    });
+    String token= await Preference().shouldAuth(prjUUID)?await Preference().getAuthToken(prjUUID):"";
+    Dio dio = Dio();
+    var response = await dio.post(
+                                    await Preference().getUploadLink(prjUUID),
+                                    data: formData,
+                                    options:Options(
+                                      headers: {
+                                        "Content-Type": "application/json",
+                                        "Authorization": token==""?"":"Bearer $token",
+                                      }
+                                    )
+                                  );
+    print(response);
+    processedNumber=-1;
+    notifyListeners();
+    return response.data['status'];
   }
 
   onItemProcessedHandler(int count){
     processedNumber=count;
     if(count!=-1){
       percent=count*100~/mainStates.length;
+    }else{
+      processedNumber=-2;
     }
     notifyListeners();
   }

@@ -215,7 +215,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Text(Strings.waitToGenerateFile,style: TextSystem.textL(Colors.white),),
+                              Text(vm.processedNumber==-2?Strings.waitToUploadFile:Strings.waitToGenerateFile,style: TextSystem.textL(Colors.white),),
 
                             const SizedBox(height: 30,),
                             SizedBox(
@@ -226,14 +226,19 @@ class _View extends StatelessView<ExportReviewViewModel> {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.only(top: 4.0),
-                                    child: ProgressBar(
+                                    child: vm.processedNumber==-2?
+                                    const ProgressRing():
+                                    ProgressBar(
                                       key: GlobalKey(),
                                       value: vm.percent.toDouble(),
                                       activeColor: Colors.teal.dark,
                                     ),
                                   ),
-                                  const SizedBox(width: 10,),
-                                  Text("( ${vm.processedNumber} of ${vm.mainStates.length})",style: TextSystem.textS(Colors.grey[100]),)
+                                  if(vm.processedNumber!=-2)
+                                    ...[
+                                      const SizedBox(width: 10,),
+                                      Text("( ${vm.processedNumber} of ${vm.mainStates.length})",style: TextSystem.textS(Colors.grey[100]),)
+                                    ]
                                 ],
                               ),
                             )
