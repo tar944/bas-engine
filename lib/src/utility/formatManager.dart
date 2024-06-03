@@ -51,7 +51,6 @@ class FormatManager{
           }
         }
         if(grp.allGroups.isNotEmpty){
-          print("----------------------------------");
           trackAllGroups(grp.allGroups);
         }
       }

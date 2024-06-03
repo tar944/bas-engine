@@ -209,7 +209,9 @@ class RecordPage extends HookWidget with WindowListener {
                 begin: Dimens.recordPnlHeight,
                 end: Dimens.recordPnlHeight + (Dimens.recordPnlHeight * 0.2)))
         .tween('color',
-            ColorTween(begin: shutterState.value!="normal"?Colors.magenta.normal:Colors.teal.normal, end: shutterState.value!="normal"?Colors.magenta.darker:Colors.teal.darker));
+            ColorTween(
+                begin: shutterState.value!="normal"?Colors.magenta.normal:Colors.teal.normal,
+                end: shutterState.value!="normal"?Colors.magenta.darker:Colors.teal.darker));
 
     if (isRecording.value) {
       return shutterState.value!="capturing"?CustomAnimationBuilder(

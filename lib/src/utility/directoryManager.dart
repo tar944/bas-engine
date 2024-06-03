@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:bas_dataset_generator_engine/src/utility/utility.dart';
@@ -31,6 +32,12 @@ class DirectoryManager {
     }
     return p.join(docsDir.path, appDirName, prjUUID, vidUUID,
         "thumbnailDir", '${getRandomString(10)}.jpg');
+  }
+
+  Future<Map<String, dynamic>> readJsonFile(String filePath) async {
+    File jsonFile = File(filePath);
+    String str = jsonFile.readAsStringSync();
+    return jsonDecode(str);
   }
 
   Future<String> getScreenDirectoryPath(

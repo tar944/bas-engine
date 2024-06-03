@@ -1,3 +1,4 @@
+import 'package:archive/archive_io.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
@@ -5,11 +6,13 @@ import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/importModels/importStructureModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/pages/projectPartPage/views/dlgProjectPart.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
+import 'package:bas_dataset_generator_engine/src/utility/utility.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
@@ -94,6 +97,15 @@ class ProjectPartsViewModel extends ViewModel {
           }
         }
         break;
+      case 'importZip':
+        FilePickerResult? result = await FilePicker.platform.pickFiles(
+            allowMultiple: false,
+            type: FileType.any,
+            dialogTitle: Strings.chooseZipFile);
+        if (result != null) {
+          await importZipFile(result.files[0].path!, part!.uuid);
+        }
+        break;
       case 'delete':
         await ProjectPartDAO().delete(part!);
         await ProjectDAO().removeAPart(prjID, part);
@@ -105,6 +117,22 @@ class ProjectPartsViewModel extends ViewModel {
         break;
     }
   }
+
+  Future<bool> importZipFile(String filePath,String partUUID) async {
+    filePath=await DirectoryManager().copyFile(filePath, path.join(await DirectoryManager().getPartDir(prjUUID, partUUID),'DFGE_${getRandomString(10)}.zip'));
+    String dirPath = filePath.replaceAll('.zip', '');
+    await extractFileToDisk(filePath, dirPath);
+    Map<String, dynamic> json = await DirectoryManager().readJsonFile(path.join(dirPath, "exportData.json"));
+
+    var importData = ImportStructureModel.fromJson(json);
+
+    for(var obj in importData.allObjects!){
+      print(obj.uuid);
+    }
+
+    return true;
+  }
+
 
   void onEditPartHandler(ProjectPartModel curPart) async {
     await ProjectPartDAO().update(curPart);

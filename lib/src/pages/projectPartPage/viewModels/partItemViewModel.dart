@@ -8,6 +8,7 @@ class PartItemViewModel extends ViewModel {
   final ValueSetter<String>? onActionCaller;
   int allImagesNumber =0;
   double donePercent=0;
+  final menuController = FlyoutController();
 
   PartItemViewModel(this.part, this.onActionCaller);
 
@@ -38,4 +39,20 @@ class PartItemViewModel extends ViewModel {
     return "";
   }
 
+  onMenuSelectHandler(String action){
+    switch(action){
+      case "edit":
+        onActionCaller!("edit&&${part.id}");
+        break;
+      case "importImg":
+        onActionCaller!("chooseImages&&${part.id}");
+        break;
+      case "delete":
+        onActionCaller!("delete&&${part.id}");
+        break;
+      case "importZip":
+        onActionCaller!("importZip&&${part.id}");
+        break;
+    }
+  }
 }

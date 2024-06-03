@@ -75,6 +75,7 @@ class Strings{
   static const String remindImages="remind to sort";
   static const String back="back";
   static const String chooseImages="Choose images";
+  static const String chooseZipFile="Choose Studio zip file";
   static const String deleteProject="Are you sure to delete this project?";
   static const String deletePart="Are you sure to delete this part?";
   static const String deleteObject="Are you sure to delete this object?";
