@@ -105,6 +105,11 @@ class LabelingViewModel extends ViewModel {
               lblName=parGrp!.label.target!.name;
             }
           }
+          if(grp.mainState.target!=null&&grp.mainState.target!.image.target==null) {
+            grp.mainState.target=null;
+            grp.state=GroupState.findMainState.name;
+            await ImageGroupDAO().update(grp);
+          }
           allNavs.add(NavModel(
               grp.id,
               grp.allStates.length,

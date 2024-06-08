@@ -32,49 +32,6 @@ class RecordPage extends HookWidget with WindowListener {
 
   RecordPage(this.partId);
 
-  void _init(BuildContext context) async {
-    // Add this line to override the default close handler
-    await windowManager.setPreventClose(true);
-
-    windowManager.waitUntilReadyToShow().then((_) async {
-      if (kIsLinux || kIsWindows) {
-        if (kIsLinux) {
-          await windowManager.setAsFrameless();
-        } else {
-          await windowManager.setAsFrameless();
-          await windowManager.setTitleBarStyle(TitleBarStyle.hidden);
-        }
-        Display primaryDisplay = await screenRetriever.getPrimaryDisplay();
-        _lastShownPosition = Offset(
-            primaryDisplay.size.width - (Dimens.recordPnlWidth + 10),
-            primaryDisplay.size.height - 260);
-        await windowManager.setPosition(_lastShownPosition);
-      }
-      await windowManager.setSkipTaskbar(true);
-      await windowManager.setHasShadow(false);
-      await windowManager.setSize(const Size(Dimens.recordPnlWidth, 200),
-          animate: true);
-      await Future.delayed(const Duration(milliseconds: 100));
-      await _windowShow();
-    });
-  }
-
-  Future<void> _windowShow() async {
-    if (kIsLinux) {
-      await windowManager.setPosition(_lastShownPosition);
-    }
-
-    bool isVisible = await windowManager.isVisible();
-    if (!isVisible) {
-      await windowManager.show();
-    } else {
-      await windowManager.focus();
-    }
-    await windowManager.setAlwaysOnTop(true);
-    await Future.delayed(const Duration(milliseconds: 10));
-    await windowManager.focus();
-  }
-
   void onCloseListener(String action) {}
 
   @override
@@ -88,8 +45,19 @@ class RecordPage extends HookWidget with WindowListener {
 
     final controller = FlyoutController();
     useEffect(() {
-      _init(context);
       Future<void>.microtask(() async {
+
+        await windowManager.setSize(const Size(Dimens.recordPnlWidth, 200), animate: true);
+
+        Display primaryDisplay = await screenRetriever.getPrimaryDisplay();
+        _lastShownPosition = Offset(
+            primaryDisplay.size.width - (Dimens.recordPnlWidth + 10),
+            primaryDisplay.size.height - 260);
+        await windowManager.setPosition(_lastShownPosition);
+        await windowManager.setAlwaysOnTop(true);
+        await Future.delayed(const Duration(milliseconds: 100));
+
+
         final part = await ProjectPartDAO().getDetails(partId!);
         if(part!.allObjects.isNotEmpty){
           lastObjectId.value=part.allObjects[part.allObjects.length-1].id!;

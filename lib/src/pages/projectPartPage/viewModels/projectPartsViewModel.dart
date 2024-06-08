@@ -24,7 +24,9 @@ import 'package:uuid/uuid.dart';
 class ProjectPartsViewModel extends ViewModel {
   List<ProjectPartModel> parts = [];
   int prjID;
+  double importedValue=0.0;
   String prjUUID = "";
+  bool needLoading = false;
   ValueSetter<int> onPartActionCaller;
 
   ProjectPartsViewModel(this.prjID, this.onPartActionCaller);
@@ -103,7 +105,12 @@ class ProjectPartsViewModel extends ViewModel {
             type: FileType.any,
             dialogTitle: Strings.chooseZipFile);
         if (result != null) {
+          needLoading = true;
+          notifyListeners();
+          await Future.delayed(const Duration(milliseconds: 10));
           await importZipFile(result.files[0].path!, part!.uuid);
+          needLoading=false;
+          updateProjectData();
         }
         break;
       case 'delete':
@@ -125,11 +132,23 @@ class ProjectPartsViewModel extends ViewModel {
     Map<String, dynamic> json = await DirectoryManager().readJsonFile(path.join(dirPath, "exportData.json"));
 
     var importData = ImportStructureModel.fromJson(json);
+    var curPart = await ProjectPartDAO().getDetailsByUUID(partUUID);
 
     for(var obj in importData.allObjects!){
-      print(obj.uuid);
+      importedValue= (100*importData.allObjects!.indexOf(obj))/importData.allObjects!.length;
+      notifyListeners();
+      await Future.delayed(const Duration(milliseconds: 10));
+      var imgPath=await DirectoryManager().copyFile(path.join(dirPath,obj.image!.path), path.join(await DirectoryManager().getPartImageDirectoryPath(prjUUID, partUUID),obj.image!.name));
+      ObjectModel newObj = ObjectModel(-1,obj.uuid!, 0, 0, 0, 0);
+      newObj.actionType = obj.actionType!;
+      var img =ImageModel(-1, obj.image!.uuid!, newObj.uuid, obj.image!.name,obj.image!.width!,obj.image!.height!, imgPath);
+      img.id= await ImageDAO().add(img);
+      newObj.actX=obj.actX!;
+      newObj.actY=obj.actY!;
+      newObj.image.target=img;
+      newObj.id=await ObjectDAO().addObject(newObj);
+      await ProjectPartDAO().addObject(curPart!.id, newObj);
     }
-
     return true;
   }
 

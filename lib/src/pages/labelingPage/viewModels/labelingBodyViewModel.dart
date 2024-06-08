@@ -32,6 +32,7 @@ class LabelingBodyViewModel extends ViewModel {
   String prjUUID,grpUUID,partUUID;
   final int partId;
   int labelGroupId=-1,deletedObjId=-1,imgW=0,imgH=0;
+  double progressValue=-1;
   bool isLoading=false,isState=true;
   LabelModel curLabel=LabelModel(-1, "", "","","");
   ValueSetter<String> onGroupActionCaller;
@@ -165,9 +166,57 @@ class LabelingBodyViewModel extends ViewModel {
     return cmd.outputImage;
   }
 
+  findSimilarImages(List<ObjectModel> allObjects)async{
+    isLoading = true;
+    progressValue=0.0;
+    notifyListeners();
+    var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
+    var allSize = allObjects.length;
+    while(allObjects.length>1){
+      print("all objects length is > ${allObjects.length}");
+      progressValue= ((allSize-allObjects.length)*100)/allSize;
+      notifyListeners();
+      await Future.delayed(const Duration(milliseconds: 10));
+      var simObjects = <ObjectModel>[];
+      var curObject = allObjects[0];
+      allObjects.removeAt(0);
+      simObjects.add(curObject);
+      final srcImg = i.decodeImage(File(curObject.image.target!.path!).readAsBytesSync(),);
+      var j=0;
+      while(j<allObjects.length){
+        final curImg = i.decodeImage(File(allObjects[j].image.target!.path!).readAsBytesSync(),);
+        var imgDiff = DiffImage.compareFromMemory(srcImg!, curImg!,asPercentage: true).diffValue;
+        print("${j+1} of ${allObjects.length}: ${curObject.image.target!.name} compare to=> ${allObjects[j].image.target!.name!} image diff: $imgDiff");
+        if(imgDiff<5){
+          simObjects.add(allObjects[j]);
+          allObjects.removeAt(j);
+          j--;
+        }
+        j++;
+      }
+      if(simObjects.length>1){
+        var newGrp = ImageGroupModel(-1, partUUID,'', Strings.emptyStr);
+        newGrp.uuid = const Uuid().v4();
+        newGrp.state = GroupState.generated.name;
+        newGrp.id=await ImageGroupDAO().add(newGrp);
+        await ProjectPartDAO().addGroup(part!.id, newGrp);
+        for(var obj in simObjects){
+          await ImageGroupDAO().addObject(newGrp.id,obj);
+          await ProjectPartDAO().removeObject(part.id, obj);
+        }
+      }
+    }
+    isLoading = false;
+    progressValue=-1;
+    updateData();
+  }
+
   onLabelActionHandler(String action)async{
     var act = action.split("&&");
     switch(act[0]){
+      case "findSimilar":
+        await findSimilarImages(objects);
+        break;
       case "showStates":
         isState=true;
         var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
@@ -248,8 +297,13 @@ class LabelingBodyViewModel extends ViewModel {
         grp.label.target=lbl;
         grp.state=grp.mainState.target==null?GroupState.findMainState.name:GroupState.findSubObjects.name;
         await ImageGroupDAO().update(grp);
-        grp=await ImageGroupDAO().getDetailsByUUID(grpUUID);
-        subGroups=grp!.allGroups;
+        if(grpUUID!=""){
+          grp=await ImageGroupDAO().getDetailsByUUID(grpUUID);
+          subGroups=grp!.allGroups;
+        }else{
+          final part= await ProjectPartDAO().getDetailsByUUID(partUUID);
+          subGroups = part!.allGroups;
+        }
         notifyListeners();
         break;
       case "remove":
@@ -366,6 +420,7 @@ class LabelingBodyViewModel extends ViewModel {
                 dlgW: img!.width>(mediaW*0.9)?(mediaW*0.9).toDouble():img.width.toDouble(),
                 dlgH: img.width>(mediaW*0.9)?(mediaH*0.9).toDouble():img.height.toDouble(),
                 allObjects: objects,
+                grpUUID: grpUUID,
                 showSubObjects: showSubObjects,
                 subGroups:subGroups,
                 showObjectId: int.parse(act[1]),

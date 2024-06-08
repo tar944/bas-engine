@@ -16,6 +16,7 @@ class DlgViewObjects extends StatelessWidget {
       {Key? key,
         required this.dlgW,
         required this.dlgH,
+        required this.grpUUID,
         required this.subGroups,
         required this.allObjects,
         required this.showSubObjects,
@@ -27,6 +28,7 @@ class DlgViewObjects extends StatelessWidget {
   final List<ObjectModel> allObjects;
   final int showObjectId;
   final bool showSubObjects;
+  final String grpUUID;
   final List<ImageGroupModel> subGroups;
   final double dlgW,dlgH;
   final ValueSetter<String> onActionCaller;
@@ -35,7 +37,7 @@ class DlgViewObjects extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: ViewObjectsViewModel(dlgW,dlgH,subGroups,showSubObjects,allObjects,showObjectId),
+      viewModel: ViewObjectsViewModel(grpUUID,dlgW,dlgH,subGroups,showSubObjects,allObjects,showObjectId),
     );
   }
 }
@@ -49,7 +51,7 @@ class _View extends StatelessView<ViewObjectsViewModel> {
       alignment: Alignment.center,
       children: [
         SizedBox(
-            width: (vm.dlgW<160?160:vm.dlgW)+60,
+            width: (vm.dlgW<300?300:vm.dlgW)+60,
             height: vm.dlgH+120,
             child: Container(
               decoration: BoxDecoration(
@@ -68,9 +70,10 @@ class _View extends StatelessView<ViewObjectsViewModel> {
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0),
-                    child: SizedBox(
-                      width: vm.dlgW,
+                    child: Container(
+                      width: vm.dlgW<300?300:vm.dlgW,
                       height: vm.dlgH,
+                      alignment: Alignment.center,
                       child: PageView(
                         physics: const NeverScrollableScrollPhysics(),
                         controller: vm.controller,
@@ -79,12 +82,9 @@ class _View extends StatelessView<ViewObjectsViewModel> {
                             decoration: BoxDecoration(
                               image: DecorationImage(
                                 image: Image.file(File(e.image.target!.path!)).image,
-                                fit: BoxFit.fitWidth,
+                                fit: BoxFit.contain,
                               ),
                             ),
-                            child:vm.showSubObjects?ViewRegionExplorer(
-                              itsObjects: vm.subObjects,
-                            ):Container(),
                           );
                         }).toList(),
                       ),
@@ -100,6 +100,7 @@ class _View extends StatelessView<ViewObjectsViewModel> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            SizedBox(width: vm.dlgW<300?70:140,),
                             IconButton(
                                 style: ButtonStyle(
                                     padding: ButtonState.all(const EdgeInsets.all(15))
@@ -119,6 +120,14 @@ class _View extends StatelessView<ViewObjectsViewModel> {
                               ),
                                 icon: const Icon(FluentIcons.chevron_right,size: 20,),
                                 onPressed: ()=>vm.nextImage()
+                            ),
+                            SizedBox(width:vm.dlgW<300?30: 100,),
+                            IconButton(
+                                style: ButtonStyle(
+                                    padding: ButtonState.all(const EdgeInsets.all(15))
+                                ),
+                                icon: Icon(FluentIcons.delete,color: Colors.red,size: 20,),
+                                onPressed: ()=>vm.onRemoveHandler()
                             ),
                           ],
                         ),

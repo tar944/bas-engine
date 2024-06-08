@@ -74,8 +74,8 @@ class _View extends StatelessView<ObjectItemViewModel> {
                         Radius.circular(Dimens.actionRadius)),
                     color: Colors.grey[170],
                     image: DecorationImage(
-                      image:
-                      Image.file(File(vm.object.image.target!.path!)).image,
+                      image: vm.object.image.target!=null?Image.file(File(vm.object.image.target!.path!)).image:const AssetImage(
+                          'lib/assets/testImages/testImg1.png'),
                       fit: BoxFit.fitWidth,
                     ),
                   ),

@@ -45,7 +45,9 @@ class ObjectDAO {
   Future<bool> deleteObject(ObjectModel object) async {
     Box<ObjectModel> box = objectbox.store.box<ObjectModel>();
     bool result = box.remove(object.id!);
-    await ImageDAO().delete(object.image.target!);
+    if(object.image.target==null){
+      await ImageDAO().delete(object.image.target!);
+    }
     return result;
   }
 }

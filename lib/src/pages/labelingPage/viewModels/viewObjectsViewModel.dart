@@ -1,5 +1,8 @@
+import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:image/image.dart' as i;
 import 'package:pmvvm/pmvvm.dart';
@@ -8,6 +11,7 @@ class ViewObjectsViewModel extends ViewModel {
   final controller = PageController();
   int curImage = 0,imgW=0,imgH=0;
   final double dlgW, dlgH;
+  final String grpUUID;
   final int showObjectId;
   final List<ObjectModel> allObjects;
   final List<ImageGroupModel> subGroups;
@@ -15,6 +19,7 @@ class ViewObjectsViewModel extends ViewModel {
   List<ObjectModel> subObjects = [];
 
   ViewObjectsViewModel(
+      this.grpUUID,
       this.dlgW,
       this.dlgH,
       this.subGroups,
@@ -48,6 +53,21 @@ class ViewObjectsViewModel extends ViewModel {
       controller.nextPage(duration: const Duration(milliseconds: 200), curve: Curves.decelerate);
       notifyListeners();
     }
+  }
+
+  onRemoveHandler()async{
+    var obj = allObjects[curImage];
+    if(grpUUID!=""&&obj.isMainObject){
+      var grp=await ImageGroupDAO().getDetailsByUUID(grpUUID);
+      grp!.state=GroupState.findMainState.name;
+      await ImageGroupDAO().update(grp);
+    }
+    await ObjectDAO().deleteObject(obj);
+    allObjects.removeAt(curImage);
+    if(curImage == allObjects.length){
+      curImage--;
+    }
+    notifyListeners();
   }
 
   List<ObjectModel> findSubObjects(List<ImageGroupModel> subGroups, double startX, double startY) {

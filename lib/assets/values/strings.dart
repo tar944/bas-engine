@@ -2,8 +2,10 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String findSimilar="Find similar";
   static const String waitToGenerateFile="Generate file is on process,please wait";
   static const String waitToUploadFile="Please wait,Your generated File is uploading...";
+  static const String waitToImportFile="Please wait for import new files and data...";
   static const String objectWarn="You can not change name an object";
   static const String errorDelete="You only can delete an object item";
   static const String objectExpProperties="Object properties";

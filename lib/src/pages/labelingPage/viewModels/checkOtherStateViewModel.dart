@@ -35,8 +35,10 @@ class CheckOtherStateViewModel extends ViewModel {
     var grp = await ImageGroupDAO().getDetails(groupId);
     grpState=GroupState.values.firstWhere((element) => element.name==grp!.state);
     for(var obj in allObjects){
-      var img = await getCroppedImage(obj);
-      allImages.add(img!);
+      if(obj.image.target!=null){
+        var img = await getCroppedImage(obj);
+        allImages.add(img!);
+      }
     }
     if(allImages.isNotEmpty){
       notifyListeners();

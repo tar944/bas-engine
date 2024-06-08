@@ -3,16 +3,12 @@ import 'dart:io';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/controllers/headerController.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
-import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgCheckOtherState.dart';
-import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/dlgExport.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
-import 'package:bas_dataset_generator_engine/src/utility/formatManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
@@ -35,7 +31,7 @@ class MainPageViewModel extends ViewModel with WindowListener {
   void init() async {
     // Add this line to override the default close handler
     await windowManager.setPreventClose(true);
-    setProjectGuideText();
+
     windowManager.waitUntilReadyToShow().then((_) async {
       if (kIsLinux || kIsWindows) {
         if (kIsLinux) {
@@ -49,9 +45,12 @@ class MainPageViewModel extends ViewModel with WindowListener {
 
       await windowManager.setSkipTaskbar(false);
       await windowManager.setFullScreen(true);
+      await windowManager.setAlwaysOnTop(false);
       await Future.delayed(const Duration(milliseconds: 100));
       await _windowShow();
     });
+
+    setProjectGuideText();
   }
 
   setProjectGuideText() async {

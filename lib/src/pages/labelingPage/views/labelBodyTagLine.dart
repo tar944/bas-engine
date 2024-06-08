@@ -91,7 +91,8 @@ class LabelBodyTagLine extends HookWidget {
                   const SizedBox(width: 10,),
                 SizedBox(
                   width: MediaQuery.sizeOf(context).width-(isParentGroup?345:131),
-                  child: subGroups.isNotEmpty?ListView.builder(
+                  child: subGroups.isNotEmpty?
+                  ListView.builder(
                       key: GlobalKey(),
                       itemCount: subGroups.length,
                       scrollDirection: Axis.horizontal,
@@ -102,7 +103,27 @@ class LabelBodyTagLine extends HookWidget {
                           onLabelSelectedCaller: onLabelActionHandler,
                         );
                       }):
-                  Text(Strings.emptyGroup,style: TextSystem.textL(Colors.white),),
+                  Row(
+                    children: [
+                      Text(Strings.emptyGroup,style: TextSystem.textL(Colors.white),),
+                      const Spacer(),
+                      IconButton(
+                        style: ButtonStyle(
+                          padding: ButtonState.all(EdgeInsets.zero)
+                        ),
+                          icon: Container(
+                            width: Dimens.btnWidthBig-20,
+                            height: Dimens.btnHeightBig,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              borderRadius: const BorderRadius.all(Radius.circular(Dimens.btnHeightBig/2)),
+                              color: Colors.teal.dark
+                            ),
+                            child: const Text(Strings.findSimilar),
+                          ), onPressed: ()=>onLabelActionHandler("findSimilar")),
+                      const SizedBox(width: 5.0,)
+                    ],
+                  ),
                 ),
               ],
             ),

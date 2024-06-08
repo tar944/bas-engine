@@ -85,20 +85,21 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
                   child: vm.objects.isNotEmpty ?
                       vm.isLoading?
-                          const Expanded(
-                              child: Column(
-                                children: [
-                                  SizedBox(
-                                    height: 200,
-                                  ),
-                                  ProgressRing(),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  Text(Strings.waitingForImageProgressing)
-                                ],
+                          Column(
+                            children: [
+                              const SizedBox(
+                                height: 300,
                               ),
-                            )
+                              Text(Strings.waitingForImageProgressing,style: TextSystem.textL(Colors.white),),
+                              const SizedBox(
+                                height: 40,
+                              ),
+                              if(vm.progressValue==-1)
+                                const ProgressRing(),
+                              if(vm.progressValue>-1)
+                                ProgressBar(value:vm.progressValue),
+                            ],
+                          )
                           :GridView(
                                   controller: ScrollController(keepScrollOffset: false),
                                   shrinkWrap: true,
