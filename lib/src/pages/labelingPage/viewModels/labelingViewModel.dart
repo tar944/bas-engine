@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageGroupDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
@@ -8,6 +9,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/navModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLevel.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
@@ -152,6 +154,26 @@ class LabelingViewModel extends ViewModel {
     } else {
       updateByGroupData(curNav);
     }
+  }
+
+  onAddNewShapeHandler(NavModel nav){
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) =>
+          DlgTitle(onActionCaller: saveAddShapeHandler, title: "",dlgTitle: Strings.dlgShape,),
+    );
+  }
+
+  saveAddShapeHandler(String name)async{
+    ImageGroupModel? newGrp= ImageGroupModel(-1, "", curGroup!.uuid, name);
+    newGrp.uuid = const Uuid().v4();
+    newGrp.state = GroupState.findMainState.name;
+    newGrp.id=await ImageGroupDAO().add(newGrp);
+    curGroup!.otherShapes.add(newGrp);
+    await ImageGroupDAO().update(curGroup!);
+    curGroup=await ImageGroupDAO().getDetails(curGroup!.id);
+    notifyListeners();
   }
 
   void onGroupSelect(String action) async {

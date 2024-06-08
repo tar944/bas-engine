@@ -9,7 +9,8 @@ class NavigationRowViewModel extends ViewModel {
   NavModel selectedNav;
   NavModel showAll=NavModel(-2, -1,0, "", "", "","","");
   ValueSetter<NavModel> onNavSelectedCaller;
-  NavigationRowViewModel(this.allNavs,this.selectedNav,this.curRowNumber,this.onNavSelectedCaller);
+  ValueSetter<NavModel> onAddNewShapeCaller;
+  NavigationRowViewModel(this.allNavs,this.selectedNav,this.curRowNumber,this.onNavSelectedCaller,this.onAddNewShapeCaller);
 
   onItemSelectHandler(NavModel curNav){
     print("selected item ==> ${curNav.id}");

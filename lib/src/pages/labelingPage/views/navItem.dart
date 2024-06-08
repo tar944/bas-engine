@@ -15,12 +15,14 @@ class NavItem extends HookWidget {
     required this.selectStatus,
     required this.showAddBtn,
     required this.onItemSelectedCaller,
+    required this.onAddNewShapeCaller,
   }) : super(key: key);
 
   final NavModel navItem;
   final String selectStatus;
   final bool showAddBtn;
   ValueSetter<NavModel> onItemSelectedCaller;
+  ValueSetter<NavModel> onAddNewShapeCaller;
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +88,7 @@ class NavItem extends HookWidget {
                             color: Colors.teal.dark
                         ),
                         child: const Icon(FluentIcons.add,size: 16,),
-                      ), onPressed: ()=>{}),
+                      ), onPressed: ()=>onAddNewShapeCaller(navItem)),
                   const SizedBox(width: 5.0,)
                 ]
             ],

@@ -158,6 +158,7 @@ class Strings{
   static const String dlgVoiceRecorder = "Voice recorder";
   static const String dlgNewSoftware = "New software";
   static const String dlgLevel = "Level manager";
+  static const String dlgShape = "Shape manager";
   static const String dlgNewGroup = "New group";
   static const String dlgNewPart = "New part";
   static const String dlgLabeling = "Manage labels";

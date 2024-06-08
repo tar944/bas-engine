@@ -18,6 +18,7 @@ class ImageGroupModel {
   final allStates = ToMany<ObjectModel>();
   final subObjects = ToMany<ObjectModel>();
   final allGroups = ToMany<ImageGroupModel>();
+  final otherShapes = ToMany<ImageGroupModel>();
   final label = ToOne<LabelModel>();
 
   ImageGroupModel(this.id,this.partUUID,this.groupUUID, this.name);
@@ -45,6 +46,9 @@ class ImageGroupModel {
     }
     if (allGroups.isNotEmpty) {
       data['allGroups'] = allGroups.map((v) => v.toJson()).toList();
+    }
+    if (otherShapes.isNotEmpty) {
+      data['otherShapes'] = otherShapes.map((v) => v.toJson()).toList();
     }
     if (label.target!=null) {
       data['label'] = label.target!.toJson();

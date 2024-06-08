@@ -49,6 +49,7 @@ class _View extends StatelessView<LabelingViewModel> {
                     curRowNumber: vm.allNavsRows.length,
                     selectedNav: vm.selectedNavs[index],
                     onNavSelectedCaller: vm.onNavItemSelectHandler,
+                    onAddNewShapeCaller: vm.onAddNewShapeHandler,
                 );
               }else{
                 return LabelingBody(

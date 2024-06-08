@@ -7,15 +7,16 @@ import 'package:bas_dataset_generator_engine/src/widgets/CButton.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 
-class DlgLevel extends HookWidget {
-  DlgLevel({
+class DlgTitle extends HookWidget {
+  DlgTitle({
     Key? key,
     required this.title,
+    required this.dlgTitle,
     required this.onActionCaller,
   }) : super(key: key);
 
   final ValueSetter<String> onActionCaller;
-  String title;
+  String title,dlgTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,7 @@ class DlgLevel extends HookWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   DialogTitleBar(
-                    title: Strings.dlgLevel,
+                    title: dlgTitle,
                     onActionListener: onCloseClicked,
                   ),
                   const SizedBox(

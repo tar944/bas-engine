@@ -54,7 +54,7 @@ class LabelManagementViewModel extends ViewModel {
       context: context,
       barrierDismissible: true,
       builder: (context) =>
-          DlgLevel(onActionCaller: saveLevelHandler, title: ""),
+          DlgTitle(onActionCaller: saveLevelHandler, title: "",dlgTitle: Strings.dlgLevel,),
     );
   }
 

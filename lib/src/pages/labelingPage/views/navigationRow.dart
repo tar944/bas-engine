@@ -13,18 +13,20 @@ class NavigationRow extends StatelessWidget {
     required this.selectedNav,
     required this.curRowNumber,
     required this.onNavSelectedCaller,
+    required this.onAddNewShapeCaller
   }) : super(key: key);
 
   final List<NavModel> allNavs;
   final NavModel selectedNav;
   final int curRowNumber;
   ValueSetter<NavModel> onNavSelectedCaller;
+  ValueSetter<NavModel> onAddNewShapeCaller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: NavigationRowViewModel(allNavs,selectedNav,curRowNumber,onNavSelectedCaller),
+      viewModel: NavigationRowViewModel(allNavs,selectedNav,curRowNumber,onNavSelectedCaller,onAddNewShapeCaller),
     );
   }
 }
@@ -56,6 +58,7 @@ class _View extends StatelessView<NavigationRowViewModel> {
                     showAddBtn: vm.selectedNav.rowNumber==vm.curRowNumber,
                     selectStatus: vm.findSelectedStatus(vm.allNavs[index]),
                     onItemSelectedCaller: vm.onItemSelectHandler,
+                  onAddNewShapeCaller: vm.onAddNewShapeCaller,
                 );
               }),
           ),
