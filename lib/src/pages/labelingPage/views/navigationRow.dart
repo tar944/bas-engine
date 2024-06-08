@@ -11,20 +11,20 @@ class NavigationRow extends StatelessWidget {
     Key? key,
     required this.allNavs,
     required this.selectedNav,
-    required this.rowNumber,
+    required this.curRowNumber,
     required this.onNavSelectedCaller,
   }) : super(key: key);
 
-  List<NavModel> allNavs;
-  NavModel selectedNav;
-  int rowNumber;
+  final List<NavModel> allNavs;
+  final NavModel selectedNav;
+  final int curRowNumber;
   ValueSetter<NavModel> onNavSelectedCaller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: NavigationRowViewModel(allNavs,selectedNav,rowNumber,onNavSelectedCaller),
+      viewModel: NavigationRowViewModel(allNavs,selectedNav,curRowNumber,onNavSelectedCaller),
     );
   }
 }
@@ -34,7 +34,6 @@ class _View extends StatelessView<NavigationRowViewModel> {
 
   @override
   Widget render(context, NavigationRowViewModel vm) {
-
     return Padding(
       padding: const EdgeInsets.all(3.0),
       child: Container(
@@ -48,11 +47,13 @@ class _View extends StatelessView<NavigationRowViewModel> {
             width: MediaQuery.sizeOf(context).width-(65+Dimens.navH*1.8),
             height: Dimens.navH,
             child: ListView.builder(
+              key: GlobalKey(),
               itemCount: vm.allNavs.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
                 return NavItem(
                     navItem: vm.allNavs[index],
+                    showAddBtn: vm.selectedNav.rowNumber==vm.curRowNumber,
                     selectStatus: vm.findSelectedStatus(vm.allNavs[index]),
                     onItemSelectedCaller: vm.onItemSelectHandler,
                 );

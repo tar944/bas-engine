@@ -53,14 +53,14 @@ class _View extends StatelessView<LabelingBodyViewModel> {
           padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
           child: Column(
             children: [
-              if(vm.tagLineState==GroupState.none||vm.tagLineState==GroupState.readyToWork)
+              if([GroupState.none,GroupState.readyToWork,GroupState.findSubObjects].contains(vm.tagLineState))
                 LabelBodyTagLine(
                     subGroups: vm.subGroups,
                     curGroup: vm.curGroup,
                     isParentGroup: vm.grpUUID!="",
                     isStatesShowing: vm.isState,
                     onLabelActionHandler: vm.onLabelActionHandler),
-              if(vm.tagLineState!=GroupState.none&&vm.tagLineState!=GroupState.readyToWork)
+              if([GroupState.none,GroupState.readyToWork,GroupState.findSubObjects].contains(vm.tagLineState)==false)
                 Row(
                   children: [
                     Container(

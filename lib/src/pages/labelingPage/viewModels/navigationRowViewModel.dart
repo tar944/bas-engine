@@ -5,20 +5,21 @@ import 'package:pmvvm/pmvvm.dart';
 class NavigationRowViewModel extends ViewModel {
 
   List<NavModel> allNavs;
-  int rowNumber;
+  int curRowNumber;
   NavModel selectedNav;
-  NavModel showAll=NavModel(-2, -1, "", "", "","","");
+  NavModel showAll=NavModel(-2, -1,0, "", "", "","","");
   ValueSetter<NavModel> onNavSelectedCaller;
-  NavigationRowViewModel(this.allNavs,this.selectedNav,this.rowNumber,this.onNavSelectedCaller);
+  NavigationRowViewModel(this.allNavs,this.selectedNav,this.curRowNumber,this.onNavSelectedCaller);
 
   onItemSelectHandler(NavModel curNav){
+    print("selected item ==> ${curNav.id}");
     selectedNav=curNav;
-    curNav.rowNumber=rowNumber;
     onNavSelectedCaller(curNav);
     notifyListeners();
   }
 
   String findSelectedStatus(NavModel curNav){
+    print("${curNav.id} && ${selectedNav.id}");
     if(selectedNav.id==-1){
       return "waiting";
     }else if(curNav.id==selectedNav.id){

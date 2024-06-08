@@ -103,27 +103,7 @@ class LabelBodyTagLine extends HookWidget {
                           onLabelSelectedCaller: onLabelActionHandler,
                         );
                       }):
-                  Row(
-                    children: [
-                      Text(Strings.emptyGroup,style: TextSystem.textL(Colors.white),),
-                      const Spacer(),
-                      IconButton(
-                        style: ButtonStyle(
-                          padding: ButtonState.all(EdgeInsets.zero)
-                        ),
-                          icon: Container(
-                            width: Dimens.btnWidthBig-20,
-                            height: Dimens.btnHeightBig,
-                            alignment: Alignment.center,
-                            decoration: BoxDecoration(
-                              borderRadius: const BorderRadius.all(Radius.circular(Dimens.btnHeightBig/2)),
-                              color: Colors.teal.dark
-                            ),
-                            child: const Text(Strings.findSimilar),
-                          ), onPressed: ()=>onLabelActionHandler("findSimilar")),
-                      const SizedBox(width: 5.0,)
-                    ],
-                  ),
+                  Text(Strings.emptyGroup,style: TextSystem.textL(Colors.white),),
                 ),
               ],
             ),

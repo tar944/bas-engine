@@ -37,14 +37,16 @@ class _View extends StatelessView<LabelingViewModel> {
       height: double.infinity,
       child: Padding(
         padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-        child:vm.allNavsRows.isNotEmpty?ListView.builder(
+        child:vm.allNavsRows.isNotEmpty?
+        ListView.builder(
+          key: GlobalKey(),
             itemCount: vm.allNavsRows.length+1,
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
               if(index!=vm.allNavsRows.length){
                 return NavigationRow(
                     allNavs: vm.allNavsRows[index],
-                    rowNumber: index+1,
+                    curRowNumber: vm.allNavsRows.length,
                     selectedNav: vm.selectedNavs[index],
                     onNavSelectedCaller: vm.onNavItemSelectHandler,
                 );

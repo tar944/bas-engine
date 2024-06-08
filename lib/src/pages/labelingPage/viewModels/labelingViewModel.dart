@@ -29,7 +29,7 @@ class LabelingViewModel extends ViewModel {
   @override
   void init() async {
     final address = await Preference().getMainAddress();
-    updateByPartData(NavModel(-1, 0, "part", "", "","",""));
+    updateByPartData(NavModel(-1, 0,1, "part", "", "","",""));
     if (address != '') {
       onGroupSelect("goto&&${address.split("&&")[2]}");
       await Preference().setMainAddress('');
@@ -62,6 +62,7 @@ class LabelingViewModel extends ViewModel {
         allNavs.add(NavModel(
             part.id,
             imgNumber,
+            1,
             "part",
             part.name!,
             part.allObjects.isNotEmpty
@@ -113,6 +114,7 @@ class LabelingViewModel extends ViewModel {
           allNavs.add(NavModel(
               grp.id,
               grp.allStates.length,
+              curNav.rowNumber+1,
               "group",
               name,
               grp.state != GroupState.findMainState.name ? grp.mainState.target!.image.target!.path! : "",
@@ -125,6 +127,7 @@ class LabelingViewModel extends ViewModel {
       selectedNavs.add(allNavs.firstWhere((element) => element.id == curNav.id));
       curGroup=allGroups.firstWhere((element) => element.id==curNav.id);
     }else{
+      selectedNavs.add(curNav);
       curGroup = await ImageGroupDAO().getDetails(curNav.id);
     }
     curPart=null;
@@ -135,10 +138,15 @@ class LabelingViewModel extends ViewModel {
 
   onNavItemSelectHandler(NavModel curNav) async {
     int rowNumber = allNavsRows.length;
-    for (int i = curNav.rowNumber; i < rowNumber ; i++) {
-      allNavsRows.removeAt(allNavsRows.length - 1);
+    if(curNav.rowNumber!=rowNumber){
+      for (int i = curNav.rowNumber; i < rowNumber ; i++) {
+        allNavsRows.removeAt(allNavsRows.length - 1);
+        selectedNavs.removeAt(selectedNavs.length - 1);
+      }
+    }else{
       selectedNavs.removeAt(selectedNavs.length - 1);
     }
+
     if (curNav.kind == "part") {
       updateByPartData(curNav);
     } else {
@@ -150,7 +158,7 @@ class LabelingViewModel extends ViewModel {
     var act = action.split("&&");
     switch (act[0]) {
       case 'open':
-        updateByGroupData(NavModel(int.parse(act[1]), 0, 'group',"", "newRow582990","",""));
+        updateByGroupData(NavModel(int.parse(act[1]), 0,allNavsRows[allNavsRows.length-1][0].rowNumber, 'group',"", "newRow582990","",""));
         break;
       case 'changePart':
         partId=int.parse(action.split("&&")[1]);

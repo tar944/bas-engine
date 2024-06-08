@@ -1,10 +1,11 @@
 class NavModel{
-  int id,imgNumber,rowNumber=-1;
+  int id,imgNumber,rowNumber;
   String kind,title,imgPath,description,lblName;
 
   NavModel(
       this.id,
       this.imgNumber,
+      this.rowNumber,
       this.kind,
       this.title,
       this.imgPath,
