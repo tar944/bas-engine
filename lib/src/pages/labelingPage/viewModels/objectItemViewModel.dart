@@ -12,15 +12,16 @@ class ObjectItemViewModel extends ViewModel {
   bool showLabel = false;
   String stepStatus;
   final bool isState;
-  final List<ImageGroupModel> allGroups;
+  final List<ImageGroupModel> subGroups;
+  final List<ImageGroupModel> otherShapes;
   final ValueSetter<String> onActionCaller;
 
-  ObjectItemViewModel(this.allGroups,this.isState, this.stepStatus, this.object, this.onActionCaller);
+  ObjectItemViewModel(this.subGroups,this.otherShapes,this.isState, this.stepStatus, this.object, this.onActionCaller);
 
   @override
   void init() {
     if (stepStatus == "hide") {
-      for (var grp in allGroups) {
+      for (var grp in subGroups) {
         if (grp.allStates.firstWhere((element) => element.id == object.id, orElse: () => ObjectModel(-1, "", 0.0, 0.0, 0.0, 0.0)).id! != -1) {
           parentGroupId = grp.id;
           // stepStatus = grp.state == GroupState.findMainState.name
@@ -43,15 +44,27 @@ class ObjectItemViewModel extends ViewModel {
     notifyListeners();
   }
 
+  List<ImageGroupModel> getGroupList(){
+    return isState?otherShapes:subGroups;
+  }
+
   onGroupSelected(List<int> allSelected, int curGroupItem) {
     if(object.isMainObject){
       Toast(Strings.warnRemoveMainObject, false).showWarning(context);
       return;
     }
-    if (parentGroupId != -1) {
-      onActionCaller("removeFromGroup&&$curGroupItem&&${object.id}");
-    } else {
-      onActionCaller("addToGroup&&$curGroupItem&&${object.id}");
+    if(isState){
+      if (parentGroupId != -1) {
+        onActionCaller("removeFromShape&&$curGroupItem&&${object.id}");
+      } else {
+        onActionCaller("addToShape&&$curGroupItem&&${object.id}");
+      }
+    }else{
+      if (parentGroupId != -1) {
+        onActionCaller("removeFromGroup&&$curGroupItem&&${object.id}");
+      } else {
+        onActionCaller("addToGroup&&$curGroupItem&&${object.id}");
+      }
     }
   }
 }

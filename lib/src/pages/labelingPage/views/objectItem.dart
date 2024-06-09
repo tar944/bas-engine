@@ -14,7 +14,8 @@ import 'package:pmvvm/pmvvm.dart';
 class ObjectItem extends StatelessWidget {
   ObjectItem(
       {Key? key,
-        required this.allGroups,
+        required this.subGroups,
+        required this.otherShapes,
         required this.object,
         required this.isState,
         required this.stepStatus,
@@ -24,15 +25,15 @@ class ObjectItem extends StatelessWidget {
   final ObjectModel object;
   final String stepStatus;
   final bool isState;
-  final List<ImageGroupModel> allGroups;
+  final List<ImageGroupModel> subGroups;
+  final List<ImageGroupModel> otherShapes;
   final ValueSetter<String> onActionCaller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel:
-          ObjectItemViewModel( allGroups,isState,stepStatus, object, onActionCaller),
+      viewModel: ObjectItemViewModel( subGroups,otherShapes,isState,stepStatus, object, onActionCaller),
     );
   }
 }
@@ -106,8 +107,7 @@ class _View extends StatelessView<ObjectItemViewModel> {
                       ],
                     ),
                   ),
-                if(vm.isState==false)
-                  Positioned(
+                Positioned(
                     bottom: 5,
                     left: 5,
                     right: 5,
@@ -133,7 +133,7 @@ class _View extends StatelessView<ObjectItemViewModel> {
                               border: Border.all(color: Colors.teal),
                             )
                         ),
-                        items: vm.allGroups.map((e)=>MultiSelectCard(
+                        items: vm.getGroupList().map((e)=>MultiSelectCard(
                               selected: e.id == vm.parentGroupId,
                               value: e.id,
                               label: e.name==Strings.emptyStr?Strings.notSet:e.name==""?e.label.target!.name:e.name,

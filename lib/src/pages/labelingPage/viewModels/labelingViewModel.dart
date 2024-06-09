@@ -31,7 +31,7 @@ class LabelingViewModel extends ViewModel {
   @override
   void init() async {
     final address = await Preference().getMainAddress();
-    updateByPartData(NavModel(-1, 0,1, "part", "", "","",""));
+    updateByPartData(NavModel(-1, 0,1, "part", "", "","","",[]));
     if (address != '') {
       onGroupSelect("goto&&${address.split("&&")[2]}");
       await Preference().setMainAddress('');
@@ -71,7 +71,8 @@ class LabelingViewModel extends ViewModel {
                 ? part.allObjects[0].image.target!.path!
                 : "",
           part.description!,
-          ""
+          "",
+          []
           )
         );
       }
@@ -121,7 +122,8 @@ class LabelingViewModel extends ViewModel {
               name,
               grp.state != GroupState.findMainState.name ? grp.mainState.target!.image.target!.path! : "",
               "",
-              lblName
+              lblName,
+            grp.otherShapes
           ));
         }
       }
@@ -180,7 +182,7 @@ class LabelingViewModel extends ViewModel {
     var act = action.split("&&");
     switch (act[0]) {
       case 'open':
-        updateByGroupData(NavModel(int.parse(act[1]), 0,allNavsRows[allNavsRows.length-1][0].rowNumber, 'group',"", "newRow582990","",""));
+        updateByGroupData(NavModel(int.parse(act[1]), 0,allNavsRows[allNavsRows.length-1][0].rowNumber, 'group',"", "newRow582990","","",[]));
         break;
       case 'changePart':
         partId=int.parse(action.split("&&")[1]);

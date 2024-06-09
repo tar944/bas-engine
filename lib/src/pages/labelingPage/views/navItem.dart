@@ -5,10 +5,12 @@ import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/navModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/navItemViewModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:pmvvm/pmvvm.dart';
 
-class NavItem extends HookWidget {
+class NavItem extends StatelessWidget {
   NavItem({
     Key? key,
     required this.navItem,
@@ -26,14 +28,26 @@ class NavItem extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    return MVVM(
+      view: () => const _View(),
+      viewModel: NavItemViewModel(navItem,selectStatus,showAddBtn,onItemSelectedCaller,onAddNewShapeCaller),
+    );
+  }
+}
+
+class _View extends StatelessView<NavItemViewModel> {
+  const _View({Key? key}) : super(key: key);
+
+  @override
+  Widget render(context, NavItemViewModel vm) {
     return Padding(
       padding: const EdgeInsets.only(right: 8.0),
       child: Opacity(
-        opacity: selectStatus=="notSelected"?0.5:1.0,
+        opacity: vm.selectStatus=="notSelected"?0.5:1.0,
         child: IconButton(
-          onPressed: ()=>onItemSelectedCaller(navItem),
+          onPressed: ()=>vm.onItemSelectedCaller(vm.navItem),
           style: ButtonStyle(
-            padding: ButtonState.all(EdgeInsets.zero)
+              padding: ButtonState.all(EdgeInsets.zero)
           ),
           icon: Row(
             children: [
@@ -41,11 +55,11 @@ class NavItem extends HookWidget {
                 width: Dimens.navItemW,
                 height: Dimens.navH,
                 decoration: BoxDecoration(
-                  border: Border.all(color: selectStatus=="selected"?Colors.teal:Colors.white),
+                  border: Border.all(color: vm.selectStatus=="selected"?Colors.teal:Colors.white),
                   borderRadius: const BorderRadius.all(Radius.circular(5.0)),
                 ),
                 child: Row(children: [
-                    Padding(
+                  Padding(
                       padding: const EdgeInsets.all(3.0),
                       child: Container(
                         width: Dimens.navH*1.5,
@@ -53,26 +67,56 @@ class NavItem extends HookWidget {
                         decoration: BoxDecoration(
                           borderRadius: const BorderRadius.all(Radius.circular(3.0)),
                           image: DecorationImage(
-                            image: navItem.imgPath!=""?Image.file(File(navItem.imgPath)).image:const AssetImage(
+                            image: vm.navItem.imgPath!=""?Image.file(File(vm.navItem.imgPath)).image:const AssetImage(
                                 'lib/assets/testImages/testImg1.png'),
                             fit: BoxFit.fitWidth,
                           ),
                         ),
                       )
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(3.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(vm.navItem.title.length>16?"${vm.navItem.title.substring(0,15)}...":vm.navItem.title,style: TextSystem.textM(vm.selectStatus=="selected"?Colors.teal:Colors.white),),
+                        const SizedBox(height: 2,),
+                        if(vm.selectStatus=="notSelected"||(vm.selectStatus=="selected"&&vm.navItem.otherShapes.isEmpty))
+                          Text(vm.navItem.kind=="part"?"${vm.navItem.description.length>20?vm.navItem.description.substring(0,20):vm.navItem.description}...":vm.navItem.lblName,style: TextSystem.textXs(vm.selectStatus=="selected"?Colors.teal:Colors.white),),
+                        if(vm.selectStatus=="selected"&&vm.navItem.otherShapes.isNotEmpty)
+                          SizedBox(
+                            width: Dimens.navItemW-(Dimens.navH*1.5)-14,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    flex: 15,
+                                    child: IconButton(
+                                      style: ButtonStyle(
+                                          padding: ButtonState.all(const EdgeInsets.all(3.0))
+                                      ),
+                                      icon: Icon(FluentIcons.chevron_left,color: Colors.teal.light,),
+                                      onPressed: ()=>vm.onPreviousShapeHandler(),
+                                    )
+                                ),
+                                Expanded(flex:70,child: Text(vm.navItem.otherShapes[vm.curShape].name!,style: TextSystem.textS(Colors.teal.light,),)),
+                                Expanded(
+                                    flex: 15,
+                                    child: IconButton(
+                                      style: ButtonStyle(
+                                          padding: ButtonState.all(const EdgeInsets.all(3.0))
+                                      ),
+                                      icon: Icon(FluentIcons.chevron_right,color: Colors.teal.light,),
+                                      onPressed: ()=>vm.onNextShapeHandler(),
+                                    )
+                                ),
+                              ],
+                            ),
+                          )
+                      ],
                     ),
-                    Padding(
-                      padding: const EdgeInsets.all(3.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(navItem.title.length>16?"${navItem.title.substring(0,15)}...":navItem.title,style: TextSystem.textM(selectStatus=="selected"?Colors.teal:Colors.white),),
-                          const SizedBox(height: 2,),
-                          Text(navItem.kind=="part"?"${navItem.description.length>20?navItem.description.substring(0,20):navItem.description}...":navItem.lblName,style: TextSystem.textXs(selectStatus=="selected"?Colors.teal:Colors.white),),
-                        ],
-                      ),
-                    )],),
+                  )],),
               ),
-              if(selectStatus=="selected"&&showAddBtn)
+              if(vm.selectStatus=="selected"&&vm.showAddBtn)
                 ...[
                   const SizedBox(width: 7,),
                   IconButton(
@@ -88,7 +132,7 @@ class NavItem extends HookWidget {
                             color: Colors.teal.dark
                         ),
                         child: const Icon(FluentIcons.add,size: 16,),
-                      ), onPressed: ()=>onAddNewShapeCaller(navItem)),
+                      ), onPressed: ()=>vm.onAddNewShapeCaller(vm.navItem)),
                   const SizedBox(width: 5.0,)
                 ]
             ],

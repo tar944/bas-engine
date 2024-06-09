@@ -53,14 +53,14 @@ class _View extends StatelessView<LabelingBodyViewModel> {
           padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
           child: Column(
             children: [
-              if([GroupState.none,GroupState.readyToWork,GroupState.findSubObjects].contains(vm.tagLineState))
+              if([GroupState.none,GroupState.readyToWork].contains(vm.tagLineState))
                 LabelBodyTagLine(
                     subGroups: vm.subGroups,
                     curGroup: vm.curGroup,
                     isParentGroup: vm.grpUUID!="",
                     isStatesShowing: vm.isState,
                     onLabelActionHandler: vm.onLabelActionHandler),
-              if([GroupState.none,GroupState.readyToWork,GroupState.findSubObjects].contains(vm.tagLineState)==false)
+              if([GroupState.none,GroupState.readyToWork].contains(vm.tagLineState)==false)
                 Row(
                   children: [
                     Container(
@@ -113,7 +113,8 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                                   children: vm.objects
                                       .map((item) => ObjectItem(
                                             key: GlobalKey(),
-                                            allGroups: vm.subGroups.where((element) => element.state!=GroupState.generated.name).toList(),
+                                            subGroups: vm.subGroups.where((element) => element.state!=GroupState.generated.name).toList(),
+                                            otherShapes: vm.otherShapes,
                                             isState:vm.isState,
                                             stepStatus: vm.tagLineState==GroupState.findSubObjects?"labelIt":vm.tagLineState==GroupState.findMainState?"firstStep":"hide",
                                             object: item,
