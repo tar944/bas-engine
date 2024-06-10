@@ -12,6 +12,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/controller/bodyController.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgCheckOtherState.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLabelingManagement.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgViewObjects.dart';
@@ -25,13 +26,11 @@ import 'package:path/path.dart' as p;
 import 'package:diff_image2/diff_image2.dart';
 
 class LabelingBodyViewModel extends ViewModel {
-  List<ObjectModel> objects;
+  BodyController bodyController;
   List<ImageGroupModel> subGroups = [];
   List<ImageGroupModel> otherShapes = [];
   ImageGroupModel? curGroup;
   GroupState tagLineState = GroupState.none;
-  String prjUUID, grpUUID, partUUID;
-  final int partId;
   int labelGroupId = -1, deletedObjId = -1, imgW = 0, imgH = 0;
   double progressValue = -1;
   bool isLoading = false, isState = true;
@@ -39,11 +38,7 @@ class LabelingBodyViewModel extends ViewModel {
   ValueSetter<String> onGroupActionCaller;
 
   LabelingBodyViewModel(
-      this.objects,
-      this.grpUUID,
-      this.partId,
-      this.partUUID,
-      this.prjUUID,
+      this.bodyController,
       this.onGroupActionCaller);
 
   @override
@@ -53,9 +48,9 @@ class LabelingBodyViewModel extends ViewModel {
 
   @override
   void onMount() async {
-    if (grpUUID != "") {
-      var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
-      var part = await ProjectPartDAO().getDetails(partId);
+    if (bodyController.grpUUID != "") {
+      var grp = await ImageGroupDAO().getDetailsByUUID(bodyController.grpUUID);
+      var part = await ProjectPartDAO().getDetails(bodyController.partId);
       if (grp!.state == GroupState.editOtherStates.name) {
         showDialog(
             context: context,
@@ -66,7 +61,7 @@ class LabelingBodyViewModel extends ViewModel {
                       .where((element) => element.needToCompare == true)
                       .toList(),
                   grpID: grp.id,
-                  prjUUID: prjUUID,
+                  prjUUID: bodyController.prjUUID,
                   partUUID: part!.uuid,
                   onUpdateCaller: () => updateData(),
                 ));
@@ -111,10 +106,8 @@ class LabelingBodyViewModel extends ViewModel {
                   curSub.bottom,
                 );
                 obj.srcObject.target = curState;
-                final path = await DirectoryManager()
-                    .getObjectImagePath(prjUUID, part!.uuid);
-                int w =
-                    (curSub.right.toInt() - curSub.left.toInt()).abs().toInt();
+                final path = await DirectoryManager().getObjectImagePath(bodyController.prjUUID, part!.uuid);
+                int w = (curSub.right.toInt() - curSub.left.toInt()).abs().toInt();
                 int h = (curSub.bottom.toInt() - curSub.top.toInt());
                 final cmd = i.Command()
                   ..decodeImageFile(curState.image.target!.path!)
@@ -150,13 +143,13 @@ class LabelingBodyViewModel extends ViewModel {
   }
 
   updateData() async {
-    if (partUUID != "") {
-      var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
+    if (bodyController.partUUID != "") {
+      var part = await ProjectPartDAO().getDetailsByUUID(bodyController.partUUID);
       subGroups = part!.allGroups;
       otherShapes = [];
       isState = false;
     } else {
-      var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+      var grp = await ImageGroupDAO().getDetailsByUUID(bodyController.grpUUID);
       subGroups = grp!.allGroups;
       otherShapes= grp.otherShapes;
       tagLineState = GroupState.values.firstWhere((element) => element.name == grp.state);
@@ -181,7 +174,7 @@ class LabelingBodyViewModel extends ViewModel {
     isLoading = true;
     progressValue = 0.0;
     notifyListeners();
-    var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
+    var part = await ProjectPartDAO().getDetailsByUUID(bodyController.partUUID);
     var allSize = allObjects.length;
     while (allObjects.length > 1) {
       print("all objects length is > ${allObjects.length}");
@@ -212,7 +205,7 @@ class LabelingBodyViewModel extends ViewModel {
         j++;
       }
       if (simObjects.length > 1) {
-        var newGrp = ImageGroupModel(-1, partUUID, '', Strings.emptyStr);
+        var newGrp = ImageGroupModel(-1, bodyController.partUUID, '', Strings.emptyStr);
         newGrp.uuid = const Uuid().v4();
         newGrp.state = GroupState.generated.name;
         newGrp.id = await ImageGroupDAO().add(newGrp);
@@ -232,18 +225,18 @@ class LabelingBodyViewModel extends ViewModel {
     var act = action.split("&&");
     switch (act[0]) {
       case "findSimilar":
-        await findSimilarImages(objects);
+        await findSimilarImages(bodyController.objects);
         break;
       case "showStates":
         isState = true;
-        var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
-        objects = grp!.allStates;
+        var grp = await ImageGroupDAO().getDetailsByUUID(bodyController.grpUUID);
+        bodyController.setObjects(grp!.allStates);
         notifyListeners();
         break;
       case "showSubs":
         isState = false;
-        var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
-        objects = grp!.subObjects;
+        var grp = await ImageGroupDAO().getDetailsByUUID(bodyController.grpUUID);
+        bodyController.setObjects(grp!.subObjects);
         notifyListeners();
         break;
       case "open":
@@ -251,7 +244,7 @@ class LabelingBodyViewModel extends ViewModel {
         break;
       case "choose":
         curGroup = await ImageGroupDAO().getDetails(int.parse(act[1]));
-        objects = curGroup!.allStates;
+        bodyController.setObjects(curGroup!.allStates);
         isState = false;
         notifyListeners();
         break;
@@ -268,33 +261,33 @@ class LabelingBodyViewModel extends ViewModel {
         break;
       case "removeGroup":
         var grp = await ImageGroupDAO().getDetails(int.parse(act[1]));
-        if (grpUUID != "") {
-          var parGroup = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+        if (bodyController.grpUUID != "") {
+          var parGroup = await ImageGroupDAO().getDetailsByUUID(bodyController.grpUUID);
           for (var obj in grp!.allStates) {
             obj.isMainObject = false;
             await ObjectDAO().update(obj);
             parGroup!.subObjects.add(obj);
           }
           await ImageGroupDAO().update(parGroup!);
-          objects = parGroup.subObjects;
+          bodyController.setObjects(parGroup.subObjects);
         }
         await ImageGroupDAO().delete(grp!);
         subGroups.removeWhere((element) => element.id == grp.id);
         notifyListeners();
         break;
       case "saveName":
-        var newGroup = ImageGroupModel(-1, partUUID, grpUUID, act[2]);
+        var newGroup = ImageGroupModel(-1, bodyController.partUUID, bodyController.grpUUID, act[2]);
         newGroup.uuid = const Uuid().v4();
         var lbl = await LabelDAO().getLabel(int.parse(act[1]));
         newGroup.label.target = lbl;
         await ImageGroupDAO().add(newGroup);
         newGroup = (await ImageGroupDAO().getDetailsByUUID(newGroup.uuid))!;
-        if (partUUID != "") {
-          var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
+        if (bodyController.partUUID != "") {
+          var part = await ProjectPartDAO().getDetailsByUUID(bodyController.partUUID);
           part!.allGroups.add(newGroup);
           await ProjectPartDAO().update(part);
         } else {
-          var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+          var grp = await ImageGroupDAO().getDetailsByUUID(bodyController.grpUUID);
           grp!.allGroups.add(newGroup);
           await ImageGroupDAO().update(grp);
         }
@@ -316,12 +309,12 @@ class LabelingBodyViewModel extends ViewModel {
             ? GroupState.findMainState.name
             : GroupState.findSubObjects.name;
         await ImageGroupDAO().update(grp);
-        if (grpUUID != "") {
-          grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+        if (bodyController.grpUUID != "") {
+          grp = await ImageGroupDAO().getDetailsByUUID(bodyController.grpUUID);
           subGroups = grp!.allGroups;
           otherShapes = grp.otherShapes;
         } else {
-          final part = await ProjectPartDAO().getDetailsByUUID(partUUID);
+          final part = await ProjectPartDAO().getDetailsByUUID(bodyController.partUUID);
           subGroups = part!.allGroups;
           otherShapes = [];
         }
@@ -341,13 +334,13 @@ class LabelingBodyViewModel extends ViewModel {
   }
 
   gotoLabelingDialog(String act) async {
-    var prj = await ProjectDAO().getDetailsByUUID(prjUUID);
+    var prj = await ProjectDAO().getDetailsByUUID(bodyController.prjUUID);
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (context) => DlgLabelManagement(
         labelList: prj!.allLabels,
-        prjUUID: prjUUID,
+        prjUUID: bodyController.prjUUID,
         returnAction: act == "showDialog" ? 'saveName' : 'changeName',
         onActionCaller: onLabelActionHandler,
       ),
@@ -361,19 +354,28 @@ class LabelingBodyViewModel extends ViewModel {
       case 'setMainState':
         onGroupActionCaller(action);
         break;
+      case 'addToShape':
+        var grp =await ImageGroupDAO().getDetails(int.parse(act[1]));
+        var parentGrp = await ImageGroupDAO().getDetailsByUUID(grp!.groupUUID);
+        var obj = await ObjectDAO().getDetails(int.parse(act[2]));
+        await ImageGroupDAO().removeObject(parentGrp!.id, obj!);
+        await ImageGroupDAO().addObject(grp.id, obj);
+        bodyController.removeObject(obj.id!);
+        notifyListeners();
+        break;
       case 'addToGroup':
         var obj = await ObjectDAO().getDetails(int.parse(act[2]));
         await ImageGroupDAO().addObject(int.parse(act[1]), obj!);
-        if (grpUUID == "") {
-          var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
+        if (bodyController.grpUUID == "") {
+          var part = await ProjectPartDAO().getDetailsByUUID(bodyController.partUUID);
           await ProjectPartDAO().removeObject(part!.id, obj);
         } else {
-          var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+          var grp = await ImageGroupDAO().getDetailsByUUID(bodyController.grpUUID);
           if (isState) {
             await ImageGroupDAO().removeObject(grp!.id, obj);
           } else {
             await ImageGroupDAO().removeSubObject(grp!.id, obj);
-            objects.removeWhere((element) => element.id == obj.id);
+            bodyController.removeObject(obj.id!);
             notifyListeners();
           }
         }
@@ -386,12 +388,12 @@ class LabelingBodyViewModel extends ViewModel {
       case 'removeFromGroup':
         var obj =
             await ObjectDAO().getDetails(int.parse(action.split("&&")[2]));
-        if (partUUID == "") {
-          var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+        if (bodyController.partUUID == "") {
+          var grp = await ImageGroupDAO().getDetailsByUUID(bodyController.grpUUID);
           await ImageGroupDAO().addSubObject(grp!.id, obj!);
           await ImageGroupDAO().removeObject(int.parse(act[1]), obj);
         } else {
-          var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
+          var part = await ProjectPartDAO().getDetailsByUUID(bodyController.partUUID);
           await ProjectPartDAO().addObject(part!.id, obj!);
           await ImageGroupDAO().removeObject(int.parse(act[1]), obj);
         }
@@ -401,13 +403,13 @@ class LabelingBodyViewModel extends ViewModel {
       case 'delete':
         var obj =
             await ObjectDAO().getDetails(int.parse(action.split("&&")[1]));
-        if (grpUUID != "" && obj!.isMainObject) {
-          var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+        if (bodyController.grpUUID != "" && obj!.isMainObject) {
+          var grp = await ImageGroupDAO().getDetailsByUUID(bodyController.grpUUID);
           grp!.state = GroupState.findMainState.name;
           await ImageGroupDAO().update(grp);
         }
         await ObjectDAO().deleteObject(obj!);
-        objects.removeWhere((element) => element.id == obj.id);
+        bodyController.removeObject(obj.id!);
         notifyListeners();
         break;
       case "setItMain":
@@ -418,7 +420,7 @@ class LabelingBodyViewModel extends ViewModel {
         newObject.image.target = obj.image.target;
         newObject.isMainObject = true;
         newObject.id = await ObjectDAO().addObject(newObject);
-        var grp = await ImageGroupDAO().getDetailsByUUID(grpUUID);
+        var grp = await ImageGroupDAO().getDetailsByUUID(bodyController.grpUUID);
         await ImageGroupDAO().addMainState(grp!.id, newObject);
         onMount();
         break;
@@ -426,13 +428,13 @@ class LabelingBodyViewModel extends ViewModel {
         var obj = await ObjectDAO().getDetails(int.parse(act[1]));
         List<ImageGroupModel> subGroups=[];
         bool showSubObjects=false;
-        if(grpUUID!=""){
-          var grp=await ImageGroupDAO().getDetailsByUUID(grpUUID);
+        if(bodyController.grpUUID!=""){
+          var grp=await ImageGroupDAO().getDetailsByUUID(bodyController.grpUUID);
           subGroups = grp!.allGroups;
           otherShapes = grp.otherShapes;
           showSubObjects=grp.label.target!=null&&grp.label.target!.levelName=="windows"?true:false;
         }else{
-          var part = await ProjectPartDAO().getDetailsByUUID(partUUID);
+          var part = await ProjectPartDAO().getDetailsByUUID(bodyController.partUUID);
           subGroups = part!.allGroups;
           otherShapes =[];
         }
@@ -445,8 +447,8 @@ class LabelingBodyViewModel extends ViewModel {
           builder: (context) => DlgViewObjects(
             dlgW: img!.width > (mediaW * 0.9) ? (mediaW * 0.9).toDouble() : img.width.toDouble(),
             dlgH: img.width > (mediaW * 0.9) ? (mediaH * 0.9).toDouble() : img.height.toDouble(),
-            allObjects: objects,
-            grpUUID: grpUUID,
+            allObjects: bodyController.objects,
+            grpUUID: bodyController.grpUUID,
             showSubObjects: showSubObjects,
             subGroups: subGroups,
             showObjectId: int.parse(act[1]),

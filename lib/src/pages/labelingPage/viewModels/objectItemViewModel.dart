@@ -45,7 +45,12 @@ class ObjectItemViewModel extends ViewModel {
   }
 
   List<ImageGroupModel> getGroupList(){
-    return isState?otherShapes:subGroups;
+    if(stepStatus=="firstStep"&&isState){
+      return otherShapes;
+    }else if(isState==false){
+      return subGroups;
+    }
+    return [];
   }
 
   onGroupSelected(List<int> allSelected, int curGroupItem) {

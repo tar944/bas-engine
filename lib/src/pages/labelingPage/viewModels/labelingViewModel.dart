@@ -9,6 +9,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/navModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/controller/bodyController.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLevel.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -17,7 +18,7 @@ import 'package:pmvvm/pmvvm.dart';
 import 'package:uuid/uuid.dart';
 
 class LabelingViewModel extends ViewModel {
-  List<ObjectModel> objects = [];
+  BodyController bodyController=BodyController();
   List<List<NavModel>> allNavsRows = [];
   List<NavModel> selectedNavs = [];
   ImageGroupModel? curGroup;
@@ -31,6 +32,7 @@ class LabelingViewModel extends ViewModel {
   @override
   void init() async {
     final address = await Preference().getMainAddress();
+    bodyController.setPrjUUID(prjUUID);
     updateByPartData(NavModel(-1, 0,1, "part", "", "","","",[]));
     if (address != '') {
       onGroupSelect("goto&&${address.split("&&")[2]}");
@@ -53,6 +55,7 @@ class LabelingViewModel extends ViewModel {
 
   updateByPartData(NavModel curNav) async {
     curGroup = null;
+    bodyController.setGrpUUID("");
     if (allNavsRows.isEmpty) {
       var prj = await ProjectDAO().getDetailsByUUID(prjUUID);
       List<NavModel> allNavs = [];
@@ -82,12 +85,15 @@ class LabelingViewModel extends ViewModel {
     }
 
     curPart = await ProjectPartDAO().getDetails(curNav.id);
-    objects=[];
+    var objects=<ObjectModel>[];
     objects.addAll(curPart!.allObjects);
     for (var grp in curPart!.allGroups) {
       objects.addAll(grp.allStates);
     }
+    bodyController.setObjects(objects);
+    bodyController.setPartId(curPart!.id);
     partId=curPart!.id;
+    bodyController.setPartUUID(curPart!.uuid);
     notifyListeners();
   }
 
@@ -135,8 +141,10 @@ class LabelingViewModel extends ViewModel {
       curGroup = await ImageGroupDAO().getDetails(curNav.id);
     }
     curPart=null;
-    objects = [];
-    objects.addAll(curGroup!.allStates);
+    bodyController.setObjects(curGroup!.allStates);
+    bodyController.setPartUUID("");
+    bodyController.setGrpUUID(curGroup!.uuid);
+    print("viewModel => ${selectedNavs[selectedNavs.length-1].id}");
     notifyListeners();
   }
 
@@ -147,10 +155,10 @@ class LabelingViewModel extends ViewModel {
         allNavsRows.removeAt(allNavsRows.length - 1);
         selectedNavs.removeAt(selectedNavs.length - 1);
       }
-    }else{
+    }
+    if(selectedNavs.length>1){
       selectedNavs.removeAt(selectedNavs.length - 1);
     }
-
     if (curNav.kind == "part") {
       updateByPartData(curNav);
     } else {
@@ -175,6 +183,14 @@ class LabelingViewModel extends ViewModel {
     curGroup!.otherShapes.add(newGrp);
     await ImageGroupDAO().update(curGroup!);
     curGroup=await ImageGroupDAO().getDetails(curGroup!.id);
+    bodyController.setGrpUUID(curGroup!.uuid);
+    notifyListeners();
+  }
+
+  onShapeChangeHandler(int grpId)async{
+    curGroup = await ImageGroupDAO().getDetails(grpId);
+    bodyController.setObjects(curGroup!.allStates);
+    bodyController.setGrpUUID(curGroup!.uuid);
     notifyListeners();
   }
 
@@ -186,6 +202,7 @@ class LabelingViewModel extends ViewModel {
         break;
       case 'changePart':
         partId=int.parse(action.split("&&")[1]);
+        bodyController.setPartId(partId);
         break;
       case 'setMainState':
       case 'goToCuttingPage':

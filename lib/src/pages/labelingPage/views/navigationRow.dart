@@ -13,7 +13,8 @@ class NavigationRow extends StatelessWidget {
     required this.selectedNav,
     required this.curRowNumber,
     required this.onNavSelectedCaller,
-    required this.onAddNewShapeCaller
+    required this.onAddNewShapeCaller,
+    required this.onSelectShapeCaller
   }) : super(key: key);
 
   final List<NavModel> allNavs;
@@ -21,12 +22,20 @@ class NavigationRow extends StatelessWidget {
   final int curRowNumber;
   ValueSetter<NavModel> onNavSelectedCaller;
   ValueSetter<NavModel> onAddNewShapeCaller;
+  ValueSetter<int> onSelectShapeCaller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: NavigationRowViewModel(allNavs,selectedNav,curRowNumber,onNavSelectedCaller,onAddNewShapeCaller),
+      viewModel: NavigationRowViewModel(
+          allNavs,
+          selectedNav,
+          curRowNumber,
+          onNavSelectedCaller,
+          onAddNewShapeCaller,
+          onSelectShapeCaller
+      ),
     );
   }
 }
@@ -36,6 +45,7 @@ class _View extends StatelessView<NavigationRowViewModel> {
 
   @override
   Widget render(context, NavigationRowViewModel vm) {
+    print("row data => ${vm.selectedNav.id} ** ${vm.selectedNav.rowNumber}");
     return Padding(
       padding: const EdgeInsets.all(3.0),
       child: Container(
@@ -59,6 +69,7 @@ class _View extends StatelessView<NavigationRowViewModel> {
                     selectStatus: vm.findSelectedStatus(vm.allNavs[index]),
                     onItemSelectedCaller: vm.onItemSelectHandler,
                   onAddNewShapeCaller: vm.onAddNewShapeCaller,
+                  onSelectShapeCaller: vm.onSelectShapeCaller,
                 );
               }),
           ),

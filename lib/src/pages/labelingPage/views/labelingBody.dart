@@ -2,6 +2,7 @@ import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/controller/bodyController.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelingBodyViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/labelBodyTagLine.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/objectItem.dart';
@@ -13,17 +14,11 @@ import 'package:pmvvm/pmvvm.dart';
 class LabelingBody extends StatelessWidget {
   LabelingBody({
     Key? key,
-    required this.objects,
-    required this.prjUUID,
-    required this.partUUID,
-    required this.partId,
-    required this.grpUUID,
+    required this.bodyController,
     required this.onGroupActionCaller
   }) : super(key: key);
 
-  List<ObjectModel> objects;
-  String prjUUID,partUUID,grpUUID;
-  final int partId;
+  BodyController bodyController;
   ValueSetter<String> onGroupActionCaller;
 
 
@@ -31,7 +26,7 @@ class LabelingBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: LabelingBodyViewModel(objects,grpUUID,partId,partUUID,prjUUID,onGroupActionCaller),
+      viewModel: LabelingBodyViewModel(bodyController,onGroupActionCaller),
     );
   }
 }
@@ -57,7 +52,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                 LabelBodyTagLine(
                     subGroups: vm.subGroups,
                     curGroup: vm.curGroup,
-                    isParentGroup: vm.grpUUID!="",
+                    isParentGroup: vm.bodyController.grpUUID!="",
                     isStatesShowing: vm.isState,
                     onLabelActionHandler: vm.onLabelActionHandler),
               if([GroupState.none,GroupState.readyToWork].contains(vm.tagLineState)==false)
@@ -83,7 +78,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.only(top: 10, bottom: 10),
-                  child: vm.objects.isNotEmpty ?
+                  child: vm.bodyController.objects.isNotEmpty ?
                       vm.isLoading?
                           Column(
                             children: [
@@ -110,7 +105,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                                           childAspectRatio: 3.2 / 2,
                                           crossAxisSpacing: 20,
                                           mainAxisSpacing: 20),
-                                  children: vm.objects
+                                  children: vm.bodyController.objects
                                       .map((item) => ObjectItem(
                                             key: GlobalKey(),
                                             subGroups: vm.subGroups.where((element) => element.state!=GroupState.generated.name).toList(),

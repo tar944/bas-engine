@@ -10,17 +10,22 @@ class NavigationRowViewModel extends ViewModel {
   NavModel showAll=NavModel(-2, -1,0, "", "", "","","",[]);
   ValueSetter<NavModel> onNavSelectedCaller;
   ValueSetter<NavModel> onAddNewShapeCaller;
-  NavigationRowViewModel(this.allNavs,this.selectedNav,this.curRowNumber,this.onNavSelectedCaller,this.onAddNewShapeCaller);
+  ValueSetter<int> onSelectShapeCaller;
+  NavigationRowViewModel(
+      this.allNavs,
+      this.selectedNav,
+      this.curRowNumber,
+      this.onNavSelectedCaller,
+      this.onAddNewShapeCaller,
+      this.onSelectShapeCaller);
 
   onItemSelectHandler(NavModel curNav){
-    print("selected item ==> ${curNav.id}");
     selectedNav=curNav;
     onNavSelectedCaller(curNav);
     notifyListeners();
   }
 
   String findSelectedStatus(NavModel curNav){
-    print("${curNav.id} && ${selectedNav.id}");
     if(selectedNav.id==-1){
       return "waiting";
     }else if(curNav.id==selectedNav.id){

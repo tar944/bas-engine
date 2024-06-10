@@ -11,18 +11,29 @@ class NavItemViewModel extends ViewModel {
   int curShape=0;
   ValueSetter<NavModel> onItemSelectedCaller;
   ValueSetter<NavModel> onAddNewShapeCaller;
+  ValueSetter<int> onSelectShapeCaller;
 
-  NavItemViewModel(this.navItem,this.selectStatus,this.showAddBtn,this.onItemSelectedCaller,this.onAddNewShapeCaller);
+  NavItemViewModel(
+      this.navItem,
+      this.selectStatus,
+      this.showAddBtn,
+      this.onItemSelectedCaller,
+      this.onAddNewShapeCaller,
+      this.onSelectShapeCaller);
   onNextShapeHandler(){
-    if(curShape<navItem.otherShapes.length-1){
+    if(curShape<navItem.otherShapes.length){
       curShape++;
       notifyListeners();
+      print("==> ${navItem.otherShapes[curShape].id}");
+      onSelectShapeCaller(navItem.otherShapes[curShape].id);
     }
   }
   onPreviousShapeHandler(){
     if(curShape>0){
       curShape--;
       notifyListeners();
+      print("==> ${navItem.otherShapes[curShape].id}");
+      onSelectShapeCaller(curShape==0?navItem.id:navItem.otherShapes[curShape].id);
     }
   }
 }

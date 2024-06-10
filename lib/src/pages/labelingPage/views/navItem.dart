@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
@@ -18,6 +17,7 @@ class NavItem extends StatelessWidget {
     required this.showAddBtn,
     required this.onItemSelectedCaller,
     required this.onAddNewShapeCaller,
+    required this.onSelectShapeCaller
   }) : super(key: key);
 
   final NavModel navItem;
@@ -25,12 +25,13 @@ class NavItem extends StatelessWidget {
   final bool showAddBtn;
   ValueSetter<NavModel> onItemSelectedCaller;
   ValueSetter<NavModel> onAddNewShapeCaller;
+  ValueSetter<int> onSelectShapeCaller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: NavItemViewModel(navItem,selectStatus,showAddBtn,onItemSelectedCaller,onAddNewShapeCaller),
+      viewModel: NavItemViewModel(navItem,selectStatus,showAddBtn,onItemSelectedCaller,onAddNewShapeCaller,onSelectShapeCaller),
     );
   }
 }
@@ -98,7 +99,7 @@ class _View extends StatelessView<NavItemViewModel> {
                                       onPressed: ()=>vm.onPreviousShapeHandler(),
                                     )
                                 ),
-                                Expanded(flex:70,child: Text(vm.navItem.otherShapes[vm.curShape].name!,style: TextSystem.textS(Colors.teal.light,),)),
+                                Expanded(flex:70,child: Text(vm.curShape==0?vm.navItem.title:vm.navItem.otherShapes[vm.curShape-1].name!,style: TextSystem.textS(Colors.teal.light,),)),
                                 Expanded(
                                     flex: 15,
                                     child: IconButton(
@@ -116,7 +117,7 @@ class _View extends StatelessView<NavItemViewModel> {
                     ),
                   )],),
               ),
-              if(vm.selectStatus=="selected"&&vm.showAddBtn)
+              if(vm.navItem.kind!='part'&&vm.selectStatus=="selected"&&vm.showAddBtn)
                 ...[
                   const SizedBox(width: 7,),
                   IconButton(

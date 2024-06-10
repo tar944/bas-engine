@@ -32,7 +32,6 @@ class _View extends StatelessView<LabelingViewModel> {
 
   @override
   Widget render(context, LabelingViewModel vm) {
-
     return SizedBox(
       height: double.infinity,
       child: Padding(
@@ -50,15 +49,11 @@ class _View extends StatelessView<LabelingViewModel> {
                     selectedNav: vm.selectedNavs[index],
                     onNavSelectedCaller: vm.onNavItemSelectHandler,
                     onAddNewShapeCaller: vm.onAddNewShapeHandler,
+                  onSelectShapeCaller: vm.onShapeChangeHandler,
                 );
               }else{
                 return LabelingBody(
-                    key: GlobalKey(),
-                    objects: vm.objects,
-                    partId: vm.partId,
-                    prjUUID: vm.prjUUID,
-                    partUUID: vm.curPart!=null?vm.curPart!.uuid:"",
-                    grpUUID: vm.curGroup!=null?vm.curGroup!.uuid:"",
+                    bodyController: vm.bodyController,
                     onGroupActionCaller: vm.onGroupSelect,
                 );
               }
