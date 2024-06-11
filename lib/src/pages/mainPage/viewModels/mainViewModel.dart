@@ -55,8 +55,7 @@ class MainPageViewModel extends ViewModel with WindowListener {
 
   setProjectGuideText() async {
     var projects = await ProjectDAO().getAll();
-    headerController.updateGuide(
-        projects.isEmpty ? Strings.guideEmptyProject : Strings.guideProjects);
+    headerController.updateGuide(projects.isEmpty ? Strings.guideEmptyProject : Strings.guideProjects);
     notifyListeners();
   }
 

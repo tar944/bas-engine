@@ -15,20 +15,23 @@ class NavItem extends StatelessWidget {
     required this.navItem,
     required this.selectStatus,
     required this.showAddBtn,
+    required this.rowNumber,
     required this.onItemSelectedCaller,
     required this.onAddNewShapeCaller,
     required this.onSelectShapeCaller
   }) : super(key: key);
 
-  final NavModel navItem;
+  NavModel navItem;
   final String selectStatus;
+  final int rowNumber;
   final bool showAddBtn;
   ValueSetter<NavModel> onItemSelectedCaller;
   ValueSetter<NavModel> onAddNewShapeCaller;
-  ValueSetter<int> onSelectShapeCaller;
+  ValueSetter<NavModel> onSelectShapeCaller;
 
   @override
   Widget build(BuildContext context) {
+    navItem.rowNumber =rowNumber;
     return MVVM(
       view: () => const _View(),
       viewModel: NavItemViewModel(navItem,selectStatus,showAddBtn,onItemSelectedCaller,onAddNewShapeCaller,onSelectShapeCaller),
@@ -91,24 +94,24 @@ class _View extends StatelessView<NavItemViewModel> {
                               children: [
                                 Expanded(
                                     flex: 15,
-                                    child: IconButton(
+                                    child: vm.showAddBtn?IconButton(
                                       style: ButtonStyle(
                                           padding: ButtonState.all(const EdgeInsets.all(3.0))
                                       ),
                                       icon: Icon(FluentIcons.chevron_left,color: Colors.teal.light,),
                                       onPressed: ()=>vm.onPreviousShapeHandler(),
-                                    )
+                                    ):Container()
                                 ),
-                                Expanded(flex:70,child: Text(vm.curShape==0?vm.navItem.title:vm.navItem.otherShapes[vm.curShape-1].name!,style: TextSystem.textS(Colors.teal.light,),)),
+                                Expanded(flex:70,child: Text(vm.navItem.shapeIndex==0?vm.navItem.title:vm.navItem.otherShapes[vm.navItem.shapeIndex-1].name!,style: TextSystem.textS(Colors.teal.light,),)),
                                 Expanded(
                                     flex: 15,
-                                    child: IconButton(
+                                    child: vm.showAddBtn?IconButton(
                                       style: ButtonStyle(
                                           padding: ButtonState.all(const EdgeInsets.all(3.0))
                                       ),
                                       icon: Icon(FluentIcons.chevron_right,color: Colors.teal.light,),
                                       onPressed: ()=>vm.onNextShapeHandler(),
-                                    )
+                                    ):Container()
                                 ),
                               ],
                             ),

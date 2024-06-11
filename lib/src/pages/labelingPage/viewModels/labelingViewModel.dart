@@ -10,6 +10,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/controller/bodyController.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/controller/navRowController.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLevel.dart';
 import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -19,8 +20,7 @@ import 'package:uuid/uuid.dart';
 
 class LabelingViewModel extends ViewModel {
   BodyController bodyController=BodyController();
-  List<List<NavModel>> allNavsRows = [];
-  List<NavModel> selectedNavs = [];
+  List<NavRowController> allNavRows = [];
   ImageGroupModel? curGroup;
   ProjectPartModel? curPart;
   int partId;
@@ -33,30 +33,21 @@ class LabelingViewModel extends ViewModel {
   void init() async {
     final address = await Preference().getMainAddress();
     bodyController.setPrjUUID(prjUUID);
-    updateByPartData(NavModel(-1, 0,1, "part", "", "","","",[]));
+    updateByPartData(NavModel(-1, 0, "part", "", "","","",[]));
     if (address != '') {
       onGroupSelect("goto&&${address.split("&&")[2]}");
       await Preference().setMainAddress('');
     }
     if (await LabelDAO().needAddDefaultValue(prjUUID)) {
-      await LabelDAO().addList(
-          prjUUID,
-          ObjectType.values
-              .map((e) => LabelModel(0,const Uuid().v4(), e.name.toString().split('__')[0], "objects",e.name.toString().split('__')[1]))
-              .toList());
-
-      await LabelDAO().addList(
-          prjUUID,
-          Windows.values
-              .map((e) => LabelModel(0,const Uuid().v4(), e.name.toString(), "windows",""))
-              .toList());
+      await LabelDAO().addList(prjUUID, ObjectType.values.map((e) => LabelModel(0,const Uuid().v4(), e.name.toString().split('__')[0], "objects",e.name.toString().split('__')[1])).toList());
+      await LabelDAO().addList(prjUUID, Windows.values.map((e) => LabelModel(0,const Uuid().v4(), e.name.toString(), "windows","")).toList());
     }
   }
 
   updateByPartData(NavModel curNav) async {
     curGroup = null;
     bodyController.setGrpUUID("");
-    if (allNavsRows.isEmpty) {
+    if (allNavRows.isEmpty) {
       var prj = await ProjectDAO().getDetailsByUUID(prjUUID);
       List<NavModel> allNavs = [];
       for (var part in prj!.allParts) {
@@ -67,7 +58,6 @@ class LabelingViewModel extends ViewModel {
         allNavs.add(NavModel(
             part.id,
             imgNumber,
-            1,
             "part",
             part.name!,
             part.allObjects.isNotEmpty
@@ -79,8 +69,13 @@ class LabelingViewModel extends ViewModel {
           )
         );
       }
-      allNavsRows.add(allNavs);
-      selectedNavs.add(allNavsRows[0][0]);
+      allNavRows.add(
+          NavRowController()
+            ..setAllItems(allNavs)
+            ..setSelectedNav(allNavs[0])
+            ..setRowNumber(1)
+            ..visibleBtn(false)
+      );
       curNav.id = prj.allParts[0].id;
     }
 
@@ -98,6 +93,9 @@ class LabelingViewModel extends ViewModel {
   }
 
   updateByGroupData(NavModel curNav) async {
+    for(int i=0;i<allNavRows.length;i++){
+      allNavRows[i].visibleBtn(false);
+    }
     if(curNav.imgPath=="newRow582990"){
       List<ImageGroupModel> allGroups = curPart==null?curGroup!.allGroups:curPart!.allGroups;
       List<NavModel> allNavs = [];
@@ -123,7 +121,6 @@ class LabelingViewModel extends ViewModel {
           allNavs.add(NavModel(
               grp.id,
               grp.allStates.length,
-              curNav.rowNumber+1,
               "group",
               name,
               grp.state != GroupState.findMainState.name ? grp.mainState.target!.image.target!.path! : "",
@@ -133,31 +130,33 @@ class LabelingViewModel extends ViewModel {
           ));
         }
       }
-      allNavsRows.add(allNavs);
-      selectedNavs.add(allNavs.firstWhere((element) => element.id == curNav.id));
+      allNavRows.add(
+          NavRowController()
+            ..setAllItems(allNavs)
+            ..setSelectedNav(allNavs.firstWhere((element) => element.id == curNav.id))
+            ..setRowNumber(allNavRows[allNavRows.length-1].rowNumber+1)
+              ..visibleBtn(true)
+      );
       curGroup=allGroups.firstWhere((element) => element.id==curNav.id);
     }else{
-      selectedNavs.add(curNav);
+      allNavRows[allNavRows.length-1].setSelectedNav(curNav);
+      allNavRows[allNavRows.length-1].visibleBtn(true);
       curGroup = await ImageGroupDAO().getDetails(curNav.id);
     }
+
     curPart=null;
     bodyController.setObjects(curGroup!.allStates);
     bodyController.setPartUUID("");
     bodyController.setGrpUUID(curGroup!.uuid);
-    print("viewModel => ${selectedNavs[selectedNavs.length-1].id}");
     notifyListeners();
   }
 
   onNavItemSelectHandler(NavModel curNav) async {
-    int rowNumber = allNavsRows.length;
+    int rowNumber = allNavRows.length;
     if(curNav.rowNumber!=rowNumber){
       for (int i = curNav.rowNumber; i < rowNumber ; i++) {
-        allNavsRows.removeAt(allNavsRows.length - 1);
-        selectedNavs.removeAt(selectedNavs.length - 1);
+        allNavRows.removeAt(allNavRows.length - 1);
       }
-    }
-    if(selectedNavs.length>1){
-      selectedNavs.removeAt(selectedNavs.length - 1);
     }
     if (curNav.kind == "part") {
       updateByPartData(curNav);
@@ -187,10 +186,13 @@ class LabelingViewModel extends ViewModel {
     notifyListeners();
   }
 
-  onShapeChangeHandler(int grpId)async{
-    curGroup = await ImageGroupDAO().getDetails(grpId);
+  onShapeChangeHandler(NavModel nav)async{
+    curGroup = await ImageGroupDAO().getDetails(nav.shapeIndex==0?nav.id:nav.otherShapes[nav.shapeIndex-1].id);
     bodyController.setObjects(curGroup!.allStates);
     bodyController.setGrpUUID(curGroup!.uuid);
+    var items = allNavRows[allNavRows.length-1].allItems;
+    items[items.indexWhere((element) => element.id==nav.id)].shapeIndex=nav.shapeIndex;
+    allNavRows[allNavRows.length-1].setAllItems(items);
     notifyListeners();
   }
 
@@ -198,7 +200,7 @@ class LabelingViewModel extends ViewModel {
     var act = action.split("&&");
     switch (act[0]) {
       case 'open':
-        updateByGroupData(NavModel(int.parse(act[1]), 0,allNavsRows[allNavsRows.length-1][0].rowNumber, 'group',"", "newRow582990","","",[]));
+        updateByGroupData(NavModel(int.parse(act[1]), 0, 'group',"", "newRow582990","","",[]));
         break;
       case 'changePart':
         partId=int.parse(action.split("&&")[1]);

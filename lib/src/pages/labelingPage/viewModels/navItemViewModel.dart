@@ -8,10 +8,11 @@ class NavItemViewModel extends ViewModel {
   final NavModel navItem;
   final String selectStatus;
   final bool showAddBtn;
-  int curShape=0;
   ValueSetter<NavModel> onItemSelectedCaller;
   ValueSetter<NavModel> onAddNewShapeCaller;
-  ValueSetter<int> onSelectShapeCaller;
+  ValueSetter<NavModel> onSelectShapeCaller;
+
+
 
   NavItemViewModel(
       this.navItem,
@@ -20,20 +21,17 @@ class NavItemViewModel extends ViewModel {
       this.onItemSelectedCaller,
       this.onAddNewShapeCaller,
       this.onSelectShapeCaller);
+
   onNextShapeHandler(){
-    if(curShape<navItem.otherShapes.length){
-      curShape++;
-      notifyListeners();
-      print("==> ${navItem.otherShapes[curShape].id}");
-      onSelectShapeCaller(navItem.otherShapes[curShape].id);
+    if(navItem.shapeIndex<navItem.otherShapes.length){
+      navItem.shapeIndex++;
+      onSelectShapeCaller(navItem);
     }
   }
   onPreviousShapeHandler(){
-    if(curShape>0){
-      curShape--;
-      notifyListeners();
-      print("==> ${navItem.otherShapes[curShape].id}");
-      onSelectShapeCaller(curShape==0?navItem.id:navItem.otherShapes[curShape].id);
+    if(navItem.shapeIndex>0){
+      navItem.shapeIndex--;
+      onSelectShapeCaller(navItem);
     }
   }
 }

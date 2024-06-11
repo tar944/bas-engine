@@ -36,23 +36,22 @@ class _View extends StatelessView<LabelingViewModel> {
       height: double.infinity,
       child: Padding(
         padding: const EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-        child:vm.allNavsRows.isNotEmpty?
+        child:vm.allNavRows.isNotEmpty?
         ListView.builder(
           key: GlobalKey(),
-            itemCount: vm.allNavsRows.length+1,
+            itemCount: vm.allNavRows.length+1,
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
-              if(index!=vm.allNavsRows.length){
+              if(index!=vm.allNavRows.length){
                 return NavigationRow(
-                    allNavs: vm.allNavsRows[index],
-                    curRowNumber: vm.allNavsRows.length,
-                    selectedNav: vm.selectedNavs[index],
+                    rowController: vm.allNavRows[index],
                     onNavSelectedCaller: vm.onNavItemSelectHandler,
                     onAddNewShapeCaller: vm.onAddNewShapeHandler,
                   onSelectShapeCaller: vm.onShapeChangeHandler,
                 );
               }else{
                 return LabelingBody(
+                  key: GlobalKey(),
                     bodyController: vm.bodyController,
                     onGroupActionCaller: vm.onGroupSelect,
                 );

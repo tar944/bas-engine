@@ -1,5 +1,6 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/navModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/labelingPage/controller/navRowController.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/navigationRowViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/navItem.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -9,29 +10,23 @@ import 'package:pmvvm/pmvvm.dart';
 class NavigationRow extends StatelessWidget {
   NavigationRow({
     Key? key,
-    required this.allNavs,
-    required this.selectedNav,
-    required this.curRowNumber,
+    required this.rowController,
     required this.onNavSelectedCaller,
     required this.onAddNewShapeCaller,
     required this.onSelectShapeCaller
   }) : super(key: key);
 
-  final List<NavModel> allNavs;
-  final NavModel selectedNav;
-  final int curRowNumber;
+  final NavRowController rowController;
   ValueSetter<NavModel> onNavSelectedCaller;
   ValueSetter<NavModel> onAddNewShapeCaller;
-  ValueSetter<int> onSelectShapeCaller;
+  ValueSetter<NavModel> onSelectShapeCaller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
       viewModel: NavigationRowViewModel(
-          allNavs,
-          selectedNav,
-          curRowNumber,
+          rowController,
           onNavSelectedCaller,
           onAddNewShapeCaller,
           onSelectShapeCaller
@@ -45,7 +40,7 @@ class _View extends StatelessView<NavigationRowViewModel> {
 
   @override
   Widget render(context, NavigationRowViewModel vm) {
-    print("row data => ${vm.selectedNav.id} ** ${vm.selectedNav.rowNumber}");
+
     return Padding(
       padding: const EdgeInsets.all(3.0),
       child: Container(
@@ -60,13 +55,15 @@ class _View extends StatelessView<NavigationRowViewModel> {
             height: Dimens.navH,
             child: ListView.builder(
               key: GlobalKey(),
-              itemCount: vm.allNavs.length,
+              itemCount: vm.rowController.allItems.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
+                print("${vm.rowController.rowNumber} ==> ${vm.rowController.showBtn}");
                 return NavItem(
-                    navItem: vm.allNavs[index],
-                    showAddBtn: vm.selectedNav.rowNumber==vm.curRowNumber,
-                    selectStatus: vm.findSelectedStatus(vm.allNavs[index]),
+                    navItem: vm.rowController.allItems[index],
+                    rowNumber: vm.rowController.rowNumber,
+                    showAddBtn: vm.rowController.showBtn,
+                    selectStatus: vm.findSelectedStatus(vm.rowController.allItems[index]),
                     onItemSelectedCaller: vm.onItemSelectHandler,
                   onAddNewShapeCaller: vm.onAddNewShapeCaller,
                   onSelectShapeCaller: vm.onSelectShapeCaller,
