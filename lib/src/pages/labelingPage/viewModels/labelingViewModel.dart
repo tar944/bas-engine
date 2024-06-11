@@ -129,7 +129,7 @@ class LabelingViewModel extends ViewModel {
             await ImageGroupDAO().update(grp);
           }
           if(grp.otherShapes.isNotEmpty&&grp.allStates.isNotEmpty) {
-            grp.otherShapes.add(grp);
+            grp.otherShapes.insert(0,grp);
           }
           var imgPath =grp.state != GroupState.findMainState.name ? grp.mainState.target!.image.target!.path! : "";
           if(imgPath==""){

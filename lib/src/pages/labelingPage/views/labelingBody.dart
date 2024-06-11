@@ -1,7 +1,6 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/controller/bodyController.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/labelingBodyViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/labelBodyTagLine.dart';
@@ -108,7 +107,7 @@ class _View extends StatelessView<LabelingBodyViewModel> {
                                   children: vm.bodyController.objects
                                       .map((item) => ObjectItem(
                                             key: GlobalKey(),
-                                            subGroups: vm.subGroups.where((element) => element.state!=GroupState.generated.name).toList(),
+                                            subGroups:vm.getValidGroups(item),
                                             otherShapes: vm.otherShapes,
                                             isState:vm.isState,
                                             stepStatus: vm.tagLineState==GroupState.findSubObjects?"labelIt":vm.tagLineState==GroupState.findMainState?"firstStep":"hide",

@@ -102,7 +102,7 @@ class _View extends StatelessView<NavItemViewModel> {
                                       onPressed: ()=>vm.onPreviousShapeHandler(),
                                     ):Container()
                                 ),
-                                Expanded(flex:70,child: Text(vm.navItem.otherShapes[vm.navItem.shapeIndex].name!,style: TextSystem.textS(Colors.teal.light,),)),
+                                Expanded(flex:70,child: Text(vm.getName(),style: TextSystem.textS(Colors.teal.light,),)),
                                 Expanded(
                                     flex: 15,
                                     child: vm.showAddBtn?IconButton(

@@ -347,6 +347,30 @@ class LabelingBodyViewModel extends ViewModel {
     );
   }
 
+  List<ImageGroupModel>getValidGroups(ObjectModel obj){
+    var validGroups = <ImageGroupModel>[];
+    if(obj.srcObject.target!=null){
+      return validGroups;
+    }
+    for(var grp in subGroups){
+      if(grp.state==GroupState.findMainState.name){
+        validGroups.add(grp);
+      }else{
+        bool isValid =false;
+        for(var shp in grp.otherShapes){
+          if(shp.state==GroupState.findMainState.name) {
+            isValid=true;
+            break;
+          }
+        }
+        if(isValid){
+          validGroups.add(grp);
+        }
+      }
+    }
+    return validGroups;
+  }
+
   onObjectActionHandler(String action) async {
     var act = action.split("&&");
     switch (act[0]) {

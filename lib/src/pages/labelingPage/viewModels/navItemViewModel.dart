@@ -34,4 +34,13 @@ class NavItemViewModel extends ViewModel {
       onSelectShapeCaller(navItem);
     }
   }
+  String getName(){
+    String name="";
+    if(navItem.otherShapes[navItem.shapeIndex].name==""){
+      name= navItem.otherShapes[navItem.shapeIndex].label.target!.name;
+    }else{
+      name= navItem.otherShapes[navItem.shapeIndex].name!;
+    }
+    return name.length>12?"${name.substring(0,12)}...":name;
+  }
 }
