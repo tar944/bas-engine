@@ -21,7 +21,13 @@ class LabelTag extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-
+    int stateNumber(){
+      int num =curGroup.allStates.length;
+      for(var grp in curGroup.otherShapes){
+        num+=grp.allStates.length;
+      }
+      return num;
+    }
     return Padding(
       padding: const EdgeInsets.only(top:4.0,bottom:4.0,left: 3.0,right: 3.0),
       child: IconButton(
@@ -50,7 +56,7 @@ class LabelTag extends HookWidget {
                 const SizedBox(
                   width: 8,
                 ),
-                if (curGroup.allStates.isNotEmpty&&!isSelected)
+                if (stateNumber()!=0&&!isSelected)
                   Container(
                     width: Dimens.tabHeightSmall,
                     height: Dimens.tabHeightSmall,
@@ -59,11 +65,11 @@ class LabelTag extends HookWidget {
                         shape: BoxShape.circle,
                         border: Border.all(color: Colors.grey[180])),
                     child: Text(
-                      curGroup.allStates.length.toString(),
+                      stateNumber().toString(),
                       style: TextSystem.textM(Colors.orange.dark),
                     ),
                   ),
-                if(curGroup.allStates.isNotEmpty&&isSelected)
+                if(stateNumber()!=0&&isSelected)
                   ...[
                     if(curGroup.label.target!=null&&curGroup.label.target!.levelName!="objects")
                       Container(
@@ -114,7 +120,7 @@ class LabelTag extends HookWidget {
                       ),
                         ),]
                   ],
-                if(curGroup.allStates.isEmpty)
+                if(stateNumber()==0)
                   IconButton(
                       style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
                       icon: Container(
@@ -135,7 +141,7 @@ class LabelTag extends HookWidget {
               ],
             ),
           ),
-          onPressed: curGroup.allStates.isEmpty?null:
+          onPressed: stateNumber()==0 ?null:
               ()=>onLabelSelectedCaller(
                   isSelected?
                     (curGroup.state==GroupState.generated.name?

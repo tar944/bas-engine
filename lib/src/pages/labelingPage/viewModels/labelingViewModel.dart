@@ -55,17 +55,24 @@ class LabelingViewModel extends ViewModel {
         for (var grp in part.allGroups) {
           imgNumber += grp.allStates.length;
         }
+        var imgPath = part.allObjects.isNotEmpty ? part.allObjects[0].image.target!.path! : "";
+        if(imgPath==""){
+          for(var grp in part.allGroups){
+            if(grp.mainState.target!=null){
+              imgPath=grp.mainState.target!.image.target!.path!;
+              break;
+            }
+          }
+        }
         allNavs.add(NavModel(
             part.id,
             imgNumber,
             "part",
             part.name!,
-            part.allObjects.isNotEmpty
-                ? part.allObjects[0].image.target!.path!
-                : "",
-          part.description!,
-          "",
-          []
+            imgPath,
+            part.description!,
+            "",
+            []
           )
         );
       }
@@ -84,6 +91,9 @@ class LabelingViewModel extends ViewModel {
     objects.addAll(curPart!.allObjects);
     for (var grp in curPart!.allGroups) {
       objects.addAll(grp.allStates);
+      for(var shp in grp.otherShapes){
+        objects.addAll(shp.allStates);
+      }
     }
     bodyController.setObjects(objects);
     bodyController.setPartId(curPart!.id);
@@ -118,15 +128,27 @@ class LabelingViewModel extends ViewModel {
             grp.state=GroupState.findMainState.name;
             await ImageGroupDAO().update(grp);
           }
+          if(grp.otherShapes.isNotEmpty&&grp.allStates.isNotEmpty) {
+            grp.otherShapes.add(grp);
+          }
+          var imgPath =grp.state != GroupState.findMainState.name ? grp.mainState.target!.image.target!.path! : "";
+          if(imgPath==""){
+            for(var shape in grp.otherShapes){
+              if(shape.mainState.target!=null){
+                imgPath=shape.mainState.target!.image.target!.path!;
+                break;
+              }
+            }
+          }
           allNavs.add(NavModel(
               grp.id,
               grp.allStates.length,
               "group",
               name,
-              grp.state != GroupState.findMainState.name ? grp.mainState.target!.image.target!.path! : "",
+              imgPath,
               "",
               lblName,
-            grp.otherShapes
+              grp.otherShapes
           ));
         }
       }
@@ -135,7 +157,7 @@ class LabelingViewModel extends ViewModel {
             ..setAllItems(allNavs)
             ..setSelectedNav(allNavs.firstWhere((element) => element.id == curNav.id))
             ..setRowNumber(allNavRows[allNavRows.length-1].rowNumber+1)
-              ..visibleBtn(true)
+            ..visibleBtn(true)
       );
       curGroup=allGroups.firstWhere((element) => element.id==curNav.id);
     }else{
@@ -145,6 +167,7 @@ class LabelingViewModel extends ViewModel {
     }
 
     curPart=null;
+    curGroup = curGroup!.otherShapes.isEmpty?curGroup:curGroup!.otherShapes[0];
     bodyController.setObjects(curGroup!.allStates);
     bodyController.setPartUUID("");
     bodyController.setGrpUUID(curGroup!.uuid);
@@ -178,6 +201,7 @@ class LabelingViewModel extends ViewModel {
     ImageGroupModel? newGrp= ImageGroupModel(-1, "", curGroup!.uuid, name);
     newGrp.uuid = const Uuid().v4();
     newGrp.state = GroupState.findMainState.name;
+    newGrp.label.target=curGroup!.label.target;
     newGrp.id=await ImageGroupDAO().add(newGrp);
     curGroup!.otherShapes.add(newGrp);
     await ImageGroupDAO().update(curGroup!);
@@ -187,7 +211,7 @@ class LabelingViewModel extends ViewModel {
   }
 
   onShapeChangeHandler(NavModel nav)async{
-    curGroup = await ImageGroupDAO().getDetails(nav.shapeIndex==0?nav.id:nav.otherShapes[nav.shapeIndex-1].id);
+    curGroup = await ImageGroupDAO().getDetails(nav.otherShapes[nav.shapeIndex].id);
     bodyController.setObjects(curGroup!.allStates);
     bodyController.setGrpUUID(curGroup!.uuid);
     var items = allNavRows[allNavRows.length-1].allItems;
