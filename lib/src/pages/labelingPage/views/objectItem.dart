@@ -77,7 +77,7 @@ class _View extends StatelessView<ObjectItemViewModel> {
                     image: DecorationImage(
                       image: vm.object.image.target!=null?Image.file(File(vm.object.image.target!.path!)).image:const AssetImage(
                           'lib/assets/testImages/testImg1.png'),
-                      fit: BoxFit.fitWidth,
+                      fit: vm.object.image.target!.width>vm.object.image.target!.height?BoxFit.fitWidth:BoxFit.fitHeight,
                     ),
                   ),
                 ),

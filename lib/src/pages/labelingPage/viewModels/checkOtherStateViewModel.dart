@@ -114,12 +114,20 @@ class CheckOtherStateViewModel extends ViewModel {
   }
 
   Future<Uint8List?> getCroppedImage(ObjectModel obj)async{
+    int width = srcObject.image.target!.width.toInt();
+    int height = srcObject.image.target!.height.toInt();
+    if(obj.image.target!.width<(srcObject.left.toInt()+width)){
+      width = obj.image.target!.width.toInt()-srcObject.left.toInt();
+    }
+    if(obj.image.target!.height<(srcObject.top.toInt()+height)){
+      height = obj.image.target!.height.toInt()-srcObject.left.toInt();
+    }
     final cmd = i.Command()
       ..decodeImageFile(obj.image.target!.path!)
       ..copyCrop(
           x: srcObject.left.toInt(),
           y: srcObject.top.toInt(),
-          width: srcObject.image.target!.width.toInt(),
+          width: width,
           height: srcObject.image.target!.height.toInt())
       ..encodeJpg();
     await cmd.executeThread();

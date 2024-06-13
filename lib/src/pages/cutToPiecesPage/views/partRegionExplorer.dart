@@ -103,6 +103,7 @@ class _View extends StatelessView<PartRegionViewModel> {
                   ),
                 );
         }).toList(),
+
       ]),
     );
   }

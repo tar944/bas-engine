@@ -69,8 +69,7 @@ class LabelingBodyViewModel extends ViewModel {
         isLoading = true;
         notifyListeners();
         ImageGroupModel? newGrp;
-        final img =
-            await i.decodeImageFile(grp.mainState.target!.image.target!.path!);
+        final img = await i.decodeImageFile(grp.mainState.target!.image.target!.path!);
         imgH = img!.height;
         imgW = img.width;
         while (grp.subObjects.isNotEmpty) {
@@ -94,44 +93,40 @@ class LabelingBodyViewModel extends ViewModel {
           for (var curState in grp.allStates) {
             if (curSub.srcObject.targetId != curState.id) {
               var curImg = await getCroppedImage(curSub, curState);
-              var imgDiff = DiffImage.compareFromMemory(srcImg!, curImg!, asPercentage: true).diffValue;
-              print("${curSub.image.target!.name} compare to=> ${curState.image.target!.name!} image diff: $imgDiff");
-              if (imgDiff > 0.8) {
-                var obj = ObjectModel(
-                  -1,
-                  const Uuid().v4(),
-                  curSub.left,
-                  curSub.right,
-                  curSub.top,
-                  curSub.bottom,
-                );
-                obj.srcObject.target = curState;
-                final path = await DirectoryManager().getObjectImagePath(bodyController.prjUUID, part!.uuid);
-                int w = (curSub.right.toInt() - curSub.left.toInt()).abs().toInt();
-                int h = (curSub.bottom.toInt() - curSub.top.toInt());
-                final cmd = i.Command()
-                  ..decodeImageFile(curState.image.target!.path!)
-                  ..copyCrop(
-                      x: curSub.left.toInt(),
-                      y: curSub.top.toInt(),
-                      width: w,
-                      height: h)
-                  ..writeToFile(path);
-                await cmd.executeThread();
-                var img = ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(path), w.toDouble(), h.toDouble(), path);
-                img.id = await ImageDAO().add(img);
-                obj.image.target = img;
-                obj.id = await ObjectDAO().addObject(obj);
-                newGrp.allStates.add(obj);
-                await ImageGroupDAO().update(newGrp);
+              if(curImg!.width==srcImg!.width&&curImg.height==srcImg.height){
+                var imgDiff = DiffImage.compareFromMemory(srcImg, curImg, asPercentage: true).diffValue;
+                print("${curSub.image.target!.name} compare to=> ${curState.image.target!.name!} image diff: $imgDiff");
+                if (imgDiff > 0.8) {
+                  var obj = ObjectModel(
+                    -1,
+                    const Uuid().v4(),
+                    curSub.left,
+                    curSub.right,
+                    curSub.top,
+                    curSub.bottom,
+                  );
+                  obj.srcObject.target = curState;
+                  final path = await DirectoryManager().getObjectImagePath(bodyController.prjUUID, part!.uuid);
+                  int w = (curSub.right.toInt() - curSub.left.toInt()).abs().toInt();
+                  int h = (curSub.bottom.toInt() - curSub.top.toInt());
+                  final cmd = i.Command()
+                    ..decodeImageFile(curState.image.target!.path!)
+                    ..copyCrop(
+                        x: curSub.left.toInt(),
+                        y: curSub.top.toInt(),
+                        width: w,
+                        height: h)
+                    ..writeToFile(path);
+                  await cmd.executeThread();
+                  var img = ImageModel(-1, const Uuid().v4(), obj.uuid, p.basename(path), w.toDouble(), h.toDouble(), path);
+                  img.id = await ImageDAO().add(img);
+                  obj.image.target = img;
+                  obj.id = await ObjectDAO().addObject(obj);
+                  newGrp.allStates.add(obj);
+                  await ImageGroupDAO().update(newGrp);
+                }
               }
             }
-          }
-          if (newGrp.allStates.length == 1) {
-            newGrp.mainState.target = newGrp.allStates[0];
-            newGrp.allStates[0].isMainObject = true;
-            await ObjectDAO().update(newGrp.allStates[0]);
-            await ImageGroupDAO().update(newGrp);
           }
         }
         grp.state = GroupState.readyToWork.name;
@@ -349,11 +344,8 @@ class LabelingBodyViewModel extends ViewModel {
 
   List<ImageGroupModel>getValidGroups(ObjectModel obj){
     var validGroups = <ImageGroupModel>[];
-    if(obj.srcObject.target!=null){
-      return validGroups;
-    }
     for(var grp in subGroups){
-      if(grp.state==GroupState.findMainState.name){
+      if([GroupState.findMainState.name,GroupState.findSubObjects.name].contains(grp.state)){
         validGroups.add(grp);
       }else{
         bool isValid =false;
@@ -470,7 +462,7 @@ class LabelingBodyViewModel extends ViewModel {
           barrierDismissible: true,
           builder: (context) => DlgViewObjects(
             dlgW: img!.width > (mediaW * 0.9) ? (mediaW * 0.9).toDouble() : img.width.toDouble(),
-            dlgH: img.width > (mediaW * 0.9) ? (mediaH * 0.9).toDouble() : img.height.toDouble(),
+            dlgH: img.height > (mediaH * 0.9) ? (mediaH * 0.9).toDouble() : img.height.toDouble(),
             allObjects: bodyController.objects,
             grpUUID: bodyController.grpUUID,
             showSubObjects: showSubObjects,

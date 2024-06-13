@@ -91,7 +91,7 @@ class _View extends StatelessView<CheckOtherStateViewModel> {
                                             decoration: BoxDecoration(
                                               image: DecorationImage(
                                                 image: Image.file(File(vm.srcObject.image.target!.path!)).image,
-                                                fit: BoxFit.fitWidth,
+                                                fit: vm.srcObject.image.target!.width>vm.srcObject.image.target!.height?BoxFit.fitWidth:BoxFit.fitHeight,
                                               ),),),
                                             const Positioned(
                                               top:0.0,
@@ -109,7 +109,7 @@ class _View extends StatelessView<CheckOtherStateViewModel> {
                                               decoration: BoxDecoration(
                                               image: DecorationImage(
                                                 image: Image.memory(vm.allImages[vm.curImage]).image,
-                                                fit: BoxFit.fitWidth,
+                                                fit: vm.srcObject.image.target!.width>vm.srcObject.image.target!.height?BoxFit.fitWidth:BoxFit.fitHeight,
                                               ),
                                             ),
                                           ),

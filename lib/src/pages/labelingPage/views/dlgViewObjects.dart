@@ -5,7 +5,6 @@ import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/viewObjectsViewModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/viewRegionExplorer.dart';
 import 'package:bas_dataset_generator_engine/src/parts/dialogTitleBar.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';

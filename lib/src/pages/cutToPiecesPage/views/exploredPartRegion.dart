@@ -43,8 +43,8 @@ class _View extends StatelessView<ExplorerPartViewModel> {
   Widget render(context, ExplorerPartViewModel vm) {
     final controller = FlyoutController();
    return SizedBox(
-      width: !vm.isMinimum?vm.getSize(isWidth: true):40,
-      height: !vm.isMinimum?vm.getSize():40,
+      width: !vm.isMinimum?(!vm.isSimpleAction&&vm.getSize(isWidth: true)<300)?300:vm.getSize(isWidth: true):40,
+      height: !vm.isMinimum?(!vm.isSimpleAction&&vm.getSize()<120)?120:vm.getSize():40,
       child: Opacity(
         opacity: !vm.isMinimum?1.0:0.3,
         child: Stack(
