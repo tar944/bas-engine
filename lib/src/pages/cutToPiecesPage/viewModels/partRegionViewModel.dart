@@ -1,5 +1,3 @@
-import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
-import 'package:bas_dataset_generator_engine/main.dart';
 import 'package:bas_dataset_generator_engine/src/controllers/regionRecController.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';

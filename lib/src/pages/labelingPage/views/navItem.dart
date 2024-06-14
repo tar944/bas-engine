@@ -1,12 +1,10 @@
 import 'dart:io';
 
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
-import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/navModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/viewModels/navItemViewModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class NavItem extends StatelessWidget {

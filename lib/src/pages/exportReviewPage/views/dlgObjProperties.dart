@@ -1,17 +1,13 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
-import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
-import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/viewModels/objectPropertiesViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/parts/dialogTitleBar.dart';
 import 'package:bas_dataset_generator_engine/src/widgets/CButton.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:pmvvm/pmvvm.dart';
-import 'package:uuid/uuid.dart';
 
 class DlgObjProperties extends StatelessWidget {
   DlgObjProperties({

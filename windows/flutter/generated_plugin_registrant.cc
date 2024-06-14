@@ -7,6 +7,7 @@
 #include "generated_plugin_registrant.h"
 
 #include <audioplayers_windows/audioplayers_windows_plugin.h>
+#include <desktop_multi_window/desktop_multi_window_plugin.h>
 #include <fc_native_video_thumbnail/fc_native_video_thumbnail_plugin_c_api.h>
 #include <flutter_acrylic/flutter_acrylic_plugin.h>
 #include <flutter_meedu_videoplayer/flutter_meedu_videoplayer_plugin_c_api.h>
@@ -25,6 +26,8 @@
 void RegisterPlugins(flutter::PluginRegistry* registry) {
   AudioplayersWindowsPluginRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("AudioplayersWindowsPlugin"));
+  DesktopMultiWindowPluginRegisterWithRegistrar(
+      registry->GetRegistrarForPlugin("DesktopMultiWindowPlugin"));
   FcNativeVideoThumbnailPluginCApiRegisterWithRegistrar(
       registry->GetRegistrarForPlugin("FcNativeVideoThumbnailPluginCApi"));
   FlutterAcrylicPluginRegisterWithRegistrar(

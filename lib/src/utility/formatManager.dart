@@ -8,7 +8,6 @@ import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesDat
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:path/path.dart' as path;
-import 'package:image/image.dart' as i;
 
 class FormatManager{
 

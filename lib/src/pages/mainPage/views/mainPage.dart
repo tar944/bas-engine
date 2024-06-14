@@ -14,6 +14,7 @@ class MainPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("main page");
     return MVVM(
       view: () => const _View(),
       viewModel: MainPageViewModel(),

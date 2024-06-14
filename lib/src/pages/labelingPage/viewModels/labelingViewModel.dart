@@ -9,6 +9,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/navModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
+import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/dlgCutToPiece.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/controller/bodyController.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/controller/navRowController.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/views/dlgLevel.dart';
@@ -235,12 +236,24 @@ class LabelingViewModel extends ViewModel {
         final curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
         final curPart = await ProjectPartDAO().getDetails(partId);
         await Preference().setMainAddress('${curProject!.id}&&${curPart!.id}&&${curGroup!.id}');
-        context.goNamed('cutToPieces',params: {
-          'groupId':curGroup!.id.toString(),
-          'partUUID':curPart.uuid,
-          'prjUUID':prjUUID,
-          'title': '${curProject.title} > ${curPart.name} > ${curGroup!.name}'
-        });
+        showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) =>
+              DlgCutToPiece(
+                groupId: curGroup!.id,
+                partUUID: curPart.uuid,
+                prjUUID: prjUUID,
+                title: '${curProject.title} > ${curPart.name} > ${curGroup!.name}',
+                onCloseCaller: ()=>{},
+              ),
+        );
+        // context.goNamed('cutToPieces',params: {
+        //   'groupId':curGroup!.id.toString(),
+        //   'partUUID':curPart.uuid,
+        //   'prjUUID':prjUUID,
+        //   'title': '${curProject.title} > ${curPart.name} > ${curGroup!.name}'
+        // });
         break;
     }
   }

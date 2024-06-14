@@ -68,6 +68,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_multi_select_items: ^0.4.2
   image_compression_flutter: ^1.0.3
+  desktop_multi_window: ^0.2.0
   screen_capturer:
     path: ./packages/screen_capturer
   diff_image2:

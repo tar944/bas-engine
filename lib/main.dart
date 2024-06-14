@@ -16,7 +16,8 @@ late ObjectBox objectbox;
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await windowManager.ensureInitialized();
+  await DirectoryManager().createLocalDir();
+  objectbox = await ObjectBox.create();
   if (kIsLinux || kIsMacOS || kIsWindows) {
     await windowManager.ensureInitialized();
   }
@@ -31,8 +32,7 @@ Future<void> main() async {
     await windowManager.show();
     await windowManager.focus();
   });
-  await DirectoryManager().createLocalDir();
-  objectbox = await ObjectBox.create();
+  print("main called");
   runApp(const MyApp());
 }
 

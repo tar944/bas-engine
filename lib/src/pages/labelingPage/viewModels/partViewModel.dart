@@ -1,4 +1,3 @@
-import 'package:bas_dataset_generator_engine/src/controllers/regionRecController.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';

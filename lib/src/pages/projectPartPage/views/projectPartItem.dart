@@ -28,7 +28,6 @@ class _View extends StatelessView<PartItemViewModel> {
 
   @override
   Widget render(context, PartItemViewModel vm) {
-    final controller = FlyoutController();
 
     return IconButton(
       onPressed: () => vm.onActionCaller!("goto&&${vm.part.id}"),

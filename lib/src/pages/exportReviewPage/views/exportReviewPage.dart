@@ -6,7 +6,6 @@ import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/viewMode
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/flyScreensList.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/partRegionExplorer.dart';
 import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
-import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:pmvvm/pmvvm.dart';

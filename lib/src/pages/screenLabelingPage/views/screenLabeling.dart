@@ -61,7 +61,6 @@ class ScreenLabeling extends HookWidget with WindowListener {
   @override
   Widget build(BuildContext context) {
     final allScreens = useState([]);
-    final indexImage = useState(0);
 
     useEffect(() {
       _init();

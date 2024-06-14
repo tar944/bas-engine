@@ -112,11 +112,13 @@ class _View extends StatelessView<TabBodyViewModel> {
               padding: const EdgeInsets.only(bottom: 10,left: 5.0,right: 5.0),
             child:MultiSelectContainer(
                 singleSelectedItem: true,
-                wrapSettings: const WrapSettings(spacing: 5.0),
+                wrapSettings: const WrapSettings(
+                    spacing: 3.0
+                ),
                 itemsPadding: const EdgeInsets.all(3.0),
                 textStyles: MultiSelectTextStyles(
-                    textStyle: TextSystem.textS(Colors.white),
-                    selectedTextStyle: TextSystem.textS(Colors.white)
+                    textStyle: TextSystem.textXs(Colors.white),
+                    selectedTextStyle: TextSystem.textXs(Colors.white)
                 ),
                 itemsDecoration: MultiSelectDecorations(
                     decoration:BoxDecoration(
