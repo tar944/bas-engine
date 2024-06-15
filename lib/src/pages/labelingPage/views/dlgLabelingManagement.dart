@@ -41,7 +41,7 @@ class _View extends StatelessView<LabelManagementViewModel> {
       alignment: Alignment.center,
       children: [
         SizedBox(
-            width: Dimens.dialogBigWidth,
+            width: Dimens.dialogLargeWidth,
             height: Dimens.dialogLargeHeight+100,
             child: Container(
               decoration: BoxDecoration(

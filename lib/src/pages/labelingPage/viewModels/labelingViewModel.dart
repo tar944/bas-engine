@@ -4,6 +4,7 @@ import 'package:bas_dataset_generator_engine/src/data/dao/labelDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectPartDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/navModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
@@ -236,24 +237,37 @@ class LabelingViewModel extends ViewModel {
         final curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
         final curPart = await ProjectPartDAO().getDetails(partId);
         await Preference().setMainAddress('${curProject!.id}&&${curPart!.id}&&${curGroup!.id}');
-        showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) =>
-              DlgCutToPiece(
-                groupId: curGroup!.id,
-                partUUID: curPart.uuid,
-                prjUUID: prjUUID,
-                title: '${curProject.title} > ${curPart.name} > ${curGroup!.name}',
-                onCloseCaller: ()=>{},
-              ),
-        );
-        // context.goNamed('cutToPieces',params: {
-        //   'groupId':curGroup!.id.toString(),
-        //   'partUUID':curPart.uuid,
-        //   'prjUUID':prjUUID,
-        //   'title': '${curProject.title} > ${curPart.name} > ${curGroup!.name}'
-        // });
+        var img =curGroup!.allStates[0].image.target!;
+        ImageModel? srcImg;
+        for(var grp in curPart.allGroups){
+          if(grp.mainState.target!=null){
+            srcImg=grp.mainState.target!.image.target!;
+            break;
+          }
+        }
+
+        if(img.width<(srcImg!.width*0.8)&&img.height<(srcImg.height*0.8)){
+          showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) =>
+                DlgCutToPiece(
+                  groupId: curGroup!.id,
+                  partUUID: curPart.uuid,
+                  prjUUID: prjUUID,
+                  title: '${curProject.title} > ${curPart.name} > ${curGroup!.name}',
+                  onCloseCaller: ()=>{},
+                ),
+          );
+        }else{
+          context.goNamed('cutToPieces',params: {
+            'groupId':curGroup!.id.toString(),
+            'partUUID':curPart.uuid,
+            'prjUUID':prjUUID,
+            'title': '${curProject.title} > ${curPart.name} > ${curGroup!.name}'
+          });
+        }
+
         break;
     }
   }
