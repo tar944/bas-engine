@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
+import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
@@ -11,6 +12,7 @@ import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesDat
 import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/dlgObjProperties.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/dlgExport.dart';
+import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/formatManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:dio/dio.dart';
@@ -18,6 +20,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
 import 'package:pmvvm/pmvvm.dart';
 import 'package:window_manager/window_manager.dart';
+import 'package:path/path.dart' as path;
 
 class ExportReviewViewModel extends ViewModel {
 
@@ -51,51 +54,80 @@ class ExportReviewViewModel extends ViewModel {
     });
   }
 
-
   @override
   void onMount() async{
     var curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
 
+    await DirectoryManager().saveFileInLocal(
+        path.join(
+            await DirectoryManager().createPrjDir(prjUUID),
+            'db_${DateTime.now().millisecondsSinceEpoch.toString()}.json'),
+        await FormatManager().getProjectData(curProject!));
+
+    var mainGroups =<ImageGroupModel>[];
+    var mainObjects =<String>[];
+
     for(var part in curProject!.allParts){
-      for (var grp in part.allGroups){
-        if(grp.label.target!=null&&grp.mainState.target!=null){
-          for(var obj in grp.allStates){
-            var curObject = obj.srcObject.target!=null?obj.srcObject.target!:obj;
-            mainStates.add(
-                PascalVOCModel(
-                    curObject.uuid,
-                    curObject.image.target!.name,
-                    curObject.image.target!.path,
-                    curObject.image.target!.width.toInt(),
-                    curObject.image.target!.height.toInt()));
-            var name = "${grp.label.target!.levelName}**${grp.label.target!.name}${grp.name!=""?"**${grp.name}":""}";
-            if(obj.isMainObject){
-              if(obj.exportName==""){
-                obj.exportName=grp.label.target!.levelName=="objects"?grp.label.target!.name:name;
-                await ObjectDAO().update(obj);
-              }
-              mainStates[mainStates.length-1].objects.add(
-                  PascalObjectModel(
-                      obj.uuid,
-                      grp.uuid,
-                      grp.label.target!.levelName,
-                      obj.exportState,
-                      obj.exportName,
-                      name,
-                      obj.left.toInt(),
-                      obj.right.toInt(),
-                      obj.top.toInt(),
-                      obj.bottom.toInt()
-                  ));
+      var dir = Directory(await DirectoryManager().getPartImageDirectoryPath(prjUUID, part.uuid));
+      List contents = dir.listSync();
+
+      for (var fileOrDir in contents) {
+        var img = await ImageDAO().getDetailsByPath(fileOrDir.path);
+        if(img != null){
+          mainObjects.add(img.objUUID);
+        }
+      }
+      if(part.allGroups.isNotEmpty){
+        mainGroups.addAll(part.allGroups);
+      }
+      for(var grp in part.allGroups){
+        if(grp.otherShapes.isNotEmpty){
+          mainGroups.addAll(grp.otherShapes);
+        }
+      }
+    }
+
+    for (var grp in mainGroups){
+      if(grp.label.target!=null&&grp.mainState.target!=null){
+        for(var obj in grp.allStates){
+          ObjectModel? curObject;
+          do{
+            curObject= curObject==null?obj.srcObject.target:curObject.srcObject.target;
+          }while(mainObjects.contains(curObject!.uuid)==false);
+
+          mainStates.add(
+              PascalVOCModel(
+                  curObject.uuid,
+                  curObject.image.target!.name,
+                  curObject.image.target!.path,
+                  curObject.image.target!.width.toInt(),
+                  curObject.image.target!.height.toInt()));
+
+          var name = "${grp.label.target!.levelName}**${grp.label.target!.name}${grp.name!=""?"**${grp.name}":""}";
+          if(obj.isMainObject){
+            if(obj.exportName==""){
+              obj.exportName=grp.label.target!.levelName=="objects"?grp.label.target!.name:name;
+              await ObjectDAO().update(obj);
             }
-            mainStates[mainStates.length-1].objects.addAll(
-                await findSubObjects(
-                    obj,
-                    grp.allGroups,
-                    name,
-                    grp.mainState.target!.left,
-                    grp.mainState.target!.top));
+            mainStates[mainStates.length - 1].objects.add(PascalObjectModel(
+                obj.uuid,
+                grp.uuid,
+                grp.label.target!.levelName,
+                obj.exportState,
+                obj.exportName,
+                name,
+                obj.left.toInt() + obj.srcObject.target!.left.toInt(),
+                obj.right.toInt() + obj.srcObject.target!.left.toInt(),
+                obj.top.toInt() + obj.srcObject.target!.top.toInt(),
+                obj.bottom.toInt() + obj.srcObject.target!.top.toInt()));
           }
+          mainStates[mainStates.length-1].objects.addAll(
+              await findSubObjects(
+                  obj,
+                  grp.allGroups,
+                  name,
+                  obj.srcObject.target!.left,
+                  obj.srcObject.target!.top));
         }
       }
     }

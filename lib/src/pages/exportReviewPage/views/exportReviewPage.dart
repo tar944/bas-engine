@@ -165,7 +165,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
                                 children: [
                                   Padding(
                                     padding: const EdgeInsets.all(5.0),
-                                    child: Text(Strings.actionGuide,style: TextSystem.textL(Colors.white),),
+                                    child: Text("${Strings.actionGuide} ( 0 )" ,style: TextSystem.textL(Colors.white),),
                                   ),
                                   Padding(
                                     padding: const EdgeInsets.all(5.0),

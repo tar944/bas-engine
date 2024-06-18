@@ -50,7 +50,7 @@ class _View extends StatelessView<ViewObjectsViewModel> {
       alignment: Alignment.center,
       children: [
         SizedBox(
-            width: (vm.dlgW<300?300:vm.dlgW)+60,
+            width: (vm.dlgW<430?430:vm.dlgW)+60,
             height: vm.dlgH+120,
             child: Container(
               decoration: BoxDecoration(
@@ -70,7 +70,7 @@ class _View extends StatelessView<ViewObjectsViewModel> {
                   Padding(
                     padding: const EdgeInsets.only(left: 20.0),
                     child: Container(
-                      width: vm.dlgW<300?300:vm.dlgW,
+                      width: vm.dlgW<430?430:vm.dlgW,
                       height: vm.dlgH,
                       alignment: Alignment.center,
                       child: PageView(

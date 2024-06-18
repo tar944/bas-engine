@@ -1,4 +1,5 @@
 import 'package:bas_dataset_generator_engine/main.dart';
+import 'package:bas_dataset_generator_engine/objectbox.g.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:objectbox/objectbox.dart';
@@ -8,6 +9,12 @@ class ImageDAO {
     Box<ImageModel> box = objectbox.store.box<ImageModel>();
     ImageModel? screen = box.get(id);
     return screen;
+  }
+
+  Future<ImageModel?> getDetailsByPath(String path) async {
+    Box<ImageModel> box = objectbox.store.box<ImageModel>();
+    ImageModel? img = box.query(ImageModel_.path.equals(path)).build().findFirst();
+    return img;
   }
 
   Future<int> add(ImageModel newScreen) async {

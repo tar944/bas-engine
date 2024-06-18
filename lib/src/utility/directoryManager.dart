@@ -52,15 +52,13 @@ class DirectoryManager {
         docsDir.path, appDirName, prjUUID, vidUUID, "screenShotsDir");
   }
 
-  Future<bool> createPrjDir(String prjUUID) async {
+  Future<String> createPrjDir(String prjUUID) async {
     final docsDir = await getApplicationDocumentsDirectory();
     var path = Directory(p.join(docsDir.path, appDirName, prjUUID));
-    if (path.existsSync()) {
-      return false;
-    } else {
+    if (!path.existsSync()) {
       await path.create();
-      return true;
     }
+    return path.path;
   }
 
   Future<bool> createVideoDir(String prjUUID, String vidUUID) async {

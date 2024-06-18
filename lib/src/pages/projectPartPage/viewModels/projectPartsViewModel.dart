@@ -141,7 +141,7 @@ class ProjectPartsViewModel extends ViewModel {
       var imgPath=await DirectoryManager().copyFile(path.join(dirPath,obj.image!.path), path.join(await DirectoryManager().getPartImageDirectoryPath(prjUUID, partUUID),obj.image!.name));
       ObjectModel newObj = ObjectModel(-1,obj.uuid!, 0, 0, 0, 0);
       newObj.actionType = obj.actionType!;
-      var img =ImageModel(-1, obj.image!.uuid!, newObj.uuid, obj.image!.name,obj.image!.width!,obj.image!.height!, imgPath);
+      var img =ImageModel(-1, obj.image!.uuid!, newObj.uuid, obj.image!.name!,obj.image!.width!,obj.image!.height!, imgPath);
       img.id= await ImageDAO().add(img);
       newObj.actX=obj.actX!;
       newObj.actY=obj.actY!;

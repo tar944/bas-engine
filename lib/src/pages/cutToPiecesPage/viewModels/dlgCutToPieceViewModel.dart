@@ -82,7 +82,6 @@ class DlgCutToPieceViewModel extends ViewModel {
     }
   }
 
-
   nextImage() async{
     indexImage = ++indexImage;
     if (indexImage == group!.allStates.length) {

@@ -17,6 +17,14 @@ class ObjectDAO {
     return obj;
   }
 
+  Future<ObjectModel?> getDetailsParentUUID(String uuid) async {
+    Box<ObjectModel> box = objectbox.store.box<ObjectModel>();
+    QueryBuilder<ObjectModel> objectBuilder = box.query();
+    objectBuilder.link(ObjectModel_.srcObject,ObjectModel_.uuid.equals(uuid));
+    ObjectModel? obj = objectBuilder.build().findFirst();
+    return obj;
+  }
+
   Future<List<ObjectModel>?> getByLabel(int lblId) async {
     Box<ObjectModel> box = objectbox.store.box<ObjectModel>();
     var listObjects = box.query(ObjectModel_.label.equals(lblId)).build().find();

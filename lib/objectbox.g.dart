@@ -860,10 +860,8 @@ ModelDefinition getObjectBoxModel() {
         },
         objectToFB: (ImageModel object, fb.Builder fbb) {
           final uuidOffset = fbb.writeString(object.uuid);
-          final nameOffset =
-              object.name == null ? null : fbb.writeString(object.name!);
-          final pathOffset =
-              object.path == null ? null : fbb.writeString(object.path!);
+          final nameOffset = fbb.writeString(object.name);
+          final pathOffset = fbb.writeString(object.path);
           final objUUIDOffset = fbb.writeString(object.objUUID);
           fbb.startTable(18);
           fbb.addInt64(0, object.id ?? 0);
@@ -886,13 +884,13 @@ ModelDefinition getObjectBoxModel() {
           final objUUIDParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 32, '');
           final nameParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGetNullable(buffer, rootOffset, 12);
+              .vTableGet(buffer, rootOffset, 12, '');
           final widthParam =
               const fb.Float64Reader().vTableGet(buffer, rootOffset, 34, 0);
           final heightParam =
               const fb.Float64Reader().vTableGet(buffer, rootOffset, 36, 0);
           final pathParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGetNullable(buffer, rootOffset, 14);
+              .vTableGet(buffer, rootOffset, 14, '');
           final object = ImageModel(idParam, uuidParam, objUUIDParam, nameParam,
               widthParam, heightParam, pathParam);
 

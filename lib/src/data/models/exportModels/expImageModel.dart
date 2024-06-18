@@ -1,9 +1,4 @@
-import 'package:objectbox/objectbox.dart';
-
-@Entity()
-class ImageModel {
-  @Id()
-  int? id;
+class ExpImageModel {
   String uuid;
   String objUUID;
   String name;
@@ -11,7 +6,7 @@ class ImageModel {
   double width;
   double height;
 
-  ImageModel(this.id,
+  ExpImageModel(
       this.uuid,
       this.objUUID,
       this.name,
