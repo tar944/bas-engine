@@ -12,18 +12,20 @@ class RegionWidget extends StatelessWidget {
     required this.curObject,
     required this.width,
     required this.height,
+    required this.regionStatus,
     required this.onObjectActionCaller,
   }) : super(key: key);
 
   final PascalObjectModel curObject;
   final double width,height;
+  final String regionStatus;
   final ValueSetter<String> onObjectActionCaller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: RegionViewModel(curObject,width,height, onObjectActionCaller),
+      viewModel: RegionViewModel(curObject,regionStatus,width,height, onObjectActionCaller),
     );
   }
 }
@@ -37,9 +39,9 @@ class _View extends StatelessView<RegionViewModel> {
      onEnter:(e)=> vm.onHoverHandler(true),
      onExit: (e)=> vm.onHoverHandler(false),
      child: GestureDetector(
-       onTapUp: (e)=>vm.onObjectActionCaller("click&&${vm.curObject.objUUID}"),
+       onTapUp: (e)=>vm.onClickHandler(),
        onSecondaryTapUp: (e)=>vm.onRightClickHandler(),
-       onTertiaryTapUp: (e)=>vm.onObjectActionCaller("middleClick&&${vm.curObject.objUUID}"),
+       onTertiaryTapUp: (e)=>vm.onMiddleHandler(),
        child: SizedBox(
           width: vm.width,
           height: vm.height,
@@ -50,7 +52,7 @@ class _View extends StatelessView<RegionViewModel> {
                     0.0,
                   vm.height,
                 ),
-                color: vm.curObject.state==ExportState.none.name?Colors.orange:vm.curObject.state==ExportState.deActive.name?Colors.grey[120]:Colors.green.light,
+                color: vm.regionStatus=="active"?Colors.green:vm.regionStatus=="none"?Colors.orange:Colors.magenta.light,
                 isActive: vm.isHover),
           ),
         ),

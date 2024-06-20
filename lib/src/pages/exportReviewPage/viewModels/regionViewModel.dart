@@ -9,26 +9,43 @@ class RegionViewModel extends ViewModel {
   final ValueSetter<String> onObjectActionCaller;
   final double width,height;
   bool isHover=false;
+  String regionStatus;
 
-  RegionViewModel(this.curObject,this.width,this.height, this.onObjectActionCaller);
+  RegionViewModel(this.curObject,this.regionStatus,this.width,this.height, this.onObjectActionCaller);
+
   onHoverHandler(bool isHover){
-    if(curObject.state!=ExportState.deActive.name) {
-      this.isHover = isHover;
-      onObjectActionCaller("hover&&${curObject.objUUID}");
-      notifyListeners();
+    this.isHover = isHover;
+    onObjectActionCaller("hover&&${curObject.objUUID}");
+    notifyListeners();
+  }
+
+  onClickHandler(){
+    regionStatus=regionStatus=='none'?'active':'none';
+    onObjectActionCaller("${curObject.objUUID}&&$regionStatus");
+    notifyListeners();
+  }
+
+  onMiddleHandler(){
+    if(regionStatus=="banned"){
+      onObjectActionCaller("${curObject.objUUID}&&unBanned");
+    }else{
+      if(regionStatus=='active'){
+        onObjectActionCaller("${curObject.objUUID}&&none");
+        regionStatus='deActive';
+        notifyListeners();
+      }else if(regionStatus=='deActive'){
+        onObjectActionCaller("${curObject.objUUID}&&banned");
+      }else{
+        regionStatus='deActive';
+        notifyListeners();
+      }
     }
+
   }
 
   onRightClickHandler(){
-    if(curObject.state==ExportState.none.name){
-      curObject.state=ExportState.active.name;
-    }else if(curObject.state==ExportState.active.name){
-      curObject.state=ExportState.deActive.name;
-      isHover=false;
-    }else{
-      curObject.state=ExportState.none.name;
+    if(regionStatus == 'active'){
+      print('it is active');
     }
-    onObjectActionCaller("rightClick&&${curObject.objUUID}&&${curObject.state}");
-    notifyListeners();
   }
 }

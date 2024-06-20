@@ -17,6 +17,7 @@ class DlgCutToPieceViewModel extends ViewModel {
 
   final confirmController = FlyoutController();
   final int groupId;
+  final double dlgSizeScale;
   final String partUUID,prjUUID;
   final String title;
   final VoidCallback onCloseCaller;
@@ -27,7 +28,7 @@ class DlgCutToPieceViewModel extends ViewModel {
   List<int>minimizedObjects=[];
   int indexImage = 0, imgH = 0,imgW = 0;
 
-  DlgCutToPieceViewModel(this.groupId, this.partUUID,this.prjUUID,this.title,this.onCloseCaller);
+  DlgCutToPieceViewModel(this.groupId,this.dlgSizeScale, this.partUUID,this.prjUUID,this.title,this.onCloseCaller);
 
   @override
   void init() async{

@@ -41,6 +41,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
               needHelp: false,
               onBackCaller: vm.onBackClicked,
             ),
+              vm.mainObject!=null?
               Container(
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height - (Dimens.topBarHeight),
@@ -52,16 +53,17 @@ class _View extends StatelessView<ExportReviewViewModel> {
                       width: double.infinity,
                       height: double.infinity,
                       decoration: BoxDecoration(
-                        image: vm.mainStates.isNotEmpty?DecorationImage(
-                          image: Image.file(File(vm.mainStates[vm.indexImage].path!)).image,
+                        image: vm.allStates.isNotEmpty?DecorationImage(
+                          image: Image.file(File(vm.allStates[vm.indexImage].path!)).image,
                           fit: BoxFit.fill,
                         ):null,
                       ),
-                      child: vm.mainStates.isNotEmpty? PartRegionExplorer(
+                      child: vm.allStates.isNotEmpty? PartRegionExplorer(
                         key: GlobalKey(),
-                        imgPath:vm.mainStates[vm.indexImage].path! ,
-                        itsObjects: vm.mainStates[vm.indexImage].objects,
-                        onObjectActionCaller: vm.onRegionActionHandler,
+                        imgPath:vm.allStates[vm.indexImage].path! ,
+                        mainObject: vm.mainObject!,
+                        allObjects: vm.curObjects,
+                        isBinState:vm.isBinState
                       ):
                       Container(),
                     ),
@@ -102,45 +104,67 @@ class _View extends StatelessView<ExportReviewViewModel> {
                               ],
                             ),
                           ),
-                          Container(
-                            width: Dimens.btnWidthNormal,
-                            height: Dimens.actionBtnH,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[170].withOpacity(0.5),
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Row(
-                              children: [
-                                const SizedBox(width: 5,),
-                                FlyoutTarget(
-                                  key: GlobalKey(),
-                                  controller: vm.moreController,
-                                  child: IconButton(
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              Container(
+                                width: Dimens.btnWidthNormal,
+                                height: Dimens.actionBtnH,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[170].withOpacity(0.5),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const SizedBox(width: 5,),
+                                    FlyoutTarget(
+                                      key: GlobalKey(),
+                                      controller: vm.moreController,
+                                      child: IconButton(
+                                          style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                          icon: const Icon(
+                                            FluentIcons.password_field,
+                                            color: Colors.white,
+                                            size: 25,
+                                          ),
+                                          onPressed: () => showFlyScreensList(
+                                              vm.allStates,
+                                              vm.allStates[vm.indexImage].objUUID!,
+                                              vm.moreController,
+                                              FlyoutPlacementMode.left,
+                                              vm.onObjectActionHandler),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5,),
+                                    IconButton(
                                       style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
                                       icon: const Icon(
-                                        FluentIcons.password_field,
+                                        FluentIcons.chevron_right,
                                         color: Colors.white,
                                         size: 25,
                                       ),
-                                      onPressed: () => showFlyScreensList(
-                                          vm.mainStates,
-                                          vm.mainStates[vm.indexImage].objUUID!,
-                                          vm.moreController,
-                                          FlyoutPlacementMode.left,
-                                          vm.onObjectActionHandler),
-                                  ),
+                                      onPressed: vm.allStates.length-1==vm.indexImage?null:() => vm.nextImage()),
+                                  ],
                                 ),
-                                const SizedBox(width: 5,),
-                                IconButton(
-                                  style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                  icon: const Icon(
-                                    FluentIcons.chevron_right,
-                                    color: Colors.white,
-                                    size: 25,
+                              ),
+                              const SizedBox(height: 10,),
+                              Container(
+                                height: Dimens.actionBtnH,
+                                width: Dimens.actionBtnH,
+                                  decoration: BoxDecoration(
+                                    color: vm.isBinState?Colors.grey[100].withOpacity(0.5):Colors.grey[170].withOpacity(0.5),
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
-                                  onPressed: vm.mainStates.length-1==vm.indexImage?null:() => vm.nextImage()),
-                              ],
-                            ),
+                                child: IconButton(
+                                  style: ButtonStyle(
+                                    padding: ButtonState.all(EdgeInsets.zero)
+                                  ),
+                                  onPressed: vm.onChangeState,
+                                  icon: Icon(FluentIcons.delete,size: 20,color: vm.isBinState?Colors.black:Colors.red.dark,),
+                                ),
+                              )
+                            ],
                           ),
                         ],
                       ),
@@ -236,7 +260,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
                                   if(vm.processedNumber!=-2)
                                     ...[
                                       const SizedBox(width: 10,),
-                                      Text("( ${vm.processedNumber} of ${vm.mainStates.length})",style: TextSystem.textS(Colors.grey[100]),)
+                                      Text("( ${vm.processedNumber} of ${vm.allStates.length})",style: TextSystem.textS(Colors.grey[100]),)
                                     ]
                                 ],
                               ),
@@ -245,7 +269,17 @@ class _View extends StatelessView<ExportReviewViewModel> {
                         ))
                   ],
                 ),
-              )
+              ):
+                  Container(
+                    width: MediaQuery.of(context).size.width,
+                    height: MediaQuery.of(context).size.height - (Dimens.topBarHeight),
+                    color: Colors.grey[180],
+                    alignment: Alignment.center,
+                    child: Column(children: [
+                      const SizedBox(height: 200,),
+                      Text(Strings.waiting,style: TextSystem.textM(Colors.white))
+                    ],),
+                  )
           ]),
         ));
   }

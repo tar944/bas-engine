@@ -12,6 +12,7 @@ class DlgCutToPiece extends StatelessWidget {
   const DlgCutToPiece(
       {Key? key,
         required this.groupId ,
+        required this.dlgSizeScale,
         required this.partUUID,
         required this.prjUUID,
         required this.title,
@@ -20,6 +21,7 @@ class DlgCutToPiece extends StatelessWidget {
       : super(key: key);
 
   final int groupId;
+  final double dlgSizeScale;
   final String partUUID,prjUUID;
   final String title;
   final VoidCallback onCloseCaller;
@@ -28,7 +30,7 @@ class DlgCutToPiece extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: DlgCutToPieceViewModel(groupId,partUUID,prjUUID,title,onCloseCaller),
+      viewModel: DlgCutToPieceViewModel(groupId,dlgSizeScale,partUUID,prjUUID,title,onCloseCaller),
     );
   }
 }
@@ -38,12 +40,14 @@ class _View extends StatelessView<DlgCutToPieceViewModel> {
 
   @override
   Widget render(context, DlgCutToPieceViewModel vm) {
+    double dlgW=Dimens.dialogXLargeWidth+(Dimens.dialogXLargeWidth*vm.dlgSizeScale);
+    double dlgH =Dimens.dialogXLargeHeight+(Dimens.dialogXLargeHeight*vm.dlgSizeScale);
     return Stack(
       alignment: Alignment.center,
       children: [
         SizedBox(
-            width: Dimens.dialogXLargeWidth,
-            height: Dimens.dialogXLargeHeight,
+            width: dlgW,
+            height: dlgH,
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(
@@ -62,8 +66,8 @@ class _View extends StatelessView<DlgCutToPieceViewModel> {
                   Padding(
                     padding: const EdgeInsets.only(left: 10.0),
                     child: SizedBox(
-                      width: Dimens.dialogXLargeWidth,
-                      height: Dimens.dialogXLargeHeight - Dimens.dialogTitleBarHeight,
+                      width: dlgW,
+                      height: dlgH - Dimens.dialogTitleBarHeight,
                       child: Stack(
                         alignment: Alignment.center,
                         children: [
@@ -92,7 +96,7 @@ class _View extends StatelessView<DlgCutToPieceViewModel> {
                             Container(),
                           ),
                           Positioned(
-                            top: (Dimens.dialogXLargeHeight - Dimens.dialogTitleBarHeight-100)/2,
+                            top: (dlgH)/2,
                             right: 10,
                             left: 0,
                             child: Row(

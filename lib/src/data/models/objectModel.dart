@@ -1,6 +1,5 @@
 import 'package:bas_dataset_generator_engine/src/data/models/imageModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/labelModel.dart';
-import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:objectbox/objectbox.dart';
 
@@ -14,7 +13,6 @@ class ObjectModel {
   double top;
   double bottom;
   String color = "blue";
-  String exportState = ExportState.none.name;
   String exportName = "";
   String actionType = "";
   bool isNavTool = false;
@@ -23,6 +21,8 @@ class ObjectModel {
   String typedText = "";
   int actX = -1, actY = -1;
   final srcObject = ToOne<ObjectModel>();
+  final labelObjects = ToMany<ObjectModel>();
+  final banObjects = ToMany<ObjectModel>();
   final image = ToOne<ImageModel>();
   final label = ToOne<LabelModel>();
 
@@ -35,7 +35,6 @@ class ObjectModel {
     data['right'] = right;
     data['top'] = top;
     data['bottom'] = bottom;
-    data['exportState'] = exportState;
     data['exportName'] = exportName;
     data['color'] = color;
     data['actionType'] = actionType;

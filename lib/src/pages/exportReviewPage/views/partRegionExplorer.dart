@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/viewModels/partRegionViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/regionWidget.dart';
@@ -8,23 +9,26 @@ class PartRegionExplorer extends StatelessWidget {
   PartRegionExplorer(
       {
         Key? key,
-        required this.itsObjects,
-        required this.onObjectActionCaller,
+        required this.allObjects,
+        required this.mainObject,
+        required this.isBinState,
         required this.imgPath
       }) : super(key: key);
 
-  final List<PascalObjectModel> itsObjects;
+  final List<PascalObjectModel> allObjects;
   final String imgPath;
-  final ValueSetter<String> onObjectActionCaller;
+  final bool isBinState;
+  final ObjectModel mainObject;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
       viewModel: PartRegionViewModel(
-          itsObjects,
+          allObjects,
           imgPath,
-          onObjectActionCaller
+          isBinState,
+          mainObject
       ),
     );
   }
@@ -37,7 +41,7 @@ class _View extends StatelessView<PartRegionViewModel> {
   Widget render(context, PartRegionViewModel vm) {
     return Listener(
       child: Stack(children: [
-        ...vm.itsObjects.map((item) {
+        ...vm.allObjects.map((item) {
           // print(item.name);
           return Positioned(
                   top: vm.getY(item.ymin!).toDouble(),
@@ -47,7 +51,8 @@ class _View extends StatelessView<PartRegionViewModel> {
                     width: (vm.getX(item.xmax!)-vm.getX(item.xmin!)).toDouble(),
                     height: (vm.getY(item.ymax!)-vm.getY(item.ymin!)).toDouble(),
                     curObject: item,
-                    onObjectActionCaller: (e) => vm.onObjectActionCaller(e),
+                    regionStatus: vm.getObjectStatus(item.objUUID!),
+                    onObjectActionCaller: vm.onObjectHandler,
                   ),
                 );
         }).toList(),

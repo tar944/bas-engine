@@ -2,6 +2,7 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String waiting="Please wait...";
   static const String addShape="New shape";
   static const String waitToGenerateFile="Generate file is on process,please wait";
   static const String waitToUploadFile="Please wait,Your generated File is uploading...";

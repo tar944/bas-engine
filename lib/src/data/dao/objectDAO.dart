@@ -43,12 +43,6 @@ class ObjectDAO {
     return result;
   }
 
-  updateExportState(String objUUID,String state) async {
-    var obj=await getDetailsByUUID(objUUID);
-    obj!.exportState=state;
-    update(obj);
-  }
-
   Future<bool> deleteObject(ObjectModel object) async {
     Box<ObjectModel> box = objectbox.store.box<ObjectModel>();
     bool result = box.remove(object.id!);

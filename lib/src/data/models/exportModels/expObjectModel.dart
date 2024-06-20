@@ -7,7 +7,6 @@ class ExpObjectModel {
   double top;
   double bottom;
   String color = "blue";
-  String exportState;
   String exportName;
   String actionType;
   String typedText;
@@ -26,7 +25,6 @@ class ExpObjectModel {
       this.top,
       this.bottom,
       this.color,
-      this.exportState,
       this.exportName,
       this.actionType,
       this.actX,
@@ -47,7 +45,6 @@ class ExpObjectModel {
     data['right'] = right;
     data['top'] = top;
     data['bottom'] = bottom;
-    data['exportState'] = exportState;
     data['exportName'] = exportName;
     data['color'] = color;
     data['actionType'] = actionType;

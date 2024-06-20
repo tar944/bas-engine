@@ -47,21 +47,22 @@ class PascalVOCModel{
       });
       builder.element('segmented',nest: 0);
       for (var element in objects) {
-        if(element.state==ExportState.active.name){
-          builder.element('object', nest:() {
-            builder.element('name',nest: element.exportName);
-            builder.element('pose',nest:element.pose);
-            builder.element('truncated',nest: element.truncated);
-            builder.element('difficult',nest: element.difficult);
-            builder.element('occluded',nest: element.occluded);
-            builder.element('bndbox',nest:(){
-              builder.element('xmin',nest: element.xmin);
-              builder.element('xmax',nest: element.xmax);
-              builder.element('ymin',nest: element.ymin);
-              builder.element('ymax', nest: element.ymax);
-            });
-          });
-        }
+        //todo change object part
+        // if(element.state==ExportState.active.name){
+        //   builder.element('object', nest:() {
+        //     builder.element('name',nest: element.exportName);
+        //     builder.element('pose',nest:element.pose);
+        //     builder.element('truncated',nest: element.truncated);
+        //     builder.element('difficult',nest: element.difficult);
+        //     builder.element('occluded',nest: element.occluded);
+        //     builder.element('bndbox',nest:(){
+        //       builder.element('xmin',nest: element.xmin);
+        //       builder.element('xmax',nest: element.xmax);
+        //       builder.element('ymin',nest: element.ymin);
+        //       builder.element('ymax', nest: element.ymax);
+        //     });
+        //   });
+        // }
       }
     });
     return builder.buildDocument();

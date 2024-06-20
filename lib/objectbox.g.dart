@@ -322,14 +322,18 @@ final _entities = <ModelEntity>[
             id: const IdUid(35, 2237997811502418755),
             name: 'exportName',
             type: 9,
-            flags: 0),
-        ModelProperty(
-            id: const IdUid(36, 3308857130380351767),
-            name: 'exportState',
-            type: 9,
             flags: 0)
       ],
-      relations: <ModelRelation>[],
+      relations: <ModelRelation>[
+        ModelRelation(
+            id: const IdUid(34, 3677170016812722088),
+            name: 'labelObjects',
+            targetId: const IdUid(15, 8892823931225835339)),
+        ModelRelation(
+            id: const IdUid(35, 7892529514868367451),
+            name: 'banObjects',
+            targetId: const IdUid(15, 8892823931225835339))
+      ],
       backlinks: <ModelBacklink>[]),
   ModelEntity(
       id: const IdUid(16, 6891732610780172479),
@@ -489,7 +493,7 @@ ModelDefinition getObjectBoxModel() {
       entities: _entities,
       lastEntityId: const IdUid(17, 8566624654259097881),
       lastIndexId: const IdUid(23, 5855966450476248403),
-      lastRelationId: const IdUid(33, 831518709818127423),
+      lastRelationId: const IdUid(35, 7892529514868367451),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [
         5922885288332288138,
@@ -649,7 +653,8 @@ ModelDefinition getObjectBoxModel() {
         8918238754733140373,
         323244748199649629,
         623411051368177646,
-        7094693992893619014
+        7094693992893619014,
+        3308857130380351767
       ],
       retiredRelationUids: const [
         7096364116743183016,
@@ -900,7 +905,10 @@ ModelDefinition getObjectBoxModel() {
         model: _entities[4],
         toOneRelations: (ObjectModel object) =>
             [object.image, object.label, object.srcObject],
-        toManyRelations: (ObjectModel object) => {},
+        toManyRelations: (ObjectModel object) => {
+              RelInfo<ObjectModel>.toMany(34, object.id!): object.labelObjects,
+              RelInfo<ObjectModel>.toMany(35, object.id!): object.banObjects
+            },
         getId: (ObjectModel object) => object.id,
         setId: (ObjectModel object, int id) {
           object.id = id;
@@ -911,7 +919,6 @@ ModelDefinition getObjectBoxModel() {
           final actionTypeOffset = fbb.writeString(object.actionType);
           final typedTextOffset = fbb.writeString(object.typedText);
           final exportNameOffset = fbb.writeString(object.exportName);
-          final exportStateOffset = fbb.writeString(object.exportState);
           fbb.startTable(37);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, uuidOffset);
@@ -931,7 +938,6 @@ ModelDefinition getObjectBoxModel() {
           fbb.addBool(26, object.isMainObject);
           fbb.addBool(27, object.needToCompare);
           fbb.addOffset(34, exportNameOffset);
-          fbb.addOffset(35, exportStateOffset);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -967,9 +973,7 @@ ModelDefinition getObjectBoxModel() {
             ..needToCompare =
                 const fb.BoolReader().vTableGet(buffer, rootOffset, 58, false)
             ..exportName = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 72, '')
-            ..exportState = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 74, '');
+                .vTableGet(buffer, rootOffset, 72, '');
           object.image.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 36, 0);
           object.image.attach(store);
@@ -979,6 +983,10 @@ ModelDefinition getObjectBoxModel() {
           object.srcObject.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 54, 0);
           object.srcObject.attach(store);
+          InternalToManyAccess.setRelInfo<ObjectModel>(object.labelObjects,
+              store, RelInfo<ObjectModel>.toMany(34, object.id!));
+          InternalToManyAccess.setRelInfo<ObjectModel>(object.banObjects, store,
+              RelInfo<ObjectModel>.toMany(35, object.id!));
           return object;
         }),
     ImageGroupModel: EntityDefinition<ImageGroupModel>(
@@ -1327,9 +1335,13 @@ class ObjectModel_ {
   static final exportName =
       QueryStringProperty<ObjectModel>(_entities[4].properties[17]);
 
-  /// see [ObjectModel.exportState]
-  static final exportState =
-      QueryStringProperty<ObjectModel>(_entities[4].properties[18]);
+  /// see [ObjectModel.labelObjects]
+  static final labelObjects =
+      QueryRelationToMany<ObjectModel, ObjectModel>(_entities[4].relations[0]);
+
+  /// see [ObjectModel.banObjects]
+  static final banObjects =
+      QueryRelationToMany<ObjectModel, ObjectModel>(_entities[4].relations[1]);
 }
 
 /// [ImageGroupModel] entity fields to define ObjectBox queries.

@@ -246,6 +246,7 @@ class LabelingViewModel extends ViewModel {
           }
         }
 
+        print(img.width);
         if(img.width<(srcImg!.width*0.8)&&img.height<(srcImg.height*0.8)){
           showDialog(
             context: context,
@@ -254,6 +255,7 @@ class LabelingViewModel extends ViewModel {
                 DlgCutToPiece(
                   groupId: curGroup!.id,
                   partUUID: curPart.uuid,
+                  dlgSizeScale: img.width>1200?0.5:0.0,
                   prjUUID: prjUUID,
                   title: '${curProject.title} > ${curPart.name} > ${curGroup!.name}',
                   onCloseCaller: ()=>{},

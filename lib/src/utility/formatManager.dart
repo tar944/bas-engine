@@ -115,7 +115,6 @@ class FormatManager{
         obj.top,
         obj.bottom,
         obj.color,
-        obj.exportState,
         obj.exportName,
         obj.actionType,
         obj.actX,
