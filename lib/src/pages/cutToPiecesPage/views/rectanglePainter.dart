@@ -18,7 +18,7 @@ class RectanglePainter extends CustomPainter {
     canvas.drawRect(rect, paint);
     if(isActive){
       paint = Paint()
-        ..color = color.withOpacity(0.5)
+        ..color = color.withOpacity(0.2)
         ..style =PaintingStyle.fill
         ..strokeWidth = 2.0;
 

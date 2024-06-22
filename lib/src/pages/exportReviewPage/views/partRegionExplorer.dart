@@ -48,10 +48,10 @@ class _View extends StatelessView<PartRegionViewModel> {
                   left: vm.getX(item.xmin!).toDouble(),
                   child: RegionWidget(
                     key: GlobalKey(),
+                    mainObjUUID: vm.mainObject.uuid,
                     width: (vm.getX(item.xmax!)-vm.getX(item.xmin!)).toDouble(),
                     height: (vm.getY(item.ymax!)-vm.getY(item.ymin!)).toDouble(),
                     curObject: item,
-                    regionStatus: vm.getObjectStatus(item.objUUID!),
                     onObjectActionCaller: vm.onObjectHandler,
                   ),
                 );

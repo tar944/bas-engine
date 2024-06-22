@@ -224,7 +224,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(15, 8892823931225835339),
       name: 'ObjectModel',
-      lastPropertyId: const IdUid(36, 3308857130380351767),
+      lastPropertyId: const IdUid(37, 2197563583700619189),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -322,6 +322,11 @@ final _entities = <ModelEntity>[
             id: const IdUid(35, 2237997811502418755),
             name: 'exportName',
             type: 9,
+            flags: 0),
+        ModelProperty(
+            id: const IdUid(37, 2197563583700619189),
+            name: 'isGlobalObject',
+            type: 1,
             flags: 0)
       ],
       relations: <ModelRelation>[
@@ -919,7 +924,7 @@ ModelDefinition getObjectBoxModel() {
           final actionTypeOffset = fbb.writeString(object.actionType);
           final typedTextOffset = fbb.writeString(object.typedText);
           final exportNameOffset = fbb.writeString(object.exportName);
-          fbb.startTable(37);
+          fbb.startTable(38);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, uuidOffset);
           fbb.addFloat64(2, object.left);
@@ -938,6 +943,7 @@ ModelDefinition getObjectBoxModel() {
           fbb.addBool(26, object.isMainObject);
           fbb.addBool(27, object.needToCompare);
           fbb.addOffset(34, exportNameOffset);
+          fbb.addBool(36, object.isGlobalObject);
           fbb.finish(fbb.endTable());
           return object.id ?? 0;
         },
@@ -973,7 +979,9 @@ ModelDefinition getObjectBoxModel() {
             ..needToCompare =
                 const fb.BoolReader().vTableGet(buffer, rootOffset, 58, false)
             ..exportName = const fb.StringReader(asciiOptimization: true)
-                .vTableGet(buffer, rootOffset, 72, '');
+                .vTableGet(buffer, rootOffset, 72, '')
+            ..isGlobalObject =
+                const fb.BoolReader().vTableGet(buffer, rootOffset, 76, false);
           object.image.targetId =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 36, 0);
           object.image.attach(store);
@@ -1334,6 +1342,10 @@ class ObjectModel_ {
   /// see [ObjectModel.exportName]
   static final exportName =
       QueryStringProperty<ObjectModel>(_entities[4].properties[17]);
+
+  /// see [ObjectModel.isGlobalObject]
+  static final isGlobalObject =
+      QueryBooleanProperty<ObjectModel>(_entities[4].properties[18]);
 
   /// see [ObjectModel.labelObjects]
   static final labelObjects =

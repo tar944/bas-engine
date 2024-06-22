@@ -30,19 +30,6 @@ class PartRegionViewModel extends ViewModel {
     notifyListeners();
   }
 
-  String getObjectStatus(String objUUID){
-    if(isBinState){
-      return "banned";
-    }else{
-      for(var obj in mainObject.labelObjects){
-        if(obj.uuid==objUUID){
-          return "active";
-        }
-      }
-      return 'none';
-    }
-  }
-
   onObjectHandler(String action)async{
     var acts= action.split('&&');
     switch(acts[1]){
@@ -53,21 +40,29 @@ class PartRegionViewModel extends ViewModel {
         break;
       case 'active':
         var obj = await ObjectDAO().getDetailsByUUID(acts[0]);
-        mainObject.labelObjects.add(obj!);
-        await ObjectDAO().update(mainObject);
-        notifyListeners();
+        if(!obj!.isGlobalObject){
+          mainObject.labelObjects.add(obj);
+          await ObjectDAO().update(mainObject);
+          notifyListeners();
+        }
         break;
       case 'banned':
         var obj = await ObjectDAO().getDetailsByUUID(acts[0]);
-        mainObject.banObjects.add(obj!);
-        allObjects.removeWhere((element) => element.objUUID==acts[0]);
-        await ObjectDAO().update(mainObject);
-        notifyListeners();
+        if(!obj!.isGlobalObject){
+          mainObject.banObjects.add(obj);
+          allObjects.removeWhere((element) => element.objUUID==acts[0]);
+          await ObjectDAO().update(mainObject);
+          notifyListeners();
+        }
         break;
       case 'unBanned':
         mainObject.banObjects.removeWhere((element) => element.uuid==acts[0]);
         await ObjectDAO().update(mainObject);
         allObjects.removeWhere((element) => element.objUUID==acts[0]);
+        notifyListeners();
+        break;
+      case 'setGlobal':
+        await ObjectDAO().setGlobalObject(acts[0]);
         notifyListeners();
         break;
     }

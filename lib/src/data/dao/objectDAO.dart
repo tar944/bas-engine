@@ -37,6 +37,16 @@ class ObjectDAO {
     return result;
   }
 
+  Future<bool> setGlobalObject(String uuid) async{
+    var obj = await getDetailsByUUID(uuid);
+    if(obj==null){
+      return false;
+    }
+    obj.isGlobalObject=!obj.isGlobalObject;
+    update(obj);
+    return true;
+  }
+
   Future<int> update(ObjectModel object) async {
     Box<ObjectModel> box = objectbox.store.box<ObjectModel>();
     int result = box.put(object);

@@ -167,9 +167,13 @@ class LabelingViewModel extends ViewModel {
       allNavRows[allNavRows.length-1].visibleBtn(true);
       curGroup = await ImageGroupDAO().getDetails(curNav.id);
     }
-
     curPart=null;
     curGroup = curGroup!.otherShapes.isEmpty?curGroup:curGroup!.otherShapes[0];
+    if(curGroup!.state==GroupState.readyToWork.name&&curGroup!.allGroups.isEmpty&&curGroup!.subObjects.isEmpty){
+      var grp = await ImageGroupDAO().getDetails(curGroup!.id);
+      grp!.state=GroupState.findSubObjects.name;
+      await ImageGroupDAO().update(grp);
+    }
     bodyController.setObjects(curGroup!.allStates);
     bodyController.setPartUUID("");
     bodyController.setGrpUUID(curGroup!.uuid);
@@ -246,7 +250,7 @@ class LabelingViewModel extends ViewModel {
           }
         }
 
-        print(img.width);
+        print(img.height);
         if(img.width<(srcImg!.width*0.8)&&img.height<(srcImg.height*0.8)){
           showDialog(
             context: context,
@@ -255,7 +259,7 @@ class LabelingViewModel extends ViewModel {
                 DlgCutToPiece(
                   groupId: curGroup!.id,
                   partUUID: curPart.uuid,
-                  dlgSizeScale: img.width>1200?0.5:0.0,
+                  dlgSizeScale: img.width>1200||img.height>750?0.5:0.0,
                   prjUUID: prjUUID,
                   title: '${curProject.title} > ${curPart.name} > ${curGroup!.name}',
                   onCloseCaller: ()=>{},

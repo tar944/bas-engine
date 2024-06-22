@@ -2,30 +2,29 @@ import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/rectanglePainter.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/viewModels/regionViewModel.dart';
-import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class RegionWidget extends StatelessWidget {
   RegionWidget({
     Key? key,
+    required this.mainObjUUID,
     required this.curObject,
     required this.width,
     required this.height,
-    required this.regionStatus,
     required this.onObjectActionCaller,
   }) : super(key: key);
 
   final PascalObjectModel curObject;
+  final String mainObjUUID;
   final double width,height;
-  final String regionStatus;
   final ValueSetter<String> onObjectActionCaller;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: RegionViewModel(curObject,regionStatus,width,height, onObjectActionCaller),
+      viewModel: RegionViewModel(mainObjUUID,curObject,width,height, onObjectActionCaller),
     );
   }
 }
@@ -52,7 +51,7 @@ class _View extends StatelessView<RegionViewModel> {
                     0.0,
                   vm.height,
                 ),
-                color: vm.regionStatus=="active"?Colors.green:vm.regionStatus=="none"?Colors.orange:Colors.magenta.light,
+                color: vm.regionStatus=="active"?Colors.green:vm.regionStatus=="none"?Colors.orange:vm.regionStatus=='global'?Colors.magenta:Colors.red,
                 isActive: vm.isHover),
           ),
         ),

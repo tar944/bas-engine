@@ -114,10 +114,10 @@ class ExportReviewViewModel extends ViewModel {
                 grp.label.target!.levelName,
                 obj.exportName,
                 name,
-                obj.left.toInt() + left.toInt(),
-                obj.right.toInt() + left.toInt(),
-                obj.top.toInt() + top.toInt(),
-                obj.bottom.toInt() + top.toInt()));
+                obj.left.toInt(),
+                obj.right.toInt() ,
+                obj.top.toInt() ,
+                obj.bottom.toInt()));
           }
           allObjects.addAll(await findSubObjects(obj, grp.allGroups, name, left, top));
         }

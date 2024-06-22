@@ -154,7 +154,7 @@ class LabelingBodyViewModel extends ViewModel {
 
   Future<i.Image?> getCroppedImage(ObjectModel subObj, ObjectModel srcObj) async {
     final cmd = i.Command()
-      ..decodeImageFile(srcObj.image.target!.path!)
+      ..decodeImageFile(srcObj.image.target!.path)
       ..copyCrop(
           x: subObj.left.toInt(),
           y: subObj.top.toInt(),
@@ -345,7 +345,7 @@ class LabelingBodyViewModel extends ViewModel {
   List<ImageGroupModel>getValidGroups(ObjectModel obj){
     var validGroups = <ImageGroupModel>[];
     for(var grp in subGroups){
-      if([GroupState.findMainState.name,GroupState.findSubObjects.name].contains(grp.state)){
+      if([GroupState.findMainState.name,GroupState.findSubObjects.name,GroupState.editOtherStates.name].contains(grp.state)){
         validGroups.add(grp);
       }else{
         bool isValid =false;
@@ -417,10 +417,9 @@ class LabelingBodyViewModel extends ViewModel {
         notifyListeners();
         break;
       case 'delete':
-        var obj =
-            await ObjectDAO().getDetails(int.parse(action.split("&&")[1]));
-        if (bodyController.grpUUID != "" && obj!.isMainObject) {
-          var grp = await ImageGroupDAO().getDetailsByUUID(bodyController.grpUUID);
+        var obj = await ObjectDAO().getDetails(int.parse(action.split("&&")[1]));
+        if (curGroup != null && obj!.isMainObject) {
+          var grp = await ImageGroupDAO().getDetailsByUUID(curGroup!.uuid);
           grp!.state = GroupState.findMainState.name;
           await ImageGroupDAO().update(grp);
         }

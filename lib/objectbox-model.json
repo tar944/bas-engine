@@ -206,7 +206,7 @@
     },
     {
       "id": "15:8892823931225835339",
-      "lastPropertyId": "36:3308857130380351767",
+      "lastPropertyId": "37:2197563583700619189",
       "name": "ObjectModel",
       "properties": [
         {
@@ -308,6 +308,11 @@
           "id": "35:2237997811502418755",
           "name": "exportName",
           "type": 9
+        },
+        {
+          "id": "37:2197563583700619189",
+          "name": "isGlobalObject",
+          "type": 1
         }
       ],
       "relations": [

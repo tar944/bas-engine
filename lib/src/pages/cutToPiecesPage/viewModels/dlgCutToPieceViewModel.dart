@@ -111,10 +111,10 @@ class DlgCutToPieceViewModel extends ViewModel {
     newObject.uuid=const Uuid().v4();
     newObject.srcObject.target=curObject!;
 
-    newObject.left=getX(newObject.left);
-    newObject.right=getX(newObject.right);
-    newObject.top=getY(newObject.top);
-    newObject.bottom=getY(newObject.bottom);
+    newObject.left=newObject.left>0?getX(newObject.left):0;
+    newObject.right=getX(newObject.right)>imgSize.width?imgSize.width:getX(newObject.right);
+    newObject.top=newObject.top>0?getY(newObject.top):0;
+    newObject.bottom=getY(newObject.bottom)>imgSize.height?imgSize.height:getY(newObject.bottom);
 
     final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
     int w =(newObject.right - newObject.left).abs().toInt();
