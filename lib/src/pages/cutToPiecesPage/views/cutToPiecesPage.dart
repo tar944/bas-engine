@@ -59,10 +59,8 @@ class _View extends StatelessView<CutToPiecesViewModel> {
                       height: vm.imgSize.height,
                       decoration: BoxDecoration(
                         image: vm.curObject!=null?DecorationImage(
-                          image: Image.file(File(vm.curObject!.image.target!.path!)).image,
-                          fit: (vm.imgW > MediaQuery.of(context).size.width ||
-                              vm.imgH > (MediaQuery.of(context).size.height - Dimens.topBarHeight))
-                              ? BoxFit.fill : BoxFit.none,
+                          image: Image.file(File(vm.curObject!.image.target!.path)).image,
+                          fit: vm.getImageBoxFit(),
                         ):null,
                       ),
                       child: vm.curObject!=null? PartRegionExplorer(

@@ -182,9 +182,9 @@ class CutToPiecesViewModel extends ViewModel {
     newObject.srcObject.target=curObject!;
 
     newObject.left=newObject.left>0?getX(newObject.left):0;
-    newObject.right=getX(newObject.right)>imgSize.width?imgSize.width:getX(newObject.right);
+    newObject.right=newObject.right>imgSize.width?getX(imgSize.width):getX(newObject.right);
     newObject.top=newObject.top>0?getY(newObject.top):0;
-    newObject.bottom=getY(newObject.bottom)>imgSize.height?imgSize.height:getY(newObject.bottom);
+    newObject.bottom=newObject.bottom>imgSize.height?getY(imgSize.height):getY(newObject.bottom);
 
     final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
     int w =(newObject.right - newObject.left).abs().toInt();
@@ -215,5 +215,16 @@ class CutToPiecesViewModel extends ViewModel {
       await ImageGroupDAO().addMainState(groupId, newObject);
       onBackClicked();
     }
+  }
+
+  BoxFit getImageBoxFit(){
+    if(imgW>MediaQuery.of(context).size.width&&imgH<MediaQuery.of(context).size.height){
+      return BoxFit.fitWidth;
+    }else if(imgW<MediaQuery.of(context).size.width&&imgH>MediaQuery.of(context).size.height){
+      return BoxFit.fitHeight;
+    }else if(imgW > MediaQuery.of(context).size.width || imgH > (MediaQuery.of(context).size.height - Dimens.topBarHeight)){
+      return BoxFit.fill;
+    }
+    return BoxFit.none;
   }
 }

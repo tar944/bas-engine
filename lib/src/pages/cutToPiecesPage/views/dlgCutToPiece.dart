@@ -76,7 +76,7 @@ class _View extends StatelessView<DlgCutToPieceViewModel> {
                             height: vm.imgSize.height,
                             decoration: BoxDecoration(
                               image: vm.curObject!=null?DecorationImage(
-                                image: Image.file(File(vm.curObject!.image.target!.path!)).image,
+                                image: Image.file(File(vm.curObject!.image.target!.path)).image,
                                 fit: (vm.imgW > MediaQuery.of(context).size.width ||
                                     vm.imgH > (MediaQuery.of(context).size.height - Dimens.dialogTitleBarHeight))
                                     ? BoxFit.fill : BoxFit.none,
@@ -86,7 +86,7 @@ class _View extends StatelessView<DlgCutToPieceViewModel> {
                               key: GlobalKey(),
                               mainObject: vm.curObject!,
                               minimumObjects: vm.minimizedObjects,
-                              otherObjects: vm.subObject.where((element) => element.srcObject.target!=null&&element.srcObject.target!.uuid!=vm.curObject!.uuid).toList(),
+                              otherObjects: vm.showOthers?vm.subObject.where((element) => element.srcObject.target!=null&&element.srcObject.target!.uuid!=vm.curObject!.uuid).toList():[],
                               itsObjects: vm.subObject.where((element) => element.srcObject.target!=null&&element.srcObject.target!.uuid==vm.curObject!.uuid).toList(),
                               onNewObjectCaller: vm.onNewPartCreatedHandler,
                               onObjectActionCaller: vm.onPartObjectHandler,
@@ -144,20 +144,36 @@ class _View extends StatelessView<DlgCutToPieceViewModel> {
                                   ),
                                 ),
                                 Container(
-                                  width: Dimens.actionBtnH,
+                                  width: Dimens.btnWidthNormal,
                                   height: Dimens.actionBtnH,
                                   decoration: BoxDecoration(
                                     color: Colors.grey[170].withOpacity(0.5),
                                     borderRadius: BorderRadius.circular(10),
                                   ),
-                                  child: IconButton(
-                                      style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                      icon: const Icon(
-                                        FluentIcons.chevron_right,
-                                        color: Colors.white,
-                                        size: 25,
+                                  child: Row(
+                                    children: [
+                                      const SizedBox(width: 5,),
+                                      IconButton(
+                                          style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                          icon: Icon(
+                                            vm.showOthers?FluentIcons.hide3:FluentIcons.view,
+                                            color: Colors.white,
+                                            size: 25,
+                                          ),
+                                          onPressed: () => vm.changeShowOthers()
                                       ),
-                                      onPressed: () => vm.nextImage()),
+                                      const SizedBox(width: 5,),
+                                      IconButton(
+                                          style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                          icon: const Icon(
+                                            FluentIcons.chevron_right,
+                                            color: Colors.white,
+                                            size: 25,
+                                          ),
+                                          onPressed: () => vm.nextImage()
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ],
                             ),

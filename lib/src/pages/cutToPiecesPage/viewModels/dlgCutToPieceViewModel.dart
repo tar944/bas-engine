@@ -24,6 +24,7 @@ class DlgCutToPieceViewModel extends ViewModel {
   Size imgSize = const Size(0, 0);
   ImageGroupModel? group;
   ObjectModel? curObject;
+  bool showOthers=true;
   List<ObjectModel>subObject=[];
   List<int>minimizedObjects=[];
   int indexImage = 0, imgH = 0,imgW = 0;
@@ -91,6 +92,11 @@ class DlgCutToPieceViewModel extends ViewModel {
     updatePageData();
   }
 
+  changeShowOthers(){
+    showOthers=!showOthers;
+    notifyListeners();
+  }
+
   perviousImage() async{
     if (indexImage == 0) return;
     indexImage = --indexImage;
@@ -112,9 +118,9 @@ class DlgCutToPieceViewModel extends ViewModel {
     newObject.srcObject.target=curObject!;
 
     newObject.left=newObject.left>0?getX(newObject.left):0;
-    newObject.right=getX(newObject.right)>imgSize.width?imgSize.width:getX(newObject.right);
+    newObject.right=newObject.right>imgSize.width?getX(imgSize.width):getX(newObject.right);
     newObject.top=newObject.top>0?getY(newObject.top):0;
-    newObject.bottom=getY(newObject.bottom)>imgSize.height?imgSize.height:getY(newObject.bottom);
+    newObject.bottom=newObject.bottom>imgSize.height?getY(imgSize.height):getY(newObject.bottom);
 
     final path = await DirectoryManager().getObjectImagePath(prjUUID, partUUID);
     int w =(newObject.right - newObject.left).abs().toInt();

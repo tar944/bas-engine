@@ -52,19 +52,27 @@ class LabelingBodyViewModel extends ViewModel {
       var grp = await ImageGroupDAO().getDetailsByUUID(bodyController.grpUUID);
       var part = await ProjectPartDAO().getDetails(bodyController.partId);
       if (grp!.state == GroupState.editOtherStates.name) {
-        showDialog(
-            context: context,
-            barrierDismissible: true,
-            builder: (context) => DlgCheckOtherState(
-                  srcObject: grp.mainState.target!,
-                  allObjects: grp.allStates
-                      .where((element) => element.needToCompare == true)
-                      .toList(),
-                  grpID: grp.id,
-                  prjUUID: bodyController.prjUUID,
-                  partUUID: part!.uuid,
-                  onUpdateCaller: () => updateData(),
-                ));
+        if(grp.mainState.target!=null){
+          showDialog(
+              context: context,
+              barrierDismissible: true,
+              builder: (context) => DlgCheckOtherState(
+                srcObject: grp.mainState.target!,
+                allObjects: grp.allStates
+                    .where((element) => element.needToCompare == true)
+                    .toList(),
+                grpID: grp.id,
+                prjUUID: bodyController.prjUUID,
+                partUUID: part!.uuid,
+                onUpdateCaller: () => updateData(),
+              ));
+        }else if(grp.allStates.isEmpty){
+          grp.state=GroupState.generated.name;
+          await ImageGroupDAO().update(grp);
+        }else{
+          grp.state=GroupState.findMainState.name;
+          await ImageGroupDAO().update(grp);
+        }
       } else if (grp.state == GroupState.finishCutting.name) {
         isLoading = true;
         notifyListeners();
