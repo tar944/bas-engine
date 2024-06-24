@@ -31,7 +31,12 @@ class DlgTitle extends HookWidget {
         Toast("You should enter a title for this level", false).showWarning(context);
         return;
       }
-      onActionCaller(ctlTitle.text.toString());
+      onActionCaller('update&&${ctlTitle.text}');
+      Navigator.pop(context);
+    }
+
+    onBtnRemoveHandler(){
+      onActionCaller('delete&&');
       Navigator.pop(context);
     }
 
@@ -102,8 +107,23 @@ class DlgTitle extends HookWidget {
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        const SizedBox(width: 5,),
+                        IconButton(
+                          style:ButtonStyle(
+                              padding: ButtonState.all(EdgeInsets.zero)
+                            ),
+                            icon: Container(
+                              width: Dimens.btnHeightBig,
+                              height: Dimens.btnHeightBig,
+                              decoration: const BoxDecoration(
+                                borderRadius: BorderRadius.all(Radius.circular(5.0))
+                              ),
+                              child: Icon(FluentIcons.delete,color: Colors.red.dark,size: 18,),
+                            ),
+                            onPressed: ()=>onBtnRemoveHandler()),
+                        const SizedBox(width: 205,),
                         CButton(
                             text: Strings.save,
                             color: Colors.blue.normal,
@@ -111,7 +131,7 @@ class DlgTitle extends HookWidget {
                             onPressed: () => onBtnSaveListener(),
                             kind: "normal"),
                         const SizedBox(
-                          width: 10,
+                          width: 5,
                         )
                       ],
                     ),

@@ -12,13 +12,13 @@ class NavigationRow extends StatelessWidget {
     Key? key,
     required this.rowController,
     required this.onNavSelectedCaller,
-    required this.onAddNewShapeCaller,
+    required this.onChangeShapeCaller,
     required this.onSelectShapeCaller
   }) : super(key: key);
 
   final NavRowController rowController;
   ValueSetter<NavModel> onNavSelectedCaller;
-  ValueSetter<NavModel> onAddNewShapeCaller;
+  ValueSetter<String> onChangeShapeCaller;
   ValueSetter<NavModel> onSelectShapeCaller;
 
   @override
@@ -28,7 +28,7 @@ class NavigationRow extends StatelessWidget {
       viewModel: NavigationRowViewModel(
           rowController,
           onNavSelectedCaller,
-          onAddNewShapeCaller,
+          onChangeShapeCaller,
           onSelectShapeCaller
       ),
     );
@@ -58,14 +58,13 @@ class _View extends StatelessView<NavigationRowViewModel> {
               itemCount: vm.rowController.allItems.length,
               scrollDirection: Axis.horizontal,
               itemBuilder: (context, index) {
-                print("${vm.rowController.rowNumber} ==> ${vm.rowController.showBtn}");
                 return NavItem(
                     navItem: vm.rowController.allItems[index],
                     rowNumber: vm.rowController.rowNumber,
                     showAddBtn: vm.rowController.showBtn,
                     selectStatus: vm.findSelectedStatus(vm.rowController.allItems[index]),
                     onItemSelectedCaller: vm.onItemSelectHandler,
-                  onAddNewShapeCaller: vm.onAddNewShapeCaller,
+                  onChangeShapeCaller: vm.onChangeShapeCaller,
                   onSelectShapeCaller: vm.onSelectShapeCaller,
                 );
               }),

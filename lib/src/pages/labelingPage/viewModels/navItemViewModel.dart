@@ -8,17 +8,15 @@ class NavItemViewModel extends ViewModel {
   final String selectStatus;
   final bool showAddBtn;
   ValueSetter<NavModel> onItemSelectedCaller;
-  ValueSetter<NavModel> onAddNewShapeCaller;
+  ValueSetter<String> onChangeShapeCaller;
   ValueSetter<NavModel> onSelectShapeCaller;
-
-
 
   NavItemViewModel(
       this.navItem,
       this.selectStatus,
       this.showAddBtn,
       this.onItemSelectedCaller,
-      this.onAddNewShapeCaller,
+      this.onChangeShapeCaller,
       this.onSelectShapeCaller);
 
   onNextShapeHandler(){

@@ -15,7 +15,7 @@ class NavItem extends StatelessWidget {
     required this.showAddBtn,
     required this.rowNumber,
     required this.onItemSelectedCaller,
-    required this.onAddNewShapeCaller,
+    required this.onChangeShapeCaller,
     required this.onSelectShapeCaller
   }) : super(key: key);
 
@@ -24,7 +24,7 @@ class NavItem extends StatelessWidget {
   final int rowNumber;
   final bool showAddBtn;
   ValueSetter<NavModel> onItemSelectedCaller;
-  ValueSetter<NavModel> onAddNewShapeCaller;
+  ValueSetter<String> onChangeShapeCaller;
   ValueSetter<NavModel> onSelectShapeCaller;
 
   @override
@@ -32,7 +32,7 @@ class NavItem extends StatelessWidget {
     navItem.rowNumber =rowNumber;
     return MVVM(
       view: () => const _View(),
-      viewModel: NavItemViewModel(navItem,selectStatus,showAddBtn,onItemSelectedCaller,onAddNewShapeCaller,onSelectShapeCaller),
+      viewModel: NavItemViewModel(navItem,selectStatus,showAddBtn,onItemSelectedCaller,onChangeShapeCaller,onSelectShapeCaller),
     );
   }
 }
@@ -100,7 +100,14 @@ class _View extends StatelessView<NavItemViewModel> {
                                       onPressed: ()=>vm.onPreviousShapeHandler(),
                                     ):Container()
                                 ),
-                                Expanded(flex:70,child: Text(vm.getName(),style: TextSystem.textS(Colors.teal.light,),)),
+                                Expanded(
+                                    flex:70,
+                                    child: IconButton(
+                                      style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
+                                        icon: Text(vm.getName(),style: TextSystem.textS(Colors.teal.light,),),
+                                        onPressed:vm.showAddBtn?()=>vm.onChangeShapeCaller(vm.navItem.otherShapes[vm.navItem.shapeIndex].uuid):null,
+                                    )
+                                ),
                                 Expanded(
                                     flex: 15,
                                     child: vm.showAddBtn?IconButton(
@@ -134,7 +141,7 @@ class _View extends StatelessView<NavItemViewModel> {
                             color: Colors.teal.dark
                         ),
                         child: const Icon(FluentIcons.add,size: 16,),
-                      ), onPressed: ()=>vm.onAddNewShapeCaller(vm.navItem)),
+                      ), onPressed: ()=>vm.onChangeShapeCaller('')),
                   const SizedBox(width: 5.0,)
                 ]
             ],

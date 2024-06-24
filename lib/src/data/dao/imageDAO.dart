@@ -32,7 +32,7 @@ class ImageDAO {
   Future<bool> delete(ImageModel screen) async {
     Box<ImageModel> box = objectbox.store.box<ImageModel>();
     bool result = box.remove(screen.id!);
-    DirectoryManager().deleteImage(screen.path!);
+    DirectoryManager().deleteImage(screen.path);
     return result;
   }
 }

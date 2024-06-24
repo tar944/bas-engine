@@ -10,6 +10,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/navModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectPartModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
 import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/dlgCutToPiece.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/controller/bodyController.dart';
 import 'package:bas_dataset_generator_engine/src/pages/labelingPage/controller/navRowController.dart';
@@ -24,6 +25,7 @@ class LabelingViewModel extends ViewModel {
   BodyController bodyController=BodyController();
   List<NavRowController> allNavRows = [];
   ImageGroupModel? curGroup;
+  ImageGroupModel? curShape;
   ProjectPartModel? curPart;
   int partId;
   final String prjUUID;
@@ -194,30 +196,76 @@ class LabelingViewModel extends ViewModel {
     }
   }
 
-  onAddNewShapeHandler(NavModel nav){
+  onChangeShapeHandler(String grpUUID)async{
+    if(grpUUID!=""){
+      curShape= await ImageGroupDAO().getDetailsByUUID(grpUUID);
+    }
     showDialog(
       context: context,
       barrierDismissible: true,
       builder: (context) =>
-          DlgTitle(onActionCaller: saveAddShapeHandler, title: "",dlgTitle: Strings.dlgShape,),
+          DlgTitle(onActionCaller: saveAddShapeHandler, title: curShape!=null?curShape!.name!:"",dlgTitle: Strings.dlgShape,),
     );
   }
 
-  saveAddShapeHandler(String name)async{
-    ImageGroupModel? newGrp= ImageGroupModel(-1, "", curGroup!.uuid, name);
-    newGrp.uuid = const Uuid().v4();
-    newGrp.state = GroupState.findMainState.name;
-    newGrp.label.target=curGroup!.label.target;
-    newGrp.id=await ImageGroupDAO().add(newGrp);
-    curGroup!.otherShapes.add(newGrp);
-    await ImageGroupDAO().update(curGroup!);
-    curGroup=await ImageGroupDAO().getDetails(curGroup!.id);
-    bodyController.setGrpUUID(curGroup!.uuid);
-    notifyListeners();
+  saveAddShapeHandler(String action)async{
+    var acts = action.split('&&');
+    if(curShape!=null){
+      if(acts[0]=='update'){
+        curShape!.name=acts[1];
+        await ImageGroupDAO().update(curShape!);
+        for(var nav in allNavRows[allNavRows.length-1].allItems){
+          if(nav.otherShapes.isNotEmpty&&nav.otherShapes[nav.shapeIndex].uuid==curShape!.uuid){
+            nav.otherShapes[nav.shapeIndex].name=curShape!.name;
+            notifyListeners();
+            break;
+          }
+        }
+      }else if(acts[0]=='delete'){
+        if(curShape!=null&&
+            curShape!.allStates.isEmpty&&
+            curShape!.subObjects.isEmpty&&
+            curShape!.allGroups.isEmpty){
+          await ImageGroupDAO().delete(curShape!);
+          for(var nav in allNavRows[allNavRows.length-1].allItems){
+            if(nav.otherShapes.isNotEmpty&&nav.otherShapes[nav.shapeIndex].uuid==curShape!.uuid){
+              nav.otherShapes.removeAt(nav.shapeIndex);
+              if(nav.otherShapes.isNotEmpty){
+                nav.shapeIndex=nav.shapeIndex==0?nav.shapeIndex:nav.shapeIndex-1;
+              }else{
+                nav.shapeIndex=-1;
+              }
+              notifyListeners();
+              break;
+            }
+          }
+        }else{
+          Toast(Strings.errRemoveGroup, false).showWarning(context);
+        }
+      }
+    }else{
+      ImageGroupModel? newGrp= ImageGroupModel(-1, "", curGroup!.uuid, acts[1]);
+      newGrp.uuid = const Uuid().v4();
+      newGrp.state = GroupState.findMainState.name;
+      newGrp.label.target=curGroup!.label.target;
+      newGrp.id=await ImageGroupDAO().add(newGrp);
+      curGroup!.otherShapes.add(newGrp);
+      await ImageGroupDAO().update(curGroup!);
+      curGroup=await ImageGroupDAO().getDetails(curGroup!.id);
+      bodyController.setGrpUUID(curGroup!.uuid);
+      notifyListeners();
+    }
   }
 
   onShapeChangeHandler(NavModel nav)async{
     curGroup = await ImageGroupDAO().getDetails(nav.otherShapes[nav.shapeIndex].id);
+    if(curGroup!.allStates.isEmpty&&
+        curGroup!.subObjects.isEmpty&&
+        curGroup!.allGroups.isEmpty&&
+        curGroup!.otherShapes.isEmpty){
+      curGroup!.state=GroupState.findMainState.name;
+      await ImageGroupDAO().update(curGroup!);
+    }
     bodyController.setObjects(curGroup!.allStates);
     bodyController.setGrpUUID(curGroup!.uuid);
     var items = allNavRows[allNavRows.length-1].allItems;

@@ -8,12 +8,12 @@ class NavigationRowViewModel extends ViewModel {
   NavRowController rowController;
   NavModel showAll=NavModel(-2, -1,"", "", "","","",[]);
   ValueSetter<NavModel> onNavSelectedCaller;
-  ValueSetter<NavModel> onAddNewShapeCaller;
+  ValueSetter<String> onChangeShapeCaller;
   ValueSetter<NavModel> onSelectShapeCaller;
   NavigationRowViewModel(
       this.rowController,
       this.onNavSelectedCaller,
-      this.onAddNewShapeCaller,
+      this.onChangeShapeCaller,
       this.onSelectShapeCaller);
 
   onItemSelectHandler(NavModel curNav){

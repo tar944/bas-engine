@@ -189,12 +189,12 @@ class LabelingBodyViewModel extends ViewModel {
       allObjects.removeAt(0);
       simObjects.add(curObject);
       final srcImg = i.decodeImage(
-        File(curObject.image.target!.path!).readAsBytesSync(),
+        File(curObject.image.target!.path).readAsBytesSync(),
       );
       var j = 0;
       while (j < allObjects.length) {
         final curImg = i.decodeImage(
-          File(allObjects[j].image.target!.path!).readAsBytesSync(),
+          File(allObjects[j].image.target!.path).readAsBytesSync(),
         );
         var imgDiff =
             DiffImage.compareFromMemory(srcImg!, curImg!, asPercentage: true)
@@ -437,7 +437,7 @@ class LabelingBodyViewModel extends ViewModel {
         break;
       case "setItMain":
         var obj = await ObjectDAO().getDetails(int.parse(act[1]));
-        final img = await i.decodeImageFile(obj!.image.target!.path!);
+        final img = await i.decodeImageFile(obj!.image.target!.path);
         var newObject = ObjectModel(-1, const Uuid().v4(), 0.0, img!.width.toDouble(), 0.0, img.height.toDouble());
         newObject.srcObject.target = obj;
         newObject.image.target = obj.image.target;

@@ -127,7 +127,7 @@ class DlgCutToPieceViewModel extends ViewModel {
     int h =(newObject.bottom - newObject.top).toInt();
 
     final cmd = i.Command()
-      ..decodeImageFile(curObject!.image.target!.path!)
+      ..decodeImageFile(curObject!.image.target!.path)
       ..copyCrop(
           x: newObject.left.toInt(),
           y: newObject.top.toInt(),

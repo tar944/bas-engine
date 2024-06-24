@@ -46,7 +46,7 @@ class _View extends StatelessView<LabelingViewModel> {
                 return NavigationRow(
                     rowController: vm.allNavRows[index],
                     onNavSelectedCaller: vm.onNavItemSelectHandler,
-                    onAddNewShapeCaller: vm.onAddNewShapeHandler,
+                    onChangeShapeCaller: vm.onChangeShapeHandler,
                   onSelectShapeCaller: vm.onShapeChangeHandler,
                 );
               }else{
