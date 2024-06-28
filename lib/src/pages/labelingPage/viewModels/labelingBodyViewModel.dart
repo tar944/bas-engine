@@ -118,7 +118,7 @@ class LabelingBodyViewModel extends ViewModel {
                   int w = (curSub.right.toInt() - curSub.left.toInt()).abs().toInt();
                   int h = (curSub.bottom.toInt() - curSub.top.toInt());
                   final cmd = i.Command()
-                    ..decodeImageFile(curState.image.target!.path!)
+                    ..decodeImageFile(curState.image.target!.path)
                     ..copyCrop(
                         x: curSub.left.toInt(),
                         y: curSub.top.toInt(),
@@ -199,7 +199,7 @@ class LabelingBodyViewModel extends ViewModel {
         var imgDiff =
             DiffImage.compareFromMemory(srcImg!, curImg!, asPercentage: true)
                 .diffValue;
-        print("${j + 1} of ${allObjects.length}: ${curObject.image.target!.name} compare to=> ${allObjects[j].image.target!.name!} image diff: $imgDiff");
+        print("${j + 1} of ${allObjects.length}: ${curObject.image.target!.name} compare to=> ${allObjects[j].image.target!.name} image diff: $imgDiff");
         if (imgDiff < 5) {
           simObjects.add(allObjects[j]);
           allObjects.removeAt(j);
@@ -461,7 +461,7 @@ class LabelingBodyViewModel extends ViewModel {
           subGroups = part!.allGroups;
           otherShapes =[];
         }
-        final img = await i.decodeImageFile(obj!.image.target!.path!);
+        final img = await i.decodeImageFile(obj!.image.target!.path);
         double mediaW = MediaQuery.sizeOf(context).width;
         double mediaH = MediaQuery.sizeOf(context).height;
         showDialog(

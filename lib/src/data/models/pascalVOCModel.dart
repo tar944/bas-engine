@@ -1,16 +1,16 @@
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
-import 'package:bas_dataset_generator_engine/src/utility/enum.dart';
 import 'package:xml/xml.dart';
 
 class PascalVOCModel{
-  String? filename,path,objUUID;
+  String? filename,path,objUUID,grpUUID;
   int? width,height;
   int depth=3;
   List<PascalObjectModel> objects=[];
 
   PascalVOCModel(
       this.objUUID,
+      this.grpUUID,
       this.filename,
       this.path,
       this.width,

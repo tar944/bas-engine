@@ -43,7 +43,7 @@ class DlgCutToPieceViewModel extends ViewModel {
 
   updatePageData()async{
     curObject=group!.allStates[indexImage];
-    final img = await i.decodeImageFile(curObject!.image.target!.path!);
+    final img = await i.decodeImageFile(curObject!.image.target!.path);
     imgH = img!.height;
     imgW = img.width;
     imgSize = Size(

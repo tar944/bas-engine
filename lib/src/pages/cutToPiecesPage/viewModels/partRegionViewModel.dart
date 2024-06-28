@@ -37,7 +37,7 @@ class PartRegionViewModel extends ViewModel {
 
   @override
   void init() async{
-    final img = await i.decodeImageFile(mainObject.image.target!.path!);
+    final img = await i.decodeImageFile(mainObject.image.target!.path);
     imgH = img!.height;
     imgW = img.width;
     notifyListeners();

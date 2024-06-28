@@ -23,7 +23,7 @@ class ImageItem extends HookWidget {
         color: Colors.grey[170],
         border: Border.all(color: Colors.magenta, width: 1.5),
         image: DecorationImage(
-          image: Image.file(File(obj.image.target!.path!)).image,
+          image: Image.file(File(obj.image.target!.path)).image,
           fit: BoxFit.fill,
         ),
       ),

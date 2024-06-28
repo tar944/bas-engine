@@ -6,9 +6,9 @@ class ScreenViewModel extends ViewModel {
 
   final PascalVOCModel object;
   final bool isSelected;
-  bool showLabel=false;
+  final bool showObjects;
   final ValueSetter<String> onActionCaller;
 
-  ScreenViewModel(this.isSelected,this.object, this.onActionCaller);
+  ScreenViewModel(this.isSelected,this.showObjects,this.object, this.onActionCaller);
 
 }

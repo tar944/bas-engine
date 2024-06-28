@@ -38,6 +38,6 @@ class NavItemViewModel extends ViewModel {
     }else{
       name= navItem.otherShapes[navItem.shapeIndex].name!;
     }
-    return name.length>12?"${name.substring(0,12)}...":name;
+    return name.length>12?"${name.substring(0,10)}...":name;
   }
 }

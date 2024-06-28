@@ -217,6 +217,7 @@ class LabelingViewModel extends ViewModel {
         for(var nav in allNavRows[allNavRows.length-1].allItems){
           if(nav.otherShapes.isNotEmpty&&nav.otherShapes[nav.shapeIndex].uuid==curShape!.uuid){
             nav.otherShapes[nav.shapeIndex].name=curShape!.name;
+            curShape=null;
             notifyListeners();
             break;
           }
@@ -235,6 +236,7 @@ class LabelingViewModel extends ViewModel {
               }else{
                 nav.shapeIndex=-1;
               }
+              curShape=null;
               notifyListeners();
               break;
             }

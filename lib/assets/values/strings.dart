@@ -2,6 +2,10 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String showObjects="Show sub objects";
+  static const String hideObjects="Hide sub objects";
+  static const String pressUp="Press up";
+  static const String pressDown="Press down";
   static const String waiting="Please wait...";
   static const String addShape="New shape";
   static const String waitToGenerateFile="Generate file is on process,please wait";

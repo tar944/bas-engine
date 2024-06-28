@@ -70,7 +70,7 @@ class CutToPiecesViewModel extends ViewModel {
 
   updatePageData()async{
     curObject=group!.allStates[indexImage];
-    final img = await i.decodeImageFile(curObject!.image.target!.path!);
+    final img = await i.decodeImageFile(curObject!.image.target!.path);
     imgH = img!.height;
     imgW = img.width;
     imgSize = Size(
@@ -191,7 +191,7 @@ class CutToPiecesViewModel extends ViewModel {
     int h =(newObject.bottom - newObject.top).toInt();
 
     final cmd = i.Command()
-      ..decodeImageFile(curObject!.image.target!.path!)
+      ..decodeImageFile(curObject!.image.target!.path)
       ..copyCrop(
           x: newObject.left.toInt(),
           y: newObject.top.toInt(),
@@ -221,7 +221,7 @@ class CutToPiecesViewModel extends ViewModel {
     if(imgW>MediaQuery.of(context).size.width&&imgH<MediaQuery.of(context).size.height){
       return BoxFit.fitWidth;
     }else if(imgW<MediaQuery.of(context).size.width&&imgH>MediaQuery.of(context).size.height){
-      return BoxFit.fitHeight;
+      return BoxFit.fill;
     }else if(imgW > MediaQuery.of(context).size.width || imgH > (MediaQuery.of(context).size.height - Dimens.topBarHeight)){
       return BoxFit.fill;
     }
