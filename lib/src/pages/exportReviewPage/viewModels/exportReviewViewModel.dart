@@ -18,9 +18,11 @@ import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:dio/dio.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:go_router/go_router.dart';
+import 'package:keyboard_event/keyboard_event.dart';
 import 'package:pmvvm/pmvvm.dart';
 import 'package:window_manager/window_manager.dart';
 import 'package:path/path.dart' as path;
+import 'package:keyboard_event/keyboard_event.dart' as key;
 
 class ExportReviewViewModel extends ViewModel {
 
@@ -38,6 +40,7 @@ class ExportReviewViewModel extends ViewModel {
   int imgW=0, imgH=0,groupIndex=0;
   Size imgSize = const Size(0, 0);
   String guidePos="bottomLeft",exportAction="",banStatesUUID="";
+  late key.KeyboardEvent keyboardEvent;
 
   ExportReviewViewModel(this.prjUUID);
 
@@ -58,6 +61,16 @@ class ExportReviewViewModel extends ViewModel {
       await Future.delayed(const Duration(milliseconds: 100));
       await _windowShow();
     });
+    keyboardEvent = key.KeyboardEvent();
+    keyboardEvent.startListening((keyEvent) => onKeyboardEventHandler(keyEvent));
+    await KeyboardEvent.init();
+  }
+
+
+  onKeyboardEventHandler(key.KeyEvent event)async{
+    if(event.isKeyUP&&event.vkName=='LCONTROL'){
+      changeListPosition();
+    }
   }
 
   @override
@@ -166,8 +179,8 @@ class ExportReviewViewModel extends ViewModel {
     }
     notifyListeners();
     updateObjects();
+    setDefaultBanStates();
   }
-
 
   updateObjects()async{
     curStates=allStates.where((element) => element.grpUUID==mainGroups[groupIndex].uuid).toList();
@@ -381,19 +394,29 @@ class ExportReviewViewModel extends ViewModel {
   nextGroup(){
     if((groupIndex+1)<mainGroups.length){
       groupIndex++;
-      banStatesUUID='';
+      indexImage=0;
       notifyListeners();
       updateObjects();
+      setDefaultBanStates();
     }
   }
 
   perviousGroup(){
     if(groupIndex!=0){
       groupIndex--;
-      banStatesUUID='';
+      indexImage=0;
       notifyListeners();
       updateObjects();
+      setDefaultBanStates();
     }
+  }
+
+  setDefaultBanStates(){
+    banStatesUUID='';
+    for(var i=1;i<curStates.length;i++){
+      banStatesUUID+='${curStates[i].objUUID}&&';
+    }
+    notifyListeners();
   }
 
   String getGroupName(){

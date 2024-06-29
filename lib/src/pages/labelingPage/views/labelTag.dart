@@ -47,8 +47,8 @@ class LabelTag extends HookWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Text("${curGroup.label.target!.name}${curGroup.name!=""?".":""}${curGroup.name}", style: TextSystem.textM(Colors.white),),
-                      if(curGroup.label.target!.levelName=="objects")
+                      Text("${curGroup.label.target!=null?curGroup.label.target!.name:'deletedLabel'}${curGroup.name!=""?".":""}${curGroup.name}", style: TextSystem.textM(Colors.white),),
+                      if(curGroup.label.target!=null&&curGroup.label.target!.levelName=="objects")
                           Text(" (${curGroup.label.target!.action})",style: TextSystem.textS(Colors.grey[120]),)
                     ],
                   )

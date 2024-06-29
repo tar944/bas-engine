@@ -3,7 +3,6 @@ import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/viewModels/exportReviewViewModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/flyScreensList.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/partRegionExplorer.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/screenItem.dart';
 import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
@@ -336,7 +335,6 @@ class _View extends StatelessView<ExportReviewViewModel> {
                                           borderRadius: BorderRadius.circular(10)
                                       ),
                                       child: vm.mainObject!=null?ListView.builder(
-                                          key: GlobalKey(),
                                           itemCount: vm.curStates.length,
                                           scrollDirection: Axis.horizontal,
                                           itemBuilder: (context, index) {
