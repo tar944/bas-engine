@@ -104,62 +104,32 @@ class _View extends StatelessView<ExportReviewViewModel> {
                               ],
                             ),
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              Container(
-                                width: Dimens.btnWidthNormal,
-                                height: Dimens.actionBtnH,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[170].withOpacity(0.5),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Row(
-                                  children: [
-                                    const SizedBox(width: 5,),
-                                    FlyoutTarget(
-                                      key: GlobalKey(),
-                                      controller: vm.moreController,
-                                      child: IconButton(
-                                          style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                          icon: const Icon(
-                                            FluentIcons.password_field,
-                                            color: Colors.white,
-                                            size: 25,
-                                          ),
-                                          onPressed: () => {},
-                                      ),
-                                    ),
-                                    const SizedBox(width: 5,),
-                                    IconButton(
-                                      style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                      icon: const Icon(
-                                        FluentIcons.chevron_right,
-                                        color: Colors.white,
-                                        size: 25,
-                                      ),
-                                      onPressed: vm.allStates.length-1==vm.indexImage?null:() => vm.nextImage()),
-                                  ],
-                                ),
-                              ),
-                              const SizedBox(height: 10,),
-                              Container(
-                                height: Dimens.actionBtnH,
-                                width: Dimens.actionBtnH,
-                                  decoration: BoxDecoration(
-                                    color: vm.isBinState?Colors.grey[100].withOpacity(0.5):Colors.grey[170].withOpacity(0.5),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                child: IconButton(
-                                  style: ButtonStyle(
-                                    padding: ButtonState.all(EdgeInsets.zero)
-                                  ),
+                          Container(
+                            width: Dimens.btnWidthNormal,
+                            height: Dimens.actionBtnH,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[170].withOpacity(0.5),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Row(
+                              children: [
+                                const SizedBox(width: 8,),
+                                IconButton(
+                                  style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(10.0))),
                                   onPressed: vm.onChangeState,
-                                  icon: Icon(FluentIcons.delete,size: 20,color: vm.isBinState?Colors.black:Colors.red.dark,),
+                                  icon: Icon(FluentIcons.delete,size: 22,color: vm.isBinState?Colors.black:Colors.red.dark,),
                                 ),
-                              )
-                            ],
+                                const SizedBox(width: 5,),
+                                IconButton(
+                                  style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                  icon: const Icon(
+                                    FluentIcons.chevron_right,
+                                    color: Colors.white,
+                                    size: 25,
+                                  ),
+                                  onPressed: vm.allStates.length-1==vm.indexImage?null:() => vm.nextImage()),
+                              ],
+                            ),
                           ),
                         ],
                       ),

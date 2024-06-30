@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
@@ -9,8 +8,6 @@ import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalVOCModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
-import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
-import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/dlgObjProperties.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/dlgExport.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/formatManager.dart';
@@ -21,7 +18,6 @@ import 'package:go_router/go_router.dart';
 import 'package:keyboard_event/keyboard_event.dart';
 import 'package:pmvvm/pmvvm.dart';
 import 'package:window_manager/window_manager.dart';
-import 'package:path/path.dart' as path;
 import 'package:keyboard_event/keyboard_event.dart' as key;
 
 class ExportReviewViewModel extends ViewModel {
@@ -143,19 +139,6 @@ class ExportReviewViewModel extends ViewModel {
           }
           allObjects.addAll(subArrays);
         }
-        var finalObjects = <PascalObjectModel>[];
-        for(var iObj in allObjects){
-          var isDuplicate=false;
-          for(var fObj in finalObjects){
-            if(iObj.xmax==fObj.xmax&&iObj.xmin==fObj.xmin&&iObj.ymax==fObj.ymax&&iObj.ymin==fObj.ymin){
-              isDuplicate=true;
-              break;
-            }
-          }
-          if(!isDuplicate){
-            finalObjects.add(iObj);
-          }
-        }
         for(var obj in grp.allStates ){
           ObjectModel? curObject;
           do{
@@ -170,7 +153,7 @@ class ExportReviewViewModel extends ViewModel {
                   curObject.image.target!.width.toInt(),
                   curObject.image.target!.height.toInt()));
 
-          allStates[allStates.length-1].objects.addAll(finalObjects);
+          allStates[allStates.length-1].objects.addAll(allObjects);
         }
         if(grp.allStates.isNotEmpty){
           mainGroups.add(grp);
@@ -306,12 +289,33 @@ class ExportReviewViewModel extends ViewModel {
     processedNumber=1;
     exportAction=action;
     notifyListeners();
-    var path = await FormatManager().generateFile(prjUUID,action, allStates,onItemProcessedHandler);
+    var exportStates=<PascalVOCModel>[];
+    for(var state in allStates){
+      var objects =<PascalObjectModel>[];
+      var mainObj= await ObjectDAO().getDetailsByUUID(state.objUUID!);
+      for(var obj in state.objects){
+        if(mainObj!.labelObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
+          objects.add(obj);
+        }else{
+          var curObj=await ObjectDAO().getDetailsByUUID(obj.objUUID!);
+          if(curObj!.isGlobalObject){
+            objects.add(obj);
+          }
+        }
+      }
+      if(objects.isNotEmpty){
+        state.objects=objects;
+        exportStates.add(state);
+      }
+    }
+
+    var path = await FormatManager().generateFile(prjUUID,action, exportStates,onItemProcessedHandler);
     if(action=="saveInServer"){
       var file=File(path);
       if(file.existsSync())
       {
-        await uploadFile(file);
+        print('finished');
+        // await uploadFile(file);
       }
     }
   }
@@ -334,7 +338,6 @@ class ExportReviewViewModel extends ViewModel {
                                       }
                                     )
                                   );
-    print(response);
     processedNumber=-1;
     notifyListeners();
     return response.data['status'];
@@ -369,25 +372,6 @@ class ExportReviewViewModel extends ViewModel {
         banStatesUUID='$banStatesUUID${act[1]}&&';
       }
       updateObjects();
-    }
-  }
-
-  onRegionActionHandler(String action)async{
-    var act = action.split("&&");
-    switch(act[0]){
-      case "click":
-        showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) =>
-              DlgObjProperties(
-                  object: allStates[indexImage].objects.firstWhere((element) => element.objUUID==act[1]),
-                  onActionCaller: onObjPropertiesHandler),
-        );
-        break;
-      case "rightClick":
-        // await ObjectDAO().updateExportState(act[1], act[2]);
-        break;
     }
   }
 
@@ -427,26 +411,6 @@ class ExportReviewViewModel extends ViewModel {
       name= mainGroups[groupIndex].name!;
     }
     return name.length>20?"${name.substring(0,19)}...":name;
-  }
-
-  onObjPropertiesHandler(String action)async{
-    var act = action.split("&&");
-    if(act[0]=="delete"){
-      if(act[2]!="objects"){
-        Toast(Strings.errorDelete, false).showError(context);
-        return;
-      }
-      var obj= await ObjectDAO().getDetailsByUUID(act[1]);
-      await ObjectDAO().deleteObject(obj!);
-      allStates[indexImage].objects.removeWhere((element) => element.objUUID==act[1]);
-      notifyListeners();
-    }else if(act[0]=="confirm"){
-      var obj= await ObjectDAO().getDetailsByUUID(act[1]);
-      obj!.exportName=act[2];
-      await ObjectDAO().update(obj);
-      allStates[indexImage].objects[allStates[indexImage].objects.indexWhere((element) => element.objUUID==act[1])].exportName=act[2];
-      notifyListeners();
-    }
   }
 
   onMouseEnter(){

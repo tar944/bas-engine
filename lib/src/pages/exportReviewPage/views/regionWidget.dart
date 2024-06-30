@@ -34,27 +34,30 @@ class _View extends StatelessView<RegionViewModel> {
 
   @override
   Widget render(context, RegionViewModel vm) {
-   return MouseRegion(
-     onEnter:(e)=> vm.onHoverHandler(true),
-     onExit: (e)=> vm.onHoverHandler(false),
-     child: GestureDetector(
-       onTapUp: (e)=>vm.onClickHandler(),
-       onSecondaryTapUp: (e)=>vm.onRightClickHandler(),
-       onTertiaryTapUp: (e)=>vm.onMiddleHandler(),
-       child: SizedBox(
-          width: vm.width,
-          height: vm.height,
-          child: CustomPaint(
-            painter: RectanglePainter(
-                object: ObjectModel(0, "", 0.0,
-                  vm.width,
-                    0.0,
-                  vm.height,
-                ),
-                color: vm.regionStatus=="active"?Colors.green:vm.regionStatus=="none"?Colors.orange:vm.regionStatus=='global'?Colors.magenta:Colors.red,
-                isActive: vm.isHover),
+   return Tooltip(
+     message: vm.curObject.exportName!.replaceAll('**', '.'),
+     child: MouseRegion(
+       onEnter:(e)=> vm.onHoverHandler(true),
+       onExit: (e)=> vm.onHoverHandler(false),
+       child: GestureDetector(
+         onTapUp: (e)=>vm.onClickHandler(),
+         onSecondaryTapUp: (e)=>vm.onRightClickHandler(),
+         onTertiaryTapUp: (e)=>vm.onMiddleHandler(),
+         child: SizedBox(
+            width: vm.width,
+            height: vm.height,
+            child: CustomPaint(
+              painter: RectanglePainter(
+                  object: ObjectModel(0, "", 0.0,
+                    vm.width,
+                      0.0,
+                    vm.height,
+                  ),
+                  color: vm.regionStatus=="active"?Colors.green:vm.regionStatus=="none"?Colors.orange:vm.regionStatus=='global'?Colors.magenta:Colors.red,
+                  isActive: vm.isHover),
+            ),
           ),
-        ),
+       ),
      ),
    );
   }

@@ -1,7 +1,10 @@
 import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
+import 'package:bas_dataset_generator_engine/src/dialogs/toast.dart';
+import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/dlgObjProperties.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 import 'package:image/image.dart' as i;
@@ -31,6 +34,7 @@ class PartRegionViewModel extends ViewModel {
   }
 
   onObjectHandler(String action)async{
+    print(action);
     var acts= action.split('&&');
     switch(acts[1]){
       case 'none':
@@ -65,6 +69,37 @@ class PartRegionViewModel extends ViewModel {
         await ObjectDAO().setGlobalObject(acts[0]);
         notifyListeners();
         break;
+      case 'showProperties':
+        showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) =>
+              DlgObjProperties(
+                  object: allObjects.firstWhere((element) => element.objUUID==acts[0]),
+                  onActionCaller: onObjPropertiesHandler),
+        );
+        break;
+    }
+  }
+
+
+  onObjPropertiesHandler(String action)async{
+    var act = action.split("&&");
+    if(act[0]=="delete"){
+      if(act[2]!="objects"){
+        Toast(Strings.errorDelete, false).showError(context);
+        return;
+      }
+      var obj= await ObjectDAO().getDetailsByUUID(act[1]);
+      await ObjectDAO().deleteObject(obj!);
+      allObjects.removeWhere((element) => element.objUUID==act[1]);
+      notifyListeners();
+    }else if(act[0]=="confirm"){
+      var obj= await ObjectDAO().getDetailsByUUID(act[1]);
+      obj!.exportName=act[2];
+      await ObjectDAO().update(obj);
+      allObjects[allObjects.indexWhere((element) => element.objUUID==act[1])].exportName=act[2];
+      notifyListeners();
     }
   }
 

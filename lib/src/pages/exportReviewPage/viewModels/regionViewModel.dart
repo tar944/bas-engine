@@ -41,13 +41,26 @@ class RegionViewModel extends ViewModel {
 
   onHoverHandler(bool isHover){
     this.isHover = isHover;
-    onObjectActionCaller("hover&&${curObject.objUUID}");
     notifyListeners();
   }
 
   onClickHandler(){
-    regionStatus=regionStatus=='none'?'active':'none';
-    onObjectActionCaller("${curObject.objUUID}&&$regionStatus");
+    switch(regionStatus){
+      case 'none':
+        regionStatus='active';
+        onObjectActionCaller("${curObject.objUUID}&&active");
+        break;
+      case'global':
+        regionStatus='none';
+        onObjectActionCaller("${curObject.objUUID}&&setGlobal");
+        break;
+      case 'active':
+        regionStatus='none';
+        onObjectActionCaller("${curObject.objUUID}&&none");
+        break;
+      default:
+        regionStatus='none';
+    }
     notifyListeners();
   }
 
@@ -66,10 +79,14 @@ class RegionViewModel extends ViewModel {
         notifyListeners();
       }
     }
-
   }
 
   onRightClickHandler(){
-    onObjectActionCaller('${curObject.objUUID}&&setGlobal');
+    if(['global','active'].contains(regionStatus)){
+      onObjectActionCaller('${curObject.objUUID}&&showProperties');
+    }else{
+      onObjectActionCaller('${curObject.objUUID}&&setGlobal');
+    }
+
   }
 }
