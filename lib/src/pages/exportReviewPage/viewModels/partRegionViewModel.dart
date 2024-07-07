@@ -12,7 +12,7 @@ import 'package:image/image.dart' as i;
 class PartRegionViewModel extends ViewModel {
   List<PascalObjectModel> allObjects;
   ObjectModel mainObject;
-  final bool isBinState;
+  final bool isSelectionMode;
 
   int imgW=0,imgH=0;
   final String imgPath;
@@ -21,7 +21,7 @@ class PartRegionViewModel extends ViewModel {
   PartRegionViewModel(
       this.allObjects,
       this.imgPath,
-      this.isBinState,
+      this.isSelectionMode,
       this.mainObject);
 
 

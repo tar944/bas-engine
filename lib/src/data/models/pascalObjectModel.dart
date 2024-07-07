@@ -2,7 +2,7 @@ import 'package:xml/xml.dart';
 
 class PascalObjectModel{
   String? name,pose="Unspecified",objUUID,stateUUID='';
-  String? exportName,grpUUID,lvlKind;
+  String? exportName,grpUUID,lvlKind,dirKind='';
   int truncated=0,difficult=0,occluded=0;
   int? xmin,xmax,ymin,ymax;
 

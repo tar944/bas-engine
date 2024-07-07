@@ -2,6 +2,9 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String pageMode="Page mode:";
+  static const String selection="selection";
+  static const String division="division";
   static const String showObjects="Show sub objects";
   static const String hideObjects="Hide sub objects";
   static const String pressUp="Press up";

@@ -64,16 +64,15 @@ class TopBarPanel extends StatelessWidget {
               ],
             ),
           ),
-          const Spacer(),
           if (needHelp)
             Padding(
-              padding: const EdgeInsets.all(3.0),
+              padding: const EdgeInsets.only(top: 3.0,bottom: 3.0),
               child: IconButton(
                   style:
-                      ButtonStyle(padding: ButtonState.all(EdgeInsets.all(3))),
+                  ButtonStyle(padding: ButtonState.all(EdgeInsets.all(3))),
                   icon: Container(
-                      width: Dimens.btnHelpW,
-                      height: Dimens.btnHelpW,
+                      width: Dimens.btnHelpW-5,
+                      height: Dimens.btnHelpW-5,
                       decoration: BoxDecoration(
                           border: Border.all(color: Colors.orange.lighter),
                           shape: BoxShape.circle),
@@ -83,6 +82,7 @@ class TopBarPanel extends StatelessWidget {
                       )),
                   onPressed: () => onBackCaller),
             ),
+          const Spacer(),
           IconButton(icon: Icon(CupertinoIcons.xmark,color: Colors.white,), onPressed: (){exit(0);}),
         ],
       ),

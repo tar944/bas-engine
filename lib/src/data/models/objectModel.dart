@@ -23,6 +23,9 @@ class ObjectModel {
   int actX = -1, actY = -1;
   final srcObject = ToOne<ObjectModel>();
   final labelObjects = ToMany<ObjectModel>();
+  final trainObjects = ToMany<ObjectModel>();
+  final validObjects = ToMany<ObjectModel>();
+  final testObjects = ToMany<ObjectModel>();
   final banObjects = ToMany<ObjectModel>();
   final image = ToOne<ImageModel>();
   final label = ToOne<LabelModel>();
@@ -45,6 +48,21 @@ class ObjectModel {
     data['actX'] = actX;
     data['actY'] = actY;
     data['typedText'] = typedText;
+    if (labelObjects.isNotEmpty) {
+      data['labelObjects'] = labelObjects.map((v) => v.toJson()).toList();
+    }
+    if (banObjects.isNotEmpty) {
+      data['banObjects'] = banObjects.map((v) => v.toJson()).toList();
+    }
+    if (trainObjects.isNotEmpty) {
+      data['trainObjects'] = trainObjects.map((v) => v.toJson()).toList();
+    }
+    if (testObjects.isNotEmpty) {
+      data['testObjects'] = testObjects.map((v) => v.toJson()).toList();
+    }
+    if (validObjects.isNotEmpty) {
+      data['validObjects'] = validObjects.map((v) => v.toJson()).toList();
+    }
     if (srcObject.target != null) {
       data['srcObjectId'] = srcObject.target!.uuid;
     }

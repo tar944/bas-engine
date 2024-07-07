@@ -38,7 +38,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
             TopBarPanel(
               title: Strings.exportReview,
               needBack: true,
-              needHelp: false,
+              needHelp: true,
               onBackCaller: vm.onBackClicked,
             ),
               vm.mainObject!=null?
@@ -63,7 +63,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
                         imgPath:vm.allStates[vm.indexImage].path! ,
                         mainObject: vm.mainObject!,
                         allObjects: vm.curObjects,
-                        isBinState:vm.isBinState
+                        isSelectionMode:vm.isSelection
                       ):
                       Container(),
                     ),
@@ -134,61 +134,6 @@ class _View extends StatelessView<ExportReviewViewModel> {
                         ],
                       ),
                     ),
-                    Positioned(
-                      left: vm.getGuidePos(0)==-1?null:vm.getGuidePos(0),
-                      right: vm.getGuidePos(2)==-1?null:vm.getGuidePos(2),
-                      top: vm.getGuidePos(1)==-1?null:vm.getGuidePos(1),
-                      bottom: vm.getGuidePos(3)==-1?null:vm.getGuidePos(3),
-                        child: MouseRegion(
-                          onEnter: (e)=>vm.onMouseEnter(),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: Colors.grey[190].withOpacity(.7),
-                              border: Border.all(color: Colors.grey[150],width: 1.0),
-                              borderRadius: const BorderRadius.all(Radius.circular(10))
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Text("${Strings.actionGuide} ( 0 )" ,style: TextSystem.textL(Colors.white),),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Row(children: [
-                                      Container(
-                                        width:Dimens.dotSize,
-                                        height: Dimens.dotSize,
-                                        decoration: BoxDecoration(
-                                          color: Colors.teal.dark,
-                                          borderRadius: const BorderRadius.all(Radius.circular(Dimens.dotSize/2))
-                                        )),
-                                      const SizedBox(width: 10,),
-                                      Text(Strings.leftClick,style: TextSystem.textM(Colors.white),)
-                                    ],),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(5.0),
-                                    child: Row(children: [
-                                      Container(
-                                        width:Dimens.dotSize,
-                                        height: Dimens.dotSize,
-                                        decoration: BoxDecoration(
-                                          color: Colors.teal.dark,
-                                          borderRadius: const BorderRadius.all(Radius.circular(Dimens.dotSize/2))
-                                        )),
-                                      const SizedBox(width: 10,),
-                                      Text(Strings.rightClick,style: TextSystem.textM(Colors.white),)
-                                    ],),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        )),
                     if(vm.processedNumber!=-1)
                       Positioned(
                         top: 0,
@@ -244,28 +189,82 @@ class _View extends StatelessView<ExportReviewViewModel> {
                               children: [
                             Padding(
                               padding: const EdgeInsets.only(left: 20),
-                              child: IconButton(
-                                style: ButtonStyle(
-                                  padding: ButtonState.all(EdgeInsets.zero)
-                                ),
-                                onPressed: vm.changeListPosition,
-                                icon: Container(
-                                  height: Dimens.btnHeightBig,
-                                  width: Dimens.btnWidthNormal+(vm.isListUp?15:0),
-                                  decoration: BoxDecoration(
-                                  borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
-                                  color: Colors.grey[180]
-                                ),
-                                  child: Row(
-                                  children: [
-                                    const SizedBox(width: 10,),
-                                    Text(vm.isListUp?Strings.pressDown:Strings.pressUp),
-                                    const SizedBox(width: 10,),
-                                    Icon(vm.isListUp?FluentIcons.down:FluentIcons.up)
-                                  ],
-                                ),
-                              ),
-                            )),
+                              child: Row(
+                                children: [
+                                  IconButton(
+                                    style: ButtonStyle(
+                                      padding: ButtonState.all(EdgeInsets.zero)
+                                    ),
+                                    onPressed: vm.changeListPosition,
+                                    icon: Container(
+                                      height: Dimens.btnHeightBig,
+                                      width: Dimens.btnWidthNormal+(vm.isListUp?15:0),
+                                      decoration: BoxDecoration(
+                                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
+                                      color: Colors.grey[180]
+                                    ),
+                                      child: Row(
+                                      children: [
+                                        const SizedBox(width: 10,),
+                                        Text(vm.isListUp?Strings.pressDown:Strings.pressUp),
+                                        const SizedBox(width: 10,),
+                                        Icon(vm.isListUp?FluentIcons.down:FluentIcons.up)
+                                      ],
+                                    ),
+                                  ),
+                            ),
+                                  const SizedBox(width: 5,),
+                                  if(vm.isListUp)
+                                    Container(
+                                      height: Dimens.btnHeightBig-10,
+                                      decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(Radius.circular(7)),
+                                          color: Colors.grey[180]
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          const Padding(
+                                            padding: EdgeInsets.only(left: 7,right: 5),
+                                            child: Text(Strings.pageMode),
+                                          ),
+                                          IconButton(
+                                              style: ButtonStyle(
+                                                padding: ButtonState.all(EdgeInsets.zero)
+                                              ),
+                                              icon: Container(
+                                                width: Dimens.btnWidthNormal-20,
+                                                decoration: vm.isSelection?BoxDecoration(
+                                                  color: Colors.teal.dark,
+                                                  borderRadius: const BorderRadius.all(Radius.circular(4))
+                                                ):null,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(top: 3,bottom: 3),
+                                                  child: Text(Strings.selection,style: TextSystem.textXs(Colors.white),),
+                                                ),
+                                              ),
+                                              onPressed: vm.changePageType),
+                                          const SizedBox(width: 5,),
+                                          IconButton(
+                                              style: ButtonStyle(
+                                                  padding: ButtonState.all(EdgeInsets.zero)
+                                              ),
+                                              icon: Container(
+                                                width: Dimens.btnWidthNormal-20,
+                                                decoration: !vm.isSelection?BoxDecoration(
+                                                    color: Colors.teal.dark,
+                                                    borderRadius: const BorderRadius.all(Radius.circular(4))
+                                                ):null,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.only(top: 3,bottom: 3),
+                                                  child: Text(Strings.division,style: TextSystem.textXs(Colors.white),),
+                                                ),
+                                              ),
+                                              onPressed: vm.changePageType),
+                                        ],
+                                      ),
+                                    )
+                                ],
+                              )),
                             Container(
                               height: 170,
                               width:  MediaQuery.of(context).size.width-20,

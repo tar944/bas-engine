@@ -224,7 +224,7 @@ final _entities = <ModelEntity>[
   ModelEntity(
       id: const IdUid(15, 8892823931225835339),
       name: 'ObjectModel',
-      lastPropertyId: const IdUid(37, 2197563583700619189),
+      lastPropertyId: const IdUid(38, 1451343129763049769),
       flags: 0,
       properties: <ModelProperty>[
         ModelProperty(
@@ -337,6 +337,18 @@ final _entities = <ModelEntity>[
         ModelRelation(
             id: const IdUid(35, 7892529514868367451),
             name: 'banObjects',
+            targetId: const IdUid(15, 8892823931225835339)),
+        ModelRelation(
+            id: const IdUid(36, 4332770320081343618),
+            name: 'trainObjects',
+            targetId: const IdUid(15, 8892823931225835339)),
+        ModelRelation(
+            id: const IdUid(37, 7731533481707176528),
+            name: 'validObjects',
+            targetId: const IdUid(15, 8892823931225835339)),
+        ModelRelation(
+            id: const IdUid(38, 6751114604194717435),
+            name: 'testObjects',
             targetId: const IdUid(15, 8892823931225835339))
       ],
       backlinks: <ModelBacklink>[]),
@@ -498,7 +510,7 @@ ModelDefinition getObjectBoxModel() {
       entities: _entities,
       lastEntityId: const IdUid(17, 8566624654259097881),
       lastIndexId: const IdUid(23, 5855966450476248403),
-      lastRelationId: const IdUid(35, 7892529514868367451),
+      lastRelationId: const IdUid(38, 6751114604194717435),
       lastSequenceId: const IdUid(0, 0),
       retiredEntityUids: const [
         5922885288332288138,
@@ -659,7 +671,8 @@ ModelDefinition getObjectBoxModel() {
         323244748199649629,
         623411051368177646,
         7094693992893619014,
-        3308857130380351767
+        3308857130380351767,
+        1451343129763049769
       ],
       retiredRelationUids: const [
         7096364116743183016,
@@ -912,7 +925,10 @@ ModelDefinition getObjectBoxModel() {
             [object.image, object.label, object.srcObject],
         toManyRelations: (ObjectModel object) => {
               RelInfo<ObjectModel>.toMany(34, object.id!): object.labelObjects,
-              RelInfo<ObjectModel>.toMany(35, object.id!): object.banObjects
+              RelInfo<ObjectModel>.toMany(35, object.id!): object.banObjects,
+              RelInfo<ObjectModel>.toMany(36, object.id!): object.trainObjects,
+              RelInfo<ObjectModel>.toMany(37, object.id!): object.validObjects,
+              RelInfo<ObjectModel>.toMany(38, object.id!): object.testObjects
             },
         getId: (ObjectModel object) => object.id,
         setId: (ObjectModel object, int id) {
@@ -924,7 +940,7 @@ ModelDefinition getObjectBoxModel() {
           final actionTypeOffset = fbb.writeString(object.actionType);
           final typedTextOffset = fbb.writeString(object.typedText);
           final exportNameOffset = fbb.writeString(object.exportName);
-          fbb.startTable(38);
+          fbb.startTable(39);
           fbb.addInt64(0, object.id ?? 0);
           fbb.addOffset(1, uuidOffset);
           fbb.addFloat64(2, object.left);
@@ -995,6 +1011,12 @@ ModelDefinition getObjectBoxModel() {
               store, RelInfo<ObjectModel>.toMany(34, object.id!));
           InternalToManyAccess.setRelInfo<ObjectModel>(object.banObjects, store,
               RelInfo<ObjectModel>.toMany(35, object.id!));
+          InternalToManyAccess.setRelInfo<ObjectModel>(object.trainObjects,
+              store, RelInfo<ObjectModel>.toMany(36, object.id!));
+          InternalToManyAccess.setRelInfo<ObjectModel>(object.validObjects,
+              store, RelInfo<ObjectModel>.toMany(37, object.id!));
+          InternalToManyAccess.setRelInfo<ObjectModel>(object.testObjects,
+              store, RelInfo<ObjectModel>.toMany(38, object.id!));
           return object;
         }),
     ImageGroupModel: EntityDefinition<ImageGroupModel>(
@@ -1354,6 +1376,18 @@ class ObjectModel_ {
   /// see [ObjectModel.banObjects]
   static final banObjects =
       QueryRelationToMany<ObjectModel, ObjectModel>(_entities[4].relations[1]);
+
+  /// see [ObjectModel.trainObjects]
+  static final trainObjects =
+      QueryRelationToMany<ObjectModel, ObjectModel>(_entities[4].relations[2]);
+
+  /// see [ObjectModel.validObjects]
+  static final validObjects =
+      QueryRelationToMany<ObjectModel, ObjectModel>(_entities[4].relations[3]);
+
+  /// see [ObjectModel.testObjects]
+  static final testObjects =
+      QueryRelationToMany<ObjectModel, ObjectModel>(_entities[4].relations[4]);
 }
 
 /// [ImageGroupModel] entity fields to define ObjectBox queries.

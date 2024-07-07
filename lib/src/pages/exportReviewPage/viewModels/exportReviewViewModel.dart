@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
@@ -10,7 +11,6 @@ import 'package:bas_dataset_generator_engine/src/data/models/pascalVOCModel.dart
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/dlgExport.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
-import 'package:bas_dataset_generator_engine/src/utility/formatManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:dio/dio.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -31,11 +31,11 @@ class ExportReviewViewModel extends ViewModel {
   List<PascalObjectModel>curObjects=[];
   ObjectModel? mainObject;
   final String prjUUID;
-  bool isBinState=false,isListUp=false;
+  bool isBinState=false,isListUp=false,isSelection=true;
   int indexImage = 0,processedNumber=-1,percent=0;
   int imgW=0, imgH=0,groupIndex=0;
   Size imgSize = const Size(0, 0);
-  String guidePos="bottomLeft",exportAction="",banStatesUUID="";
+  String exportAction="",banStatesUUID="";
   late key.KeyboardEvent keyboardEvent;
 
   ExportReviewViewModel(this.prjUUID);
@@ -169,29 +169,66 @@ class ExportReviewViewModel extends ViewModel {
     curStates=allStates.where((element) => element.grpUUID==mainGroups[groupIndex].uuid).toList();
     mainObject= await ObjectDAO().getDetailsByUUID(curStates[indexImage].objUUID!);
     curObjects=[];
-    if(isBinState){
-      for(var obj in curStates[indexImage].objects) {
-        if(mainObject!.banObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
-          if(banStatesUUID.contains('${obj.stateUUID}&&')==false){
-            curObjects.add(obj);
-          }
-        }
-      }
-    }else{
-      for(var obj in curStates[indexImage].objects) {
-        if(mainObject!.banObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id==-1){
-          if(banStatesUUID.contains('${obj.stateUUID}&&')==false||
-              mainObject!.labelObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
-           curObjects.add(obj);
-          }else{
-            var objDetails=await ObjectDAO().getDetailsByUUID(obj.objUUID!);
-            if(objDetails!.isGlobalObject){
+    if(isSelection){
+      if(isBinState){
+        for(var obj in curStates[indexImage].objects) {
+          if(mainObject!.banObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
+            if(banStatesUUID.contains('${obj.stateUUID}&&')==false){
               curObjects.add(obj);
             }
           }
         }
+      }else{
+        for(var obj in curStates[indexImage].objects) {
+          if(mainObject!.banObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id==-1){
+            if(banStatesUUID.contains('${obj.stateUUID}&&')==false||
+                mainObject!.labelObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
+              curObjects.add(obj);
+            }else{
+              var objDetails=await ObjectDAO().getDetailsByUUID(obj.objUUID!);
+              if(objDetails!.isGlobalObject){
+                curObjects.add(obj);
+              }
+            }
+          }
+        }
+      }
+    }else{
+      var validObjects=<PascalObjectModel>[];
+      for(var obj in curStates[indexImage].objects) {
+        var isSelected=mainObject!.labelObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1;
+        if(!isSelected){
+          var objDetails=await ObjectDAO().getDetailsByUUID(obj.objUUID!);
+          if(objDetails!.isGlobalObject){
+            isSelected=true;
+          }
+        }
+        if(isSelected){
+          var dirKind='';
+          if(mainObject!.trainObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
+            dirKind='train&&';
+          }
+          if(mainObject!.validObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
+            dirKind='${dirKind}valid&&';
+          }
+          if(mainObject!.testObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
+            dirKind='${dirKind}test&&';
+          }
+          validObjects.add(obj);
+        }
+      }
+      if(isBinState){
+        for(var obj in validObjects){
+          if(obj.dirKind==''){
+            curObjects.add(obj);
+          }
+        }
+      }else{
+        curObjects=validObjects;
       }
     }
+
+    print(curStates[indexImage].path!);
     notifyListeners();
   }
 
@@ -290,7 +327,7 @@ class ExportReviewViewModel extends ViewModel {
     exportAction=action;
     notifyListeners();
     var exportStates=<PascalVOCModel>[];
-    for(var state in allStates){
+    for(var state in allStates.sublist(0,6)){
       var objects =<PascalObjectModel>[];
       var mainObj= await ObjectDAO().getDetailsByUUID(state.objUUID!);
       for(var obj in state.objects){
@@ -304,20 +341,25 @@ class ExportReviewViewModel extends ViewModel {
         }
       }
       if(objects.isNotEmpty){
+        print(objects.length);
         state.objects=objects;
         exportStates.add(state);
       }
     }
 
-    var path = await FormatManager().generateFile(prjUUID,action, exportStates,onItemProcessedHandler);
-    if(action=="saveInServer"){
-      var file=File(path);
-      if(file.existsSync())
-      {
-        print('finished');
-        // await uploadFile(file);
-      }
-    }
+    // var path = await FormatManager().generateFile(prjUUID,action, exportStates,onItemProcessedHandler);
+    // if(action=="saveInServer"){
+    //   var file=File(path);
+    //   if(file.existsSync())
+    //   {
+    //     print('finished');
+    //     //todo two line should remove------------------------
+    //     processedNumber=-1;
+    //     notifyListeners();
+    //     //todo uncomment--------------------
+    //     // await uploadFile(file);
+    //   }
+    // }
   }
 
   Future<String> uploadFile(File file) async {
@@ -413,32 +455,9 @@ class ExportReviewViewModel extends ViewModel {
     return name.length>20?"${name.substring(0,19)}...":name;
   }
 
-  onMouseEnter(){
-    if(guidePos=="bottomLeft"){
-      guidePos="topLeft";
-    }else if(guidePos=="topLeft"){
-      guidePos="topRight";
-    }else if(guidePos=="topRight"){
-      guidePos="bottomRight";
-    }else{
-      guidePos="bottomLeft";
-    }
+  changePageType(){
+    isSelection=!isSelection;
+    updateObjects();
     notifyListeners();
-  }
-
-  double getGuidePos(int dir){
-    //[L,T,R,B]
-    switch (guidePos){
-      case "bottomRight":
-        return [-1.0,-1.0,20.0,20.0][dir];
-      case "bottomLeft":
-        return [20.0,-1.0,-1.0,20.0][dir];
-      case "topRight":
-        return [-1.0,20.0,20.0,-1.0][dir];
-      case "topLeft":
-        return [20.0,20.0,-1.0,-1.0][dir];
-      default:
-        return [20.0,-1.0,-1.0,20.0][dir];
-    }
   }
 }

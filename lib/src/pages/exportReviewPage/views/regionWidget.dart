@@ -11,12 +11,14 @@ class RegionWidget extends StatelessWidget {
     required this.mainObjUUID,
     required this.curObject,
     required this.width,
+    required this.isDivMode,
     required this.height,
     required this.onObjectActionCaller,
   }) : super(key: key);
 
   final PascalObjectModel curObject;
   final String mainObjUUID;
+  final bool isDivMode;
   final double width,height;
   final ValueSetter<String> onObjectActionCaller;
 
@@ -24,7 +26,7 @@ class RegionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: RegionViewModel(mainObjUUID,curObject,width,height, onObjectActionCaller),
+      viewModel: RegionViewModel(mainObjUUID,curObject,width,height,isDivMode, onObjectActionCaller),
     );
   }
 }
@@ -40,23 +42,74 @@ class _View extends StatelessView<RegionViewModel> {
        onEnter:(e)=> vm.onHoverHandler(true),
        onExit: (e)=> vm.onHoverHandler(false),
        child: GestureDetector(
-         onTapUp: (e)=>vm.onClickHandler(),
+         onTapUp: (e)=>vm.onClickHandler(e),
          onSecondaryTapUp: (e)=>vm.onRightClickHandler(),
          onTertiaryTapUp: (e)=>vm.onMiddleHandler(),
-         child: SizedBox(
-            width: vm.width,
-            height: vm.height,
-            child: CustomPaint(
-              painter: RectanglePainter(
-                  object: ObjectModel(0, "", 0.0,
-                    vm.width,
-                      0.0,
-                    vm.height,
-                  ),
-                  color: vm.regionStatus=="active"?Colors.green:vm.regionStatus=="none"?Colors.orange:vm.regionStatus=='global'?Colors.magenta:Colors.red,
-                  isActive: vm.isHover),
-            ),
-          ),
+         child: FlyoutTarget(
+            key: vm.objectKey,
+           controller: vm.objectController,
+           child: Stack(
+             children: [
+               SizedBox(
+                width: vm.width,
+                height: vm.height,
+                child: CustomPaint(
+                  painter: RectanglePainter(
+                      object: ObjectModel(0, "", 0.0,
+                        vm.width,
+                          0.0,
+                        vm.height,
+                      ),
+                      color: vm.getColor(),
+                      isActive: vm.isHover),
+                ),
+              ),
+               if(vm.isDivMode)
+                Positioned(
+                  left: 3,
+                  top: 3,
+                  child: Row(
+                     children: [
+                       IconButton(
+                           style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
+                           icon: Container(
+                             width: vm.getSize(),
+                             height: vm.getSize(),
+                             decoration: BoxDecoration(
+                               color: vm.curObject.dirKind!.contains('train')?Colors.teal.dark:Colors.teal.dark.withOpacity(.5),
+                                 borderRadius: BorderRadius.all(Radius.circular(vm.getSize()/2))
+                             ),
+                           ),
+                           onPressed: ()=>{}),
+                       const SizedBox(width: 3,),
+                       IconButton(
+                           style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
+                           icon: Container(
+                             width: vm.getSize(),
+                             height: vm.getSize(),
+                             decoration: BoxDecoration(
+                               color: vm.curObject.dirKind!.contains('valid')?Colors.orange.dark:Colors.orange.dark.withOpacity(.5),
+                                 borderRadius: BorderRadius.all(Radius.circular(vm.getSize()/2))
+                             ),
+                           ),
+                           onPressed: ()=>{}),
+                       const SizedBox(width: 3,),
+                       IconButton(
+                           style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
+                           icon: Container(
+                             width: vm.getSize(),
+                             height: vm.getSize(),
+                             decoration: BoxDecoration(
+                               color: vm.curObject.dirKind!.contains('test')?Colors.magenta.dark:Colors.magenta.dark.withOpacity(.5),
+                               borderRadius: BorderRadius.all(Radius.circular(vm.getSize()/2))
+                             ),
+                           ),
+                           onPressed: ()=>{}),
+                     ],
+                   ))
+             ]
+           ),
+         ),
        ),
      ),
    );

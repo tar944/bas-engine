@@ -11,13 +11,13 @@ class PartRegionExplorer extends StatelessWidget {
         Key? key,
         required this.allObjects,
         required this.mainObject,
-        required this.isBinState,
+        required this.isSelectionMode,
         required this.imgPath
       }) : super(key: key);
 
   final List<PascalObjectModel> allObjects;
   final String imgPath;
-  final bool isBinState;
+  final bool isSelectionMode;
   final ObjectModel mainObject;
 
   @override
@@ -27,7 +27,7 @@ class PartRegionExplorer extends StatelessWidget {
       viewModel: PartRegionViewModel(
           allObjects,
           imgPath,
-          isBinState,
+          isSelectionMode,
           mainObject
       ),
     );
@@ -51,6 +51,7 @@ class _View extends StatelessView<PartRegionViewModel> {
                     mainObjUUID: vm.mainObject.uuid,
                     width: (vm.getX(item.xmax!)-vm.getX(item.xmin!)).toDouble(),
                     height: (vm.getY(item.ymax!)-vm.getY(item.ymin!)).toDouble(),
+                    isDivMode:!vm.isSelectionMode,
                     curObject: item,
                     onObjectActionCaller: vm.onObjectHandler,
                   ),
