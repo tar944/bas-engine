@@ -35,15 +35,41 @@ class TopBarPanel extends StatelessWidget {
           if (needBack)
             Padding(
               padding: const EdgeInsets.all(3.0),
-              child: IconButton(
-                  style: ButtonStyle(
-                      padding: ButtonState.all(const EdgeInsets.all(3))),
-                  icon: Container(
-                    width: Dimens.actionBtnW - 11,
-                    alignment: Alignment.center,
-                    child: const Icon(FluentIcons.back),
-                  ),
-                  onPressed: () =>onBackCaller!()),
+              child: Focus(
+                canRequestFocus: false,
+                descendantsAreFocusable: false,
+                child: IconButton(
+                    style: ButtonStyle(
+                        padding: ButtonState.all(const EdgeInsets.all(3))),
+                    icon: Container(
+                      width: Dimens.actionBtnW - 11,
+                      alignment: Alignment.center,
+                      child: const Icon(FluentIcons.back),
+                    ),
+                    onPressed: () =>onBackCaller!()),
+              ),
+            ),
+          if (needHelp)
+            Padding(
+              padding: const EdgeInsets.only(top: 3.0,bottom: 3.0),
+              child:Focus(
+                canRequestFocus: false,
+                descendantsAreFocusable: false,
+                child: IconButton(
+                    style:
+                    ButtonStyle(padding: ButtonState.all(EdgeInsets.all(3))),
+                    icon: Container(
+                        width: Dimens.btnHelpW-5,
+                        height: Dimens.btnHelpW-5,
+                        decoration: BoxDecoration(
+                            border: Border.all(color: Colors.orange.lighter),
+                            shape: BoxShape.circle),
+                        child: Icon(
+                          FluentIcons.help,
+                          color: Colors.orange.lighter,
+                        )),
+                    onPressed: () => onBackCaller),
+              ),
             ),
           Padding(
             padding: const EdgeInsets.only(left: 8.0,right: 8.0),
@@ -64,26 +90,11 @@ class TopBarPanel extends StatelessWidget {
               ],
             ),
           ),
-          if (needHelp)
-            Padding(
-              padding: const EdgeInsets.only(top: 3.0,bottom: 3.0),
-              child: IconButton(
-                  style:
-                  ButtonStyle(padding: ButtonState.all(EdgeInsets.all(3))),
-                  icon: Container(
-                      width: Dimens.btnHelpW-5,
-                      height: Dimens.btnHelpW-5,
-                      decoration: BoxDecoration(
-                          border: Border.all(color: Colors.orange.lighter),
-                          shape: BoxShape.circle),
-                      child: Icon(
-                        FluentIcons.help,
-                        color: Colors.orange.lighter,
-                      )),
-                  onPressed: () => onBackCaller),
-            ),
           const Spacer(),
-          IconButton(icon: Icon(CupertinoIcons.xmark,color: Colors.white,), onPressed: (){exit(0);}),
+          Focus(
+              canRequestFocus: false,
+              descendantsAreFocusable: false,
+              child: IconButton(icon: Icon(CupertinoIcons.xmark,color: Colors.white,), onPressed: (){exit(0);})),
         ],
       ),
     );

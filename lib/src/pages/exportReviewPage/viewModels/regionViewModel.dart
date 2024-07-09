@@ -1,25 +1,27 @@
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
+import 'package:keyboard_event/keyboard_event.dart' as key;
 
 class RegionViewModel extends ViewModel {
   PascalObjectModel curObject;
   final ValueSetter<String> onObjectActionCaller;
   final double width, height;
   final String mainObjUUID;
-  final bool isDivMode;
   bool isHover = false;
-  String regionStatus = 'none';
+  late key.KeyboardEvent keyboardEvent;
+  String regionStatus = 'none',activeObjUUID;
   final objectKey = GlobalKey();
   final objectController = FlyoutController();
 
   RegionViewModel(
       this.mainObjUUID,
+      this.activeObjUUID,
       this.curObject,
       this.width,
       this.height,
-      this.isDivMode,
       this.onObjectActionCaller);
 
   @override
@@ -45,6 +47,37 @@ class RegionViewModel extends ViewModel {
       }
     }
     notifyListeners();
+    await key.KeyboardEvent.init();
+  }
+
+
+  onKeyboardEventHandler(key.KeyEvent e)async{
+    if(activeObjUUID!=Strings.notSet&&activeObjUUID==curObject.objUUID){
+      if(e.isKeyUP){
+        print(curObject.objUUID);
+        print(e.vkName);
+        switch(e.vkName){
+          case 'NUMPAD1':
+            onDivisionHandler('train');
+            keyboardEvent.cancelListening();
+            break;
+          case 'NUMPAD2':
+            onDivisionHandler('valid');
+            keyboardEvent.cancelListening();
+            break;
+          case 'NUMPAD3':
+            onDivisionHandler('test');
+            keyboardEvent.cancelListening();
+            break;
+          case 'ESCAPE':
+            keyboardEvent.cancelListening();
+            onObjectActionCaller('empty&&escape&&');
+            activeObjUUID=Strings.notSet;
+            notifyListeners();
+            break;
+        }
+      }
+    }
   }
 
   onHoverHandler(bool isHover) {
@@ -53,7 +86,7 @@ class RegionViewModel extends ViewModel {
   }
 
   onClickHandler(e) {
-    if(isDivMode){
+    if(activeObjUUID!=Strings.notSet){
       final targetContext = objectKey.currentContext;
       if (targetContext == null) return;
       final box = targetContext.findRenderObject() as RenderBox;
@@ -156,7 +189,7 @@ class RegionViewModel extends ViewModel {
   }
 
   onMiddleHandler() {
-    if(!isDivMode){
+    if(activeObjUUID==Strings.notSet){
       if (regionStatus == "banned") {
         onObjectActionCaller("${curObject.objUUID}&&unBanned");
       } else {
@@ -175,7 +208,7 @@ class RegionViewModel extends ViewModel {
   }
 
   onRightClickHandler() {
-    if(!isDivMode){
+    if(activeObjUUID==Strings.notSet){
       if (['global', 'active'].contains(regionStatus)) {
         onObjectActionCaller('${curObject.objUUID}&&showProperties');
       } else {
@@ -197,9 +230,16 @@ class RegionViewModel extends ViewModel {
   }
 
   Color getColor() {
-    if(isDivMode){
+    if(activeObjUUID!=Strings.notSet){
       if(curObject.dirKind==''){
-        return Colors.blue.light;
+        if(activeObjUUID==curObject.objUUID){
+          print('active obj is => ${curObject.objUUID}');
+          keyboardEvent = key.KeyboardEvent();
+          keyboardEvent.startListening((keyEvent) => onKeyboardEventHandler(keyEvent));
+          return Colors.orange.dark;
+        }else{
+          return Colors.blue.light;
+        }
       }else{
         return Colors.purple;
       }

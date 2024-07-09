@@ -30,7 +30,7 @@ class ExportReviewViewModel extends ViewModel {
   List<PascalObjectModel>curObjects=[];
   ObjectModel? mainObject;
   final String prjUUID;
-  bool isBinState=false,isListUp=false,isSelection=true;
+  bool isBinState=false,isListUp=false,isSelection=true,isPartKeyActive=false;
   int indexImage = 0,processedNumber=-1,percent=0;
   int imgW=0, imgH=0,groupIndex=0;
   Size imgSize = const Size(0, 0);
@@ -56,15 +56,50 @@ class ExportReviewViewModel extends ViewModel {
       await Future.delayed(const Duration(milliseconds: 100));
       await _windowShow();
     });
-    keyboardEvent = key.KeyboardEvent();
-    keyboardEvent.startListening((keyEvent) => onKeyboardEventHandler(keyEvent));
+    activeKeyboard();
     await KeyboardEvent.init();
   }
 
+  activeKeyboard(){
+    isPartKeyActive=false;
+    keyboardEvent = key.KeyboardEvent();
+    keyboardEvent.startListening((keyEvent) => onKeyboardEventHandler(keyEvent));
+    notifyListeners();
 
-  onKeyboardEventHandler(key.KeyEvent event)async{
-    if(event.isKeyUP&&event.vkName=='LCONTROL'){
-      changeListPosition();
+  }
+
+  onKeyboardEventHandler(key.KeyEvent e)async{
+    // return;
+    if(e.isKeyUP){
+      switch(e.vkName){
+        case 'LCONTROL':
+        case 'RCONTROL':
+          changeListPosition();
+          break;
+        case 'RMENU':
+        case 'LMENU':
+          changePageType();
+          break;
+        case 'RETURN':
+          isListUp=!isListUp;
+          if(!isSelection){
+            isPartKeyActive=true;
+          }
+          notifyListeners();
+          break;
+        case 'UP':
+          nextGroup();
+          break;
+        case 'DOWN':
+          perviousGroup();
+          break;
+        case 'LEFT':
+          perviousImage();
+          break;
+        case 'RIGHT':
+          nextImage();
+          break;
+      }
     }
   }
 
@@ -236,12 +271,14 @@ class ExportReviewViewModel extends ViewModel {
       if(grp.label.target!=null){
         var name ="$preName**${grp.label.target!.name}${grp.name!=""?"**${grp.name}":""}";
         for(var state in grp.allStates){
-          if(state.srcObject.target!.uuid==mainObject.uuid||state.srcObject.target!.srcObject.target!.uuid==mainObject.uuid){
+          if(state.srcObject.target!.uuid==mainObject.uuid||
+              (state.srcObject.target!.srcObject.target!=null
+                  &&state.srcObject.target!.srcObject.target!.uuid==mainObject.uuid)){
             var left = state.srcObject.target!.uuid==mainObject.uuid?state.left:state.srcObject.target!.left;
             var top = state.srcObject.target!.uuid==mainObject.uuid?state.top:state.srcObject.target!.top;
             var right = state.srcObject.target!.uuid==mainObject.uuid?state.right:state.srcObject.target!.right;
             var bottom = state.srcObject.target!.uuid==mainObject.uuid?state.bottom:state.srcObject.target!.bottom;
-            if(state.exportName==""){
+            if(state.exportName==""||grp.label.target!.levelName=="objects"){
               state.exportName=grp.label.target!.levelName=="objects"?grp.label.target!.name:name;
               await ObjectDAO().update(state);
             }
@@ -264,6 +301,18 @@ class ExportReviewViewModel extends ViewModel {
       }
     }
     return allObjects;
+  }
+
+  onPartActionHandler(String action){
+    if(action=='return&&'){
+      if(indexImage<curStates.length-1){
+        nextImage();
+      }else{
+        activeKeyboard();
+      }
+    }else if (action =='escape&&'){
+      activeKeyboard();
+    }
   }
 
   onBackClicked(){
@@ -298,15 +347,19 @@ class ExportReviewViewModel extends ViewModel {
   }
 
   nextImage() async{
-    indexImage = ++indexImage;
-    notifyListeners();
-    updateObjects();
+    if(indexImage<curStates.length-1){
+      indexImage = ++indexImage;
+      notifyListeners();
+      updateObjects();
+    }
   }
 
   perviousImage() async{
-    indexImage = --indexImage;
-    notifyListeners();
-    updateObjects();
+    if(indexImage!=0){
+      indexImage = --indexImage;
+      notifyListeners();
+      updateObjects();
+    }
   }
 
   onExportBtnHandler()async{

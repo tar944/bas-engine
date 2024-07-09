@@ -9,19 +9,23 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 import 'package:image/image.dart' as i;
 
+
 class PartRegionViewModel extends ViewModel {
   List<PascalObjectModel> allObjects;
   ObjectModel mainObject;
-  final bool isSelectionMode;
-
+  final bool isSelectionMode,isKeyActive;
   int imgW=0,imgH=0;
+  final ValueSetter<String> onActionCaller;
   final String imgPath;
+  String activeObjUUID='';
 
 
   PartRegionViewModel(
       this.allObjects,
       this.imgPath,
       this.isSelectionMode,
+      this.isKeyActive,
+      this.onActionCaller,
       this.mainObject);
 
 
@@ -30,6 +34,26 @@ class PartRegionViewModel extends ViewModel {
     final img = await i.decodeImageFile(imgPath);
     imgH = img!.height;
     imgW = img.width;
+    if(!isSelectionMode&&isKeyActive){
+      findNextActiveObject();
+    }
+    notifyListeners();
+  }
+
+  findNextActiveObject(){
+    activeObjUUID=Strings.notSet;
+    for(var obj in allObjects){
+      if(obj.dirKind==''){
+        activeObjUUID=obj.objUUID!;
+        break;
+      }
+    }
+    if(activeObjUUID==Strings.notSet){
+      Toast(Strings.jobDone,false).showSuccess(context);
+      if(isKeyActive){
+        onActionCaller('return&&');
+      }
+    }
     notifyListeners();
   }
 
@@ -44,6 +68,7 @@ class PartRegionViewModel extends ViewModel {
           mainObject.trainObjects.add(obj!);
         }
         await ObjectDAO().update(mainObject);
+        findNextActiveObject();
         break;
       case 'valid':
         if(acts[2]=="true"){
@@ -53,6 +78,7 @@ class PartRegionViewModel extends ViewModel {
           mainObject.validObjects.add(obj!);
         }
         await ObjectDAO().update(mainObject);
+        findNextActiveObject();
         break;
       case 'test':
         if(acts[2]=="true"){
@@ -62,6 +88,7 @@ class PartRegionViewModel extends ViewModel {
           mainObject.testObjects.add(obj!);
         }
         await ObjectDAO().update(mainObject);
+        findNextActiveObject();
         break;
       case 'none':
         mainObject.labelObjects.removeWhere((element) => element.uuid==acts[0]);
@@ -102,12 +129,14 @@ class PartRegionViewModel extends ViewModel {
           builder: (context) =>
               DlgObjProperties(
                   object: allObjects.firstWhere((element) => element.objUUID==acts[0]),
-                  onActionCaller: onObjPropertiesHandler),
+                  onActionCaller:(e)=> onObjPropertiesHandler(e)),
         );
+        break;
+      case 'escape':
+        onActionCaller('escape&&');
         break;
     }
   }
-
 
   onObjPropertiesHandler(String action)async{
     var act = action.split("&&");

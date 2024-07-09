@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/viewModels/partRegionViewModel.dart';
@@ -12,13 +13,16 @@ class PartRegionExplorer extends StatelessWidget {
         required this.allObjects,
         required this.mainObject,
         required this.isSelectionMode,
-        required this.imgPath
+        required this.onActionCaller,
+        required this.imgPath,
+        required this.isKeyActive
       }) : super(key: key);
 
   final List<PascalObjectModel> allObjects;
   final String imgPath;
-  final bool isSelectionMode;
+  final bool isSelectionMode,isKeyActive;
   final ObjectModel mainObject;
+  final ValueSetter<String> onActionCaller;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +32,8 @@ class PartRegionExplorer extends StatelessWidget {
           allObjects,
           imgPath,
           isSelectionMode,
+          isKeyActive,
+          onActionCaller,
           mainObject
       ),
     );
@@ -51,7 +57,7 @@ class _View extends StatelessView<PartRegionViewModel> {
                     mainObjUUID: vm.mainObject.uuid,
                     width: (vm.getX(item.xmax!)-vm.getX(item.xmin!)).toDouble(),
                     height: (vm.getY(item.ymax!)-vm.getY(item.ymin!)).toDouble(),
-                    isDivMode:!vm.isSelectionMode,
+                    activeObjUUID:vm.isSelectionMode?Strings.notSet:vm.activeObjUUID,
                     curObject: item,
                     onObjectActionCaller: vm.onObjectHandler,
                   ),

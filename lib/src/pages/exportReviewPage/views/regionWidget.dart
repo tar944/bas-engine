@@ -1,3 +1,4 @@
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
 import 'package:bas_dataset_generator_engine/src/pages/cutToPiecesPage/views/rectanglePainter.dart';
@@ -9,16 +10,15 @@ class RegionWidget extends StatelessWidget {
   RegionWidget({
     Key? key,
     required this.mainObjUUID,
+    required this.activeObjUUID,
     required this.curObject,
     required this.width,
-    required this.isDivMode,
     required this.height,
     required this.onObjectActionCaller,
   }) : super(key: key);
 
   final PascalObjectModel curObject;
-  final String mainObjUUID;
-  final bool isDivMode;
+  final String mainObjUUID,activeObjUUID;
   final double width,height;
   final ValueSetter<String> onObjectActionCaller;
 
@@ -26,7 +26,7 @@ class RegionWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: RegionViewModel(mainObjUUID,curObject,width,height,isDivMode, onObjectActionCaller),
+      viewModel: RegionViewModel(mainObjUUID,activeObjUUID,curObject,width,height, onObjectActionCaller),
     );
   }
 }
@@ -61,17 +61,17 @@ class _View extends StatelessView<RegionViewModel> {
                         vm.height,
                       ),
                       color: vm.getColor(),
-                      isActive: vm.isHover),
+                      isActive: vm.isHover||vm.activeObjUUID==vm.curObject.objUUID),
                 ),
               ),
-               if(vm.isDivMode)
+               if(vm.activeObjUUID!=Strings.notSet)
                 Positioned(
                   left: 3,
                   top: 3,
                   child: Row(
                      children: [
                        IconButton(
-                           style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
+                            style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
                            icon: Container(
                              width: vm.getSize(),
                              height: vm.getSize(),

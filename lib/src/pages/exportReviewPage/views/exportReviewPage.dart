@@ -36,7 +36,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
         content: SizedBox.expand(
           child: Column(children: [
             TopBarPanel(
-              title: Strings.exportReview,
+              title: '${Strings.exportReview} (${vm.indexImage+1} of ${vm.curStates.length})',
               needBack: true,
               needHelp: true,
               onBackCaller: vm.onBackClicked,
@@ -63,6 +63,8 @@ class _View extends StatelessView<ExportReviewViewModel> {
                         imgPath:vm.allStates[vm.indexImage].path! ,
                         mainObject: vm.mainObject!,
                         allObjects: vm.curObjects,
+                        isKeyActive:vm.isPartKeyActive,
+                        onActionCaller: vm.onPartActionHandler,
                         isSelectionMode:vm.isSelection
                       ):
                       Container(),
@@ -84,23 +86,31 @@ class _View extends StatelessView<ExportReviewViewModel> {
                             child: Row(
                               children: [
                                 const SizedBox(width: 5,),
-                                IconButton(
-                                  style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                  icon: const Icon(
-                                    FluentIcons.chevron_left,
-                                    color: Colors.white,
-                                    size: 25,
-                                  ),
-                                  onPressed: vm.indexImage==0?null:() => vm.perviousImage()),
-                                const SizedBox(width: 5,),
-                                IconButton(
+                                Focus(
+                                  canRequestFocus: false,
+                                  descendantsAreFocusable: false,
+                                  child: IconButton(
                                     style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                    icon: Icon(
-                                      FluentIcons.cloud_import_export,
-                                      color: Colors.teal,
+                                    icon: const Icon(
+                                      FluentIcons.chevron_left,
+                                      color: Colors.white,
                                       size: 25,
                                     ),
-                                    onPressed:()=> vm.onExportBtnHandler()),
+                                    onPressed: vm.indexImage==0?null:() => vm.perviousImage()),
+                                ),
+                                const SizedBox(width: 5,),
+                                Focus(
+                                  canRequestFocus: false,
+                                  descendantsAreFocusable: false,
+                                  child: IconButton(
+                                      style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                      icon: Icon(
+                                        FluentIcons.cloud_import_export,
+                                        color: Colors.teal,
+                                        size: 25,
+                                      ),
+                                      onPressed:()=> vm.onExportBtnHandler()),
+                                ),
                               ],
                             ),
                           ),
@@ -114,20 +124,28 @@ class _View extends StatelessView<ExportReviewViewModel> {
                             child: Row(
                               children: [
                                 const SizedBox(width: 8,),
-                                IconButton(
-                                  style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(10.0))),
-                                  onPressed: vm.onChangeState,
-                                  icon: Icon(FluentIcons.delete,size: 22,color: vm.isBinState?Colors.black:Colors.red.dark,),
+                                Focus(
+                                  canRequestFocus: false,
+                                  descendantsAreFocusable: false,
+                                  child: IconButton(
+                                    style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(10.0))),
+                                    onPressed: vm.onChangeState,
+                                    icon: Icon(FluentIcons.delete,size: 22,color: vm.isBinState?Colors.black:Colors.red.dark,),
+                                  ),
                                 ),
                                 const SizedBox(width: 5,),
-                                IconButton(
-                                  style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                  icon: const Icon(
-                                    FluentIcons.chevron_right,
-                                    color: Colors.white,
-                                    size: 25,
-                                  ),
-                                  onPressed: vm.allStates.length-1==vm.indexImage?null:() => vm.nextImage()),
+                                Focus(
+                                  canRequestFocus: false,
+                                  descendantsAreFocusable: false,
+                                  child: IconButton(
+                                    style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                    icon: const Icon(
+                                      FluentIcons.chevron_right,
+                                      color: Colors.white,
+                                      size: 25,
+                                    ),
+                                    onPressed: vm.allStates.length-1==vm.indexImage?null:() => vm.nextImage()),
+                                ),
                               ],
                             ),
                           ),
@@ -191,28 +209,32 @@ class _View extends StatelessView<ExportReviewViewModel> {
                               padding: const EdgeInsets.only(left: 20),
                               child: Row(
                                 children: [
-                                  IconButton(
-                                    style: ButtonStyle(
-                                      padding: ButtonState.all(EdgeInsets.zero)
+                                  Focus(
+                                    canRequestFocus: false,
+                                    descendantsAreFocusable: false,
+                                    child: IconButton(
+                                      style: ButtonStyle(
+                                        padding: ButtonState.all(EdgeInsets.zero)
+                                      ),
+                                      onPressed: vm.changeListPosition,
+                                      icon: Container(
+                                        height: Dimens.btnHeightBig,
+                                        width: Dimens.btnWidthNormal+(vm.isListUp?15:0),
+                                        decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
+                                        color: Colors.grey[180]
+                                      ),
+                                        child: Row(
+                                        children: [
+                                          const SizedBox(width: 10,),
+                                          Text(vm.isListUp?Strings.pressDown:Strings.pressUp),
+                                          const SizedBox(width: 10,),
+                                          Icon(vm.isListUp?FluentIcons.down:FluentIcons.up)
+                                        ],
+                                      ),
                                     ),
-                                    onPressed: vm.changeListPosition,
-                                    icon: Container(
-                                      height: Dimens.btnHeightBig,
-                                      width: Dimens.btnWidthNormal+(vm.isListUp?15:0),
-                                      decoration: BoxDecoration(
-                                      borderRadius: const BorderRadius.only(topLeft: Radius.circular(10),topRight: Radius.circular(10)),
-                                      color: Colors.grey[180]
-                                    ),
-                                      child: Row(
-                                      children: [
-                                        const SizedBox(width: 10,),
-                                        Text(vm.isListUp?Strings.pressDown:Strings.pressUp),
-                                        const SizedBox(width: 10,),
-                                        Icon(vm.isListUp?FluentIcons.down:FluentIcons.up)
-                                      ],
-                                    ),
-                                  ),
                             ),
+                                  ),
                                   const SizedBox(width: 5,),
                                   if(vm.isListUp)
                                     Container(
@@ -227,39 +249,47 @@ class _View extends StatelessView<ExportReviewViewModel> {
                                             padding: EdgeInsets.only(left: 7,right: 5),
                                             child: Text(Strings.pageMode),
                                           ),
-                                          IconButton(
-                                              style: ButtonStyle(
-                                                padding: ButtonState.all(EdgeInsets.zero)
-                                              ),
-                                              icon: Container(
-                                                width: Dimens.btnWidthNormal-20,
-                                                decoration: vm.isSelection?BoxDecoration(
-                                                  color: Colors.teal.dark,
-                                                  borderRadius: const BorderRadius.all(Radius.circular(4))
-                                                ):null,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(top: 3,bottom: 3),
-                                                  child: Text(Strings.selection,style: TextSystem.textXs(Colors.white),),
-                                                ),
-                                              ),
-                                              onPressed: vm.changePageType),
-                                          const SizedBox(width: 5,),
-                                          IconButton(
-                                              style: ButtonStyle(
+                                          Focus(
+                                            canRequestFocus: false,
+                                            descendantsAreFocusable: false,
+                                            child: IconButton(
+                                                style: ButtonStyle(
                                                   padding: ButtonState.all(EdgeInsets.zero)
-                                              ),
-                                              icon: Container(
-                                                width: Dimens.btnWidthNormal-20,
-                                                decoration: !vm.isSelection?BoxDecoration(
+                                                ),
+                                                icon: Container(
+                                                  width: Dimens.btnWidthNormal-20,
+                                                  decoration: vm.isSelection?BoxDecoration(
                                                     color: Colors.teal.dark,
                                                     borderRadius: const BorderRadius.all(Radius.circular(4))
-                                                ):null,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(top: 3,bottom: 3),
-                                                  child: Text(Strings.division,style: TextSystem.textXs(Colors.white),),
+                                                  ):null,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(top: 3,bottom: 3),
+                                                    child: Text(Strings.selection,style: TextSystem.textXs(Colors.white),),
+                                                  ),
                                                 ),
-                                              ),
-                                              onPressed: vm.changePageType),
+                                                onPressed: vm.changePageType),
+                                          ),
+                                          const SizedBox(width: 5,),
+                                          Focus(
+                                            canRequestFocus: false,
+                                            descendantsAreFocusable: false,
+                                            child: IconButton(
+                                                style: ButtonStyle(
+                                                    padding: ButtonState.all(EdgeInsets.zero)
+                                                ),
+                                                icon: Container(
+                                                  width: Dimens.btnWidthNormal-20,
+                                                  decoration: !vm.isSelection?BoxDecoration(
+                                                      color: Colors.teal.dark,
+                                                      borderRadius: const BorderRadius.all(Radius.circular(4))
+                                                  ):null,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(top: 3,bottom: 3),
+                                                    child: Text(Strings.division,style: TextSystem.textXs(Colors.white),),
+                                                  ),
+                                                ),
+                                                onPressed: vm.changePageType),
+                                          ),
                                         ],
                                       ),
                                     )
@@ -283,13 +313,21 @@ class _View extends StatelessView<ExportReviewViewModel> {
                                       child: Row(
                                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                         children: [
-                                          IconButton(
-                                              icon: const Icon(FluentIcons.chevron_left),
-                                              onPressed: vm.groupIndex==0?null:vm.perviousGroup),
+                                          Focus(
+                                            canRequestFocus: false,
+                                            descendantsAreFocusable: false,
+                                            child: IconButton(
+                                                icon: const Icon(FluentIcons.chevron_left),
+                                                onPressed: vm.groupIndex==0?null:vm.perviousGroup),
+                                          ),
                                           Text(vm.getGroupName(),style: TextSystem.textM(Colors.white),),
-                                          IconButton(
-                                              icon: const Icon(FluentIcons.chevron_right),
-                                              onPressed: vm.groupIndex+1==vm.mainGroups.length?null:vm.nextGroup)
+                                          Focus(
+                                            canRequestFocus: false,
+                                            descendantsAreFocusable: false,
+                                            child: IconButton(
+                                                icon: const Icon(FluentIcons.chevron_right),
+                                                onPressed: vm.groupIndex+1==vm.mainGroups.length?null:vm.nextGroup),
+                                          )
                                         ],
                                       ),
                                     ),
