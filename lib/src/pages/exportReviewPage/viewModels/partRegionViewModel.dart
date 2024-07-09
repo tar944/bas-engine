@@ -34,9 +34,35 @@ class PartRegionViewModel extends ViewModel {
   }
 
   onObjectHandler(String action)async{
-    print(action);
     var acts= action.split('&&');
     switch(acts[1]){
+      case 'train':
+        if(acts[2]=="true"){
+          mainObject.trainObjects.removeWhere((element) => element.uuid==acts[0]);
+        }else{
+          var obj = await ObjectDAO().getDetailsByUUID(acts[0]);
+          mainObject.trainObjects.add(obj!);
+        }
+        await ObjectDAO().update(mainObject);
+        break;
+      case 'valid':
+        if(acts[2]=="true"){
+          mainObject.validObjects.removeWhere((element) => element.uuid==acts[0]);
+        }else{
+          var obj = await ObjectDAO().getDetailsByUUID(acts[0]);
+          mainObject.validObjects.add(obj!);
+        }
+        await ObjectDAO().update(mainObject);
+        break;
+      case 'test':
+        if(acts[2]=="true"){
+          mainObject.testObjects.removeWhere((element) => element.uuid==acts[0]);
+        }else{
+          var obj = await ObjectDAO().getDetailsByUUID(acts[0]);
+          mainObject.testObjects.add(obj!);
+        }
+        await ObjectDAO().update(mainObject);
+        break;
       case 'none':
         mainObject.labelObjects.removeWhere((element) => element.uuid==acts[0]);
         await ObjectDAO().update(mainObject);

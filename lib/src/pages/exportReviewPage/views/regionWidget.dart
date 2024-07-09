@@ -76,11 +76,11 @@ class _View extends StatelessView<RegionViewModel> {
                              width: vm.getSize(),
                              height: vm.getSize(),
                              decoration: BoxDecoration(
-                               color: vm.curObject.dirKind!.contains('train')?Colors.teal.dark:Colors.teal.dark.withOpacity(.5),
+                               color: vm.curObject.dirKind!.contains('train')?Colors.teal.dark:Colors.teal.dark.withOpacity(.3),
                                  borderRadius: BorderRadius.all(Radius.circular(vm.getSize()/2))
                              ),
                            ),
-                           onPressed: ()=>{}),
+                           onPressed: ()=>vm.onDivisionHandler('train')),
                        const SizedBox(width: 3,),
                        IconButton(
                            style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
@@ -88,11 +88,11 @@ class _View extends StatelessView<RegionViewModel> {
                              width: vm.getSize(),
                              height: vm.getSize(),
                              decoration: BoxDecoration(
-                               color: vm.curObject.dirKind!.contains('valid')?Colors.orange.dark:Colors.orange.dark.withOpacity(.5),
+                               color: vm.curObject.dirKind!.contains('valid')?Colors.orange.dark:Colors.orange.dark.withOpacity(.3),
                                  borderRadius: BorderRadius.all(Radius.circular(vm.getSize()/2))
                              ),
                            ),
-                           onPressed: ()=>{}),
+                           onPressed: ()=>vm.onDivisionHandler('valid')),
                        const SizedBox(width: 3,),
                        IconButton(
                            style: ButtonStyle(padding: ButtonState.all(EdgeInsets.zero)),
@@ -100,11 +100,11 @@ class _View extends StatelessView<RegionViewModel> {
                              width: vm.getSize(),
                              height: vm.getSize(),
                              decoration: BoxDecoration(
-                               color: vm.curObject.dirKind!.contains('test')?Colors.magenta.dark:Colors.magenta.dark.withOpacity(.5),
+                               color: vm.curObject.dirKind!.contains('test')?Colors.magenta.dark:Colors.magenta.dark.withOpacity(.3),
                                borderRadius: BorderRadius.all(Radius.circular(vm.getSize()/2))
                              ),
                            ),
-                           onPressed: ()=>{}),
+                           onPressed: ()=>vm.onDivisionHandler('test')),
                      ],
                    ))
              ]

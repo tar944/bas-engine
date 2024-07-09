@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
@@ -214,6 +213,7 @@ class ExportReviewViewModel extends ViewModel {
           if(mainObject!.testObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
             dirKind='${dirKind}test&&';
           }
+          obj.dirKind=dirKind;
           validObjects.add(obj);
         }
       }
@@ -227,8 +227,6 @@ class ExportReviewViewModel extends ViewModel {
         curObjects=validObjects;
       }
     }
-
-    print(curStates[indexImage].path!);
     notifyListeners();
   }
 

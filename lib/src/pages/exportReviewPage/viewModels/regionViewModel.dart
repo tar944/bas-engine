@@ -4,7 +4,7 @@ import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 
 class RegionViewModel extends ViewModel {
-  final PascalObjectModel curObject;
+  PascalObjectModel curObject;
   final ValueSetter<String> onObjectActionCaller;
   final double width, height;
   final String mainObjUUID;
@@ -65,6 +65,16 @@ class RegionViewModel extends ViewModel {
           barrierColor: Colors.black.withOpacity(0.1),
           position: position,
           builder: (context) {
+            onActionHandler(String dirName){
+              onObjectActionCaller('${curObject.objUUID}&&$dirName&&${curObject.dirKind!.contains(dirName)}');
+              if(curObject.dirKind!.contains(dirName)){
+                curObject.dirKind=curObject.dirKind!.replaceAll('$dirName&&', '');
+              }else{
+                curObject.dirKind ='${curObject.dirKind}$dirName&&';
+              }
+              notifyListeners();
+              Navigator.pop(context);
+            }
             return FlyoutContent(
               child: SizedBox(
                 width: 260.0,
@@ -83,7 +93,7 @@ class RegionViewModel extends ViewModel {
                         ),
                       ),
                       label: const Text('train'),
-                      onPressed: () {},
+                      onPressed: ()=>onActionHandler('train'),
                     ),
                     CommandBarButton(
                       icon: Container(
@@ -95,7 +105,7 @@ class RegionViewModel extends ViewModel {
                         ),
                       ),
                       label: const Text('valid'),
-                      onPressed: () {},
+                      onPressed: ()=>onActionHandler('valid'),
                     ),
                     CommandBarButton(
                       icon: Container(
@@ -107,7 +117,7 @@ class RegionViewModel extends ViewModel {
                         ),
                       ),
                       label: const Text('test'),
-                      onPressed: () {},
+                      onPressed: ()=>onActionHandler('test'),
                     ),
                   ],
                 ),
@@ -133,6 +143,16 @@ class RegionViewModel extends ViewModel {
       notifyListeners();
     }
 
+  }
+
+  onDivisionHandler(String dirName){
+    onObjectActionCaller('${curObject.objUUID}&&$dirName&&${curObject.dirKind!.contains(dirName)}');
+    if(curObject.dirKind!.contains(dirName)){
+      curObject.dirKind=curObject.dirKind!.replaceAll('$dirName&&', '');
+    }else{
+      curObject.dirKind ='${curObject.dirKind}$dirName&&';
+    }
+    notifyListeners();
   }
 
   onMiddleHandler() {
