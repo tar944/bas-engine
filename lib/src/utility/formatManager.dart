@@ -12,6 +12,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/exportModels/expPar
 import 'package:bas_dataset_generator_engine/src/data/models/exportModels/expProjectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/imageGroupModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
+import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalVOCModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/projectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
@@ -31,12 +32,46 @@ class FormatManager{
 
     for(var item in allStates){
       item.filename = item.filename!.replaceAll(".png", ".jpg");
-      await DirectoryManager().copyImage(
+      var trainObjects=<PascalObjectModel>[];
+      var validObjects=<PascalObjectModel>[];
+      var testObjects=<PascalObjectModel>[];
+      var paths=['','',''];
+      for(var obj in item.objects){
+        if(obj.dirKind!.contains('train')){
+          paths[0]=path.join(filePath, "train", item.filename);
+          trainObjects.add(obj);
+        }
+        if(obj.dirKind!.contains('valid')){
+          paths[1]=path.join(filePath, "valid", item.filename);
+          validObjects.add(obj);
+        }
+        if(obj.dirKind!.contains('test')){
+          paths[2]=path.join(filePath, "test", item.filename);
+          testObjects.add(obj);
+        }
+      }
+
+      await DirectoryManager().saveExportImage(
           srcPath: item.path!,
-          desPath: path.join(filePath, "trainData", item.filename),
+          dirPaths: paths,
           quality: 50);
-      await DirectoryManager().saveFileInLocal(
-          path.join(filePath,'trainData', '${item.filename}.xml'), item.toXML().toXmlString(pretty: true));
+
+      if(trainObjects.isNotEmpty){
+        item.objects=trainObjects;
+        await DirectoryManager().saveFileInLocal(
+            path.join(filePath,'train', item.filename!.replaceAll('.jpg', '.xml')), item.toXML().toXmlString(pretty: true));
+      }
+      if(validObjects.isNotEmpty){
+        item.objects=validObjects;
+        await DirectoryManager().saveFileInLocal(
+            path.join(filePath,'valid', item.filename!.replaceAll('.jpg', '.xml')), item.toXML().toXmlString(pretty: true));
+      }
+      if(testObjects.isNotEmpty){
+        item.objects=testObjects;
+        await DirectoryManager().saveFileInLocal(
+            path.join(filePath,'test', item.filename!.replaceAll('.jpg', '.xml')), item.toXML().toXmlString(pretty: true));
+      }
+
       onItemProcessCaller(allStates.indexOf(item)+1);
     }
     print("compression finished");

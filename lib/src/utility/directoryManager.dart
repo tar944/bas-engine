@@ -105,7 +105,9 @@ class DirectoryManager {
     }
     final filePath =p.join(path.path, DateTime.now().millisecondsSinceEpoch.toString());
     await Directory(filePath).create();
-    await Directory(p.join(filePath, 'trainData')).create();
+    await Directory(p.join(filePath, 'train')).create();
+    await Directory(p.join(filePath, 'valid')).create();
+    await Directory(p.join(filePath, 'test')).create();
     await Directory(p.join(filePath, 'dbData')).create();
     return filePath;
   }
@@ -134,6 +136,29 @@ class DirectoryManager {
     File(desPath).writeAsBytesSync(output.rawBytes);
 
     return desPath;
+  }
+
+  Future<bool> saveExportImage({required String srcPath,required List<String> dirPaths,required int quality}) async {
+    ImageFile img = await XFile(srcPath).asImageFile;
+
+    Configuration config = Configuration(
+      outputType: ImageOutputType.jpg,
+      // can only be true for Android and iOS while using ImageOutputType.jpg or ImageOutputType.pngÏ
+      useJpgPngNativeCompressor: true,
+      // set quality between 0-100
+      quality: quality,
+    );
+
+    final param = ImageFileConfiguration(input: img, config: config);
+    final output = await compressor.compress(param);
+
+    for(var path in dirPaths){
+      if(path!=""){
+        File(path).writeAsBytesSync(output.rawBytes);
+      }
+    }
+
+    return true;
   }
 
   Future<String> getPartImageDirectoryPath(String prjUUID, String partUUID) async {

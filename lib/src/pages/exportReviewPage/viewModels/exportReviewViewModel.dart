@@ -10,6 +10,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/pascalVOCModel.dart
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/dlgExport.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
+import 'package:bas_dataset_generator_engine/src/utility/formatManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/platform_util.dart';
 import 'package:dio/dio.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -238,17 +239,7 @@ class ExportReviewViewModel extends ViewModel {
           }
         }
         if(isSelected){
-          var dirKind='';
-          if(mainObject!.trainObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
-            dirKind='train&&';
-          }
-          if(mainObject!.validObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
-            dirKind='${dirKind}valid&&';
-          }
-          if(mainObject!.testObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
-            dirKind='${dirKind}test&&';
-          }
-          obj.dirKind=dirKind;
+          obj.dirKind=getDirKind(mainObject!, obj);
           validObjects.add(obj);
         }
       }
@@ -263,6 +254,20 @@ class ExportReviewViewModel extends ViewModel {
       }
     }
     notifyListeners();
+  }
+
+  String getDirKind(ObjectModel objDetails,PascalObjectModel pasObj){
+    var dirKind='';
+    if(objDetails.trainObjects.firstWhere((element) => element.uuid==pasObj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
+      dirKind='train&&';
+    }
+    if(objDetails.validObjects.firstWhere((element) => element.uuid==pasObj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
+      dirKind='${dirKind}valid&&';
+    }
+    if(objDetails.testObjects.firstWhere((element) => element.uuid==pasObj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
+      dirKind='${dirKind}test&&';
+    }
+    return dirKind;
   }
 
   Future<List<PascalObjectModel>> findSubObjects(ObjectModel mainObject,List<ImageGroupModel>allGroups,String preName,double startX,double startY)async{
@@ -378,27 +383,28 @@ class ExportReviewViewModel extends ViewModel {
     exportAction=action;
     notifyListeners();
     var exportStates=<PascalVOCModel>[];
-    for(var state in allStates.sublist(0,6)){
+    for(var state in allStates){
       var objects =<PascalObjectModel>[];
       var mainObj= await ObjectDAO().getDetailsByUUID(state.objUUID!);
       for(var obj in state.objects){
         if(mainObj!.labelObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
+          obj.dirKind=getDirKind(mainObj, obj);
           objects.add(obj);
         }else{
           var curObj=await ObjectDAO().getDetailsByUUID(obj.objUUID!);
           if(curObj!.isGlobalObject){
+            obj.dirKind=getDirKind(mainObj, obj);
             objects.add(obj);
           }
         }
       }
       if(objects.isNotEmpty){
-        print(objects.length);
         state.objects=objects;
         exportStates.add(state);
       }
     }
 
-    // var path = await FormatManager().generateFile(prjUUID,action, exportStates,onItemProcessedHandler);
+    var path = await FormatManager().generateFile(prjUUID,action, exportStates,onItemProcessedHandler);
     // if(action=="saveInServer"){
     //   var file=File(path);
     //   if(file.existsSync())
