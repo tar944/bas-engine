@@ -29,4 +29,22 @@ class PascalObjectModel{
     ymin = int.parse(xml.findElements("ymin").single.innerText);
     ymax = int.parse(xml.findElements("ymax").single.innerText);
   }
+
+
+  PascalObjectModel getCopy(){
+    var newObj = PascalObjectModel(
+        objUUID,
+        grpUUID,
+        lvlKind,
+        exportName,
+        name,
+        xmin,
+        xmax,
+        ymin,
+        ymax
+    );
+    newObj.stateUUID = stateUUID;
+    newObj.dirKind=dirKind;
+    return newObj;
+  }
 }

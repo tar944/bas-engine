@@ -2,6 +2,7 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String dlgError="Export failed, errors are:";
   static const String jobDone="Job done!";
   static const String pageMode="Page mode:";
   static const String selection="selection";

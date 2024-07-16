@@ -122,7 +122,8 @@ class RegionViewModel extends ViewModel {
                         height: 20,
                         decoration: BoxDecoration(
                             color: curObject.dirKind!.contains('train')?Colors.teal.dark:Colors.teal.dark.withOpacity(.5),
-                            borderRadius: const BorderRadius.all(Radius.circular(10))
+                            borderRadius: const BorderRadius.all(Radius.circular(10)),
+                          border: curObject.dirKind!.contains('train')?Border.all(color: Colors.white,width: 2.0):null
                         ),
                       ),
                       label: const Text('train'),
@@ -134,7 +135,8 @@ class RegionViewModel extends ViewModel {
                         height: 20,
                         decoration: BoxDecoration(
                             color: curObject.dirKind!.contains('valid')?Colors.orange.dark:Colors.orange.dark.withOpacity(.5),
-                            borderRadius: const BorderRadius.all(Radius.circular(10))
+                            borderRadius: const BorderRadius.all(Radius.circular(10)),
+                            border: curObject.dirKind!.contains('valid')?Border.all(color: Colors.white,width: 2.0):null
                         ),
                       ),
                       label: const Text('valid'),
@@ -146,7 +148,8 @@ class RegionViewModel extends ViewModel {
                         height: 20,
                         decoration: BoxDecoration(
                             color: curObject.dirKind!.contains('test')?Colors.magenta.dark:Colors.magenta.dark.withOpacity(.5),
-                            borderRadius: const BorderRadius.all(Radius.circular(10))
+                            borderRadius: const BorderRadius.all(Radius.circular(10)),
+                            border: curObject.dirKind!.contains('test')?Border.all(color: Colors.white,width: 2.0):null
                         ),
                       ),
                       label: const Text('test'),

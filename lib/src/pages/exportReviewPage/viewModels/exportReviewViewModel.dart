@@ -8,6 +8,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalVOCModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
+import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/dlgError.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/dlgExport.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/formatManager.dart';
@@ -70,7 +71,7 @@ class ExportReviewViewModel extends ViewModel {
   }
 
   onKeyboardEventHandler(key.KeyEvent e)async{
-    // return;
+    return;
     if(e.isKeyUP){
       switch(e.vkName){
         case 'LCONTROL':
@@ -389,12 +390,12 @@ class ExportReviewViewModel extends ViewModel {
       for(var obj in state.objects){
         if(mainObj!.labelObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
           obj.dirKind=getDirKind(mainObj, obj);
-          objects.add(obj);
+          objects.add(obj.getCopy());
         }else{
           var curObj=await ObjectDAO().getDetailsByUUID(obj.objUUID!);
           if(curObj!.isGlobalObject){
             obj.dirKind=getDirKind(mainObj, obj);
-            objects.add(obj);
+            objects.add(obj.getCopy());
           }
         }
       }
@@ -404,19 +405,29 @@ class ExportReviewViewModel extends ViewModel {
       }
     }
 
-    var path = await FormatManager().generateFile(prjUUID,action, exportStates,onItemProcessedHandler);
-    // if(action=="saveInServer"){
-    //   var file=File(path);
-    //   if(file.existsSync())
-    //   {
-    //     print('finished');
-    //     //todo two line should remove------------------------
-    //     processedNumber=-1;
-    //     notifyListeners();
-    //     //todo uncomment--------------------
-    //     // await uploadFile(file);
-    //   }
-    // }
+    var result = await FormatManager().generateFile(prjUUID,action, exportStates,onItemProcessedHandler);
+    if(result.contains('failed&&')){
+      processedNumber=-1;
+      notifyListeners();
+      showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) => DlgError(errors:result.split('&&').sublist(1)));
+    }else{
+      // if(action=="saveInServer"){
+      //   var file=File(path);
+      //   if(file.existsSync())
+      //   {
+      //     print('finished');
+      //     //todo two line should remove------------------------
+      //     processedNumber=-1;
+      //     notifyListeners();
+      //     //todo uncomment--------------------
+      //     // await uploadFile(file);
+      //   }
+      // }
+    }
+
   }
 
   Future<String> uploadFile(File file) async {

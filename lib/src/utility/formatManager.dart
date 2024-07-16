@@ -30,6 +30,12 @@ class FormatManager{
     }
     print("creating Export file =========================================");
 
+    var checkResult = checkStates(allStates);
+
+    if(checkResult!=''){
+      return 'failed$checkResult';
+    }
+
     for(var item in allStates){
       item.filename = item.filename!.replaceAll(".png", ".jpg");
       var trainObjects=<PascalObjectModel>[];
@@ -82,7 +88,7 @@ class FormatManager{
 
     ZipFileEncoder().zipDirectory(Directory(filePath), filename: '$filePath.zip');
     onItemProcessCaller(-1);
-    return '$filePath.zip';
+    return 'success&&$filePath.zip';
   }
 
   trackAllGroups(List<ImageGroupModel> allGroups)
@@ -100,6 +106,58 @@ class FormatManager{
       }
 
     }
+  }
+
+  String checkStates(List<PascalVOCModel>allStates){
+
+    var trainNames =<String>[];
+    var validNames =<String>[];
+    var testNames =<String>[];
+
+    for(var item in allStates) {
+      for (var obj in item.objects) {
+        if (obj.dirKind!.contains('train') &&
+            !trainNames.contains(obj.exportName)) {
+          trainNames.add(obj.exportName!);
+        }
+        if (obj.dirKind!.contains('valid') &&
+            !validNames.contains(obj.exportName)) {
+          validNames.add(obj.exportName!);
+        }
+        if (obj.dirKind!.contains('test') &&
+            !testNames.contains(obj.exportName)) {
+          testNames.add(obj.exportName!);
+        }
+      }
+    }
+
+    var errorMessage ='';
+
+    for(var name in trainNames){
+      if(!validNames.contains(name)&&!errorMessage.contains('$name has not valid object')){
+        errorMessage='$errorMessage&&$name has not valid object';
+      }
+      if(!testNames.contains(name)&&!errorMessage.contains('$name has not test object')){
+        errorMessage='$errorMessage&&$name has not test object';
+      }
+    }
+    for(var name in validNames){
+      if(!trainNames.contains(name)&&!errorMessage.contains('$name has not train object')){
+        errorMessage='$errorMessage&&$name has not train object';
+      }
+      if(!testNames.contains(name)&&!errorMessage.contains('$name has not test object')){
+        errorMessage='$errorMessage&&$name has not test object';
+      }
+    }
+    for(var name in testNames){
+      if(!trainNames.contains(name)&&!errorMessage.contains('$name has not train object')){
+        errorMessage='$errorMessage&&$name has not train object';
+      }
+      if(!validNames.contains(name)&&!errorMessage.contains('$name has not valid object')){
+        errorMessage='$errorMessage&&$name has not valid object';
+      }
+    }
+    return errorMessage;
   }
 
   generateBackupData(String exportPath,String prjUUID) async{

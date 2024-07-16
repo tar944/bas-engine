@@ -77,7 +77,8 @@ class _View extends StatelessView<RegionViewModel> {
                              height: vm.getSize(),
                              decoration: BoxDecoration(
                                color: vm.curObject.dirKind!.contains('train')?Colors.teal.dark:Colors.teal.dark.withOpacity(.3),
-                                 borderRadius: BorderRadius.all(Radius.circular(vm.getSize()/2))
+                                 borderRadius: BorderRadius.all(Radius.circular(vm.getSize()/2)),
+                                 border: vm.curObject.dirKind!.contains('train')?Border.all(color: Colors.white,width: 1.5):null
                              ),
                            ),
                            onPressed: ()=>vm.onDivisionHandler('train')),
@@ -89,7 +90,8 @@ class _View extends StatelessView<RegionViewModel> {
                              height: vm.getSize(),
                              decoration: BoxDecoration(
                                color: vm.curObject.dirKind!.contains('valid')?Colors.orange.dark:Colors.orange.dark.withOpacity(.3),
-                                 borderRadius: BorderRadius.all(Radius.circular(vm.getSize()/2))
+                                 borderRadius: BorderRadius.all(Radius.circular(vm.getSize()/2)),
+                                 border: vm.curObject.dirKind!.contains('valid')?Border.all(color: Colors.white,width: 1.5):null
                              ),
                            ),
                            onPressed: ()=>vm.onDivisionHandler('valid')),
@@ -101,7 +103,8 @@ class _View extends StatelessView<RegionViewModel> {
                              height: vm.getSize(),
                              decoration: BoxDecoration(
                                color: vm.curObject.dirKind!.contains('test')?Colors.magenta.dark:Colors.magenta.dark.withOpacity(.3),
-                               borderRadius: BorderRadius.all(Radius.circular(vm.getSize()/2))
+                               borderRadius: BorderRadius.all(Radius.circular(vm.getSize()/2)),
+                                 border: vm.curObject.dirKind!.contains('test')?Border.all(color: Colors.white,width: 1.5):null
                              ),
                            ),
                            onPressed: ()=>vm.onDivisionHandler('test')),
