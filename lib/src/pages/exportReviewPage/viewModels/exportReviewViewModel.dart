@@ -9,6 +9,7 @@ import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.d
 import 'package:bas_dataset_generator_engine/src/data/models/pascalVOCModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/dlgError.dart';
+import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/dlgExportName.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/dlgExport.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/formatManager.dart';
@@ -30,6 +31,7 @@ class ExportReviewViewModel extends ViewModel {
   List<PascalVOCModel>curStates=[];
   List<ImageGroupModel>mainGroups=[];
   List<PascalObjectModel>curObjects=[];
+  var exportStates=<PascalVOCModel>[];
   ObjectModel? mainObject;
   final String prjUUID;
   bool isBinState=false,isListUp=false,isSelection=true,isPartKeyActive=false;
@@ -352,6 +354,21 @@ class ExportReviewViewModel extends ViewModel {
     }
   }
 
+  onExportNameHandler(){
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        dismissWithEsc: false,
+        builder: (context) => DlgExportName(objects:curObjects,onObjectChangeCaller:(e)=> onExportEditHandler(e),));
+  }
+
+  onExportEditHandler(List<PascalObjectModel> objects){
+    if(objects.isNotEmpty){
+      curObjects=objects;
+      notifyListeners();
+    }
+  }
+
   nextImage() async{
     if(indexImage<curStates.length-1){
       indexImage = ++indexImage;
@@ -369,21 +386,7 @@ class ExportReviewViewModel extends ViewModel {
   }
 
   onExportBtnHandler()async{
-    var curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) => DlgExport(
-                                prjUUID:prjUUID,
-                                prjName: curProject!.title!,
-                                onExportCaller:exportHandler,));
-  }
-
-  exportHandler(String action)async{
-    processedNumber=1;
-    exportAction=action;
-    notifyListeners();
-    var exportStates=<PascalVOCModel>[];
+    exportStates=[];
     for(var state in allStates){
       var objects =<PascalObjectModel>[];
       var mainObj= await ObjectDAO().getDetailsByUUID(state.objUUID!);
@@ -404,30 +407,43 @@ class ExportReviewViewModel extends ViewModel {
         exportStates.add(state);
       }
     }
-
-    var result = await FormatManager().generateFile(prjUUID,action, exportStates,onItemProcessedHandler);
-    if(result.contains('failed&&')){
-      processedNumber=-1;
-      notifyListeners();
+    notifyListeners();
+    var result = FormatManager().checkStates(exportStates);
+    if(result==""){
+      var curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
+      showDialog(
+          context: context,
+          barrierDismissible: true,
+          builder: (context) => DlgExport(
+            prjUUID:prjUUID,
+            prjName: curProject!.title!,
+            onExportCaller:exportHandler,));
+    }else{
       showDialog(
           context: context,
           barrierDismissible: true,
           builder: (context) => DlgError(errors:result.split('&&').sublist(1)));
-    }else{
-      // if(action=="saveInServer"){
-      //   var file=File(path);
-      //   if(file.existsSync())
-      //   {
-      //     print('finished');
-      //     //todo two line should remove------------------------
-      //     processedNumber=-1;
-      //     notifyListeners();
-      //     //todo uncomment--------------------
-      //     // await uploadFile(file);
-      //   }
-      // }
     }
+  }
 
+  exportHandler(String action)async{
+    processedNumber=1;
+    exportAction=action;
+    notifyListeners();
+    var path = await FormatManager().generateFile(prjUUID,action, exportStates,onItemProcessedHandler);
+
+    // if(action=="saveInServer"){
+    //   var file=File(path);
+    //   if(file.existsSync())
+    //   {
+    //     print('finished');
+    //     //todo two line should remove------------------------
+    //     processedNumber=-1;
+    //     notifyListeners();
+    //     //todo uncomment--------------------
+    //     // await uploadFile(file);
+    //   }
+    // }
   }
 
   Future<String> uploadFile(File file) async {

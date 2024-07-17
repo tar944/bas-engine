@@ -13,17 +13,19 @@ class DlgObjProperties extends StatelessWidget {
   DlgObjProperties({
     Key? key,
     required this.object,
+    required this.needMore,
     required this.onActionCaller,
   }) : super(key: key);
 
   final ValueSetter<String> onActionCaller;
   PascalObjectModel object;
+  bool needMore;
 
   @override
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: ObjectPropertiesViewModel(object,onActionCaller),
+      viewModel: ObjectPropertiesViewModel(needMore,object,onActionCaller),
     );
   }
 }
@@ -105,12 +107,13 @@ class _View extends StatelessView<ObjectPropertiesViewModel> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 8.0),
-                          child: IconButton(
-                              icon: Icon(FluentIcons.delete,color: Colors.red.dark,size: 20,),
-                              onPressed: ()=>vm.onBtnDeleteHandler()),
-                        ),
+                        if(vm.needMore)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: IconButton(
+                                icon: Icon(FluentIcons.delete,color: Colors.red.dark,size: 20,),
+                                onPressed: ()=>vm.onBtnDeleteHandler()),
+                          ),
                         const Spacer(),
                         CButton(
                             text: Strings.confirm,

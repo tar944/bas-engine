@@ -236,6 +236,21 @@ class _View extends StatelessView<ExportReviewViewModel> {
                             ),
                                   ),
                                   const SizedBox(width: 5,),
+                                  IconButton(
+                                      style: ButtonStyle(
+                                          padding: ButtonState.all(EdgeInsets.zero)
+                                      ),
+                                      icon: Container(
+                                        width: Dimens.btnHeightBig-5,
+                                        height: Dimens.btnHeightBig-5,
+                                        decoration: BoxDecoration(
+                                            borderRadius: const BorderRadius.all(Radius.circular(5)),
+                                            color: Colors.grey[180]
+                                        ),
+                                        child: const Icon(FluentIcons.view_list),
+                                      ),
+                                      onPressed: vm.onExportNameHandler),
+                                  const SizedBox(width: 5,),
                                   if(vm.isListUp)
                                     Container(
                                       height: Dimens.btnHeightBig-10,
@@ -292,7 +307,7 @@ class _View extends StatelessView<ExportReviewViewModel> {
                                           ),
                                         ],
                                       ),
-                                    )
+                                    ),
                                 ],
                               )),
                             Container(

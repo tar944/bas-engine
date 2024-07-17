@@ -128,6 +128,7 @@ class PartRegionViewModel extends ViewModel {
           barrierDismissible: true,
           builder: (context) =>
               DlgObjProperties(
+                needMore: true,
                   object: allObjects.firstWhere((element) => element.objUUID==acts[0]),
                   onActionCaller:(e)=> onObjPropertiesHandler(e)),
         );

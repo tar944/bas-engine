@@ -30,12 +30,6 @@ class FormatManager{
     }
     print("creating Export file =========================================");
 
-    var checkResult = checkStates(allStates);
-
-    if(checkResult!=''){
-      return 'failed$checkResult';
-    }
-
     for(var item in allStates){
       item.filename = item.filename!.replaceAll(".png", ".jpg");
       var trainObjects=<PascalObjectModel>[];
@@ -88,7 +82,7 @@ class FormatManager{
 
     ZipFileEncoder().zipDirectory(Directory(filePath), filename: '$filePath.zip');
     onItemProcessCaller(-1);
-    return 'success&&$filePath.zip';
+    return '$filePath.zip';
   }
 
   trackAllGroups(List<ImageGroupModel> allGroups)

@@ -11,7 +11,8 @@ class ObjectPropertiesViewModel extends ViewModel {
   final ValueSetter<String> onActionCaller;
   List<String> nameParts=[];
   List<String> exportParts=[];
-  ObjectPropertiesViewModel(this.object, this.onActionCaller);
+  final bool needMore;
+  ObjectPropertiesViewModel(this.needMore,this.object, this.onActionCaller);
 
 
   @override
