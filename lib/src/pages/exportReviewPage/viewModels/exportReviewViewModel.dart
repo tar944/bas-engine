@@ -408,7 +408,7 @@ class ExportReviewViewModel extends ViewModel {
       }
     }
     notifyListeners();
-    var result = FormatManager().checkStates(exportStates);
+    var result = await FormatManager().checkStates(exportStates);
     if(result==""){
       var curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
       showDialog(

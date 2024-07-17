@@ -102,25 +102,29 @@ class FormatManager{
     }
   }
 
-  String checkStates(List<PascalVOCModel>allStates){
+  Future<String> checkStates(List<PascalVOCModel>allStates)async{
 
     var trainNames =<String>[];
     var validNames =<String>[];
     var testNames =<String>[];
 
     for(var item in allStates) {
+      var grp = await ImageGroupDAO().getDetailsByUUID(item.grpUUID!);
       for (var obj in item.objects) {
-        if (obj.dirKind!.contains('train') &&
-            !trainNames.contains(obj.exportName)) {
-          trainNames.add(obj.exportName!);
+        if (obj.dirKind!.contains('train')) {
+          if(trainNames.firstWhere((el) => el.contains(obj.exportName!),orElse: ()=>'')==''){
+            trainNames.add('${grp!.name} > ${obj.exportName!}');
+          }
         }
-        if (obj.dirKind!.contains('valid') &&
-            !validNames.contains(obj.exportName)) {
-          validNames.add(obj.exportName!);
+        if (obj.dirKind!.contains('valid')) {
+          if(validNames.firstWhere((el) => el.contains(obj.exportName!),orElse: ()=>'')=='') {
+            validNames.add('${grp!.name} > ${obj.exportName!}');
+          }
         }
-        if (obj.dirKind!.contains('test') &&
-            !testNames.contains(obj.exportName)) {
-          testNames.add(obj.exportName!);
+        if (obj.dirKind!.contains('test')) {
+          if(testNames.firstWhere((el) => el.contains(obj.exportName!),orElse: ()=>'')=='') {
+            testNames.add('${grp!.name} > ${obj.exportName!}');
+          }
         }
       }
     }
@@ -128,26 +132,29 @@ class FormatManager{
     var errorMessage ='';
 
     for(var name in trainNames){
-      if(!validNames.contains(name)&&!errorMessage.contains('$name has not valid object')){
+      var expName=name.split(' > ')[1];
+      if(validNames.firstWhere((el) => el.contains(expName),orElse: ()=>'')==''&&!errorMessage.contains('$name has not valid object')){
         errorMessage='$errorMessage&&$name has not valid object';
       }
-      if(!testNames.contains(name)&&!errorMessage.contains('$name has not test object')){
+      if(testNames.firstWhere((el) => el.contains(expName),orElse: ()=>'')==''&&!errorMessage.contains('$name has not test object')){
         errorMessage='$errorMessage&&$name has not test object';
       }
     }
     for(var name in validNames){
-      if(!trainNames.contains(name)&&!errorMessage.contains('$name has not train object')){
+      var expName=name.split(' > ')[1];
+      if(trainNames.firstWhere((el) => el.contains(expName),orElse: ()=>'')==''&&!errorMessage.contains('$name has not train object')){
         errorMessage='$errorMessage&&$name has not train object';
       }
-      if(!testNames.contains(name)&&!errorMessage.contains('$name has not test object')){
+      if(testNames.firstWhere((el) => el.contains(expName),orElse: ()=>'')==''&&!errorMessage.contains('$name has not test object')){
         errorMessage='$errorMessage&&$name has not test object';
       }
     }
     for(var name in testNames){
-      if(!trainNames.contains(name)&&!errorMessage.contains('$name has not train object')){
+      var expName=name.split(' > ')[1];
+      if(trainNames.firstWhere((el) => el.contains(expName),orElse: ()=>'')==''&&!errorMessage.contains('$name has not train object')){
         errorMessage='$errorMessage&&$name has not train object';
       }
-      if(!validNames.contains(name)&&!errorMessage.contains('$name has not valid object')){
+      if(validNames.firstWhere((el) => el.contains(expName),orElse: ()=>'')==''&&!errorMessage.contains('$name has not valid object')){
         errorMessage='$errorMessage&&$name has not valid object';
       }
     }
