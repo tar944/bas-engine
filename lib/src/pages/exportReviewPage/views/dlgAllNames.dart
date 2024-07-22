@@ -2,17 +2,13 @@ import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/viewModels/DlgErrorViewModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/viewModels/exportNameViewModel.dart';
-import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/viewModels/objectPropertiesViewModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/viewModels/allNamesViewModel.dart';
 import 'package:bas_dataset_generator_engine/src/parts/dialogTitleBar.dart';
-import 'package:bas_dataset_generator_engine/src/widgets/CButton.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-import 'package:flutter_multi_select_items/flutter_multi_select_items.dart';
 import 'package:pmvvm/pmvvm.dart';
 
-class DlgExportName extends StatelessWidget {
-  DlgExportName({
+class DlgAllNames extends StatelessWidget {
+  DlgAllNames({
     Key? key,
     required this.objects,
     required this.onObjectChangeCaller
@@ -25,16 +21,16 @@ class DlgExportName extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: ExportNameViewModel(objects,onObjectChangeCaller),
+      viewModel: AllNamesViewModel(objects,onObjectChangeCaller),
     );
   }
 }
 
-class _View extends StatelessView<ExportNameViewModel> {
+class _View extends StatelessView<AllNamesViewModel> {
   const _View({Key? key}) : super(key: key);
 
   @override
-  Widget render(context, ExportNameViewModel vm) {
+  Widget render(context, AllNamesViewModel vm) {
     return Stack(
       alignment: Alignment.center,
       children: [

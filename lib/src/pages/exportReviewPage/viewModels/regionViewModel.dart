@@ -236,15 +236,14 @@ class RegionViewModel extends ViewModel {
     if(activeObjUUID!=Strings.notSet){
       if(curObject.dirKind==''){
         if(activeObjUUID==curObject.objUUID){
-          print('active obj is => ${curObject.objUUID}');
           keyboardEvent = key.KeyboardEvent();
           keyboardEvent.startListening((keyEvent) => onKeyboardEventHandler(keyEvent));
           return Colors.orange.dark;
         }else{
-          return Colors.blue.light;
+          return curObject.hasError?Colors.white:Colors.blue.light;
         }
       }else{
-        return Colors.purple;
+        return curObject.hasError?Colors.white:Colors.purple;
       }
     }else{
       if (regionStatus == "active") {

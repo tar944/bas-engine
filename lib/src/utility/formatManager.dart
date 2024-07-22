@@ -22,7 +22,7 @@ import 'package:path/path.dart' as path;
 
 class FormatManager{
 
-  Future<String> generateFile(String prjUUID,String exportAction,List<PascalVOCModel>allStates,ValueSetter<int>onItemProcessCaller) async {
+  Future<String> generateFile(String prjUUID,String exportAction,List<PascalVOCModel>allStates,List<String> exportNames,ValueSetter<int>onItemProcessCaller) async {
     String filePath = await DirectoryManager().getFinalExportPath(await Preference().getExportPath(prjUUID));
     bool needBackup = await Preference().shouldBackUp(prjUUID);
     if(filePath=="errNotFoundDirectory"){
@@ -37,39 +37,41 @@ class FormatManager{
       var testObjects=<PascalObjectModel>[];
       var paths=['','',''];
       for(var obj in item.objects){
-        if(obj.dirKind!.contains('train')){
+        if(obj.dirKind!.contains('train')&&exportNames.contains(obj.exportName)){
           paths[0]=path.join(filePath, "train", item.filename);
           trainObjects.add(obj);
         }
-        if(obj.dirKind!.contains('valid')){
+        if(obj.dirKind!.contains('valid')&&exportNames.contains(obj.exportName)){
           paths[1]=path.join(filePath, "valid", item.filename);
           validObjects.add(obj);
         }
-        if(obj.dirKind!.contains('test')){
+        if(obj.dirKind!.contains('test')&&exportNames.contains(obj.exportName)){
           paths[2]=path.join(filePath, "test", item.filename);
           testObjects.add(obj);
         }
       }
 
-      await DirectoryManager().saveExportImage(
-          srcPath: item.path!,
-          dirPaths: paths,
-          quality: 50);
+      if(trainObjects.isNotEmpty||validObjects.isNotEmpty||testObjects.isNotEmpty){
+        await DirectoryManager().saveExportImage(
+            srcPath: item.path!,
+            dirPaths: paths,
+            quality: 50);
 
-      if(trainObjects.isNotEmpty){
-        item.objects=trainObjects;
-        await DirectoryManager().saveFileInLocal(
-            path.join(filePath,'train', item.filename!.replaceAll('.jpg', '.xml')), item.toXML().toXmlString(pretty: true));
-      }
-      if(validObjects.isNotEmpty){
-        item.objects=validObjects;
-        await DirectoryManager().saveFileInLocal(
-            path.join(filePath,'valid', item.filename!.replaceAll('.jpg', '.xml')), item.toXML().toXmlString(pretty: true));
-      }
-      if(testObjects.isNotEmpty){
-        item.objects=testObjects;
-        await DirectoryManager().saveFileInLocal(
-            path.join(filePath,'test', item.filename!.replaceAll('.jpg', '.xml')), item.toXML().toXmlString(pretty: true));
+        if(trainObjects.isNotEmpty){
+          item.objects=trainObjects;
+          await DirectoryManager().saveFileInLocal(
+              path.join(filePath,'train', item.filename!.replaceAll('.jpg', '.xml')), item.toXML().toXmlString(pretty: true));
+        }
+        if(validObjects.isNotEmpty){
+          item.objects=validObjects;
+          await DirectoryManager().saveFileInLocal(
+              path.join(filePath,'valid', item.filename!.replaceAll('.jpg', '.xml')), item.toXML().toXmlString(pretty: true));
+        }
+        if(testObjects.isNotEmpty){
+          item.objects=testObjects;
+          await DirectoryManager().saveFileInLocal(
+              path.join(filePath,'test', item.filename!.replaceAll('.jpg', '.xml')), item.toXML().toXmlString(pretty: true));
+        }
       }
 
       onItemProcessCaller(allStates.indexOf(item)+1);

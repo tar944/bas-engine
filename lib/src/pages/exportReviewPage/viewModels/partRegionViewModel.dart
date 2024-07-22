@@ -41,14 +41,14 @@ class PartRegionViewModel extends ViewModel {
   }
 
   findNextActiveObject(){
-    activeObjUUID=Strings.notSet;
+    activeObjUUID='';
     for(var obj in allObjects){
       if(obj.dirKind==''){
         activeObjUUID=obj.objUUID!;
         break;
       }
     }
-    if(activeObjUUID==Strings.notSet){
+    if(activeObjUUID==''){
       Toast(Strings.jobDone,false).showSuccess(context);
       if(isKeyActive){
         onActionCaller('return&&');

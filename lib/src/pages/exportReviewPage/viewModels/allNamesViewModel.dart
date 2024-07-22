@@ -4,13 +4,13 @@ import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/dl
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:pmvvm/pmvvm.dart';
 
-class ExportNameViewModel extends ViewModel {
+class AllNamesViewModel extends ViewModel {
 
   final List<PascalObjectModel> objects;
   ValueSetter<List<PascalObjectModel>> onObjectChangeCaller;
   bool needUpdate=false;
 
-  ExportNameViewModel(this.objects,this.onObjectChangeCaller);
+  AllNamesViewModel(this.objects,this.onObjectChangeCaller);
 
   onEditNameHandler(PascalObjectModel obj){
     showDialog(

@@ -3,6 +3,7 @@ import 'package:xml/xml.dart';
 class PascalObjectModel{
   String? name,pose="Unspecified",objUUID,stateUUID='';
   String? exportName,grpUUID,lvlKind,dirKind='';
+  bool hasError=false;
   int truncated=0,difficult=0,occluded=0;
   int? xmin,xmax,ymin,ymax;
 
@@ -45,6 +46,7 @@ class PascalObjectModel{
     );
     newObj.stateUUID = stateUUID;
     newObj.dirKind=dirKind;
+    newObj.hasError=hasError;
     return newObj;
   }
 }

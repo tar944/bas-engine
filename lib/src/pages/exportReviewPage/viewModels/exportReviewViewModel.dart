@@ -8,8 +8,9 @@ import 'package:bas_dataset_generator_engine/src/data/models/objectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalObjectModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/models/pascalVOCModel.dart';
 import 'package:bas_dataset_generator_engine/src/data/preferences/preferencesData.dart';
+import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/dlgAllNames.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/dlgError.dart';
-import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/dlgExportName.dart';
+import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/dlgExportObjects.dart';
 import 'package:bas_dataset_generator_engine/src/pages/mainPage/views/dlgExport.dart';
 import 'package:bas_dataset_generator_engine/src/utility/directoryManager.dart';
 import 'package:bas_dataset_generator_engine/src/utility/formatManager.dart';
@@ -31,6 +32,7 @@ class ExportReviewViewModel extends ViewModel {
   List<PascalVOCModel>curStates=[];
   List<ImageGroupModel>mainGroups=[];
   List<PascalObjectModel>curObjects=[];
+  List<String>exportNames=[];
   var exportStates=<PascalVOCModel>[];
   ObjectModel? mainObject;
   final String prjUUID;
@@ -38,7 +40,7 @@ class ExportReviewViewModel extends ViewModel {
   int indexImage = 0,processedNumber=-1,percent=0;
   int imgW=0, imgH=0,groupIndex=0;
   Size imgSize = const Size(0, 0);
-  String exportAction="",banStatesUUID="";
+  String exportAction="",banStatesUUID="",foundErrors='';
   late key.KeyboardEvent keyboardEvent;
 
   ExportReviewViewModel(this.prjUUID);
@@ -62,49 +64,6 @@ class ExportReviewViewModel extends ViewModel {
     });
     activeKeyboard();
     await KeyboardEvent.init();
-  }
-
-  activeKeyboard(){
-    isPartKeyActive=false;
-    keyboardEvent = key.KeyboardEvent();
-    keyboardEvent.startListening((keyEvent) => onKeyboardEventHandler(keyEvent));
-    notifyListeners();
-
-  }
-
-  onKeyboardEventHandler(key.KeyEvent e)async{
-    return;
-    if(e.isKeyUP){
-      switch(e.vkName){
-        case 'LCONTROL':
-        case 'RCONTROL':
-          changeListPosition();
-          break;
-        case 'RMENU':
-        case 'LMENU':
-          changePageType();
-          break;
-        case 'RETURN':
-          isListUp=!isListUp;
-          if(!isSelection){
-            isPartKeyActive=true;
-          }
-          notifyListeners();
-          break;
-        case 'UP':
-          nextGroup();
-          break;
-        case 'DOWN':
-          perviousGroup();
-          break;
-        case 'LEFT':
-          perviousImage();
-          break;
-        case 'RIGHT':
-          nextImage();
-          break;
-      }
-    }
   }
 
   @override
@@ -203,6 +162,71 @@ class ExportReviewViewModel extends ViewModel {
     setDefaultBanStates();
   }
 
+  Future<void> _windowShow() async {
+    bool isAlwaysOnTop = await windowManager.isAlwaysOnTop();
+    if (kIsLinux) {
+      await windowManager.setPosition(Offset.zero);
+    }
+
+    bool isVisible = await windowManager.isVisible();
+    if (!isVisible) {
+      await windowManager.show();
+    } else {
+      await windowManager.focus();
+    }
+
+    if (kIsLinux && !isAlwaysOnTop) {
+      await windowManager.setAlwaysOnTop(true);
+      await Future.delayed(const Duration(milliseconds: 10));
+      await windowManager.setAlwaysOnTop(false);
+      await Future.delayed(const Duration(milliseconds: 10));
+      await windowManager.focus();
+    }
+  }
+
+  activeKeyboard(){
+    isPartKeyActive=false;
+    keyboardEvent = key.KeyboardEvent();
+    keyboardEvent.startListening((keyEvent) => onKeyboardEventHandler(keyEvent));
+    notifyListeners();
+
+  }
+
+  onKeyboardEventHandler(key.KeyEvent e)async{
+    return;
+    if(e.isKeyUP){
+      switch(e.vkName){
+        case 'LCONTROL':
+        case 'RCONTROL':
+          changeListPosition();
+          break;
+        case 'RMENU':
+        case 'LMENU':
+          changePageType();
+          break;
+        case 'RETURN':
+          isListUp=!isListUp;
+          if(!isSelection){
+            isPartKeyActive=true;
+          }
+          notifyListeners();
+          break;
+        case 'UP':
+          nextGroup();
+          break;
+        case 'DOWN':
+          perviousGroup();
+          break;
+        case 'LEFT':
+          perviousImage();
+          break;
+        case 'RIGHT':
+          nextImage();
+          break;
+      }
+    }
+  }
+
   updateObjects()async{
     curStates=allStates.where((element) => element.grpUUID==mainGroups[groupIndex].uuid).toList();
     mainObject= await ObjectDAO().getDetailsByUUID(curStates[indexImage].objUUID!);
@@ -243,6 +267,7 @@ class ExportReviewViewModel extends ViewModel {
         }
         if(isSelected){
           obj.dirKind=getDirKind(mainObject!, obj);
+          obj.hasError = foundErrors.contains(obj.exportName!);
           validObjects.add(obj);
         }
       }
@@ -332,34 +357,12 @@ class ExportReviewViewModel extends ViewModel {
     notifyListeners();
   }
 
-  Future<void> _windowShow() async {
-    bool isAlwaysOnTop = await windowManager.isAlwaysOnTop();
-    if (kIsLinux) {
-      await windowManager.setPosition(Offset.zero);
-    }
-
-    bool isVisible = await windowManager.isVisible();
-    if (!isVisible) {
-      await windowManager.show();
-    } else {
-      await windowManager.focus();
-    }
-
-    if (kIsLinux && !isAlwaysOnTop) {
-      await windowManager.setAlwaysOnTop(true);
-      await Future.delayed(const Duration(milliseconds: 10));
-      await windowManager.setAlwaysOnTop(false);
-      await Future.delayed(const Duration(milliseconds: 10));
-      await windowManager.focus();
-    }
-  }
-
   onExportNameHandler(){
     showDialog(
         context: context,
         barrierDismissible: false,
         dismissWithEsc: false,
-        builder: (context) => DlgExportName(objects:curObjects,onObjectChangeCaller:(e)=> onExportEditHandler(e),));
+        builder: (context) => DlgAllNames(objects:curObjects,onObjectChangeCaller:(e)=> onExportEditHandler(e),));
   }
 
   onExportEditHandler(List<PascalObjectModel> objects){
@@ -409,28 +412,51 @@ class ExportReviewViewModel extends ViewModel {
     }
     notifyListeners();
     var result = await FormatManager().checkStates(exportStates);
+    foundErrors=result;
+    notifyListeners();
+    updateObjects();
     if(result==""){
-      var curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
+      var allObjects=<String>[];
+      for(var item in allStates){
+        for(var obj in item.objects){
+          if(allObjects.contains(obj.exportName)==false){
+            allObjects.add(obj.exportName!);
+          }
+        }
+      }
       showDialog(
           context: context,
-          barrierDismissible: true,
-          builder: (context) => DlgExport(
-            prjUUID:prjUUID,
-            prjName: curProject!.title!,
-            onExportCaller:exportHandler,));
+          barrierDismissible: false,
+          dismissWithEsc: false,
+          builder: (context) => DlgExportObjects(objNames:allObjects,onObjectSelectCaller:(e)=> onExportObjectsHandler(e),));
+
     }else{
       showDialog(
           context: context,
           barrierDismissible: true,
-          builder: (context) => DlgError(errors:result.split('&&').sublist(1)));
+          builder: (context) => DlgError(errors:result.split('&&')));
     }
+  }
+
+  onExportObjectsHandler(List<String>objNames)async{
+    exportNames=objNames;
+    notifyListeners();
+    var curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
+    showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (context) => DlgExport(
+          prjUUID:prjUUID,
+          prjName: curProject!.title!,
+          onExportCaller:exportHandler,));
   }
 
   exportHandler(String action)async{
     processedNumber=1;
     exportAction=action;
     notifyListeners();
-    var path = await FormatManager().generateFile(prjUUID,action, exportStates,onItemProcessedHandler);
+
+    var path = await FormatManager().generateFile(prjUUID,action, exportStates,exportNames,onItemProcessedHandler);
 
     // if(action=="saveInServer"){
     //   var file=File(path);

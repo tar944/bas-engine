@@ -61,7 +61,7 @@ class _View extends StatelessView<RegionViewModel> {
                         vm.height,
                       ),
                       color: vm.getColor(),
-                      isActive: vm.isHover||vm.activeObjUUID==vm.curObject.objUUID),
+                      isActive: vm.isHover||vm.activeObjUUID==vm.curObject.objUUID||vm.curObject.hasError),
                 ),
               ),
                if(vm.activeObjUUID!=Strings.notSet)
