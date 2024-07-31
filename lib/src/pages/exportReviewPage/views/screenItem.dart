@@ -12,6 +12,7 @@ class ScreenItem extends StatelessWidget {
   ScreenItem(
       {Key? key,
         required this.isSelected,
+        required this.isDivision,
         required this.showObject,
         required this.object,
         required this.onActionCaller})
@@ -19,6 +20,7 @@ class ScreenItem extends StatelessWidget {
 
   final PascalVOCModel object;
   final bool isSelected;
+  final bool isDivision;
   final bool showObject;
   final ValueSetter<String> onActionCaller;
 
@@ -26,7 +28,7 @@ class ScreenItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return MVVM(
       view: () => const _View(),
-      viewModel: ScreenViewModel(isSelected, showObject,object, onActionCaller),
+      viewModel: ScreenViewModel(isSelected,isDivision, showObject,object, onActionCaller),
     );
   }
 }
@@ -72,7 +74,7 @@ class _View extends StatelessView<ScreenViewModel> {
                       ),
                     ),
                   ),
-                    if(!vm.isSelected)
+                    if(!vm.isSelected&&!vm.isDivision)
                       Positioned(
                           left: 10,
                           right: 10,

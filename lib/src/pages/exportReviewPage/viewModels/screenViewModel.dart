@@ -5,10 +5,10 @@ import 'package:pmvvm/pmvvm.dart';
 class ScreenViewModel extends ViewModel {
 
   final PascalVOCModel object;
-  final bool isSelected;
+  final bool isSelected,isDivision;
   final bool showObjects;
   final ValueSetter<String> onActionCaller;
 
-  ScreenViewModel(this.isSelected,this.showObjects,this.object, this.onActionCaller);
+  ScreenViewModel(this.isSelected,this.isDivision,this.showObjects,this.object, this.onActionCaller);
 
 }

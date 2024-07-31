@@ -372,9 +372,10 @@ class _View extends StatelessView<ExportReviewViewModel> {
                                           itemBuilder: (context, index) {
                                             return ScreenItem(
                                               key: GlobalKey(),
+                                              isDivision:!vm.isSelection,
                                               isSelected:vm.curStates[index].objUUID==vm.mainObject!.uuid,
                                               object: vm.curStates[index],
-                                              showObject: !vm.banStatesUUID.contains('${vm.curStates[index].objUUID!}&&'),
+                                              showObject: !vm.isSelection||!vm.banStatesUUID.contains('${vm.curStates[index].objUUID!}&&'),
                                               onActionCaller: vm.onObjectActionHandler,
                                             );
                                           }):Container(),

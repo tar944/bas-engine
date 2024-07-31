@@ -600,7 +600,9 @@ class ExportReviewViewModel extends ViewModel {
     var act = action.split('&&');
     if (act[0] == 'selected') {
       indexImage = curStates.indexWhere((element) => element.objUUID == act[1]);
-      banStatesUUID = banStatesUUID.replaceAll('${act[1]}&&', '');
+      if(isSelection){
+        banStatesUUID = banStatesUUID.replaceAll('${act[1]}&&', '');
+      }
       updateObjects();
     } else {
       if (banStatesUUID.contains('${act[1]}&&')) {

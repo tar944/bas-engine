@@ -57,6 +57,7 @@ void showFlyScreensList(
                       .map((item) =>
                       ScreenItem(
                         key: GlobalKey(),
+                        isDivision: false,
                         isSelected:item.objUUID==objUUID,
                         showObject: true,
                         object: item,
