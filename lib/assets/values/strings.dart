@@ -2,6 +2,7 @@ import 'dart:core';
 
 class Strings{
   static const String name="";
+  static const String chooseObjects="Choose objects";
   static const String nextStep="Next step";
   static const String errEmptyName="You did not choose any name for going to next step";
   static const String dlgExportNames="Export Names";

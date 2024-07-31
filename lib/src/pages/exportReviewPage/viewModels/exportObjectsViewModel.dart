@@ -24,12 +24,13 @@ class ExportObjectsViewModel extends ViewModel {
     Navigator.pop(context);
   }
 
+  void showAllHandler(){
+    onObjectSelectCaller([]);
+    onCloseClicked();
+  }
+
   void onNextLevelHandler(){
-    if(exportNames.isEmpty){
-      Toast(Strings.errEmptyName, false).showError(context);
-    }else{
-      onObjectSelectCaller(exportNames);
-      onCloseClicked();
-    }
+    onObjectSelectCaller(exportNames);
+    onCloseClicked();
   }
 }

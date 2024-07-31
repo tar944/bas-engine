@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/imageDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/objectDAO.dart';
 import 'package:bas_dataset_generator_engine/src/data/dao/projectDAO.dart';
@@ -24,29 +25,29 @@ import 'package:window_manager/window_manager.dart';
 import 'package:keyboard_event/keyboard_event.dart' as key;
 
 class ExportReviewViewModel extends ViewModel {
-
-  final confirmController = FlyoutController();
   final moreController = FlyoutController();
-  final groupController = FlyoutController();
-  List<PascalVOCModel>allStates=[];
-  List<PascalVOCModel>curStates=[];
-  List<ImageGroupModel>mainGroups=[];
-  List<PascalObjectModel>curObjects=[];
-  List<String>exportNames=[];
-  var exportStates=<PascalVOCModel>[];
+  List<PascalVOCModel> allStates = [];
+  List<PascalVOCModel> curStates = [];
+  List<ImageGroupModel> mainGroups = [];
+  List<PascalObjectModel> curObjects = [];
+  List<String> exportNames = [];
+  var exportStates = <PascalVOCModel>[];
   ObjectModel? mainObject;
   final String prjUUID;
-  bool isBinState=false,isListUp=false,isSelection=true,isPartKeyActive=false;
-  int indexImage = 0,processedNumber=-1,percent=0;
-  int imgW=0, imgH=0,groupIndex=0;
+  bool isBinState = false,
+      isListUp = false,
+      isSelection = true,
+      isPartKeyActive = false;
+  int indexImage = 0, processedNumber = -1, percent = 0;
+  int imgW = 0, imgH = 0, groupIndex = 0;
   Size imgSize = const Size(0, 0);
-  String exportAction="",banStatesUUID="",foundErrors='';
+  String exportAction = "", banStatesUUID = "", foundErrors = '';
   late key.KeyboardEvent keyboardEvent;
 
   ExportReviewViewModel(this.prjUUID);
 
   @override
-  void init() async{
+  void init() async {
     await windowManager.setPreventClose(true);
     windowManager.waitUntilReadyToShow().then((_) async {
       if (kIsLinux || kIsWindows) {
@@ -67,8 +68,8 @@ class ExportReviewViewModel extends ViewModel {
   }
 
   @override
-  void onMount() async{
-    await Future.delayed(const Duration(milliseconds: 500));
+  void onMount() async {
+    await Future.delayed(const Duration(milliseconds: 300));
 
     var curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
     // await DirectoryManager().saveFileInLocal(
@@ -77,83 +78,103 @@ class ExportReviewViewModel extends ViewModel {
     //         'db_${DateTime.now().millisecondsSinceEpoch.toString()}.json'),
     //     await FormatManager().getProjectData(curProject!));
 
-    var mainObjects =<String>[];
-    var groups =<ImageGroupModel>[];
+    mainGroups = [];
+    allStates = [];
 
-    for(var part in curProject!.allParts){
-      var dir = Directory(await DirectoryManager().getPartImageDirectoryPath(prjUUID, part.uuid));
+    var mainObjects = <String>[];
+    var groups = <ImageGroupModel>[];
+
+    for (var part in curProject!.allParts) {
+      var dir = Directory(await DirectoryManager()
+          .getPartImageDirectoryPath(prjUUID, part.uuid));
       List contents = dir.listSync();
 
       for (var fileOrDir in contents) {
         var img = await ImageDAO().getDetailsByPath(fileOrDir.path);
-        if(img != null){
+        if (img != null) {
           mainObjects.add(img.objUUID);
         }
       }
-      if(part.allGroups.isNotEmpty){
+      if (part.allGroups.isNotEmpty) {
         groups.addAll(part.allGroups);
       }
-      for(var grp in part.allGroups){
-        if(grp.otherShapes.isNotEmpty){
+      for (var grp in part.allGroups) {
+        if (grp.otherShapes.isNotEmpty) {
           groups.addAll(grp.otherShapes);
         }
       }
     }
 
-    for (var grp in groups){
-      if(grp.label.target!=null&&grp.mainState.target!=null){
-        var allObjects=<PascalObjectModel>[];
-        for(var obj in grp.allStates){
+    for (var grp in groups) {
+      if (grp.label.target != null && grp.mainState.target != null) {
+        var allObjects = <PascalObjectModel>[];
+        for (var obj in grp.allStates) {
           ObjectModel? curObject;
-          double left=obj.left,top=obj.top;
-          do{
-            curObject= curObject==null?obj.srcObject.target:curObject.srcObject.target;
-            left+=curObject!.left;
-            top+=curObject.top;
-          }while(mainObjects.contains(curObject.uuid)==false);
-          var name = "${grp.label.target!.levelName}**${grp.label.target!.name}${grp.name!=""?"**${grp.name}":""}";
-          if(obj.isMainObject){
-            if(obj.exportName==""){
-              obj.exportName=grp.label.target!.levelName=="objects"?grp.label.target!.name:name;
+          double left = obj.left, top = obj.top;
+          do {
+            curObject = curObject == null
+                ? obj.srcObject.target
+                : curObject.srcObject.target;
+            left += curObject!.left;
+            top += curObject.top;
+          } while (mainObjects.contains(curObject.uuid) == false);
+          var name =
+              "${grp.label.target!.levelName}**${grp.label.target!.name}${grp.name != "" ? "**${grp.name}" : ""}";
+          if (obj.isMainObject) {
+            if (obj.exportName == "") {
+              obj.exportName = grp.label.target!.levelName == "objects"
+                  ? grp.label.target!.name
+                  : name;
               await ObjectDAO().update(obj);
             }
-            var subObject=PascalObjectModel(
+            var subObject = PascalObjectModel(
                 obj.uuid,
                 grp.uuid,
                 grp.label.target!.levelName,
                 obj.exportName,
                 name,
                 obj.left.toInt(),
-                obj.right.toInt() ,
-                obj.top.toInt() ,
+                obj.right.toInt(),
+                obj.top.toInt(),
                 obj.bottom.toInt());
-            subObject.stateUUID=curObject.uuid;
+            subObject.stateUUID = curObject.uuid;
             allObjects.add(subObject);
           }
-          var subArrays=await findSubObjects(obj, grp.allGroups, name, left, top);
-          for(int i=0;i<subArrays.length;i++){
-            subArrays[i].stateUUID=curObject.uuid;
+          var subArrays =
+              await findSubObjects(obj, grp.allGroups, name, left, top);
+          for (int i = 0; i < subArrays.length; i++) {
+            subArrays[i].stateUUID = curObject.uuid;
           }
           allObjects.addAll(subArrays);
         }
-        for(var obj in grp.allStates ){
-          ObjectModel? curObject;
-          do{
-            curObject= curObject==null?obj.srcObject.target:curObject.srcObject.target;
-          }while(mainObjects.contains(curObject!.uuid)==false);
-          allStates.add(
-              PascalVOCModel(
-                  curObject.uuid,
-                  grp.uuid,
-                  curObject.image.target!.name,
-                  curObject.image.target!.path,
-                  curObject.image.target!.width.toInt(),
-                  curObject.image.target!.height.toInt()));
 
-          allStates[allStates.length-1].objects.addAll(allObjects);
-        }
-        if(grp.allStates.isNotEmpty){
-          mainGroups.add(grp);
+        if (exportNames.isEmpty ||
+            allObjects.firstWhere(
+                    (el) => exportNames.contains(el.exportName),
+                orElse: () => PascalObjectModel(Strings.notSet, '', '', '', '', -1, -1, -1, -1)).objUUID != Strings.notSet) {
+          for (var obj in grp.allStates) {
+            ObjectModel? curObject;
+            do {
+              curObject = curObject == null
+                  ? obj.srcObject.target
+                  : curObject.srcObject.target;
+            } while (mainObjects.contains(curObject!.uuid) == false);
+            allStates.add(PascalVOCModel(
+                curObject.uuid,
+                grp.uuid,
+                curObject.image.target!.name,
+                curObject.image.target!.path,
+                curObject.image.target!.width.toInt(),
+                curObject.image.target!.height.toInt()));
+            if(exportNames.isEmpty){
+              allStates[allStates.length - 1].objects.addAll(allObjects);
+            }else{
+              allStates[allStates.length - 1].objects.addAll(allObjects.where((e) => exportNames.contains(e.exportName)));
+            }
+          }
+          if (grp.allStates.isNotEmpty) {
+            mainGroups.add(grp);
+          }
         }
       }
     }
@@ -184,18 +205,18 @@ class ExportReviewViewModel extends ViewModel {
     }
   }
 
-  activeKeyboard(){
-    isPartKeyActive=false;
+  activeKeyboard() {
+    isPartKeyActive = false;
     keyboardEvent = key.KeyboardEvent();
-    keyboardEvent.startListening((keyEvent) => onKeyboardEventHandler(keyEvent));
+    keyboardEvent
+        .startListening((keyEvent) => onKeyboardEventHandler(keyEvent));
     notifyListeners();
-
   }
 
-  onKeyboardEventHandler(key.KeyEvent e)async{
+  onKeyboardEventHandler(key.KeyEvent e) async {
     return;
-    if(e.isKeyUP){
-      switch(e.vkName){
+    if (e.isKeyUP) {
+      switch (e.vkName) {
         case 'LCONTROL':
         case 'RCONTROL':
           changeListPosition();
@@ -205,9 +226,9 @@ class ExportReviewViewModel extends ViewModel {
           changePageType();
           break;
         case 'RETURN':
-          isListUp=!isListUp;
-          if(!isSelection){
-            isPartKeyActive=true;
+          isListUp = !isListUp;
+          if (!isSelection) {
+            isPartKeyActive = true;
           }
           notifyListeners();
           break;
@@ -227,107 +248,157 @@ class ExportReviewViewModel extends ViewModel {
     }
   }
 
-  updateObjects()async{
-    curStates=allStates.where((element) => element.grpUUID==mainGroups[groupIndex].uuid).toList();
-    mainObject= await ObjectDAO().getDetailsByUUID(curStates[indexImage].objUUID!);
-    curObjects=[];
-    if(isSelection){
-      if(isBinState){
-        for(var obj in curStates[indexImage].objects) {
-          if(mainObject!.banObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
-            if(banStatesUUID.contains('${obj.stateUUID}&&')==false){
+  updateObjects() async {
+    curStates = allStates
+        .where((element) => element.grpUUID == mainGroups[groupIndex].uuid)
+        .toList();
+    mainObject =
+        await ObjectDAO().getDetailsByUUID(curStates[indexImage].objUUID!);
+    curObjects = [];
+    if (isSelection) {
+      if (isBinState) {
+        for (var obj in curStates[indexImage].objects) {
+          if (mainObject!.banObjects
+                  .firstWhere((element) => element.uuid == obj.objUUID,
+                      orElse: () => ObjectModel(-1, '', 0, 0, 0, 0))
+                  .id !=
+              -1) {
+            if (banStatesUUID.contains('${obj.stateUUID}&&') == false) {
               curObjects.add(obj);
             }
           }
         }
-      }else{
-        for(var obj in curStates[indexImage].objects) {
-          if(mainObject!.banObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id==-1){
-            if(banStatesUUID.contains('${obj.stateUUID}&&')==false||
-                mainObject!.labelObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
+      } else {
+        for (var obj in curStates[indexImage].objects) {
+          if (mainObject!.banObjects
+                  .firstWhere((element) => element.uuid == obj.objUUID,
+                      orElse: () => ObjectModel(-1, '', 0, 0, 0, 0))
+                  .id ==
+              -1) {
+            if (banStatesUUID.contains('${obj.stateUUID}&&') == false ||
+                mainObject!.labelObjects
+                        .firstWhere((element) => element.uuid == obj.objUUID,
+                            orElse: () => ObjectModel(-1, '', 0, 0, 0, 0))
+                        .id !=
+                    -1) {
               curObjects.add(obj);
-            }else{
-              var objDetails=await ObjectDAO().getDetailsByUUID(obj.objUUID!);
-              if(objDetails!.isGlobalObject){
+            } else {
+              var objDetails = await ObjectDAO().getDetailsByUUID(obj.objUUID!);
+              if (objDetails!.isGlobalObject) {
                 curObjects.add(obj);
               }
             }
           }
         }
       }
-    }else{
-      var validObjects=<PascalObjectModel>[];
-      for(var obj in curStates[indexImage].objects) {
-        var isSelected=mainObject!.labelObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1;
-        if(!isSelected){
-          var objDetails=await ObjectDAO().getDetailsByUUID(obj.objUUID!);
-          if(objDetails!.isGlobalObject){
-            isSelected=true;
+    } else {
+      var validObjects = <PascalObjectModel>[];
+      for (var obj in curStates[indexImage].objects) {
+        var isSelected = mainObject!.labelObjects
+                .firstWhere((element) => element.uuid == obj.objUUID,
+                    orElse: () => ObjectModel(-1, '', 0, 0, 0, 0))
+                .id !=
+            -1;
+        if (!isSelected) {
+          var objDetails = await ObjectDAO().getDetailsByUUID(obj.objUUID!);
+          if (objDetails!.isGlobalObject) {
+            isSelected = true;
           }
         }
-        if(isSelected){
-          obj.dirKind=getDirKind(mainObject!, obj);
+        if (isSelected) {
+          obj.dirKind = getDirKind(mainObject!, obj);
           obj.hasError = foundErrors.contains(obj.exportName!);
           validObjects.add(obj);
         }
       }
-      if(isBinState){
-        for(var obj in validObjects){
-          if(obj.dirKind==''){
+      if (isBinState) {
+        for (var obj in validObjects) {
+          if (obj.dirKind == '') {
             curObjects.add(obj);
           }
         }
-      }else{
-        curObjects=validObjects;
+      } else {
+        curObjects = validObjects;
       }
     }
     notifyListeners();
   }
 
-  String getDirKind(ObjectModel objDetails,PascalObjectModel pasObj){
-    var dirKind='';
-    if(objDetails.trainObjects.firstWhere((element) => element.uuid==pasObj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
-      dirKind='train&&';
+  String getDirKind(ObjectModel objDetails, PascalObjectModel pasObj) {
+    var dirKind = '';
+    if (objDetails.trainObjects
+            .firstWhere((element) => element.uuid == pasObj.objUUID,
+                orElse: () => ObjectModel(-1, '', 0, 0, 0, 0))
+            .id !=
+        -1) {
+      dirKind = 'train&&';
     }
-    if(objDetails.validObjects.firstWhere((element) => element.uuid==pasObj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
-      dirKind='${dirKind}valid&&';
+    if (objDetails.validObjects
+            .firstWhere((element) => element.uuid == pasObj.objUUID,
+                orElse: () => ObjectModel(-1, '', 0, 0, 0, 0))
+            .id !=
+        -1) {
+      dirKind = '${dirKind}valid&&';
     }
-    if(objDetails.testObjects.firstWhere((element) => element.uuid==pasObj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
-      dirKind='${dirKind}test&&';
+    if (objDetails.testObjects
+            .firstWhere((element) => element.uuid == pasObj.objUUID,
+                orElse: () => ObjectModel(-1, '', 0, 0, 0, 0))
+            .id !=
+        -1) {
+      dirKind = '${dirKind}test&&';
     }
     return dirKind;
   }
 
-  Future<List<PascalObjectModel>> findSubObjects(ObjectModel mainObject,List<ImageGroupModel>allGroups,String preName,double startX,double startY)async{
-    List<PascalObjectModel> allObjects=[];
-    for(var grp in allGroups){
-      if(grp.label.target!=null){
-        var name ="$preName**${grp.label.target!.name}${grp.name!=""?"**${grp.name}":""}";
-        for(var state in grp.allStates){
-          if(state.srcObject.target!.uuid==mainObject.uuid||
-              (state.srcObject.target!.srcObject.target!=null
-                  &&state.srcObject.target!.srcObject.target!.uuid==mainObject.uuid)){
-            var left = state.srcObject.target!.uuid==mainObject.uuid?state.left:state.srcObject.target!.left;
-            var top = state.srcObject.target!.uuid==mainObject.uuid?state.top:state.srcObject.target!.top;
-            var right = state.srcObject.target!.uuid==mainObject.uuid?state.right:state.srcObject.target!.right;
-            var bottom = state.srcObject.target!.uuid==mainObject.uuid?state.bottom:state.srcObject.target!.bottom;
-            if(state.exportName==""||grp.label.target!.levelName=="objects"){
-              state.exportName=grp.label.target!.levelName=="objects"?grp.label.target!.name:name;
+  Future<List<PascalObjectModel>> findSubObjects(
+      ObjectModel mainObject,
+      List<ImageGroupModel> allGroups,
+      String preName,
+      double startX,
+      double startY) async {
+    List<PascalObjectModel> allObjects = [];
+    for (var grp in allGroups) {
+      if (grp.label.target != null) {
+        var name =
+            "$preName**${grp.label.target!.name}${grp.name != "" ? "**${grp.name}" : ""}";
+        for (var state in grp.allStates) {
+          if (state.srcObject.target!.uuid == mainObject.uuid ||
+              (state.srcObject.target!.srcObject.target != null &&
+                  state.srcObject.target!.srcObject.target!.uuid ==
+                      mainObject.uuid)) {
+            var left = state.srcObject.target!.uuid == mainObject.uuid
+                ? state.left
+                : state.srcObject.target!.left;
+            var top = state.srcObject.target!.uuid == mainObject.uuid
+                ? state.top
+                : state.srcObject.target!.top;
+            var right = state.srcObject.target!.uuid == mainObject.uuid
+                ? state.right
+                : state.srcObject.target!.right;
+            var bottom = state.srcObject.target!.uuid == mainObject.uuid
+                ? state.bottom
+                : state.srcObject.target!.bottom;
+            if (state.exportName == "" ||
+                grp.label.target!.levelName == "objects") {
+              state.exportName = grp.label.target!.levelName == "objects"
+                  ? grp.label.target!.name
+                  : name;
               await ObjectDAO().update(state);
             }
             allObjects.add(PascalObjectModel(
-              state.uuid,
-              grp.uuid,
-              grp.label.target!.levelName,
-              state.exportName,
-              name,
-              (left+startX).toInt(),
-              (right+startX).toInt(),
-              (top+startY).toInt(),
-              (bottom+startY).toInt()
-            ));
-            if(grp.label.target!.levelName!="objects"&&grp.mainState.target!=null){
-              allObjects.addAll(await findSubObjects(state, grp.allGroups, name,left+startX, top+startY));
+                state.uuid,
+                grp.uuid,
+                grp.label.target!.levelName,
+                state.exportName,
+                name,
+                (left + startX).toInt(),
+                (right + startX).toInt(),
+                (top + startY).toInt(),
+                (bottom + startY).toInt()));
+            if (grp.label.target!.levelName != "objects" &&
+                grp.mainState.target != null) {
+              allObjects.addAll(await findSubObjects(
+                  state, grp.allGroups, name, left + startX, top + startY));
             }
           }
         }
@@ -336,90 +407,67 @@ class ExportReviewViewModel extends ViewModel {
     return allObjects;
   }
 
-  onPartActionHandler(String action){
-    if(action=='return&&'){
-      if(indexImage<curStates.length-1){
+  onPartActionHandler(String action) {
+    if (action == 'return&&') {
+      if (indexImage < curStates.length - 1) {
         nextImage();
-      }else{
+      } else {
         activeKeyboard();
       }
-    }else if (action =='escape&&'){
+    } else if (action == 'escape&&') {
       activeKeyboard();
     }
   }
 
-  onBackClicked(){
+  onBackClicked() {
     context.goNamed('mainPage');
   }
 
-  changeListPosition(){
-    isListUp=!isListUp;
+  changeListPosition() {
+    isListUp = !isListUp;
     notifyListeners();
   }
 
-  onExportNameHandler(){
+  onExportNameHandler() {
     showDialog(
         context: context,
         barrierDismissible: false,
         dismissWithEsc: false,
-        builder: (context) => DlgAllNames(objects:curObjects,onObjectChangeCaller:(e)=> onExportEditHandler(e),));
+        builder: (context) => DlgAllNames(
+              objects: curObjects,
+              onObjectChangeCaller: (e) => onExportEditHandler(e),
+            ));
   }
 
-  onExportEditHandler(List<PascalObjectModel> objects){
-    if(objects.isNotEmpty){
-      curObjects=objects;
+  onExportEditHandler(List<PascalObjectModel> objects) {
+    if (objects.isNotEmpty) {
+      curObjects = objects;
       notifyListeners();
     }
   }
 
-  nextImage() async{
-    if(indexImage<curStates.length-1){
+  nextImage() async {
+    if (indexImage < curStates.length - 1) {
       indexImage = ++indexImage;
       notifyListeners();
       updateObjects();
     }
   }
 
-  perviousImage() async{
-    if(indexImage!=0){
+  perviousImage() async {
+    if (indexImage != 0) {
       indexImage = --indexImage;
       notifyListeners();
       updateObjects();
     }
   }
 
-  onExportBtnHandler()async{
-    exportStates=[];
-    for(var state in allStates){
-      var objects =<PascalObjectModel>[];
-      var mainObj= await ObjectDAO().getDetailsByUUID(state.objUUID!);
-      for(var obj in state.objects){
-        if(mainObj!.labelObjects.firstWhere((element) => element.uuid==obj.objUUID,orElse: ()=>ObjectModel(-1, '', 0, 0, 0, 0)).id!=-1){
-          obj.dirKind=getDirKind(mainObj, obj);
-          objects.add(obj.getCopy());
-        }else{
-          var curObj=await ObjectDAO().getDetailsByUUID(obj.objUUID!);
-          if(curObj!.isGlobalObject){
-            obj.dirKind=getDirKind(mainObj, obj);
-            objects.add(obj.getCopy());
-          }
-        }
-      }
-      if(objects.isNotEmpty){
-        state.objects=objects;
-        exportStates.add(state);
-      }
-    }
-    notifyListeners();
-    var result = await FormatManager().checkStates(exportStates);
-    foundErrors=result;
-    notifyListeners();
-    updateObjects();
-    if(result==""){
-      var allObjects=<String>[];
-      for(var item in allStates){
-        for(var obj in item.objects){
-          if(allObjects.contains(obj.exportName)==false){
+  onExportBtnHandler(String act) async {
+    if (act == Strings.chooseObjects) {
+      var allObjects = <String>[];
+      for (var item in allStates) {
+        for (var obj in item.objects) {
+          if (allObjects.contains(obj.exportName) == false) {
             allObjects.add(obj.exportName!);
           }
         }
@@ -428,35 +476,75 @@ class ExportReviewViewModel extends ViewModel {
           context: context,
           barrierDismissible: false,
           dismissWithEsc: false,
-          builder: (context) => DlgExportObjects(objNames:allObjects,onObjectSelectCaller:(e)=> onExportObjectsHandler(e),));
-
-    }else{
-      showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (context) => DlgError(errors:result.split('&&')));
+          builder: (context) => DlgExportObjects(
+                objNames: allObjects,
+                onObjectSelectCaller: (e) => onExportObjectsHandler(e),
+              ));
+    } else {
+      exportStates = [];
+      for (var state in allStates) {
+        var objects = <PascalObjectModel>[];
+        var mainObj = await ObjectDAO().getDetailsByUUID(state.objUUID!);
+        for (var obj in state.objects) {
+          if (mainObj!.labelObjects
+                  .firstWhere((element) => element.uuid == obj.objUUID,
+                      orElse: () => ObjectModel(-1, '', 0, 0, 0, 0))
+                  .id !=
+              -1) {
+            obj.dirKind = getDirKind(mainObj, obj);
+            objects.add(obj.getCopy());
+          } else {
+            var curObj = await ObjectDAO().getDetailsByUUID(obj.objUUID!);
+            if (curObj!.isGlobalObject) {
+              obj.dirKind = getDirKind(mainObj, obj);
+              objects.add(obj.getCopy());
+            }
+          }
+        }
+        if (objects.isNotEmpty) {
+          state.objects = objects;
+          exportStates.add(state);
+        }
+      }
+      notifyListeners();
+      var result = await FormatManager().checkStates(exportStates);
+      foundErrors = result;
+      notifyListeners();
+      updateObjects();
+      if (result == "") {
+        var curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
+        showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) => DlgExport(
+                  prjUUID: prjUUID,
+                  prjName: curProject!.title!,
+                  onExportCaller: exportHandler,
+                ));
+      } else {
+        showDialog(
+            context: context,
+            barrierDismissible: true,
+            builder: (context) => DlgError(errors: result.split('&&')));
+      }
     }
   }
 
-  onExportObjectsHandler(List<String>objNames)async{
-    exportNames=objNames;
+  onExportObjectsHandler(List<String> objNames) async {
+    exportNames = objNames;
+    groupIndex = 0;
+    indexImage = 0;
     notifyListeners();
-    var curProject = await ProjectDAO().getDetailsByUUID(prjUUID);
-    showDialog(
-        context: context,
-        barrierDismissible: true,
-        builder: (context) => DlgExport(
-          prjUUID:prjUUID,
-          prjName: curProject!.title!,
-          onExportCaller:exportHandler,));
+    onMount();
   }
 
-  exportHandler(String action)async{
-    processedNumber=1;
-    exportAction=action;
+  exportHandler(String action) async {
+    processedNumber = 1;
+    exportAction = action;
     notifyListeners();
 
-    var path = await FormatManager().generateFile(prjUUID,action, exportStates,exportNames,onItemProcessedHandler);
+    var path = await FormatManager().generateFile(
+        prjUUID, action, exportStates, exportNames, onItemProcessedHandler);
 
     // if(action=="saveInServer"){
     //   var file=File(path);
@@ -475,98 +563,95 @@ class ExportReviewViewModel extends ViewModel {
   Future<String> uploadFile(File file) async {
     String fileName = file.path.split('/').last;
     FormData formData = FormData.fromMap({
-      "dataSet":
-      await MultipartFile.fromFile(file.path, filename:fileName),
+      "dataSet": await MultipartFile.fromFile(file.path, filename: fileName),
     });
-    String token= await Preference().shouldAuth(prjUUID)?await Preference().getAuthToken(prjUUID):"";
+    String token = await Preference().shouldAuth(prjUUID)
+        ? await Preference().getAuthToken(prjUUID)
+        : "";
     Dio dio = Dio();
-    var response = await dio.post(
-                                    await Preference().getUploadLink(prjUUID),
-                                    data: formData,
-                                    options:Options(
-                                      headers: {
-                                        "Content-Type": "application/json",
-                                        "Authorization": token==""?"":"Bearer $token",
-                                      }
-                                    )
-                                  );
-    processedNumber=-1;
+    var response = await dio.post(await Preference().getUploadLink(prjUUID),
+        data: formData,
+        options: Options(headers: {
+          "Content-Type": "application/json",
+          "Authorization": token == "" ? "" : "Bearer $token",
+        }));
+    processedNumber = -1;
     notifyListeners();
     return response.data['status'];
   }
 
-  onItemProcessedHandler(int count){
-    processedNumber=count;
-    if(count!=-1){
-      percent=count*100~/allStates.length;
-    }else{
-      processedNumber=-2;
+  onItemProcessedHandler(int count) {
+    processedNumber = count;
+    if (count != -1) {
+      percent = count * 100 ~/ allStates.length;
+    } else {
+      processedNumber = -2;
     }
     notifyListeners();
   }
 
-  onChangeState(){
-    isBinState=!isBinState;
+  onChangeState() {
+    isBinState = !isBinState;
     notifyListeners();
     updateObjects();
   }
 
   onObjectActionHandler(String action) async {
     var act = action.split('&&');
-    if(act[0]=='selected'){
-      indexImage=curStates.indexWhere((element) => element.objUUID==act[1]);
-      banStatesUUID=banStatesUUID.replaceAll('${act[1]}&&', '');
+    if (act[0] == 'selected') {
+      indexImage = curStates.indexWhere((element) => element.objUUID == act[1]);
+      banStatesUUID = banStatesUUID.replaceAll('${act[1]}&&', '');
       updateObjects();
-    }else{
-      if(banStatesUUID.contains('${act[1]}&&')){
-        banStatesUUID=banStatesUUID.replaceAll('${act[1]}&&', '');
-      }else{
-        banStatesUUID='$banStatesUUID${act[1]}&&';
+    } else {
+      if (banStatesUUID.contains('${act[1]}&&')) {
+        banStatesUUID = banStatesUUID.replaceAll('${act[1]}&&', '');
+      } else {
+        banStatesUUID = '$banStatesUUID${act[1]}&&';
       }
       updateObjects();
     }
   }
 
-  nextGroup(){
-    if((groupIndex+1)<mainGroups.length){
+  nextGroup() {
+    if ((groupIndex + 1) < mainGroups.length) {
       groupIndex++;
-      indexImage=0;
+      indexImage = 0;
       notifyListeners();
       updateObjects();
       setDefaultBanStates();
     }
   }
 
-  perviousGroup(){
-    if(groupIndex!=0){
+  perviousGroup() {
+    if (groupIndex != 0) {
       groupIndex--;
-      indexImage=0;
+      indexImage = 0;
       notifyListeners();
       updateObjects();
       setDefaultBanStates();
     }
   }
 
-  setDefaultBanStates(){
-    banStatesUUID='';
-    for(var i=1;i<curStates.length;i++){
-      banStatesUUID+='${curStates[i].objUUID}&&';
+  setDefaultBanStates() {
+    banStatesUUID = '';
+    for (var i = 1; i < curStates.length; i++) {
+      banStatesUUID += '${curStates[i].objUUID}&&';
     }
     notifyListeners();
   }
 
-  String getGroupName(){
-    String name="";
-    if(mainGroups[groupIndex].name==""){
-      name= mainGroups[groupIndex].label.target!.name;
-    }else{
-      name= mainGroups[groupIndex].name!;
+  String getGroupName() {
+    String name = "";
+    if (mainGroups[groupIndex].name == "") {
+      name = mainGroups[groupIndex].label.target!.name;
+    } else {
+      name = mainGroups[groupIndex].name!;
     }
-    return name.length>20?"${name.substring(0,19)}...":name;
+    return name.length > 20 ? "${name.substring(0, 19)}..." : name;
   }
 
-  changePageType(){
-    isSelection=!isSelection;
+  changePageType() {
+    isSelection = !isSelection;
     updateObjects();
     notifyListeners();
   }

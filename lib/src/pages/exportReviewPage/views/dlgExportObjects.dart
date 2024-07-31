@@ -84,7 +84,14 @@ class _View extends StatelessView<ExportObjectsViewModel> {
                     children: [
                       const Spacer(),
                       CButton(
-                          text: Strings.nextStep,
+                          text: Strings.showAll,
+                          color: Colors.magenta.normal,
+                          textColor: Colors.white,
+                          onPressed: () => vm.onNextLevelHandler(),
+                          kind: "normal"),
+                      const SizedBox(width: 10,),
+                      CButton(
+                          text: Strings.confirm,
                           color: Colors.blue.normal,
                           textColor: Colors.white,
                           onPressed: () => vm.onNextLevelHandler(),

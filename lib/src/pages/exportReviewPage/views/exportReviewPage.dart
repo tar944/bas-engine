@@ -3,6 +3,7 @@ import 'package:bas_dataset_generator_engine/assets/values/dimens.dart';
 import 'package:bas_dataset_generator_engine/assets/values/strings.dart';
 import 'package:bas_dataset_generator_engine/assets/values/textStyle.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/viewModels/exportReviewViewModel.dart';
+import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/flyMore.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/partRegionExplorer.dart';
 import 'package:bas_dataset_generator_engine/src/pages/exportReviewPage/views/screenItem.dart';
 import 'package:bas_dataset_generator_engine/src/parts/topBarPanel.dart';
@@ -102,14 +103,23 @@ class _View extends StatelessView<ExportReviewViewModel> {
                                 Focus(
                                   canRequestFocus: false,
                                   descendantsAreFocusable: false,
-                                  child: IconButton(
-                                      style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
-                                      icon: Icon(
-                                        FluentIcons.cloud_import_export,
-                                        color: Colors.teal,
-                                        size: 25,
+                                  child: FlyoutTarget(
+                                      key: GlobalKey(),
+                                      controller: vm.moreController,
+                                      child: IconButton(
+                                          style: ButtonStyle(padding: ButtonState.all(const EdgeInsets.all(8.0))),
+                                          icon: Icon(
+                                            FluentIcons.more,
+                                            color: Colors.white,
+                                            size: 25,
+                                          ),
+                                          onPressed:()=> showFlyMore(
+                                              vm.moreController,
+                                              FlyoutPlacementMode.topCenter,
+                                              vm.onExportBtnHandler
+                                          )
                                       ),
-                                      onPressed:()=> vm.onExportBtnHandler()),
+                                  ),
                                 ),
                               ],
                             ),
